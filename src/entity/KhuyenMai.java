@@ -4,10 +4,120 @@
  */
 package entity;
 
+import java.time.LocalDateTime;
+
 /**
  *
  * @author CÔNG HOÀNG
  */
 public class KhuyenMai {
+    private String maKhuyenMai;
+    private String tenKhuyenMai;
+    private double heSoKhuyenMai;
+    private LocalDateTime ngayBatDau;
+    private LocalDateTime ngayKetThuc;
+    private double tongTienToiThieu;
+    private double tienKhuyenMaiToiDa;
+    private String trangThai;
     
+    public static final String TENKHUYENMAI_EMPTY = "Tên khuyến mãi không được rỗng!";
+    public static final String HESO_INVALID = "Hệ số khuyến mãi phải từ 0.0 đến 1.0!";
+    public static final String NGAYBATDAU_INVALID = "Ngày bắt đầu phải nhỏ hơn ngày kết thúc!";
+    public static final String NGAYKETTHUC_INVALID = "Ngày kết thúc phải lớn hơn ngày bắt đầu!";
+    public static final String TONGTIEN_INVALID = "Tổng tiền tối thiểu phải lớn hơn 0!";
+    
+    public KhuyenMai() {
+    }
+    
+    public KhuyenMai(String maKhuyenMai, String tenKhuyenMai, double heSoKhuyenMai,
+                     LocalDateTime ngayBatDau, LocalDateTime ngayKetThuc,
+                     double tongTienToiThieu, double tienKhuyenMaiToiDa) throws Exception {
+        setMaKhuyenMai(maKhuyenMai);
+        setTenKhuyenMai(tenKhuyenMai);
+        setHeSoKhuyenMai(heSoKhuyenMai);
+        setNgayBatDau(ngayBatDau);
+        setNgayKetThuc(ngayKetThuc);
+        setTongTienToiThieu(tongTienToiThieu);
+        setTienKhuyenMaiToiDa(tienKhuyenMaiToiDa);
+    }
+    
+    public String getMaKhuyenMai() {
+        return maKhuyenMai;
+    }
+    
+    public void setMaKhuyenMai(String maKhuyenMai) {
+        this.maKhuyenMai = maKhuyenMai;
+    }
+    
+    public String getTenKhuyenMai() {
+        return tenKhuyenMai;
+    }
+    
+    public void setTenKhuyenMai(String tenKhuyenMai) throws Exception {
+        tenKhuyenMai = tenKhuyenMai.trim();
+        if (tenKhuyenMai.isEmpty()) {
+            throw new Exception(TENKHUYENMAI_EMPTY);
+        }
+        this.tenKhuyenMai = tenKhuyenMai;
+    }
+    
+    public double getHeSoKhuyenMai() {
+        return heSoKhuyenMai;
+    }
+    
+    public void setHeSoKhuyenMai(double heSoKhuyenMai) throws Exception {
+        if (heSoKhuyenMai < 0.0 || heSoKhuyenMai > 1.0) {
+            throw new Exception(HESO_INVALID);
+        }
+        this.heSoKhuyenMai = heSoKhuyenMai;
+    }
+    
+    public LocalDateTime getNgayBatDau() {
+        return ngayBatDau;
+    }
+    
+    public void setNgayBatDau(LocalDateTime ngayBatDau) throws Exception {
+        if (ngayKetThuc != null && ngayBatDau.isAfter(ngayKetThuc)) {
+            throw new Exception(NGAYBATDAU_INVALID);
+        }
+        this.ngayBatDau = ngayBatDau;
+    }
+    
+    public LocalDateTime getNgayKetThuc() {
+        return ngayKetThuc;
+    }
+    
+    public void setNgayKetThuc(LocalDateTime ngayKetThuc) throws Exception {
+        if (ngayBatDau != null && ngayKetThuc.isBefore(ngayBatDau)) {
+            throw new Exception(NGAYKETTHUC_INVALID);
+        }
+        this.ngayKetThuc = ngayKetThuc;
+    }
+    
+    public double getTongTienToiThieu() {
+        return tongTienToiThieu;
+    }
+    
+    public void setTongTienToiThieu(double tongTienToiThieu) throws Exception {
+        if (tongTienToiThieu <= 0) {
+            throw new Exception(TONGTIEN_INVALID);
+        }
+        this.tongTienToiThieu = tongTienToiThieu;
+    }
+    
+    public double getTienKhuyenMaiToiDa() {
+        return tienKhuyenMaiToiDa;
+    }
+    
+    public void setTienKhuyenMaiToiDa(double tienKhuyenMaiToiDa) {
+        this.tienKhuyenMaiToiDa = tienKhuyenMaiToiDa;
+    }
+    
+    public String getTrangThai() {
+        return trangThai;
+    }
+    
+    public void setTrangThai(String trangThai) {
+        this.trangThai = trangThai;
+    }
 }

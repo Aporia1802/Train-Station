@@ -9,5 +9,50 @@ package entity;
  * @author CÔNG HOÀNG
  */
 public class HanhKhach {
+     private String maHanhKhach;
+    private String tenHanhKhach;
+    private String cccd;
     
+    public static final String TENHANHKHACH_EMPTY = "Tên hành khách không được rỗng!";
+    public static final String TENHANHKHACH_INVALID = "Tên hành khách chỉ được chứa kí tự chữ và khoảng trắng!";
+    
+    public HanhKhach() {
+    }
+    
+    public HanhKhach(String maHanhKhach, String tenHanhKhach, String cccd) throws Exception {
+        setMaHanhKhach(maHanhKhach);
+        setTenHanhKhach(tenHanhKhach);
+        setCccd(cccd);
+    }
+    
+    public String getMaHanhKhach() {
+        return maHanhKhach;
+    }
+    
+    public void setMaHanhKhach(String maHanhKhach) {
+        this.maHanhKhach = maHanhKhach;
+    }
+    
+    public String getTenHanhKhach() {
+        return tenHanhKhach;
+    }
+    
+    public void setTenHanhKhach(String tenHanhKhach) throws Exception {
+        tenHanhKhach = tenHanhKhach.trim();
+        if (tenHanhKhach.isEmpty()) {
+            throw new Exception(TENHANHKHACH_EMPTY);
+        }
+        if (!tenHanhKhach.matches("^[\\p{L} ]+$")) {
+            throw new Exception(TENHANHKHACH_INVALID);
+        }
+        this.tenHanhKhach = tenHanhKhach;
+    }
+    
+    public String getCccd() {
+        return cccd;
+    }
+    
+    public void setCccd(String cccd) {
+        this.cccd = cccd;
+    }
 }
