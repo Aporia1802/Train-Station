@@ -53,6 +53,8 @@ public class Loading_GUI extends javax.swing.JFrame {
                 progressbar_status.setValue(value);
             }
         }).start();
+        
+        
     }
 
     /**
