@@ -141,7 +141,9 @@ public class Login_GUI extends javax.swing.JPanel {
 
         lbl_matKhau.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         lbl_matKhau.setText("Mật khẩu");
-        lbl_matKhau.setPreferredSize(new java.awt.Dimension(400, 22));
+        lbl_matKhau.setMaximumSize(new java.awt.Dimension(65, 15));
+        lbl_matKhau.setMinimumSize(new java.awt.Dimension(65, 15));
+        lbl_matKhau.setPreferredSize(new java.awt.Dimension(400, 15));
         jPanel4.add(lbl_matKhau, java.awt.BorderLayout.LINE_START);
 
         pnl_login.add(jPanel4);
@@ -196,7 +198,7 @@ public class Login_GUI extends javax.swing.JPanel {
         pnl_center.add(pnl_login);
 
         pnl_quenMatKhau.setBackground(new java.awt.Color(255, 255, 255));
-        pnl_quenMatKhau.setPreferredSize(new java.awt.Dimension(400, 530));
+        pnl_quenMatKhau.setPreferredSize(new java.awt.Dimension(400, 520));
         pnl_quenMatKhau.setLayout(new javax.swing.BoxLayout(pnl_quenMatKhau, javax.swing.BoxLayout.Y_AXIS));
         pnl_quenMatKhau.setVisible(false);
         pnl_quenMatKhau.add(filler2);
@@ -242,7 +244,9 @@ public class Login_GUI extends javax.swing.JPanel {
 
         lbl_email.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         lbl_email.setText("Email");
-        lbl_email.setPreferredSize(new java.awt.Dimension(400, 22));
+        lbl_email.setMaximumSize(new java.awt.Dimension(38, 15));
+        lbl_email.setMinimumSize(new java.awt.Dimension(38, 15));
+        lbl_email.setPreferredSize(new java.awt.Dimension(400, 15));
         jPanel11.add(lbl_email, java.awt.BorderLayout.LINE_START);
 
         pnl_quenMatKhau.add(jPanel11);
