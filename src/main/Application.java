@@ -4,20 +4,28 @@
  */
 package main;
 
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
 import database.ConnectDB;
 import gui.Loading_GUI;
 import gui.Login_GUI;
+import gui.MainForm;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import raven.toast.Notifications;
 
 /**
@@ -27,6 +35,8 @@ import raven.toast.Notifications;
 public class Application extends javax.swing.JFrame {
     public static Application app;
     private final Login_GUI loginForm;
+    private final MainForm mainForm;
+    
     /**
      * Creates new form Application
      */
@@ -35,8 +45,10 @@ public class Application extends javax.swing.JFrame {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
         setSize(new Dimension(1200, 650));
+        setLocationRelativeTo(null);
         setTitle("Platform 9 3/4");
 //        setIconImage(new FlatSVGIcon("imgs/icon.svg").getImage());
+        mainForm = new MainForm();
         loginForm = new Login_GUI();
         setContentPane(loginForm);
         Notifications.getInstance().setJFrame(this);
@@ -55,7 +67,33 @@ public class Application extends javax.swing.JFrame {
                 }
             }
         });
-        setLocationRelativeTo(null);
+    }
+    
+     public static void showForm(Component component) {
+        component.applyComponentOrientation(app.getComponentOrientation());
+        app.mainForm.showForm(component);
+    }
+
+    public static void login() {
+        FlatAnimatedLafChange.showSnapshot();
+        app.setContentPane(app.mainForm);
+        app.mainForm.applyComponentOrientation(app.getComponentOrientation());
+        setSelectedMenu(0, 0);
+        app.mainForm.hideMenu();
+        SwingUtilities.updateComponentTreeUI(app.mainForm);
+        FlatAnimatedLafChange.hideSnapshotWithAnimation();
+    }
+
+    public static void logout() {
+        FlatAnimatedLafChange.showSnapshot();
+        app.setContentPane(app.loginForm);
+        app.loginForm.applyComponentOrientation(app.getComponentOrientation());
+        SwingUtilities.updateComponentTreeUI(app.loginForm);
+        FlatAnimatedLafChange.hideSnapshotWithAnimation();
+    }
+
+    public static void setSelectedMenu(int index, int subIndex) {
+        app.mainForm.setSelectedMenu(index, subIndex);
     }
 
     /**
@@ -93,7 +131,7 @@ public class Application extends javax.swing.JFrame {
             FlatLaf.registerCustomDefaultsSource("theme");
             javax.swing.UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatLightLaf());
 
-        } catch (Exception ex) {
+        } catch (UnsupportedLookAndFeelException ex) {
             System.err.println("Không thể khởi tạo FlatLaf");
         }
         

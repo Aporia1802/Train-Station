@@ -5,11 +5,9 @@
 package gui;
 
 import com.formdev.flatlaf.FlatClientProperties;
-import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import javax.swing.Timer;
-import javax.swing.UIManager;
 
 /**
  *
