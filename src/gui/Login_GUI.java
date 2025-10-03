@@ -17,6 +17,7 @@ public class Login_GUI extends javax.swing.JPanel {
      */
     public Login_GUI() {
         initComponents();
+        System.out.println(getClass().getResource("/icons/eye.png"));
     }
 
     /**
@@ -59,7 +60,7 @@ public class Login_GUI extends javax.swing.JPanel {
         jPanel11 = new javax.swing.JPanel();
         lbl_email = new javax.swing.JLabel();
         jPanel12 = new javax.swing.JPanel();
-        txt_email = new javax.swing.JPasswordField();
+        txt_email = new javax.swing.JTextField();
         jPanel13 = new javax.swing.JPanel();
         lbl_dangNhap = new javax.swing.JLabel();
         jPanel14 = new javax.swing.JPanel();
@@ -75,7 +76,7 @@ public class Login_GUI extends javax.swing.JPanel {
         pnl_logo.setLayout(new java.awt.BorderLayout());
 
         lbl_logo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbl_logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/Large_logo.png"))); // NOI18N
+        lbl_logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/login/Large_logo.png"))); // NOI18N
         lbl_logo.setMaximumSize(new java.awt.Dimension(630, 650));
         lbl_logo.setMinimumSize(new java.awt.Dimension(630, 650));
         lbl_logo.setPreferredSize(new java.awt.Dimension(630, 650));
@@ -159,7 +160,7 @@ public class Login_GUI extends javax.swing.JPanel {
             }
         });
         jPanel3.add(txt_matKhau, java.awt.BorderLayout.CENTER);
-        txt_matKhau.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
+        txt_matKhau.putClientProperty(FlatClientProperties.STYLE, "arc:10;" + "" + "showRevealButton:true;");
 
         pnl_login.add(jPanel3);
 
@@ -255,14 +256,12 @@ public class Login_GUI extends javax.swing.JPanel {
 
         txt_email.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         txt_email.setMinimumSize(new java.awt.Dimension(64, 14));
-        txt_email.setPreferredSize(new java.awt.Dimension(90, 10));
-        txt_email.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_emailActionPerformed(evt);
-            }
-        });
+        txt_email.setPreferredSize(new java.awt.Dimension(64, 10));
         jPanel12.add(txt_email, java.awt.BorderLayout.CENTER);
-        txt_email.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
+        txt_email.putClientProperty(FlatClientProperties.STYLE,                                  
+            "arc:10;" +                                                
+            "focusWidth: 0"           
+        );
 
         pnl_quenMatKhau.add(jPanel12);
 
@@ -315,10 +314,6 @@ public class Login_GUI extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_matKhauActionPerformed
 
-    private void txt_emailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_emailActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_emailActionPerformed
-
     private void btn_layMatKhauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_layMatKhauActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btn_layMatKhauActionPerformed
@@ -369,7 +364,7 @@ public class Login_GUI extends javax.swing.JPanel {
     private javax.swing.JPanel pnl_login;
     private javax.swing.JPanel pnl_logo;
     private javax.swing.JPanel pnl_quenMatKhau;
-    private javax.swing.JPasswordField txt_email;
+    private javax.swing.JTextField txt_email;
     private javax.swing.JPasswordField txt_matKhau;
     private javax.swing.JTextField txt_taiKhoan;
     private javax.swing.JTextField txt_taiKhoan1;

@@ -77,11 +77,9 @@ public class Loading_GUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setAlwaysOnTop(true);
-        setMaximumSize(new java.awt.Dimension(400, 255));
         setMinimumSize(new java.awt.Dimension(400, 255));
         setName("Loading"); // NOI18N
         setUndecorated(true);
-        setPreferredSize(new java.awt.Dimension(400, 255));
         setResizable(false);
         setType(java.awt.Window.Type.POPUP);
 
@@ -90,7 +88,7 @@ public class Loading_GUI extends javax.swing.JFrame {
         pnl_container.setMinimumSize(new java.awt.Dimension(400, 255));
         pnl_container.setLayout(null);
 
-        lbl_logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/Logo.png"))); // NOI18N
+        lbl_logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/login/Logo.png"))); // NOI18N
         lbl_logo.setMaximumSize(new java.awt.Dimension(180, 180));
         lbl_logo.setMinimumSize(new java.awt.Dimension(180, 180));
         lbl_logo.setPreferredSize(new java.awt.Dimension(180, 180));

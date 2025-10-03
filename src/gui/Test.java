@@ -4,9 +4,12 @@
  */
 package gui;
 
+import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
 import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
+import utils.PasswordRevealIcon;
 
 /**
  *
@@ -29,11 +32,12 @@ public class Test extends JFrame{
     }
 
     public static void main(String[] args) {
-        // Đặt Look and Feel FlatLaf (nếu muốn)
+        // Đặt Look and Feel FlatLaf
         try {
+            FlatRobotoFont.install();
+            FlatLaf.registerCustomDefaultsSource("theme");
             javax.swing.UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatLightLaf());
-            
-            
+
         } catch (Exception ex) {
             System.err.println("Không thể khởi tạo FlatLaf");
         }
