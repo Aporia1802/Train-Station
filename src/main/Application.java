@@ -43,7 +43,7 @@ public class Application extends javax.swing.JFrame {
 //        setIconImage(new FlatSVGIcon("imgs/icon.svg").getImage());
         mainForm = new MainForm();
         loginForm = new Login_GUI();
-        setContentPane(mainForm);
+        setContentPane(loginForm);
         Notifications.getInstance().setJFrame(this);
 
         // Handle on close
