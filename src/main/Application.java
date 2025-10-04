@@ -35,7 +35,7 @@ import raven.toast.Notifications;
 public class Application extends javax.swing.JFrame {
     public static Application app;
     private final Login_GUI loginForm;
-    private final MainForm mainForm;
+//    private final MainForm mainForm;
     
     /**
      * Creates new form Application
@@ -48,7 +48,7 @@ public class Application extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setTitle("Platform 9 3/4");
 //        setIconImage(new FlatSVGIcon("imgs/icon.svg").getImage());
-        mainForm = new MainForm();
+//        mainForm = new MainForm();
         loginForm = new Login_GUI();
         setContentPane(loginForm);
         Notifications.getInstance().setJFrame(this);
@@ -69,32 +69,32 @@ public class Application extends javax.swing.JFrame {
         });
     }
     
-     public static void showForm(Component component) {
-        component.applyComponentOrientation(app.getComponentOrientation());
-        app.mainForm.showForm(component);
-    }
-
-    public static void login() {
-        FlatAnimatedLafChange.showSnapshot();
-        app.setContentPane(app.mainForm);
-        app.mainForm.applyComponentOrientation(app.getComponentOrientation());
-        setSelectedMenu(0, 0);
-        app.mainForm.hideMenu();
-        SwingUtilities.updateComponentTreeUI(app.mainForm);
-        FlatAnimatedLafChange.hideSnapshotWithAnimation();
-    }
-
-    public static void logout() {
-        FlatAnimatedLafChange.showSnapshot();
-        app.setContentPane(app.loginForm);
-        app.loginForm.applyComponentOrientation(app.getComponentOrientation());
-        SwingUtilities.updateComponentTreeUI(app.loginForm);
-        FlatAnimatedLafChange.hideSnapshotWithAnimation();
-    }
-
-    public static void setSelectedMenu(int index, int subIndex) {
-        app.mainForm.setSelectedMenu(index, subIndex);
-    }
+//     public static void showForm(Component component) {
+//        component.applyComponentOrientation(app.getComponentOrientation());
+//        app.mainForm.showForm(component);
+//    }
+//
+//    public static void login() {
+//        FlatAnimatedLafChange.showSnapshot();
+//        app.setContentPane(app.mainForm);
+//        app.mainForm.applyComponentOrientation(app.getComponentOrientation());
+//        setSelectedMenu(0, 0);
+//        app.mainForm.hideMenu();
+//        SwingUtilities.updateComponentTreeUI(app.mainForm);
+//        FlatAnimatedLafChange.hideSnapshotWithAnimation();
+//    }
+//
+//    public static void logout() {
+//        FlatAnimatedLafChange.showSnapshot();
+//        app.setContentPane(app.loginForm);
+//        app.loginForm.applyComponentOrientation(app.getComponentOrientation());
+//        SwingUtilities.updateComponentTreeUI(app.loginForm);
+//        FlatAnimatedLafChange.hideSnapshotWithAnimation();
+//    }
+//
+//    public static void setSelectedMenu(int index, int subIndex) {
+//        app.mainForm.setSelectedMenu(index, subIndex);
+//    }
 
     /**
      * This method is called from within the constructor to initialize the form.
