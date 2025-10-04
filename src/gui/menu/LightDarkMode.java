@@ -104,7 +104,7 @@ public class LightDarkMode extends JPanel{
         addStyle(buttonLight, !isDark);
         addStyle(buttonDark, isDark);
         if (isDark) {
-            buttonLighDark.setIcon(new FlatSVGIcon("imgs/menudark.svg"));
+            buttonLighDark.setIcon(new FlatSVGIcon("imgs/menu/dark.svg"));
         } else {
             buttonLighDark.setIcon(new FlatSVGIcon("imgs/menu/light.svg"));
         }

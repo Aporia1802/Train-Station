@@ -66,7 +66,7 @@ public class MainForm extends JLayeredPane{
     }
 
     private void initMenuEvent() {
-
+        
     }
 
     private void setMenuFull(boolean full) {
