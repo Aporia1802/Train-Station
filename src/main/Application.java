@@ -43,7 +43,7 @@ public class Application extends javax.swing.JFrame {
 //        setIconImage(new FlatSVGIcon("imgs/icon.svg").getImage());
         mainForm = new MainForm();
         loginForm = new Login_GUI();
-        setContentPane(loginForm);
+        setContentPane(mainForm);
         Notifications.getInstance().setJFrame(this);
 
         // Handle on close
@@ -131,8 +131,8 @@ public class Application extends javax.swing.JFrame {
         app = new Application();
 
 //      Fake loading
-        new Loading_GUI().setVisible(true);
-        
+//        new Loading_GUI().setVisible(true);
+//        
 //        Delay render
         Timer timer = new Timer(2500, (ActionEvent evt) -> {
             java.awt.EventQueue.invokeLater(() -> {

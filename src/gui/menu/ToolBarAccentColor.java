@@ -73,35 +73,39 @@ public class ToolBarAccentColor extends JPanel {
         SwingUtilities.updateComponentTreeUI(popup);
     }
 
-    private void init() {
-        setLayout(new BorderLayout());
-        toolbar = new JToolBar();
-        add(toolbar);
-        putClientProperty(FlatClientProperties.STYLE, ""
-                + "background:$Menu.background");
-        toolbar.putClientProperty(FlatClientProperties.STYLE, ""
-                + "background:$Menu.background");
+private void init() {
+    setLayout(new BorderLayout());
+    toolbar = new JToolBar();
+    add(toolbar);
+    putClientProperty(FlatClientProperties.STYLE, ""
+            + "background:$Menu.background");
+    toolbar.putClientProperty(FlatClientProperties.STYLE, ""
+            + "background:$Menu.background");
 
-        popup.putClientProperty(FlatClientProperties.STYLE, ""
-                + "background:$Menu.background;"
-                + "borderColor:$Menu.background;");
-        ButtonGroup group = new ButtonGroup();
-        selectedButton = new JToggleButton(new AccentColorIcon(accentColorKeys[0]));
-        selectedButton.addActionListener((ActionEvent e) -> {
-            int y = (selectedButton.getPreferredSize().height - (toolbar.getPreferredSize().height + UIScale.scale(10))) / 2;
-            show(ToolBarAccentColor.this, (int) getWidth() + UIScale.scale(4), y);
+    popup.putClientProperty(FlatClientProperties.STYLE, ""
+            + "background:$Menu.background;"
+            + "borderColor:$Menu.background;");
+    ButtonGroup group = new ButtonGroup();
+    selectedButton = new JToggleButton(new AccentColorIcon(accentColorKeys[0]));
+    selectedButton.putClientProperty(FlatClientProperties.STYLE, ""
+            + "toolbar.focusWidth:0");
+    selectedButton.addActionListener((ActionEvent e) -> {
+        int y = (selectedButton.getPreferredSize().height - (toolbar.getPreferredSize().height + UIScale.scale(10))) / 2;
+        show(ToolBarAccentColor.this, (int) getWidth() + UIScale.scale(4), y);
+    });
+    for (int i = 0; i < accentColorNames.length; i++) {
+        String key = accentColorKeys[i];
+        JToggleButton tbutton = new JToggleButton(new AccentColorIcon(key));
+        tbutton.putClientProperty(FlatClientProperties.STYLE, ""
+                + "toolbar.focusWidth:0");
+        tbutton.setSelected(UIManager.getColor("Component.accentColor").equals(UIManager.getColor(key)));
+        tbutton.addActionListener((ActionEvent e) -> {
+            colorAccentChanged(key);
         });
-        for (int i = 0; i < accentColorNames.length; i++) {
-            String key = accentColorKeys[i];
-            JToggleButton tbutton = new JToggleButton(new AccentColorIcon(key));
-            tbutton.setSelected(UIManager.getColor("Component.accentColor").equals(UIManager.getColor(key)));
-            tbutton.addActionListener((ActionEvent e) -> {
-                colorAccentChanged(key);
-            });
-            group.add(tbutton);
-            toolbar.add(tbutton);
-        }
+        group.add(tbutton);
+        toolbar.add(tbutton);
     }
+}
 
     private void colorAccentChanged(String colorKey) {
         if (popup.isVisible()) {

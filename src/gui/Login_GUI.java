@@ -322,12 +322,14 @@ public class Login_GUI extends javax.swing.JPanel {
         // TODO add your handling code here:
         pnl_login.setVisible(false);
         pnl_quenMatKhau.setVisible(true);
+        txt_taiKhoan1.requestFocus();
     }//GEN-LAST:event_lbl_quenMatKhauMouseClicked
 
     private void lbl_dangNhapMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_dangNhapMouseClicked
         // TODO add your handling code here:
         pnl_quenMatKhau.setVisible(false);
         pnl_login.setVisible(true);
+        txt_taiKhoan.requestFocus();
     }//GEN-LAST:event_lbl_dangNhapMouseClicked
 
 
