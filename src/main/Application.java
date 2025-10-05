@@ -7,17 +7,20 @@ package main;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import database.ConnectDB;
 import gui.Loading_GUI;
 import gui.Login_GUI;
 import gui.MainForm;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
+import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import raven.toast.Notifications;
 
@@ -118,15 +121,12 @@ public class Application extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-    
-       try {
-            FlatRobotoFont.install();
-            FlatLaf.registerCustomDefaultsSource("theme");
-            javax.swing.UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatLightLaf());
+        FlatRobotoFont.install();
+        FlatLaf.registerCustomDefaultsSource("theme");
+        UIManager.put("defaultFont", new Font(FlatRobotoFont.FAMILY, Font.PLAIN, 15));
+        FlatMacLightLaf.setup();
 
-        } catch (UnsupportedLookAndFeelException ex) {
-            System.err.println("Không thể khởi tạo FlatLaf");
-        }
+        
        
         app = new Application();
 
