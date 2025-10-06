@@ -67,4 +67,18 @@ public class TaiKhoan_DAO implements DAOBase<TaiKhoan> {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
+    public Boolean updatePassword(String taiKhoan, String matKhauMoi) {
+        int n = 0;
+        try {
+            PreparedStatement st = ConnectDB.conn.prepareStatement("update taiKhoan set "
+                    + "matKhau = ? where tenDangNhap = ?");
+            st.setString(1, matKhauMoi);
+            st.setString(2, taiKhoan);
+
+            n = st.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return n > 0;
+    }
 }

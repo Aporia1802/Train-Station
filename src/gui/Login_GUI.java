@@ -8,6 +8,7 @@ import bus.Login_BUS;
 import com.formdev.flatlaf.FlatClientProperties;
 import dao.NhanVien_DAO;
 import entity.NhanVien;
+import javax.swing.SwingWorker;
 import main.Application;
 import raven.toast.Notifications;
 
@@ -318,6 +319,31 @@ public class Login_GUI extends javax.swing.JPanel {
 
     private void btn_layMatKhauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_layMatKhauActionPerformed
         // TODO add your handling code here:
+        String taiKhoan = txt_taiKhoan1.getText();
+        String email = txt_email.getText();
+        
+        // Chạy bất đồng bộ
+        SwingWorker<Void, Void> worker = new SwingWorker<>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+            // Code nặng (reset password, gửi email)
+                log_BUS.resetPassword(taiKhoan, email);
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    get(); // bắt exception nếu có trong doInBackground
+                    Notifications.getInstance().show(Notifications.Type.SUCCESS, 
+                    "Mật khẩu đã được cập nhật. Vui lòng đăng nhập lại!");
+                } catch (Exception ex) {
+                    Notifications.getInstance().show(Notifications.Type.ERROR, ex.getMessage());
+                }
+            }
+    };
+
+    worker.execute(); // chạy
     }//GEN-LAST:event_btn_layMatKhauActionPerformed
 
     private void lbl_quenMatKhauMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_quenMatKhauMouseClicked
@@ -336,11 +362,11 @@ public class Login_GUI extends javax.swing.JPanel {
 
     private void btn_dangNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_dangNhapActionPerformed
         // TODO add your handling code here:
-        String tenDangNhap = txt_taiKhoan.getText();
+        String taiKhoan = txt_taiKhoan.getText();
         String matKhau = String.copyValueOf(txt_matKhau.getPassword());
 
         try {
-            NhanVien nhanVien = log_BUS.login(tenDangNhap, matKhau);
+            NhanVien nhanVien = log_BUS.login(taiKhoan, matKhau);
             if (nhanVien != null && nhanVien.isTrangThai()) {
                 Application.login();
             }
