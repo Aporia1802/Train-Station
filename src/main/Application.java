@@ -16,6 +16,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.sql.SQLException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -46,7 +47,7 @@ public class Application extends javax.swing.JFrame {
 //        setIconImage(new FlatSVGIcon("imgs/icon.svg").getImage());
         mainForm = new MainForm();
         loginForm = new Login_GUI();
-        setContentPane(mainForm);
+        setContentPane(loginForm);
         Notifications.getInstance().setJFrame(this);
 
         // Handle on close
@@ -125,14 +126,20 @@ public class Application extends javax.swing.JFrame {
         FlatLaf.registerCustomDefaultsSource("theme");
         UIManager.put("defaultFont", new Font(FlatRobotoFont.FAMILY, Font.PLAIN, 15));
         FlatMacLightLaf.setup();
-
         
-       
         app = new Application();
 
 //      Fake loading
-//        new Loading_GUI().setVisible(true);
-//        
+        new Loading_GUI().setVisible(true);
+        
+//      Connect db
+        try {
+            ConnectDB.connect();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Không thể kết nối đến database!", "Không thể khởi động ứng dụng", JOptionPane.DEFAULT_OPTION);
+            System.exit(0);
+        }
+     
 //        Delay render
         Timer timer = new Timer(2500, (ActionEvent evt) -> {
             java.awt.EventQueue.invokeLater(() -> {
@@ -141,7 +148,6 @@ public class Application extends javax.swing.JFrame {
         });
         timer.setRepeats(false);
         timer.start();
-        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

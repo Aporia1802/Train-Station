@@ -26,18 +26,18 @@ public class NhanVien {
 //  Thông báo lỗi
     public static final String TENNV_EMPTY = "Họ tên không được rỗng!";
     public static final String TENNV_INVALID = "Họ tên chỉ được chứa kí tự chữ và khoảng trắng!";
-    public static final String SDT_EMPTY = "Số điện thoại không được rỗng!";
-    public static final String SDT_INVALID = "Số điện thoại không hợp lệ!";
     public static final String NGAYSINH_INVALID = "Nhân viên phải đủ 18 tuổi trở lên!";
     public static final String EMAIL_INVALID = "Email không hợp lệ!";
+    public static final String SDT_EMPTY = "Số điện thoại không được rỗng!";
+    public static final String SDT_INVALID = "Số điện thoại không hợp lệ!";
     public static final String CCCD_EMPTY = "Số cccd không được rỗng!";
-    public static final String CCCD_INVALID = "Số cccd chỉ chứa tối đa là 12 số!";
+    public static final String CCCD_INVALID = "Số cccd không hợp lệ!";
     
     public NhanVien() {
     }
 
     public NhanVien(String maNV) {
-        this.maNV = maNV;
+        setMaNV(maNV);
     }
     
     public NhanVien(String maNV, String tenNV, boolean gioiTinh, LocalDate ngaySinh, String email, String soDienThoai, String cccd, String diaChi, String chucVu, boolean trangThai) throws Exception {
@@ -100,10 +100,10 @@ public class NhanVien {
     }
 
     public void setEmail(String email) throws Exception{
-        email = email.trim();
-        if(!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\\\.[A-Za-z]{2,}$")) {
-            throw new Exception(EMAIL_INVALID);
-        }
+//        email = email.trim();
+//        if(!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\\\.[A-Za-z]{2,}$")) {
+//            throw new Exception(EMAIL_INVALID);
+//        }
         this.email = email;
     }
 

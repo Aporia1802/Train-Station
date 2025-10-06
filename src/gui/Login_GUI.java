@@ -4,14 +4,20 @@
  */
 package gui;
 
+import bus.Login_BUS;
 import com.formdev.flatlaf.FlatClientProperties;
+import dao.NhanVien_DAO;
+import entity.NhanVien;
+import main.Application;
+import raven.toast.Notifications;
 
 /**
  *
  * @author CÔNG HOÀNG
  */
 public class Login_GUI extends javax.swing.JPanel {
-
+    private final Login_BUS log_BUS = new Login_BUS();
+    private final NhanVien_DAO nhanVienDAO = new NhanVien_DAO();
     /**
      * Creates new form Login
      */
@@ -154,11 +160,6 @@ public class Login_GUI extends javax.swing.JPanel {
         txt_matKhau.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         txt_matKhau.setMinimumSize(new java.awt.Dimension(64, 14));
         txt_matKhau.setPreferredSize(new java.awt.Dimension(90, 10));
-        txt_matKhau.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_matKhauActionPerformed(evt);
-            }
-        });
         jPanel3.add(txt_matKhau, java.awt.BorderLayout.CENTER);
         txt_matKhau.putClientProperty(FlatClientProperties.STYLE, "arc:10;" + "" + "showRevealButton:true;");
 
@@ -191,6 +192,11 @@ public class Login_GUI extends javax.swing.JPanel {
         btn_dangNhap.setText("Đăng nhập");
         btn_dangNhap.setOpaque(true);
         btn_dangNhap.setPreferredSize(new java.awt.Dimension(88, 18));
+        btn_dangNhap.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_dangNhapActionPerformed(evt);
+            }
+        });
         btn_dangNhap.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
         jPanel1.add(btn_dangNhap, java.awt.BorderLayout.CENTER);
 
@@ -310,10 +316,6 @@ public class Login_GUI extends javax.swing.JPanel {
         add(pnl_container, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txt_matKhauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_matKhauActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_matKhauActionPerformed
-
     private void btn_layMatKhauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_layMatKhauActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btn_layMatKhauActionPerformed
@@ -331,6 +333,21 @@ public class Login_GUI extends javax.swing.JPanel {
         pnl_login.setVisible(true);
         txt_taiKhoan.requestFocus();
     }//GEN-LAST:event_lbl_dangNhapMouseClicked
+
+    private void btn_dangNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_dangNhapActionPerformed
+        // TODO add your handling code here:
+        String tenDangNhap = txt_taiKhoan.getText();
+        String matKhau = String.copyValueOf(txt_matKhau.getPassword());
+
+        try {
+            NhanVien nhanVien = log_BUS.login(tenDangNhap, matKhau);
+            if (nhanVien != null && nhanVien.isTrangThai()) {
+                Application.login();
+            }
+        } catch (Exception ex) {
+            Notifications.getInstance().show(Notifications.Type.ERROR, ex.getMessage());
+        }
+    }//GEN-LAST:event_btn_dangNhapActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

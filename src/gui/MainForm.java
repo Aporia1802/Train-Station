@@ -8,6 +8,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.util.UIScale;
 import gui.menu.Menu;
+import gui.menu.MenuAction;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
@@ -20,6 +21,7 @@ import javax.swing.JButton;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import main.Application;
 
 /**
  *
@@ -66,7 +68,17 @@ public class MainForm extends JLayeredPane{
     }
 
     private void initMenuEvent() {
-        
+        menu.addMenuEvent((int index, int subIndex, MenuAction action) -> {
+            // Application.mainForm.showForm(new DefaultForm("Form : " + index + " " + subIndex));
+            if (index == 0) {
+                Application.showForm(new DatVe_GUI());
+            } 
+            else if (index == 9) {
+                Application.logout();
+            } else {
+                action.cancel();
+            }
+        });
     }
 
     private void setMenuFull(boolean full) {

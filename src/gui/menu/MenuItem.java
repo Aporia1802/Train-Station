@@ -149,7 +149,7 @@ public class MenuItem extends JPanel{
                 + "innerFocusWidth:0;"
                 + "arc:10;"
                 + "iconTextGap:15;"
-                + "margin:8,11,8,11");
+                + "margin:3,11,3,11");
         return button;
     }
 

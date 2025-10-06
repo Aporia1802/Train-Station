@@ -87,8 +87,6 @@ private void init() {
             + "borderColor:$Menu.background;");
     ButtonGroup group = new ButtonGroup();
     selectedButton = new JToggleButton(new AccentColorIcon(accentColorKeys[0]));
-    selectedButton.putClientProperty(FlatClientProperties.STYLE, ""
-            + "toolbar.focusWidth:0");
     selectedButton.addActionListener((ActionEvent e) -> {
         int y = (selectedButton.getPreferredSize().height - (toolbar.getPreferredSize().height + UIScale.scale(10))) / 2;
         show(ToolBarAccentColor.this, (int) getWidth() + UIScale.scale(4), y);
@@ -96,8 +94,6 @@ private void init() {
     for (int i = 0; i < accentColorNames.length; i++) {
         String key = accentColorKeys[i];
         JToggleButton tbutton = new JToggleButton(new AccentColorIcon(key));
-        tbutton.putClientProperty(FlatClientProperties.STYLE, ""
-                + "toolbar.focusWidth:0");
         tbutton.setSelected(UIManager.getColor("Component.accentColor").equals(UIManager.getColor(key)));
         tbutton.addActionListener((ActionEvent e) -> {
             colorAccentChanged(key);

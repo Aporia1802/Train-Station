@@ -9,5 +9,5 @@ package utils;
  * @author CÔNG HOÀNG
  */
 public class SendEmail {
-    
+
 }
