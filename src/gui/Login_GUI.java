@@ -25,6 +25,9 @@ public class Login_GUI extends javax.swing.JPanel {
     public Login_GUI() {
         initComponents();
         System.out.println(getClass().getResource("/icons/eye.png"));
+        txt_taiKhoan.setText("0901234567");
+        txt_matKhau.setText("aNJTre18");
+        
     }
 
     /**
@@ -368,7 +371,7 @@ public class Login_GUI extends javax.swing.JPanel {
         try {
             NhanVien nhanVien = log_BUS.login(taiKhoan, matKhau);
             if (nhanVien != null && nhanVien.isTrangThai()) {
-                Application.login();
+                Application.login(nhanVien);
             }
         } catch (Exception ex) {
             Notifications.getInstance().show(Notifications.Type.ERROR, ex.getMessage());

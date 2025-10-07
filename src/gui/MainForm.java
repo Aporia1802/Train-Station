@@ -7,6 +7,7 @@ package gui;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.util.UIScale;
+import gui.bookTicket.DatVe_GUI;
 import gui.menu.Menu;
 import gui.menu.MenuAction;
 import java.awt.BorderLayout;
@@ -17,8 +18,11 @@ import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import main.Application;
@@ -66,17 +70,46 @@ public class MainForm extends JLayeredPane{
         String icon = (getComponentOrientation().isLeftToRight()) ? "menu_left.svg" : "menu_right.svg";
         menuButton.setIcon(new FlatSVGIcon("imgs/menu/" + icon, 0.8f));
     }
+    
+    public static void rerenderMenuByEmployee() {
+        menu.rerender();
+    }
 
     private void initMenuEvent() {
         menu.addMenuEvent((int index, int subIndex, MenuAction action) -> {
             // Application.mainForm.showForm(new DefaultForm("Form : " + index + " " + subIndex));
-            if (index == 0) {
-                Application.showForm(new DatVe_GUI());
-            } 
-            else if (index == 9) {
-                Application.logout();
-            } else {
-                action.cancel();
+            switch (index) {
+                case 0:
+                    Application.showForm(new TrangChu_GUI());
+                    break;
+                case 1:
+                    switch (subIndex) {
+                        case 1:
+                            Application.showForm(new DatVe_GUI());
+                            break;
+                        case 2:
+                            Application.showForm(new DoiVe_GUI());
+                            break;
+                        case 3:
+                            Application.showForm(new TraVe_GUI());
+                            break;
+                        default:
+                            action.cancel();
+                            break;
+                    }
+                    break;
+                case 10:
+                    if (JOptionPane.showConfirmDialog(this, "Bạn có thật sự muốn đăng xuất", "Xác nhận hành động", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                        try {
+                            Application.logout();
+                        } catch (Exception ex) {
+                            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    break;
+                default:
+                    action.cancel();
+                    break;
             }
         });
     }
@@ -108,7 +141,7 @@ public class MainForm extends JLayeredPane{
         menu.setSelectedMenu(index, subIndex);
     }
 
-    private Menu menu;
+    private static Menu menu;
     private JPanel panelBody;
     private JButton menuButton;
 

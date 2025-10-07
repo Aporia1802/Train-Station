@@ -8,12 +8,12 @@ package gui;
  *
  * @author CÔNG HOÀNG
  */
-public class DatVe_GUI extends javax.swing.JPanel {
+public class TrangChu_GUI extends javax.swing.JPanel {
 
     /**
-     * Creates new form DatVe_GUI
+     * Creates new form TrangChu_GUI
      */
-    public DatVe_GUI() {
+    public TrangChu_GUI() {
         initComponents();
     }
 
@@ -26,19 +26,19 @@ public class DatVe_GUI extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-
-        setPreferredSize(new java.awt.Dimension(1200, 650));
-        setLayout(new java.awt.BorderLayout());
-
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Dat ve");
-        add(jLabel1, java.awt.BorderLayout.CENTER);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }

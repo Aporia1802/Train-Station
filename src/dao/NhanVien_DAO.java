@@ -19,7 +19,6 @@ import java.util.ArrayList;
  */
 public class NhanVien_DAO implements DAOBase<NhanVien>{
     
-//  Lấy ra nhân viên với số điện thoại
     @Override
     public NhanVien getOne(String id) {
         NhanVien nhanVien = null;

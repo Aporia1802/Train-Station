@@ -9,6 +9,7 @@ import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import database.ConnectDB;
+import entity.NhanVien;
 import gui.Loading_GUI;
 import gui.Login_GUI;
 import gui.MainForm;
@@ -32,6 +33,7 @@ import raven.toast.Notifications;
 public class Application extends javax.swing.JFrame {
     public static Application app;
     private final Login_GUI loginForm;
+    public static NhanVien nhanVien = null;
     private final MainForm mainForm;
     
     /**
@@ -41,7 +43,7 @@ public class Application extends javax.swing.JFrame {
         initComponents();
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
-        setSize(new Dimension(1200, 650));
+        setSize(new Dimension(1366, 768));
         setLocationRelativeTo(null);
         setTitle("Platform 9 3/4");
 //        setIconImage(new FlatSVGIcon("imgs/icon.svg").getImage());
@@ -71,7 +73,7 @@ public class Application extends javax.swing.JFrame {
         app.mainForm.showForm(component);
     }
 
-    public static void login() {
+    public static void login(NhanVien nhanVien) {
         FlatAnimatedLafChange.showSnapshot();
         app.setContentPane(app.mainForm);
         app.mainForm.applyComponentOrientation(app.getComponentOrientation());
@@ -79,6 +81,12 @@ public class Application extends javax.swing.JFrame {
         app.mainForm.hideMenu();
         SwingUtilities.updateComponentTreeUI(app.mainForm);
         FlatAnimatedLafChange.hideSnapshotWithAnimation();
+        
+        
+        // Update state
+        Application.nhanVien = nhanVien;
+        MainForm.rerenderMenuByEmployee();
+        Notifications.getInstance().show(Notifications.Type.SUCCESS, "Đăng nhập vào hệ thống thành công");
     }
 
     public static void logout() {
@@ -87,6 +95,9 @@ public class Application extends javax.swing.JFrame {
         app.loginForm.applyComponentOrientation(app.getComponentOrientation());
         SwingUtilities.updateComponentTreeUI(app.loginForm);
         FlatAnimatedLafChange.hideSnapshotWithAnimation();
+//      update state
+        Application.nhanVien = null;
+        Notifications.getInstance().show(Notifications.Type.INFO, "Đăng xuất khỏi hệ thống thành công");
     }
 
     public static void setSelectedMenu(int index, int subIndex) {
@@ -103,6 +114,8 @@ public class Application extends javax.swing.JFrame {
     private void initComponents() {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(550, 768));
+        setPreferredSize(new java.awt.Dimension(1366, 768));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
