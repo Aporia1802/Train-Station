@@ -60,11 +60,11 @@ public class ThongTinHanhTrinh_GUI extends javax.swing.JPanel {
         pnl_header.add(jLabel1);
         jLabel1.setBounds(30, 10, 30, 30);
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 25)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Thông tin hành trình");
         pnl_header.add(jLabel2);
-        jLabel2.setBounds(160, 10, 270, 43);
+        jLabel2.setBounds(110, 0, 270, 43);
 
         pnl_main.add(pnl_header, java.awt.BorderLayout.PAGE_START);
 

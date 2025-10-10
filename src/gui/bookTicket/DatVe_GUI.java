@@ -115,8 +115,8 @@ public class DatVe_GUI extends JPanel {
         JPanel navPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
         navPanel.setBackground(Color.WHITE);
 
-        btnPrevious = new JButton("◀ Quay lại");
-        btnNext = new JButton("Tiếp theo ▶");
+        btnPrevious = new JButton("Quay lại");
+        btnNext = new JButton("Tiếp theo");
 
         btnPrevious.setEnabled(false);
 
