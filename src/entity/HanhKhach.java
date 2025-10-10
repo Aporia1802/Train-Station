@@ -4,17 +4,21 @@
  */
 package entity;
 
+import java.time.LocalDate;
+
 /**
  *
  * @author CÔNG HOÀNG
  */
 public class HanhKhach {
-     private String maHanhKhach;
+    private String maHanhKhach;
     private String tenHanhKhach;
     private String cccd;
+    private LocalDate ngaySinh;
     
     public static final String TENHANHKHACH_EMPTY = "Tên hành khách không được rỗng!";
     public static final String TENHANHKHACH_INVALID = "Tên hành khách chỉ được chứa kí tự chữ và khoảng trắng!";
+    public static final String NGAYSINH_INVALID = "Phải trước ngày hiện tại!";
     
     public HanhKhach() {
     }
@@ -55,4 +59,17 @@ public class HanhKhach {
     public void setCccd(String cccd) {
         this.cccd = cccd;
     }
+
+    public LocalDate getNgaySinh() {
+        return ngaySinh;
+    }
+
+    public void setNgaySinh(LocalDate ngaySinh) throws Exception{
+        if(ngaySinh.isAfter(LocalDate.now())) {
+            throw new Exception(NGAYSINH_INVALID);
+        }
+        this.ngaySinh = ngaySinh;
+    }
+    
+    
 }

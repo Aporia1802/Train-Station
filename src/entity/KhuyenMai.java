@@ -66,7 +66,7 @@ public class KhuyenMai {
     }
     
     public void setHeSoKhuyenMai(double heSoKhuyenMai) throws Exception {
-        if (heSoKhuyenMai < 0.0 || heSoKhuyenMai > 1.0) {
+        if (heSoKhuyenMai < 0 || heSoKhuyenMai > 1) {
             throw new Exception(HESO_INVALID);
         }
         this.heSoKhuyenMai = heSoKhuyenMai;
