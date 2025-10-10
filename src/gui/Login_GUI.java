@@ -25,8 +25,8 @@ public class Login_GUI extends javax.swing.JPanel {
     public Login_GUI() {
         initComponents();
         System.out.println(getClass().getResource("/icons/eye.png"));
-        txt_taiKhoan.setText("0901234567");
-        txt_matKhau.setText("aNJTre18");
+        txt_taiKhoan.setText("0912345678");
+        txt_matKhau.setText("6uZXqeMV");
         
     }
 
