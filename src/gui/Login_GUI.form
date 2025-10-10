@@ -286,9 +286,6 @@
                           <Dimension value="[90, 10]"/>
                         </Property>
                       </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txt_matKhauActionPerformed"/>
-                      </Events>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="txt_matKhau.putClientProperty(FlatClientProperties.STYLE, &quot;arc:10;&quot; + &quot;&quot; + &quot;showRevealButton:true;&quot;);"/>
                       </AuxValues>
@@ -365,6 +362,9 @@
                           <Dimension value="[88, 18]"/>
                         </Property>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_dangNhapActionPerformed"/>
+                      </Events>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="btn_dangNhap.putClientProperty(FlatClientProperties.STYLE, &quot;arc:10;&quot;);"/>
                       </AuxValues>

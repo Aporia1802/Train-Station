@@ -25,6 +25,7 @@ import java.util.List;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import raven.toast.Notifications;
 
 /**
  *
@@ -66,7 +67,6 @@ public class MenuItem extends JPanel{
     private final int bottomGap = 5;
     private boolean menuShow;
     private float animate;
-
     private PopupSubMenu popup;
 
     public MenuItem(Menu menu, String menus[], int menuIndex, List<MenuEvent> events) {
@@ -94,9 +94,18 @@ public class MenuItem extends JPanel{
                 + "foreground:$Menu.lineColor");
         for (int i = 0; i < menus.length; i++) {
             JButton menuItem = createButtonItem(menus[i]);
+//            Nếu không có quyền sử dụng sẽ disable
+            boolean isBan = Menu.isBan(menus[i]);
+
             menuItem.setHorizontalAlignment(menuItem.getComponentOrientation().isLeftToRight() ? JButton.LEADING : JButton.TRAILING);
+
             if (i == 0) {
-                menuItem.setIcon(getIcon());
+//                Chuyển thành icon bị khóa nếu tài khoản không có quyền
+                if (isBan) {
+                    menuItem.setIcon(new FlatSVGIcon("imgs/menu/lock.svg"));
+                } else {
+                    menuItem.setIcon(getIcon());
+                }
                 menuItem.addActionListener((ActionEvent e) -> {
                     if (menus.length > 1) {
                         if (menu.isMenuFull()) {
@@ -105,13 +114,24 @@ public class MenuItem extends JPanel{
                             popup.show(MenuItem.this, (int) MenuItem.this.getWidth() + UIScale.scale(5), UIScale.scale(menuItemHeight) / 2);
                         }
                     } else {
-                        menu.runEvent(menuIndex, 0);
+                        if (isBan) {
+                            Notifications.getInstance().show(Notifications.Type.INFO, "Tài khoản của bạn không thể sử dụng chức năng này");
+                        } else {
+                            menu.runEvent(menuIndex, 0);
+                        }
                     }
                 });
             } else {
                 final int subIndex = i;
+                if (isBan) {
+                    menuItem.setIcon(new FlatSVGIcon("imgs/menu/lock.svg"));
+                }
                 menuItem.addActionListener((ActionEvent e) -> {
-                    menu.runEvent(menuIndex, subIndex);
+                    if (isBan) {
+                        Notifications.getInstance().show(Notifications.Type.INFO, "Tài khoản của bạn không thể sử dụng chức năng này");
+                    } else {
+                        menu.runEvent(menuIndex, subIndex);
+                    }
                 });
             }
             add(menuItem);
@@ -141,12 +161,14 @@ public class MenuItem extends JPanel{
                 + "background:$Menu.background;"
                 + "foreground:$Menu.foreground;"
                 + "selectedBackground:$Menu.button.selectedBackground;"
+                + "hoverBackground:$Menu.button.hoverBackground;"
                 + "selectedForeground:$Menu.button.selectedForeground;"
+                + "hoverForeground:$Menu.button.hoverForeground;"
                 + "borderWidth:0;"
                 + "focusWidth:0;"
                 + "innerFocusWidth:0;"
                 + "arc:10;"
-                + "iconTextGap:10;"
+                + "iconTextGap:15;"
                 + "margin:3,11,3,11");
         return button;
     }

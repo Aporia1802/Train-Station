@@ -19,27 +19,37 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import main.Application;
 
 /**
  *
  * @author CÔNG HOÀNG
  */
 public class Menu extends JPanel{
-     private final String menuItems[][] = {
-        {"~MAIN~"},
-        {"Dashboard"},
-        {"~WEB APP~"},
-        {"Email", "Inbox", "Read", "Compost"},
-        {"Chat"},
-        {"Calendar"},
-        {"~COMPONENT~"},
-        {"Advanced UI", "Cropper", "Owl Carousel", "Sweet Alert"},
-        {"Forms", "Basic Elements", "Advanced Elements", "Editors", "Wizard"},
-        {"~OTHER~"},
-        {"Charts", "Apex", "Flot", "Peity", "Sparkline"},
-        {"Icons", "Feather Icons", "Flag Icons", "Mdi Icons"},
-        {"Special Pages", "Blank page", "Faq", "Invoice", "Profile", "Pricing", "Timeline"},
-        {"Logout"}
+    public static final int STORE_EMPLOYEE = 0;
+    
+    private static final String menuItems[][] = {
+        {"Trang chủ"},
+        {"Vé", "Đặt vé", "Đổi vé", "Trả vé"},
+        {"Tra cúu", "Vé"},
+        {"Thống kê", "Thống kê doanh thu", "Thống kê hành khách"},
+        {"Quản lý tàu"},
+        {"Quản lý địa điểm ga"},
+        {"Quản lý nhân viên"},
+        {"Quản lý khuyến mãi"},
+        {"Quản lý hành trình"},
+        {"Tài khoản"},
+        {"Đăng xuất"}
+    };
+     
+     
+     //    row col
+    private static final int employeeItemsBan[][] = {
+        {4, 0},
+        {5, 0},
+        {6, 0},
+        {7, 0},
+        {8, 0},
     };
 
     public boolean isMenuFull() {
@@ -63,10 +73,53 @@ public class Menu extends JPanel{
         lightDarkMode.setMenuFull(menuFull);
         toolBarAccentColor.setMenuFull(menuFull);
     }
+    
+        public static boolean isBan(String menuItemName) {
+//        Nếu nhân viên rỗng thì cấm tất cả
+        if (Application.nhanVien == null) {
+            return true;
+        }
+
+//        Xác định xem tài khoản thuộc loại nào để ban
+        int roleIndex = Menu.STORE_EMPLOYEE;
+        String roleName = Application.nhanVien.getChucVu();
+
+//        Nếu cửa hàng trưởng thì cho phép tất cả
+        if (roleName.equalsIgnoreCase("Nhân viên quản lý")) {
+            return false;
+        }
+
+        for (String banItem : getBanList(roleIndex)) {
+            if (banItem.equals(menuItemName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+        
+    public static ArrayList<String> getBanList(int role) {
+        ArrayList<String> banList = new ArrayList<>();
+        int[][] itemsBan;
+        switch (role) {
+            case STORE_EMPLOYEE:
+                itemsBan = employeeItemsBan;
+                break;
+            default:
+                itemsBan = employeeItemsBan;
+        }
+        
+        for (int[] item : itemsBan) {
+            int row = item[0];
+            int col = item[1];
+            banList.add(menuItems[row][col]);
+        }
+
+        return banList;
+    }
 
     private final List<MenuEvent> events = new ArrayList<>();
     private boolean menuFull = true;
-    private final String headerName = "Raven Channel";
+    private final String headerName = "Platform 9 3/4";
 
     protected final boolean hideMenuTitleOnMinimum = true;
     protected final int menuTitleLeftInset = 5;
@@ -78,6 +131,11 @@ public class Menu extends JPanel{
     public Menu() {
         init();
     }
+    
+    public void rerender() {
+        this.removeAll();
+        init();
+    }
 
     private void init() {
         setLayout((LayoutManager) new MenuLayout());
@@ -86,8 +144,10 @@ public class Menu extends JPanel{
                 + "background:$Menu.background;"
                 + "arc:10");
         header = new JLabel(headerName);
-        header.setIcon(new ImageIcon(getClass().getResource("imgs/logo.png")));
+        header.setIcon(new ImageIcon(getClass().getResource("/imgs/logo.png")));
+        header.setIconTextGap(20);
         header.putClientProperty(FlatClientProperties.STYLE, ""
+                + "border: 5,5,5,5;"
                 + "font:$Menu.header.font;"
                 + "foreground:$Menu.foreground");
 
@@ -247,7 +307,7 @@ public class Menu extends JPanel{
                 int hgap = menuFull ? sheaderFullHgap : 0;
                 int accentColorHeight = 0;
                 if (toolBarAccentColor.isVisible()) {
-                    accentColorHeight = toolBarAccentColor.getPreferredSize().height+gap;
+                    accentColorHeight = toolBarAccentColor.getPreferredSize().height + gap;
                 }
 
                 header.setBounds(x + hgap, y, iconWidth - (hgap * 2), iconHeight);
@@ -255,7 +315,7 @@ public class Menu extends JPanel{
                 int ldWidth = width - ldgap * 2;
                 int ldHeight = lightDarkMode.getPreferredSize().height;
                 int ldx = x + ldgap;
-                int ldy = y + height - ldHeight - ldgap  - accentColorHeight;
+                int ldy = y + height - ldHeight - ldgap - accentColorHeight;
 
                 int menux = x;
                 int menuy = y + iconHeight + gap;
