@@ -30,7 +30,7 @@ public class TaiKhoan_DAO implements DAOBase<TaiKhoan> {
             st.setString(1, id);
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
-                String maNV = rs.getString("nhanVien");
+                String maNV = rs.getString("maNV");
                 String matKhau = rs.getString("matKhau");
                 res = new TaiKhoan(matKhau, new NhanVien(maNV));
             }
