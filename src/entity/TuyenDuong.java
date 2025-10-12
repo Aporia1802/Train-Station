@@ -9,8 +9,6 @@ package entity;
  * @author CÔNG HOÀNG
  */
 public class TuyenDuong {
-    Dưới đây là class TuyenDuong được viết theo yêu cầu:
-javapublic class TuyenDuong {
     private String maTuyenDuong;
     private GaTau gaDi;
     private GaTau gaDen;
