@@ -10,19 +10,22 @@ package entity;
  */
 public class KhoangTau {
     private String maKhoangTau;
-    private String tenKhoangTau;
+    private int soHieuKhoang;
     private int sucChua;
     private ToaTau toaTau;
     
     public static final String TENKHOANG_EMPTY = "Tên khoang không được rỗng!";
     public static final String SUCCHUA_INVALID = "Sức chứa phải lớn hơn 0!";
+    public static final String SOHIEU_INVALID = "Số hiệu khoang phải lớn hơn 0!";
     public static final String TOATAU_NULL = "Toa tàu không được null!";
     
-    public KhoangTau() {
+    public KhoangTau(String maKhoangTau) {
+        setMaKhoangTau(maKhoangTau);
     }
     
-    public KhoangTau(String maKhoangTau, int sucChua, ToaTau toaTau) throws Exception {
+    public KhoangTau(String maKhoangTau, int soHieuKhoang, int sucChua, ToaTau toaTau) throws Exception {
         setMaKhoangTau(maKhoangTau);
+        setSoHieuKhoang(soHieuKhoang);
         setSucChua(sucChua);
         setToaTau(toaTau);
     }
@@ -34,18 +37,18 @@ public class KhoangTau {
     public void setMaKhoangTau(String maKhoangTau) {
         this.maKhoangTau = maKhoangTau;
     }
-    
-    public String getTenKhoangTau() {
-        return tenKhoangTau;
+
+    public int getSoHieuKhoang() {
+        return soHieuKhoang;
     }
-    
-    public void setTenKhoangTau(String tenKhoangTau) throws Exception {
-        tenKhoangTau = tenKhoangTau.trim();
-        if (tenKhoangTau.isEmpty()) {
-            throw new Exception(TENKHOANG_EMPTY);
+
+    public void setSoHieuKhoang(int soHieuKhoang) throws Exception{
+        if(soHieuKhoang < 0) {
+            throw new Exception(SOHIEU_INVALID);
         }
-        this.tenKhoangTau = tenKhoangTau;
+        this.soHieuKhoang = soHieuKhoang;
     }
+    
     
     public int getSucChua() {
         return sucChua;

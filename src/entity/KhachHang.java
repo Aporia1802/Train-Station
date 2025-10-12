@@ -16,8 +16,6 @@ private String maKH;
     private String tenKH;
     private String soDienThoai;
     private String cccd;
-    private String diaChi;
-    private String email;
     private LocalDate ngaySinh;
     private boolean gioiTinh;
     
@@ -26,22 +24,18 @@ private String maKH;
     public static final String TENKH_INVALID = "Tên khách hàng chỉ được chứa kí tự chữ và khoảng trắng!";
     public static final String SDT_EMPTY = "Số điện thoại không được rỗng!";
     public static final String SDT_INVALID = "Số điện thoại không hợp lệ!";
-    public static final String EMAIL_INVALID = "Email không hợp lệ!";
     public static final String CCCD_EMPTY = "Số CCCD không được rỗng!";
     public static final String CCCD_INVALID = "Số CCCD phải chứa 12 chữ số!";
-    public static final String DIACHI_EMPTY = "Địa chỉ không được rỗng!";
     
     public KhachHang() {
     }
     
     public KhachHang(String maKH, String tenKH, String soDienThoai, String cccd, 
-                     String diaChi, String email, LocalDate ngaySinh, boolean gioiTinh) throws Exception {
+                     LocalDate ngaySinh, boolean gioiTinh) throws Exception {
         setMaKH(maKH);
         setTenKH(tenKH);
         setSoDienThoai(soDienThoai);
         setCccd(cccd);
-        setDiaChi(diaChi);
-        setEmail(email);
         setNgaySinh(ngaySinh);
         setGioiTinh(gioiTinh);
     }
@@ -97,30 +91,6 @@ private String maKH;
             throw new Exception(CCCD_INVALID);
         }
         this.cccd = cccd;
-    }
-    
-    public String getDiaChi() {
-        return diaChi;
-    }
-    
-    public void setDiaChi(String diaChi) throws Exception {
-        diaChi = diaChi.trim();
-        if (diaChi.isEmpty()) {
-            throw new Exception(DIACHI_EMPTY);
-        }
-        this.diaChi = diaChi;
-    }
-    
-    public String getEmail() {
-        return email;
-    }
-    
-    public void setEmail(String email) throws Exception {
-        email = email.trim();
-        if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
-            throw new Exception(EMAIL_INVALID);
-        }
-        this.email = email;
     }
     
     public LocalDate getNgaySinh() {

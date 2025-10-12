@@ -11,14 +11,14 @@ import java.time.LocalDate;
  * @author CÔNG HOÀNG
  */
 public class HoaDon {
-      private String maHoaDon;
-    private NhanVien nhanVien;
-    private KhachHang khachHang;
+    private String maHoaDon;
     private LocalDate ngayLapHoaDon;
-    private int soVe;
     private final double VAT = 0.1;
     private KhuyenMai khuyenMai;
+    private NhanVien nhanVien;
+    private KhachHang khachHang;
     private double tongTien;
+    private double thanhTien;
     
     public static final String NHANVIEN_NULL = "Nhân viên không được null!";
     public static final String KHACHHANG_NULL = "Khách hàng không được null!";
@@ -28,13 +28,12 @@ public class HoaDon {
     }
     
     public HoaDon(String maHoaDon, NhanVien nhanVien, KhachHang khachHang,
-                  LocalDate ngayLapHoaDon, int soVe, KhuyenMai khuyenMai,
+                  LocalDate ngayLapHoaDon, KhuyenMai khuyenMai,
                   double tongTien) throws Exception {
         setMaHoaDon(maHoaDon);
         setNhanVien(nhanVien);
         setKhachHang(khachHang);
         setNgayLapHoaDon(ngayLapHoaDon);
-        setSoVe(soVe);
         setKhuyenMai(khuyenMai);
         setTongTien(tongTien);
     }
@@ -79,15 +78,7 @@ public class HoaDon {
         }
         this.ngayLapHoaDon = ngayLapHoaDon;
     }
-    
-    public int getSoVe() {
-        return soVe;
-    }
-    
-    public void setSoVe(int soVe) {
-        this.soVe = soVe;
-    }
-    
+
     public double getVAT() {
         return VAT;
     }
@@ -107,4 +98,14 @@ public class HoaDon {
     public void setTongTien(double tongTien) {
         this.tongTien = tongTien;
     }
+
+    public double getThanhTien() {
+        return thanhTien;
+    }
+
+    public void setThanhTien(double thanhTien) {
+        this.thanhTien = thanhTien;
+    }
+    
+    
 }

@@ -4,28 +4,29 @@
  */
 package entity;
 
+import enums.TrangThaiGhe;
+
 /**
  *
  * @author CÔNG HOÀNG
  */
 public class Ghe {
     private String maGhe;
-    private String viTri;
-    private String trangThaiGhe;
+    private int soGhe;
+    private TrangThaiGhe trangThaiGhe;
     private LoaiGhe loaiGhe;
     private KhoangTau khoangTau;
     
-    public static final String TRANGTHAI_INVALID = "Trạng thái ghế không hợp lệ!";
     public static final String LOAIGHE_NULL = "Loại ghế không được null!";
     public static final String KHOANGTAU_NULL = "Khoang tàu không được null!";
     
     public Ghe() {
     }
     
-    public Ghe(String maGhe, String viTri, String trangThaiGhe, 
+    public Ghe(String maGhe, int soGhe, TrangThaiGhe trangThaiGhe, 
                LoaiGhe loaiGhe, KhoangTau khoangTau) throws Exception {
         setMaGhe(maGhe);
-        setViTri(viTri);
+        setSoGhe(soGhe);
         setTrangThaiGhe(trangThaiGhe);
         setLoaiGhe(loaiGhe);
         setKhoangTau(khoangTau);
@@ -38,26 +39,23 @@ public class Ghe {
     public void setMaGhe(String maGhe) {
         this.maGhe = maGhe;
     }
-    
-    public String getViTri() {
-        return viTri;
+
+    public int getSoGhe() {
+        return soGhe;
+    }
+
+    public void setSoGhe(int soGhe) {
+        this.soGhe = soGhe;
     }
     
-    public void setViTri(String viTri) {
-        this.viTri = viTri;
-    }
-    
-    public String getTrangThaiGhe() {
+    public TrangThaiGhe getTrangThaiGhe() {
         return trangThaiGhe;
     }
-    
-    public void setTrangThaiGhe(String trangThaiGhe) throws Exception {
-        if (!trangThaiGhe.equals("Trống") && !trangThaiGhe.equals("Đã đặt") && 
-            !trangThaiGhe.equals("Đang giữ chỗ")) {
-            throw new Exception(TRANGTHAI_INVALID);
-        }
+
+    public void setTrangThaiGhe(TrangThaiGhe trangThaiGhe) {
         this.trangThaiGhe = trangThaiGhe;
     }
+    
     
     public LoaiGhe getLoaiGhe() {
         return loaiGhe;

@@ -4,6 +4,8 @@
  */
 package entity;
 
+import java.util.Objects;
+
 /**
  *
  * @author CÔNG HOÀNG
@@ -51,4 +53,27 @@ public class TaiKhoan {
 //        }
         this.matKhau = matKhau;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final TaiKhoan other = (TaiKhoan) obj;
+        return Objects.equals(this.tenDangNhap, other.tenDangNhap);
+    }
+    
+    
 }

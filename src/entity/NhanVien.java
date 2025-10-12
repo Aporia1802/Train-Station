@@ -101,7 +101,7 @@ public class NhanVien {
 
     public void setEmail(String email) throws Exception{
 //        email = email.trim();
-//        if(!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\\\.[A-Za-z]{2,}$")) {
+//        if(!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
 //            throw new Exception(EMAIL_INVALID);
 //        }
         this.email = email;

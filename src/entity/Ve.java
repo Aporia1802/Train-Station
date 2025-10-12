@@ -10,7 +10,7 @@ package entity;
  */
 public class Ve {
       private String maVe;
-    private ChuyenDi chuyenDi;
+    private ChuyenTau chuyenDi;
     private HanhKhach hanhKhach;
     private Ghe ghe;
     private HoaDon hoaDon;
@@ -29,7 +29,7 @@ public class Ve {
     public Ve() {
     }
     
-    public Ve(String maVe, ChuyenDi chuyenDi, HanhKhach hanhKhach, 
+    public Ve(String maVe, ChuyenTau chuyenDi, HanhKhach hanhKhach, 
               Ghe ghe, HoaDon hoaDon, String trangThai, 
               double giaVe, LoaiVe loaiVe) throws Exception {
         setMaVe(maVe);
@@ -50,11 +50,11 @@ public class Ve {
         this.maVe = maVe;
     }
     
-    public ChuyenDi getChuyenDi() {
+    public ChuyenTau getChuyenDi() {
         return chuyenDi;
     }
     
-    public void setChuyenDi(ChuyenDi chuyenDi) throws Exception {
+    public void setChuyenDi(ChuyenTau chuyenDi) throws Exception {
         if (chuyenDi == null) {
             throw new Exception(CHUYENDI_NULL);
         }

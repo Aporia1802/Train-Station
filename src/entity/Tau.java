@@ -4,6 +4,7 @@
  */
 package entity;
 
+import enums.TrangThaiTau;
 import java.time.LocalDate;
 
 /**
@@ -15,23 +16,20 @@ public class Tau {
     private int soToaTau;
     private int sucChua;
     private LocalDate ngayHoatDong;
-    private String hangSanXuat;
-    private LocalDate namSanXuat;
+    private TrangThaiTau trangThai;
     
     public static final String SOTOA_INVALID = "Số toa tàu phải lớn hơn 0!";
-    public static final String HANGSANXUAT_EMPTY = "Hãng sản xuất không được rỗng!";
-    public static final String NAMSANXUAT_INVALID = "Năm sản xuất phải trước ngày hiện tại!";
     
-    public Tau() {
+    public Tau(String maTau) {
+        setMaTau(maTau);
     }
     
     public Tau(int soToaTau, int sucChua, LocalDate ngayHoatDong, 
-               String hangSanXuat, LocalDate namSanXuat) throws Exception {
+              TrangThaiTau trangThai) throws Exception {
         setSoToaTau(soToaTau);
         setSucChua(sucChua);
         setNgayHoatDong(ngayHoatDong);
-        setHangSanXuat(hangSanXuat);
-        setNamSanXuat(namSanXuat);
+        setTrangThai(trangThai);
     }
     
     public String getMaTau() {
@@ -60,7 +58,7 @@ public class Tau {
     public void setSucChua(int sucChua) {
         this.sucChua = sucChua;
     }
-    
+
     public LocalDate getNgayHoatDong() {
         return ngayHoatDong;
     }
@@ -69,26 +67,11 @@ public class Tau {
         this.ngayHoatDong = ngayHoatDong;
     }
     
-    public String getHangSanXuat() {
-        return hangSanXuat;
+    public TrangThaiTau getTrangThai() {
+        return trangThai;
     }
-    
-    public void setHangSanXuat(String hangSanXuat) throws Exception {
-        hangSanXuat = hangSanXuat.trim();
-        if (hangSanXuat.isEmpty()) {
-            throw new Exception(HANGSANXUAT_EMPTY);
-        }
-        this.hangSanXuat = hangSanXuat;
-    }
-    
-    public LocalDate getNamSanXuat() {
-        return namSanXuat;
-    }
-    
-    public void setNamSanXuat(LocalDate namSanXuat) throws Exception {
-        if (namSanXuat.isAfter(LocalDate.now())) {
-            throw new Exception(NAMSANXUAT_INVALID);
-        }
-        this.namSanXuat = namSanXuat;
+
+    public void setTrangThai(TrangThaiTau trangThai) {
+        this.trangThai = trangThai;
     }
 }

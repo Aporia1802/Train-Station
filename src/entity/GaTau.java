@@ -16,7 +16,8 @@ public class GaTau {
     
     public static final String TENGA_EMPTY = "Tên ga không được rỗng!";
     public static final String DIACHI_EMPTY = "Địa chỉ không được rỗng!";
-    public static final String SDT_INVALID = "Số điện thoại phải có 10-11 chữ số!";
+    public static final String SDT_INVALID = "Số điện thoại không hợp lệ!";
+    public static final String SDT_EMPTY = "Số điện thoại không được rỗng!";
     
     public GaTau() {
     }
@@ -69,7 +70,10 @@ public class GaTau {
     
     public void setSoDienThoai(String soDienThoai) throws Exception {
         soDienThoai = soDienThoai.trim();
-        if (!soDienThoai.matches("\\d{10,11}")) {
+        if (soDienThoai.isEmpty()) {
+            throw new Exception(SDT_EMPTY);
+        }
+        if (!soDienThoai.matches("^(02|03|05|07|08|09)\\d{8}$")) {
             throw new Exception(SDT_INVALID);
         }
         this.soDienThoai = soDienThoai;

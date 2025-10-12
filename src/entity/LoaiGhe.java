@@ -14,7 +14,6 @@ public class LoaiGhe {
     private String moTa;
     private double heSoLoaiGhe;
     
-    public static final String MALOAIGHE_INVALID = "Mã loại ghế không hợp lệ!";
     public static final String TENLOAIGHE_EMPTY = "Tên loại ghế không được rỗng!";
     
     public LoaiGhe() {
@@ -31,11 +30,7 @@ public class LoaiGhe {
         return maLoaiGhe;
     }
     
-    public void setMaLoaiGhe(String maLoaiGhe) throws Exception {
-        if (!maLoaiGhe.equals("GHE_DA_NANG") && !maLoaiGhe.equals("GHE_NGOI_MEM") &&
-            !maLoaiGhe.equals("GIUONG_NAM_4") && !maLoaiGhe.equals("GIUONG_NAM_6")) {
-            throw new Exception(MALOAIGHE_INVALID);
-        }
+    public void setMaLoaiGhe(String maLoaiGhe) {
         this.maLoaiGhe = maLoaiGhe;
     }
     

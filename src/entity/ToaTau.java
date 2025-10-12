@@ -10,23 +10,29 @@ package entity;
  */
 public class ToaTau {
     private String maToa;
-    private String tenToa;
+    private int soHieuToa;
     private int soKhoangTau;
+    private int soCho;
     private Tau tau;
     
     public static final String TENTOA_EMPTY = "Tên toa không được rỗng!";
+    public static final String SOHIEU_INVALID = "Số hiêu toa tàu phải lớn hơn 0!";
     public static final String SOKHOANG_INVALID = "Số khoang tàu phải lớn hơn 0!";
+    public static final String SOCHO_INVALID = "Số chỗ trong toa phải lơn hơn 0!";
     public static final String TAU_NULL = "Tàu không được null!";
+
     
     public ToaTau() {
     }
-    
-    public ToaTau(String maToa, String tenToa, int soKhoangTau, Tau tau) throws Exception {
+
+    public ToaTau(String maToa, int soHieuToa, int soKhoangTau, int soCho, Tau tau) throws Exception{
         setMaToa(maToa);
-        setTenToa(tenToa);
+        setSoHieuToa(soHieuToa);
         setSoKhoangTau(soKhoangTau);
         setTau(tau);
     }
+    
+    
     
     public String getMaToa() {
         return maToa;
@@ -34,18 +40,6 @@ public class ToaTau {
     
     public void setMaToa(String maToa) {
         this.maToa = maToa;
-    }
-    
-    public String getTenToa() {
-        return tenToa;
-    }
-    
-    public void setTenToa(String tenToa) throws Exception {
-        tenToa = tenToa.trim();
-        if (tenToa.isEmpty()) {
-            throw new Exception(TENTOA_EMPTY);
-        }
-        this.tenToa = tenToa;
     }
     
     public int getSoKhoangTau() {
@@ -57,6 +51,28 @@ public class ToaTau {
             throw new Exception(SOKHOANG_INVALID);
         }
         this.soKhoangTau = soKhoangTau;
+    }
+    
+    public int getSoHieuToa() {
+        return soHieuToa;
+    }
+
+    public void setSoHieuToa(int soHieuToa) throws Exception {
+        if(soHieuToa < 0) {
+            throw new Exception(SOHIEU_INVALID);
+        }
+        this.soHieuToa = soHieuToa;
+    }
+
+    public int getSoCho() {
+        return soCho;
+    }
+
+    public void setSoCho(int soCho) throws Exception{
+        if(soCho < 0) {
+            throw new Exception(SOCHO_INVALID);
+        }
+        this.soCho = soCho;
     }
     
     public Tau getTau() {
