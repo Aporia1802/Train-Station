@@ -31,13 +31,13 @@ public class Menu extends JPanel{
     private static final String menuItems[][] = {
         {"Trang chủ"},
         {"Vé", "Đặt vé", "Đổi vé", "Trả vé"},
-        {"Tra cúu", "Vé"},
+        {"Tra cúu", "Vé", "Nhân viên", "Ga tàu", "Tàu", "Hành khách", "Chuyến tàu"},
         {"Thống kê", "Thống kê doanh thu", "Thống kê hành khách"},
         {"Quản lý tàu"},
         {"Quản lý địa điểm ga"},
         {"Quản lý nhân viên"},
         {"Quản lý khuyến mãi"},
-        {"Quản lý hành trình"},
+        {"Quản lý chuyến tàu"},
         {"Tài khoản"},
         {"Đăng xuất"}
     };
@@ -45,6 +45,7 @@ public class Menu extends JPanel{
      
      //    row col
     private static final int employeeItemsBan[][] = {
+        {2, 2},
         {4, 0},
         {5, 0},
         {6, 0},

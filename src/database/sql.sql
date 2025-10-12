@@ -206,5 +206,5 @@ INSERT INTO NhanVien (maNV, tenNV, gioiTinh, ngaySinh, email, soDienThoai, cccd,
 
 -- Insert dữ liệu mẫu cho bảng TaiKhoan
 INSERT INTO TaiKhoan (tenDangNhap, matKhau, maNV) VALUES
-('0901234567', N'3c86e8c03745cf7fc0e3a327d6660a8c', 'NV-0-95-123-001'),
-('0912345678', N'c0a55f024dd3b67a4d44210d66e7a0ea', 'NV-1-98-234-002')
+('0901234567', N'3c86e8c03745cf7fc0e3a327d6660a8c', 'NV-0-95-123-001'), --RypLmY9B
+('0912345678', N'c0a55f024dd3b67a4d44210d66e7a0ea', 'NV-1-98-234-002') --6uZUqeMV
