@@ -55,9 +55,6 @@
         </Component>
         <Component class="javax.swing.JButton" name="btn_timKiem">
           <Properties>
-            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="33" green="33" red="ff" type="rgb"/>
-            </Property>
             <Property name="text" type="java.lang.String" value="T&#xec;m ki&#x1ebf;m"/>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[100, 50]"/>
@@ -388,8 +385,11 @@
                 <Component class="javax.swing.JLabel" name="lbl_ngaySinh">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Ng&#xe0;y sinh:"/>
+                    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[100, 16]"/>
+                    </Property>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[60, 16]"/>
+                      <Dimension value="[70, 16]"/>
                     </Property>
                   </Properties>
                 </Component>

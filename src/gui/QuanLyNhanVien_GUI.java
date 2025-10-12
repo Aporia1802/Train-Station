@@ -111,7 +111,6 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
         });
         pnl_timKiem.add(txt_nhapmanv);
 
-        btn_timKiem.setBackground(new java.awt.Color(255, 51, 51));
         btn_timKiem.setText("Tìm kiếm");
         btn_timKiem.setMaximumSize(new java.awt.Dimension(100, 50));
         btn_timKiem.setPreferredSize(new java.awt.Dimension(100, 50));
@@ -224,7 +223,8 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
         jPanel9.setLayout(new javax.swing.BoxLayout(jPanel9, javax.swing.BoxLayout.LINE_AXIS));
 
         lbl_ngaySinh.setText("Ngày sinh:");
-        lbl_ngaySinh.setPreferredSize(new java.awt.Dimension(60, 16));
+        lbl_ngaySinh.setMaximumSize(new java.awt.Dimension(100, 16));
+        lbl_ngaySinh.setPreferredSize(new java.awt.Dimension(70, 16));
         jPanel9.add(lbl_ngaySinh);
 
         jDateChooser1.setMinimumSize(new java.awt.Dimension(141, 0));
