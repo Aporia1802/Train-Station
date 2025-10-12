@@ -108,10 +108,11 @@ public class MainForm extends JLayeredPane{
                             break;
                     }
                     break;
-                case 9:
-                    Application.showForm(new QuanLiThongTinCaNhan_GUI());
                 case 6:
                     Application.showForm(new QuanLyNhanVien_GUI());
+                    break;
+                case 9:
+                    Application.showForm(new QuanLiThongTinCaNhan_GUI());
                     break;
                 case 10:
                     if (JOptionPane.showConfirmDialog(this, "Bạn có thật sự muốn đăng xuất", "Xác nhận hành động", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
