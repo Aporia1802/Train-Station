@@ -28,12 +28,21 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         pnl_timKiem = new javax.swing.JPanel();
+        filler26 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
+        jLabel1 = new javax.swing.JLabel();
+        filler25 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
         txt_nhapmanv = new javax.swing.JTextField();
+        filler19 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
         btn_timKiem = new javax.swing.JButton();
+        filler20 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
         cbo_chucVu = new javax.swing.JComboBox<>();
+        filler21 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
         cbo_trangThai = new javax.swing.JComboBox<>();
+        filler22 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
         btn_Loc = new javax.swing.JButton();
+        filler23 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
         btn_Reset = new javax.swing.JButton();
+        filler24 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
         pnl_thongTinNhanVien = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         filler12 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
@@ -91,7 +100,7 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
         filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
         jPanel3 = new javax.swing.JPanel();
         btn_themNV = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
+        pnl_bangthongtin = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
@@ -101,8 +110,12 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
         pnl_timKiem.setBackground(new java.awt.Color(255, 255, 255));
         pnl_timKiem.setPreferredSize(new java.awt.Dimension(1366, 40));
         pnl_timKiem.setLayout(new javax.swing.BoxLayout(pnl_timKiem, javax.swing.BoxLayout.LINE_AXIS));
+        pnl_timKiem.add(filler26);
 
-        txt_nhapmanv.setText("Nhập mã nhân viên");
+        jLabel1.setText("Mã NV :");
+        pnl_timKiem.add(jLabel1);
+        pnl_timKiem.add(filler25);
+
         txt_nhapmanv.setPreferredSize(new java.awt.Dimension(100, 22));
         txt_nhapmanv.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -110,11 +123,13 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
             }
         });
         pnl_timKiem.add(txt_nhapmanv);
+        pnl_timKiem.add(filler19);
 
         btn_timKiem.setText("Tìm kiếm");
         btn_timKiem.setMaximumSize(new java.awt.Dimension(100, 50));
         btn_timKiem.setPreferredSize(new java.awt.Dimension(100, 50));
         pnl_timKiem.add(btn_timKiem);
+        pnl_timKiem.add(filler20);
 
         cbo_chucVu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Chức vụ", "Quản lý", "Nhân viên" }));
         cbo_chucVu.setToolTipText("");
@@ -124,19 +139,23 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
             }
         });
         pnl_timKiem.add(cbo_chucVu);
+        pnl_timKiem.add(filler21);
 
         cbo_trangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Trạng thái", "Còn làm", "Nghỉ việc" }));
         pnl_timKiem.add(cbo_trangThai);
+        pnl_timKiem.add(filler22);
 
         btn_Loc.setText("Lọc");
         btn_Loc.setMaximumSize(new java.awt.Dimension(100, 50));
         btn_Loc.setPreferredSize(new java.awt.Dimension(100, 50));
         pnl_timKiem.add(btn_Loc);
+        pnl_timKiem.add(filler23);
 
         btn_Reset.setText("Reset");
         btn_Reset.setMaximumSize(new java.awt.Dimension(100, 50));
         btn_Reset.setPreferredSize(new java.awt.Dimension(100, 50));
         pnl_timKiem.add(btn_Reset);
+        pnl_timKiem.add(filler24);
 
         add(pnl_timKiem, java.awt.BorderLayout.PAGE_START);
 
@@ -224,7 +243,7 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
 
         lbl_ngaySinh.setText("Ngày sinh:");
         lbl_ngaySinh.setMaximumSize(new java.awt.Dimension(100, 16));
-        lbl_ngaySinh.setPreferredSize(new java.awt.Dimension(70, 16));
+        lbl_ngaySinh.setPreferredSize(new java.awt.Dimension(60, 16));
         jPanel9.add(lbl_ngaySinh);
 
         jDateChooser1.setMinimumSize(new java.awt.Dimension(141, 0));
@@ -336,7 +355,8 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
 
         add(pnl_thongTinNhanVien, java.awt.BorderLayout.LINE_END);
 
-        jPanel1.setLayout(new java.awt.BorderLayout());
+        pnl_bangthongtin.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Bảng thông tin nhân viên", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 14))); // NOI18N
+        pnl_bangthongtin.setLayout(new java.awt.BorderLayout());
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -352,9 +372,9 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
         jTable1.setMaximumSize(new java.awt.Dimension(1000, 80));
         jScrollPane1.setViewportView(jTable1);
 
-        jPanel1.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        pnl_bangthongtin.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        add(jPanel1, java.awt.BorderLayout.CENTER);
+        add(pnl_bangthongtin, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
     private void txt_nhapmanvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_nhapmanvActionPerformed
@@ -402,7 +422,15 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
     private javax.swing.Box.Filler filler16;
     private javax.swing.Box.Filler filler17;
     private javax.swing.Box.Filler filler18;
+    private javax.swing.Box.Filler filler19;
     private javax.swing.Box.Filler filler2;
+    private javax.swing.Box.Filler filler20;
+    private javax.swing.Box.Filler filler21;
+    private javax.swing.Box.Filler filler22;
+    private javax.swing.Box.Filler filler23;
+    private javax.swing.Box.Filler filler24;
+    private javax.swing.Box.Filler filler25;
+    private javax.swing.Box.Filler filler26;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
@@ -414,7 +442,7 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
     private javax.swing.JButton jButton4;
     private javax.swing.JComboBox<String> jComboBox1;
     private com.toedter.calendar.JDateChooser jDateChooser1;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
@@ -436,6 +464,7 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
     private javax.swing.JLabel lbl_sdt;
     private javax.swing.JLabel lbl_trangThai;
     private javax.swing.JPanel pnl_MaNV;
+    private javax.swing.JPanel pnl_bangthongtin;
     private javax.swing.JPanel pnl_diaChi;
     private javax.swing.JPanel pnl_gioiTinh;
     private javax.swing.JPanel pnl_hoTen;
