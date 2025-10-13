@@ -100,11 +100,17 @@ public class MainForm extends JLayeredPane{
                     break;
                 case 2: 
                     switch (subIndex) {
-//                        case 6: 
-//                            Application.showForm(new TraCuuChuyenTau_GUI());
-//                            break;
                         case 2: 
                             Application.showForm(new TraCuuNhanVien_GUI());
+                            break;
+                        case 3: 
+                            Application.showForm(new TraCuuGaTau_GUI());
+                            break;
+                        case 4: 
+                            Application.showForm(new TraCuuTau_GUI());
+                            break;
+                        case 6: 
+                            Application.showForm(new TraCuuChuyenTau_GUI());
                             break;
                         default:
                             action.cancel();
