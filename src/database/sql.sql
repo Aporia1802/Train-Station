@@ -14,7 +14,7 @@ CREATE TABLE NhanVien (
     email VARCHAR(50),
     soDienThoai VARCHAR(10) NOT NULL UNIQUE,
     cccd VARCHAR(12) NOT NULL,
-	diaChi NVARCHAR(50) NOT NULL,
+    diaChi NVARCHAR(50) NOT NULL,
     chucVu NVARCHAR(20) NOT NULL,
     trangThai BIT NOT NULL,
 );
@@ -50,9 +50,9 @@ CREATE TABLE GaTau (
 CREATE TABLE Tau (
     maTau VARCHAR(20) PRIMARY KEY,
     soToaTau INT NOT NULL,
-	sucChua INT NOT NULL,
-	ngayHoatDong DATE NOT NULL,
-	trangThai VARCHAR(20) NOT NULL,
+    sucChua INT NOT NULL,
+    ngayHoatDong DATE NOT NULL,
+    trangThai VARCHAR(20) NOT NULL,
 );
 
 -- 6. BẢNG TOA TÀU

@@ -4,18 +4,16 @@
  */
 package gui;
 
-import com.formdev.flatlaf.extras.FlatSVGIcon;
-
 /**
  *
  * @author CÔNG HOÀNG
  */
-public class TraCuuChuyenTau_GUI extends javax.swing.JPanel {
+public class TraCuuGaTau_GUI extends javax.swing.JPanel {
 
     /**
-     * Creates new form TraCuuChuyenTau
+     * Creates new form TraCuuGaTau_GUI
      */
-    public TraCuuChuyenTau_GUI() {
+    public TraCuuGaTau_GUI() {
         initComponents();
     }
 
@@ -31,17 +29,14 @@ public class TraCuuChuyenTau_GUI extends javax.swing.JPanel {
         pnl_header = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         pnl_ga = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        cb_gaDi = new javax.swing.JComboBox<>();
+        lbl_maGa = new javax.swing.JLabel();
+        cb_maGa = new javax.swing.JComboBox<>();
         lbl_next1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        cb_gaDen = new javax.swing.JComboBox<>();
+        cb_tenGa = new javax.swing.JComboBox<>();
         pnl_ngay = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        date_ngayDi = new com.toedter.calendar.JDateChooser();
-        lbl_next2 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        cb_tau = new javax.swing.JComboBox<>();
+        txt_tinhThanh = new javax.swing.JTextField();
         pnl_timKiem = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
@@ -50,8 +45,6 @@ public class TraCuuChuyenTau_GUI extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
-        setBackground(new java.awt.Color(255, 255, 255));
-        setPreferredSize(new java.awt.Dimension(1366, 768));
         setLayout(new java.awt.BorderLayout());
 
         pnl_header.setBackground(new java.awt.Color(255, 255, 255));
@@ -60,7 +53,7 @@ public class TraCuuChuyenTau_GUI extends javax.swing.JPanel {
         pnl_header.setLayout(new java.awt.BorderLayout());
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder("Thông tin hành trình"), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        jPanel2.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder("Thông tin ga tàu"), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
         jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.Y_AXIS));
 
         pnl_ga.setBackground(new java.awt.Color(255, 255, 255));
@@ -69,29 +62,32 @@ public class TraCuuChuyenTau_GUI extends javax.swing.JPanel {
         pnl_ga.setPreferredSize(new java.awt.Dimension(100, 70));
         pnl_ga.setLayout(new javax.swing.BoxLayout(pnl_ga, javax.swing.BoxLayout.LINE_AXIS));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel1.setText("Ga đi:");
-        jLabel1.setMaximumSize(new java.awt.Dimension(100, 16));
-        jLabel1.setPreferredSize(new java.awt.Dimension(100, 16));
-        pnl_ga.add(jLabel1);
+        lbl_maGa.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lbl_maGa.setText("Mã ga:");
+        lbl_maGa.setPreferredSize(new java.awt.Dimension(100, 16));
+        pnl_ga.add(lbl_maGa);
 
-        cb_gaDi.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cb_gaDi.setMaximumSize(new java.awt.Dimension(32767, 50));
-        pnl_ga.add(cb_gaDi);
+        cb_maGa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cb_maGa.setMaximumSize(new java.awt.Dimension(32767, 50));
+        pnl_ga.add(cb_maGa);
 
         lbl_next1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbl_next1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/fast-forward.png"))); // NOI18N
-        lbl_next1.setPreferredSize(new java.awt.Dimension(70, 16));
+        lbl_next1.setPreferredSize(new java.awt.Dimension(60, 16));
         pnl_ga.add(lbl_next1);
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel3.setText("Ga đến:");
+        jLabel3.setText("Tên ga:");
         jLabel3.setPreferredSize(new java.awt.Dimension(100, 25));
         pnl_ga.add(jLabel3);
 
-        cb_gaDen.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cb_gaDen.setMaximumSize(new java.awt.Dimension(32767, 50));
-        pnl_ga.add(cb_gaDen);
+        cb_tenGa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cb_tenGa.setMaximumSize(new java.awt.Dimension(32767, 50));
+        cb_tenGa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cb_tenGaActionPerformed(evt);
+            }
+        });
+        pnl_ga.add(cb_tenGa);
 
         jPanel2.add(pnl_ga);
 
@@ -101,32 +97,12 @@ public class TraCuuChuyenTau_GUI extends javax.swing.JPanel {
         pnl_ngay.setLayout(new javax.swing.BoxLayout(pnl_ngay, javax.swing.BoxLayout.LINE_AXIS));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel4.setText("Ngày đi:");
-        jLabel4.setPreferredSize(new java.awt.Dimension(100, 25));
+        jLabel4.setText("Tỉnh/thành phố:");
+        jLabel4.setPreferredSize(new java.awt.Dimension(150, 25));
         pnl_ngay.add(jLabel4);
 
-        date_ngayDi.setMaximumSize(cb_gaDi.getMaximumSize());
-        date_ngayDi.setPreferredSize(cb_gaDi.getPreferredSize());
-        pnl_ngay.add(date_ngayDi);
-
-        lbl_next2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbl_next2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/fast-forward.png"))); // NOI18N
-        lbl_next2.setPreferredSize(new java.awt.Dimension(70, 16));
-        pnl_ngay.add(lbl_next2);
-
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel6.setText("Tàu:");
-        jLabel6.setPreferredSize(new java.awt.Dimension(100, 25));
-        pnl_ngay.add(jLabel6);
-
-        cb_tau.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cb_tau.setMaximumSize(new java.awt.Dimension(32767, 50));
-        cb_tau.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cb_tauActionPerformed(evt);
-            }
-        });
-        pnl_ngay.add(cb_tau);
+        txt_tinhThanh.setMaximumSize(new java.awt.Dimension(2147483647, 50));
+        pnl_ngay.add(txt_tinhThanh);
 
         jPanel2.add(pnl_ngay);
 
@@ -184,32 +160,29 @@ public class TraCuuChuyenTau_GUI extends javax.swing.JPanel {
         add(jPanel1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cb_tauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_tauActionPerformed
+    private void cb_tenGaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_tenGaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cb_tauActionPerformed
+    }//GEN-LAST:event_cb_tenGaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> cb_gaDen;
-    private javax.swing.JComboBox<String> cb_gaDi;
-    private javax.swing.JComboBox<String> cb_tau;
-    private com.toedter.calendar.JDateChooser date_ngayDi;
+    private javax.swing.JComboBox<String> cb_maGa;
+    private javax.swing.JComboBox<String> cb_tenGa;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JLabel lbl_maGa;
     private javax.swing.JLabel lbl_next1;
-    private javax.swing.JLabel lbl_next2;
     private javax.swing.JPanel pnl_ga;
     private javax.swing.JPanel pnl_header;
     private javax.swing.JPanel pnl_ngay;
     private javax.swing.JPanel pnl_timKiem;
+    private javax.swing.JTextField txt_tinhThanh;
     // End of variables declaration//GEN-END:variables
 }
