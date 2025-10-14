@@ -80,7 +80,7 @@ public class MainForm extends JLayeredPane{
             // Application.mainForm.showForm(new DefaultForm("Form : " + index + " " + subIndex));
             switch (index) {
                 case 0:
-                    Application.showForm(new TrangChu_GUI());
+                    Application.showForm(new Dashboard_GUI());
                     break;
                 case 1:
                     switch (subIndex) {

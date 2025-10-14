@@ -8,12 +8,12 @@ package gui;
  *
  * @author CÔNG HOÀNG
  */
-public class TrangChu_GUI extends javax.swing.JPanel {
+public class Dashboard_GUI extends javax.swing.JPanel {
 
     /**
      * Creates new form TrangChu_GUI
      */
-    public TrangChu_GUI() {
+    public Dashboard_GUI() {
         initComponents();
     }
 
