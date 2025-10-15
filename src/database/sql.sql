@@ -59,8 +59,8 @@ CREATE TABLE Tau (
 CREATE TABLE ToaTau (
     maToaTau VARCHAR(20) PRIMARY KEY,
     soKhoangTau INT NOT NULL,
-	soHieuToa INT NOT NULL,
-	soCho INT NOT NULL,
+    soHieuToa INT NOT NULL,
+    soCho INT NOT NULL,
     maTau VARCHAR(20) NOT NULL,
     
     -- Ràng buộc
@@ -103,8 +103,8 @@ CREATE TABLE Ghe (
 -- 10. BẢNG TUYẾN ĐƯỜNG
 CREATE TABLE TuyenDuong (
     maTuyenDuong VARCHAR(20) PRIMARY KEY,
-	quangDuong float NOT NULL,
-	soTienMotKm float NOT NULL,
+    quangDuong float NOT NULL,
+    soTienMotKm float NOT NULL,
     gaDi VARCHAR(20) NOT NULL,
     gaDen VARCHAR(20) NOT NULL,
     
@@ -121,8 +121,8 @@ CREATE TABLE ChuyenTau (
     thoiGianDen DATETIME NOT NULL,
     soGheDaDat INT NOT NULL DEFAULT 0,
     soGheConTrong INT NOT NULL,
-	maTau VARCHAR(20) NOT NULL,
-	maTuyenDuong VARCHAR(20) NOT NULL,
+    maTau VARCHAR(20) NOT NULL,
+    maTuyenDuong VARCHAR(20) NOT NULL,
     
     -- Ràng buộc
     CONSTRAINT FK_CD_ThoiGianDiChuyen FOREIGN KEY (maTuyenDuong) REFERENCES TuyenDuong(maTuyenDuong),
@@ -168,7 +168,7 @@ CREATE TABLE HoaDon (
     VAT FLOAT NOT NULL DEFAULT 0.1,
     maKhuyenMai VARCHAR(20),
     tongTien FLOAT NOT NULL,
-	thanhTien FLOAT NOT NULL,
+    thanhTien FLOAT NOT NULL,
     
     -- Ràng buộc
     CONSTRAINT FK_HD_NhanVien FOREIGN KEY (maNhanVien) REFERENCES NhanVien(maNV),

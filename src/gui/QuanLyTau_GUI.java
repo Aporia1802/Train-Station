@@ -26,264 +26,44 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        pnl_timKiem = new javax.swing.JPanel();
-        filler21 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
-        jLabel1 = new javax.swing.JLabel();
-        filler20 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
-        jTextField1 = new javax.swing.JTextField();
-        filler15 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
-        bnt_timKiem = new javax.swing.JButton();
-        filler16 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
-        cbo_trangThai = new javax.swing.JComboBox<>();
-        filler17 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
-        btn_loc = new javax.swing.JButton();
-        filler18 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
-        btn_reset = new javax.swing.JButton();
-        filler19 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
-        pnl_thongTin = new javax.swing.JPanel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
-        pnl_máTau = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
-        pnl_tenTau = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
-        pnl_gaDi = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
-        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
-        pnl_gaDen = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
-        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
-        pnl_ngayKhoiHanh = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
-        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
-        pnl_gioDi = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
-        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
-        pnl_gioDen = new javax.swing.JPanel();
-        jLabel8 = new javax.swing.JLabel();
-        jTextField7 = new javax.swing.JTextField();
-        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
-        pnl_soCho = new javax.swing.JPanel();
-        jLabel9 = new javax.swing.JLabel();
-        jTextField8 = new javax.swing.JTextField();
-        filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
-        pnl_giaVe = new javax.swing.JPanel();
-        jLabel10 = new javax.swing.JLabel();
-        jTextField9 = new javax.swing.JTextField();
-        filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
-        pnl_nut1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        filler13 = new javax.swing.Box.Filler(new java.awt.Dimension(25, 0), new java.awt.Dimension(25, 0), new java.awt.Dimension(25, 32767));
-        jButton2 = new javax.swing.JButton();
-        filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
-        pnl_nut2 = new javax.swing.JPanel();
-        jButton3 = new javax.swing.JButton();
-        filler14 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
-        jButton4 = new javax.swing.JButton();
-        filler12 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
-        jPanel12 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-
-        setLayout(new java.awt.BorderLayout());
-
-        pnl_timKiem.setBackground(new java.awt.Color(255, 255, 255));
-        pnl_timKiem.setPreferredSize(new java.awt.Dimension(919, 40));
-        pnl_timKiem.setLayout(new javax.swing.BoxLayout(pnl_timKiem, javax.swing.BoxLayout.LINE_AXIS));
-        pnl_timKiem.add(filler21);
-
-        jLabel1.setText("Mã tàu :");
-        pnl_timKiem.add(jLabel1);
-        pnl_timKiem.add(filler20);
-
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
-            }
-        });
-        pnl_timKiem.add(jTextField1);
-        pnl_timKiem.add(filler15);
-
-        bnt_timKiem.setText("Tìm kiếm");
-        bnt_timKiem.setMaximumSize(new java.awt.Dimension(79, 60));
-        bnt_timKiem.setPreferredSize(new java.awt.Dimension(79, 60));
-        bnt_timKiem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bnt_timKiemActionPerformed(evt);
-            }
-        });
-        pnl_timKiem.add(bnt_timKiem);
-        pnl_timKiem.add(filler16);
-
-        cbo_trangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Trạng thái", "Hoạt động", "Ngưng hoạt động" }));
-        pnl_timKiem.add(cbo_trangThai);
-        pnl_timKiem.add(filler17);
-
-        btn_loc.setText("Lọc");
-        btn_loc.setMaximumSize(new java.awt.Dimension(72, 60));
-        btn_loc.setPreferredSize(new java.awt.Dimension(72, 60));
-        pnl_timKiem.add(btn_loc);
-        pnl_timKiem.add(filler18);
-
-        btn_reset.setText("Reset");
-        btn_reset.setMaximumSize(new java.awt.Dimension(72, 60));
-        btn_reset.setPreferredSize(new java.awt.Dimension(72, 60));
-        pnl_timKiem.add(btn_reset);
-        pnl_timKiem.add(filler19);
-
-        add(pnl_timKiem, java.awt.BorderLayout.PAGE_START);
-
-        pnl_thongTin.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Thông tin tàu", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 14))); // NOI18N
-        pnl_thongTin.setPreferredSize(new java.awt.Dimension(450, 479));
-        pnl_thongTin.setLayout(new javax.swing.BoxLayout(pnl_thongTin, javax.swing.BoxLayout.Y_AXIS));
-        pnl_thongTin.add(filler1);
-
-        pnl_máTau.setLayout(new javax.swing.BoxLayout(pnl_máTau, javax.swing.BoxLayout.X_AXIS));
-
-        jLabel2.setText("Mã tàu :");
-        jLabel2.setMaximumSize(new java.awt.Dimension(90, 16));
-        jLabel2.setPreferredSize(new java.awt.Dimension(90, 16));
-        pnl_máTau.add(jLabel2);
-        pnl_máTau.add(jTextField2);
-
-        pnl_thongTin.add(pnl_máTau);
-        pnl_thongTin.add(filler2);
-
-        pnl_tenTau.setLayout(new javax.swing.BoxLayout(pnl_tenTau, javax.swing.BoxLayout.LINE_AXIS));
-
-        jLabel3.setText("Tên tàu :");
-        jLabel3.setMaximumSize(new java.awt.Dimension(90, 16));
-        jLabel3.setPreferredSize(new java.awt.Dimension(90, 16));
-        pnl_tenTau.add(jLabel3);
-        pnl_tenTau.add(jTextField3);
-
-        pnl_thongTin.add(pnl_tenTau);
-        pnl_thongTin.add(filler3);
-
-        pnl_gaDi.setLayout(new javax.swing.BoxLayout(pnl_gaDi, javax.swing.BoxLayout.LINE_AXIS));
-
-        jLabel4.setText("Ga đi :");
-        jLabel4.setMaximumSize(new java.awt.Dimension(90, 16));
-        jLabel4.setPreferredSize(new java.awt.Dimension(90, 16));
-        pnl_gaDi.add(jLabel4);
-        pnl_gaDi.add(jTextField4);
-
-        pnl_thongTin.add(pnl_gaDi);
-        pnl_thongTin.add(filler4);
-
-        pnl_gaDen.setLayout(new javax.swing.BoxLayout(pnl_gaDen, javax.swing.BoxLayout.LINE_AXIS));
-
-        jLabel5.setText("Ga đến :");
-        jLabel5.setMaximumSize(new java.awt.Dimension(90, 16));
-        jLabel5.setPreferredSize(new java.awt.Dimension(90, 16));
-        pnl_gaDen.add(jLabel5);
-        pnl_gaDen.add(jTextField5);
-
-        pnl_thongTin.add(pnl_gaDen);
-        pnl_thongTin.add(filler5);
-
-        pnl_ngayKhoiHanh.setLayout(new javax.swing.BoxLayout(pnl_ngayKhoiHanh, javax.swing.BoxLayout.LINE_AXIS));
-
-        jLabel6.setText("Ngày khởi hành :");
-        pnl_ngayKhoiHanh.add(jLabel6);
-        pnl_ngayKhoiHanh.add(jDateChooser1);
-
-        pnl_thongTin.add(pnl_ngayKhoiHanh);
-        pnl_thongTin.add(filler6);
-
-        pnl_gioDi.setLayout(new javax.swing.BoxLayout(pnl_gioDi, javax.swing.BoxLayout.LINE_AXIS));
-
-        jLabel7.setText("Giờ đi :");
-        jLabel7.setMaximumSize(new java.awt.Dimension(90, 16));
-        jLabel7.setPreferredSize(new java.awt.Dimension(90, 16));
-        pnl_gioDi.add(jLabel7);
-        pnl_gioDi.add(jTextField6);
-
-        pnl_thongTin.add(pnl_gioDi);
-        pnl_thongTin.add(filler7);
-
-        pnl_gioDen.setLayout(new javax.swing.BoxLayout(pnl_gioDen, javax.swing.BoxLayout.LINE_AXIS));
-
-        jLabel8.setText("Giờ đến :");
-        jLabel8.setMaximumSize(new java.awt.Dimension(90, 16));
-        jLabel8.setPreferredSize(new java.awt.Dimension(90, 16));
-        pnl_gioDen.add(jLabel8);
-        pnl_gioDen.add(jTextField7);
-
-        pnl_thongTin.add(pnl_gioDen);
-        pnl_thongTin.add(filler8);
-
-        pnl_soCho.setLayout(new javax.swing.BoxLayout(pnl_soCho, javax.swing.BoxLayout.LINE_AXIS));
-
-        jLabel9.setText("Số chỗ :");
-        jLabel9.setMaximumSize(new java.awt.Dimension(90, 16));
-        jLabel9.setPreferredSize(new java.awt.Dimension(90, 16));
-        pnl_soCho.add(jLabel9);
-        pnl_soCho.add(jTextField8);
-
-        pnl_thongTin.add(pnl_soCho);
-        pnl_thongTin.add(filler9);
-
-        pnl_giaVe.setLayout(new javax.swing.BoxLayout(pnl_giaVe, javax.swing.BoxLayout.LINE_AXIS));
-
-        jLabel10.setText("Giá vé :");
-        jLabel10.setMaximumSize(new java.awt.Dimension(90, 16));
-        jLabel10.setPreferredSize(new java.awt.Dimension(90, 16));
-        pnl_giaVe.add(jLabel10);
-        pnl_giaVe.add(jTextField9);
-
-        pnl_thongTin.add(pnl_giaVe);
-        pnl_thongTin.add(filler10);
-
-        pnl_nut1.setLayout(new javax.swing.BoxLayout(pnl_nut1, javax.swing.BoxLayout.LINE_AXIS));
-
-        jButton1.setText("Xóa trắng");
-        jButton1.setMaximumSize(new java.awt.Dimension(90, 40));
-        jButton1.setMinimumSize(new java.awt.Dimension(90, 23));
-        jButton1.setPreferredSize(new java.awt.Dimension(90, 40));
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        pnl_nut1.add(jButton1);
-        pnl_nut1.add(filler13);
-
-        jButton2.setText("Cập Nhật");
-        jButton2.setMaximumSize(new java.awt.Dimension(90, 40));
-        jButton2.setPreferredSize(new java.awt.Dimension(90, 40));
-        pnl_nut1.add(jButton2);
-
-        pnl_thongTin.add(pnl_nut1);
-        pnl_thongTin.add(filler11);
-
-        pnl_nut2.setLayout(new javax.swing.BoxLayout(pnl_nut2, javax.swing.BoxLayout.LINE_AXIS));
-
-        jButton3.setText("Thêm tàu");
-        jButton3.setMaximumSize(new java.awt.Dimension(90, 40));
-        jButton3.setPreferredSize(new java.awt.Dimension(90, 40));
-        pnl_nut2.add(jButton3);
-        pnl_nut2.add(filler14);
-
-        jButton4.setText("Sửa");
-        jButton4.setMaximumSize(new java.awt.Dimension(90, 40));
-        jButton4.setPreferredSize(new java.awt.Dimension(90, 40));
-        pnl_nut2.add(jButton4);
-
-        pnl_thongTin.add(pnl_nut2);
-        pnl_thongTin.add(filler12);
-
-        add(pnl_thongTin, java.awt.BorderLayout.LINE_END);
-
-        jPanel12.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Bảng thông tin tàu", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 14))); // NOI18N
-        jPanel12.setLayout(new javax.swing.BoxLayout(jPanel12, javax.swing.BoxLayout.LINE_AXIS));
+        pnl_top = new javax.swing.JPanel();
+        pnl_timKiem = new javax.swing.JPanel();
+        txt_timKiem = new javax.swing.JTextField();
+        pnl_btnTimKiem = new javax.swing.JPanel();
+        btn_timKiem = new javax.swing.JButton();
+        pnl_cta = new javax.swing.JPanel();
+        cbo_trangThai = new javax.swing.JComboBox<>();
+        btn_Loc = new javax.swing.JButton();
+        btn_Reset = new javax.swing.JButton();
+        pnl_center = new javax.swing.JPanel();
+        spl_container = new javax.swing.JSplitPane();
+        src_nhanVien = new javax.swing.JScrollPane();
+        tbl_nhanVien = new javax.swing.JTable();
+        pnl_container = new javax.swing.JPanel();
+        pnl_thongTinNhanVien = new javax.swing.JPanel();
+        pnl_maTau = new javax.swing.JPanel();
+        lbl_maTau = new javax.swing.JLabel();
+        txt_maTau = new javax.swing.JTextField();
+        pnl_hoTen = new javax.swing.JPanel();
+        lbl_hoTen = new javax.swing.JLabel();
+        txt_hoTen = new javax.swing.JTextField();
+        pnl_diaChi = new javax.swing.JPanel();
+        lbl_diaChi = new javax.swing.JLabel();
+        txt_diaChi = new javax.swing.JTextField();
+        pnl_cccd = new javax.swing.JPanel();
+        lbl_cccd = new javax.swing.JLabel();
+        txt_cccd = new javax.swing.JTextField();
+        pnl_trangThai = new javax.swing.JPanel();
+        lbl_trangThai = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        pnl_btnGroup = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        btn_xoaTrang = new javax.swing.JButton();
+        btn_capNhat = new javax.swing.JButton();
+        btn_themNV = new javax.swing.JButton();
+        btn_xuatExcel = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -300,89 +80,314 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        jPanel12.add(jScrollPane1);
+        setLayout(new java.awt.BorderLayout());
 
-        add(jPanel12, java.awt.BorderLayout.CENTER);
+        pnl_top.setBackground(new java.awt.Color(255, 255, 255));
+        pnl_top.setMinimumSize(new java.awt.Dimension(20, 20));
+        pnl_top.setPreferredSize(new java.awt.Dimension(1366, 50));
+        pnl_top.setLayout(new javax.swing.BoxLayout(pnl_top, javax.swing.BoxLayout.LINE_AXIS));
+
+        pnl_timKiem.setLayout(new javax.swing.BoxLayout(pnl_timKiem, javax.swing.BoxLayout.LINE_AXIS));
+
+        txt_timKiem.setPreferredSize(new java.awt.Dimension(500, 30));
+        txt_timKiem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_timKiemActionPerformed(evt);
+            }
+        });
+        pnl_timKiem.add(txt_timKiem);
+
+        pnl_btnTimKiem.setLayout(new java.awt.BorderLayout());
+
+        btn_timKiem.setText("Tìm kiếm");
+        pnl_btnTimKiem.add(btn_timKiem, java.awt.BorderLayout.CENTER);
+
+        pnl_timKiem.add(pnl_btnTimKiem);
+
+        pnl_top.add(pnl_timKiem);
+
+        pnl_cta.setPreferredSize(new java.awt.Dimension(500, 50));
+        pnl_cta.setLayout(new java.awt.GridLayout());
+
+        cbo_trangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Trạng thái", "Đang hoạt động", "Bảo trì", "Ngừng hoạt động" }));
+        cbo_trangThai.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbo_trangThaiActionPerformed(evt);
+            }
+        });
+        pnl_cta.add(cbo_trangThai);
+
+        btn_Loc.setText("Lọc");
+        btn_Loc.setMaximumSize(new java.awt.Dimension(100, 50));
+        btn_Loc.setPreferredSize(new java.awt.Dimension(100, 50));
+        pnl_cta.add(btn_Loc);
+
+        btn_Reset.setText("Reset");
+        btn_Reset.setMaximumSize(new java.awt.Dimension(100, 50));
+        btn_Reset.setPreferredSize(new java.awt.Dimension(100, 50));
+        pnl_cta.add(btn_Reset);
+
+        pnl_top.add(pnl_cta);
+
+        add(pnl_top, java.awt.BorderLayout.PAGE_START);
+
+        pnl_center.setLayout(new javax.swing.BoxLayout(pnl_center, javax.swing.BoxLayout.LINE_AXIS));
+
+        spl_container.setResizeWeight(0.6);
+        spl_container.setMinimumSize(new java.awt.Dimension(805, 416));
+        spl_container.setPreferredSize(new java.awt.Dimension(1055, 718));
+
+        src_nhanVien.setMinimumSize(new java.awt.Dimension(400, 20));
+        src_nhanVien.setPreferredSize(new java.awt.Dimension(800, 402));
+
+        tbl_nhanVien.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "Mã tàu", "Tên tàu", "Số lượng toa", "Sức chứa", "Trạng thái"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, true, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tbl_nhanVien.setMaximumSize(new java.awt.Dimension(1000, 80));
+        tbl_nhanVien.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tbl_nhanVien.setShowGrid(false);
+        src_nhanVien.setViewportView(tbl_nhanVien);
+
+        spl_container.setLeftComponent(src_nhanVien);
+
+        pnl_container.setBackground(new java.awt.Color(255, 255, 255));
+        pnl_container.setMinimumSize(new java.awt.Dimension(400, 379));
+        pnl_container.setPreferredSize(new java.awt.Dimension(250, 100));
+        pnl_container.setLayout(new java.awt.BorderLayout());
+
+        pnl_thongTinNhanVien.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder("Thông tin tàu"), javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+        pnl_thongTinNhanVien.setLayout(new javax.swing.BoxLayout(pnl_thongTinNhanVien, javax.swing.BoxLayout.Y_AXIS));
+
+        pnl_maTau.setMaximumSize(new java.awt.Dimension(2147483647, 50));
+        pnl_maTau.setMinimumSize(new java.awt.Dimension(118, 6));
+        pnl_maTau.setPreferredSize(new java.awt.Dimension(230, 50));
+        pnl_maTau.setLayout(new javax.swing.BoxLayout(pnl_maTau, javax.swing.BoxLayout.X_AXIS));
+
+        lbl_maTau.setText("Mã tàu:");
+        lbl_maTau.setMaximumSize(new java.awt.Dimension(45, 16));
+        lbl_maTau.setMinimumSize(new java.awt.Dimension(45, 16));
+        lbl_maTau.setPreferredSize(new java.awt.Dimension(100, 16));
+        pnl_maTau.add(lbl_maTau);
+
+        txt_maTau.setEnabled(false);
+        txt_maTau.setMaximumSize(new java.awt.Dimension(2147483647, 40));
+        txt_maTau.setPreferredSize(new java.awt.Dimension(64, 40));
+        txt_maTau.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_maTauActionPerformed(evt);
+            }
+        });
+        pnl_maTau.add(txt_maTau);
+
+        pnl_thongTinNhanVien.add(pnl_maTau);
+
+        pnl_hoTen.setMaximumSize(pnl_maTau.getMaximumSize());
+        pnl_hoTen.setPreferredSize(pnl_maTau.getPreferredSize());
+        pnl_hoTen.setLayout(new javax.swing.BoxLayout(pnl_hoTen, javax.swing.BoxLayout.LINE_AXIS));
+
+        lbl_hoTen.setText("Tên tàu:");
+        lbl_hoTen.setMaximumSize(lbl_maTau.getMaximumSize());
+        lbl_hoTen.setMinimumSize(new java.awt.Dimension(45, 16));
+        lbl_hoTen.setPreferredSize(lbl_maTau.getPreferredSize());
+        pnl_hoTen.add(lbl_hoTen);
+
+        txt_hoTen.setMaximumSize(txt_maTau.getMaximumSize());
+        txt_hoTen.setPreferredSize(txt_maTau.getPreferredSize());
+        pnl_hoTen.add(txt_hoTen);
+
+        pnl_thongTinNhanVien.add(pnl_hoTen);
+
+        pnl_diaChi.setMaximumSize(pnl_maTau.getMaximumSize());
+        pnl_diaChi.setMinimumSize(new java.awt.Dimension(118, 6));
+        pnl_diaChi.setPreferredSize(pnl_maTau.getPreferredSize());
+        pnl_diaChi.setLayout(new javax.swing.BoxLayout(pnl_diaChi, javax.swing.BoxLayout.LINE_AXIS));
+
+        lbl_diaChi.setText("Sức chứa:");
+        lbl_diaChi.setMaximumSize(new java.awt.Dimension(45, 16));
+        lbl_diaChi.setMinimumSize(new java.awt.Dimension(45, 16));
+        lbl_diaChi.setPreferredSize(new java.awt.Dimension(100, 16));
+        pnl_diaChi.add(lbl_diaChi);
+
+        txt_diaChi.setMaximumSize(txt_maTau.getMaximumSize());
+        txt_diaChi.setMinimumSize(new java.awt.Dimension(64, 30));
+        txt_diaChi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_diaChiActionPerformed(evt);
+            }
+        });
+        pnl_diaChi.add(txt_diaChi);
+
+        pnl_thongTinNhanVien.add(pnl_diaChi);
+
+        pnl_cccd.setMaximumSize(pnl_maTau.getMaximumSize());
+        pnl_cccd.setMinimumSize(new java.awt.Dimension(118, 6));
+        pnl_cccd.setPreferredSize(new java.awt.Dimension(230, 50));
+        pnl_cccd.setLayout(new javax.swing.BoxLayout(pnl_cccd, javax.swing.BoxLayout.LINE_AXIS));
+
+        lbl_cccd.setText("Số lượng toa:");
+        lbl_cccd.setMaximumSize(lbl_maTau.getMaximumSize());
+        lbl_cccd.setPreferredSize(lbl_maTau.getPreferredSize());
+        pnl_cccd.add(lbl_cccd);
+
+        txt_cccd.setMaximumSize(txt_maTau.getMaximumSize());
+        txt_cccd.setPreferredSize(txt_maTau.getPreferredSize());
+        txt_cccd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_cccdActionPerformed(evt);
+            }
+        });
+        pnl_cccd.add(txt_cccd);
+
+        pnl_thongTinNhanVien.add(pnl_cccd);
+
+        pnl_trangThai.setMaximumSize(pnl_maTau.getMaximumSize());
+        pnl_trangThai.setPreferredSize(new java.awt.Dimension(230, 50));
+        pnl_trangThai.setLayout(new javax.swing.BoxLayout(pnl_trangThai, javax.swing.BoxLayout.LINE_AXIS));
+
+        lbl_trangThai.setText("Trạng thái:");
+        lbl_trangThai.setPreferredSize(new java.awt.Dimension(100, 16));
+        pnl_trangThai.add(lbl_trangThai);
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Đang hoạt động", "Bảo trì", "Ngừng hoạt động" }));
+        jComboBox1.setMaximumSize(new java.awt.Dimension(32767, 40));
+        jComboBox1.setPreferredSize(new java.awt.Dimension(230, 40));
+        pnl_trangThai.add(jComboBox1);
+
+        pnl_thongTinNhanVien.add(pnl_trangThai);
+
+        pnl_container.add(pnl_thongTinNhanVien, java.awt.BorderLayout.CENTER);
+
+        pnl_btnGroup.setMaximumSize(new java.awt.Dimension(260, 100));
+        pnl_btnGroup.setMinimumSize(new java.awt.Dimension(220, 100));
+        pnl_btnGroup.setLayout(new java.awt.BorderLayout());
+
+        jPanel5.setLayout(new java.awt.GridLayout(2, 2, 5, 5));
+
+        btn_xoaTrang.setText("Xóa trắng");
+        btn_xoaTrang.setMaximumSize(new java.awt.Dimension(120, 50));
+        btn_xoaTrang.setPreferredSize(new java.awt.Dimension(120, 50));
+        jPanel5.add(btn_xoaTrang);
+
+        btn_capNhat.setText("Cập nhật");
+        btn_capNhat.setMaximumSize(new java.awt.Dimension(120, 50));
+        btn_capNhat.setPreferredSize(new java.awt.Dimension(120, 50));
+        btn_capNhat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_capNhatActionPerformed(evt);
+            }
+        });
+        jPanel5.add(btn_capNhat);
+
+        btn_themNV.setText("Đưa vào hoạt động");
+        btn_themNV.setMaximumSize(new java.awt.Dimension(139, 23));
+        btn_themNV.setMinimumSize(new java.awt.Dimension(139, 23));
+        btn_themNV.setPreferredSize(new java.awt.Dimension(72, 50));
+        btn_themNV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_themNVActionPerformed(evt);
+            }
+        });
+        jPanel5.add(btn_themNV);
+
+        btn_xuatExcel.setText("Xuất Excel");
+        btn_xuatExcel.setMaximumSize(new java.awt.Dimension(120, 50));
+        btn_xuatExcel.setPreferredSize(new java.awt.Dimension(120, 50));
+        jPanel5.add(btn_xuatExcel);
+
+        pnl_btnGroup.add(jPanel5, java.awt.BorderLayout.CENTER);
+
+        pnl_container.add(pnl_btnGroup, java.awt.BorderLayout.PAGE_END);
+
+        spl_container.setRightComponent(pnl_container);
+
+        pnl_center.add(spl_container);
+
+        add(pnl_center, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void txt_timKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_timKiemActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_txt_timKiemActionPerformed
 
-    private void bnt_timKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bnt_timKiemActionPerformed
+    private void cbo_trangThaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbo_trangThaiActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_bnt_timKiemActionPerformed
+    }//GEN-LAST:event_cbo_trangThaiActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void txt_maTauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_maTauActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_txt_maTauActionPerformed
+
+    private void txt_diaChiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_diaChiActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_diaChiActionPerformed
+
+    private void btn_capNhatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_capNhatActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_capNhatActionPerformed
+
+    private void txt_cccdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_cccdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_cccdActionPerformed
+
+    private void btn_themNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_themNVActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_themNVActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton bnt_timKiem;
-    private javax.swing.JButton btn_loc;
-    private javax.swing.JButton btn_reset;
+    private javax.swing.JButton btn_Loc;
+    private javax.swing.JButton btn_Reset;
+    private javax.swing.JButton btn_capNhat;
+    private javax.swing.JButton btn_themNV;
+    private javax.swing.JButton btn_timKiem;
+    private javax.swing.JButton btn_xoaTrang;
+    private javax.swing.JButton btn_xuatExcel;
     private javax.swing.JComboBox<String> cbo_trangThai;
-    private javax.swing.Box.Filler filler1;
-    private javax.swing.Box.Filler filler10;
-    private javax.swing.Box.Filler filler11;
-    private javax.swing.Box.Filler filler12;
-    private javax.swing.Box.Filler filler13;
-    private javax.swing.Box.Filler filler14;
-    private javax.swing.Box.Filler filler15;
-    private javax.swing.Box.Filler filler16;
-    private javax.swing.Box.Filler filler17;
-    private javax.swing.Box.Filler filler18;
-    private javax.swing.Box.Filler filler19;
-    private javax.swing.Box.Filler filler2;
-    private javax.swing.Box.Filler filler20;
-    private javax.swing.Box.Filler filler21;
-    private javax.swing.Box.Filler filler3;
-    private javax.swing.Box.Filler filler4;
-    private javax.swing.Box.Filler filler5;
-    private javax.swing.Box.Filler filler6;
-    private javax.swing.Box.Filler filler7;
-    private javax.swing.Box.Filler filler8;
-    private javax.swing.Box.Filler filler9;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel12;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextField9;
-    private javax.swing.JPanel pnl_gaDen;
-    private javax.swing.JPanel pnl_gaDi;
-    private javax.swing.JPanel pnl_giaVe;
-    private javax.swing.JPanel pnl_gioDen;
-    private javax.swing.JPanel pnl_gioDi;
-    private javax.swing.JPanel pnl_máTau;
-    private javax.swing.JPanel pnl_ngayKhoiHanh;
-    private javax.swing.JPanel pnl_nut1;
-    private javax.swing.JPanel pnl_nut2;
-    private javax.swing.JPanel pnl_soCho;
-    private javax.swing.JPanel pnl_tenTau;
-    private javax.swing.JPanel pnl_thongTin;
+    private javax.swing.JLabel lbl_cccd;
+    private javax.swing.JLabel lbl_diaChi;
+    private javax.swing.JLabel lbl_hoTen;
+    private javax.swing.JLabel lbl_maTau;
+    private javax.swing.JLabel lbl_trangThai;
+    private javax.swing.JPanel pnl_btnGroup;
+    private javax.swing.JPanel pnl_btnTimKiem;
+    private javax.swing.JPanel pnl_cccd;
+    private javax.swing.JPanel pnl_center;
+    private javax.swing.JPanel pnl_container;
+    private javax.swing.JPanel pnl_cta;
+    private javax.swing.JPanel pnl_diaChi;
+    private javax.swing.JPanel pnl_hoTen;
+    private javax.swing.JPanel pnl_maTau;
+    private javax.swing.JPanel pnl_thongTinNhanVien;
     private javax.swing.JPanel pnl_timKiem;
+    private javax.swing.JPanel pnl_top;
+    private javax.swing.JPanel pnl_trangThai;
+    private javax.swing.JSplitPane spl_container;
+    private javax.swing.JScrollPane src_nhanVien;
+    private javax.swing.JTable tbl_nhanVien;
+    private javax.swing.JTextField txt_cccd;
+    private javax.swing.JTextField txt_diaChi;
+    private javax.swing.JTextField txt_hoTen;
+    private javax.swing.JTextField txt_maTau;
+    private javax.swing.JTextField txt_timKiem;
     // End of variables declaration//GEN-END:variables
 }
