@@ -100,6 +100,9 @@ public class MainForm extends JLayeredPane{
                     break;
                 case 2: 
                     switch (subIndex) {
+                        case 1: 
+                            Application.showForm(new TraCuuVe_GUI());
+                            break;
                         case 2: 
                             Application.showForm(new TraCuuNhanVien_GUI());
                             break;
@@ -120,8 +123,14 @@ public class MainForm extends JLayeredPane{
                 case 4:
                     Application.showForm(new QuanLyTau_GUI());
                     break;
+                case 5:
+                    Application.showForm(new QuanLyGaTau_GUI());
+                    break;
                 case 6:
                     Application.showForm(new QuanLyNhanVien_GUI());
+                    break;
+                case 8:
+                    Application.showForm(new QuanLyChuyenDi_GUI());
                     break;
                 case 9:
                     Application.showForm(new QuanLiThongTinCaNhan_GUI());

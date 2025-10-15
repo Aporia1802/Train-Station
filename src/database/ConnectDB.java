@@ -12,7 +12,7 @@ import java.sql.*;
  */
 public class ConnectDB {
     public static Connection conn = null;
-
+    
     public static void connect() throws SQLException {
 
         String url = "jdbc:sqlserver://localhost:1433;databasename=QuanLyBanVeTau";
