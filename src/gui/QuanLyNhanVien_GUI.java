@@ -163,7 +163,7 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
                 {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Mã nhân viên", "Tên nhân viên", "Số điện thoại", "CCCD", "Chức vụ", "Giới tính", "Trạng thái"
+                "Mã nhân viên", "Tên nhân viên", "CCCD", "Số điện thoại", "Chức vụ", "Giới tính", "Trạng thái"
             }
         ) {
             boolean[] canEdit = new boolean [] {
