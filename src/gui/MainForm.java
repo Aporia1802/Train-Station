@@ -112,6 +112,9 @@ public class MainForm extends JLayeredPane{
                         case 4: 
                             Application.showForm(new TraCuuTau_GUI());
                             break;
+                        case 5:
+                            Application.showForm(new TraCuuHanhKhach_GUI());
+                            break;
                         case 6: 
                             Application.showForm(new TraCuuChuyenTau_GUI());
                             break;
@@ -128,6 +131,9 @@ public class MainForm extends JLayeredPane{
                     break;
                 case 6:
                     Application.showForm(new QuanLyNhanVien_GUI());
+                    break;
+                case 7:
+                    Application.showForm(new QuanLiKhuyenMai_GUI());
                     break;
                 case 8:
                     Application.showForm(new QuanLyChuyenDi_GUI());
