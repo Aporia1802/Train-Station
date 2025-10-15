@@ -64,7 +64,7 @@ public class TraCuuNhanVien_GUI extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Mã nhân viên", "Tên nhân viên", "Ngày sinh", "Số điện thoại", "CCCD", "Trạng thái"
+                "Mã nhân viên", "Tên nhân viên", "Ngày sinh", "Số điện thoại", "CCCD", "Trạng thái", "Địa chỉ ", "Chức vụ", "Giới tính"
             }
         ));
         jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
