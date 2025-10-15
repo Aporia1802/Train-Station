@@ -31,7 +31,7 @@ public class Menu extends JPanel{
     private static final String menuItems[][] = {
         {"Trang chủ"},
         {"Vé", "Đặt vé", "Đổi vé", "Trả vé"},
-        {"Tra cúu", "Vé", "Nhân viên", "Ga tàu", "Tàu", "Hành khách", "Chuyến tàu"},
+        {"Tra cứu", "Vé", "Nhân viên", "Ga tàu", "Tàu", "Hành khách", "Chuyến tàu"},
         {"Thống kê", "Thống kê doanh thu", "Thống kê hành khách"},
         {"Quản lý tàu"},
         {"Quản lý địa điểm ga"},

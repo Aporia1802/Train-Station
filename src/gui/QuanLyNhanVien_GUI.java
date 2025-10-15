@@ -157,17 +157,17 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
 
         tbl_nhanVien.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Mã nhân viên", "Tên nhân viên", "Ngày sinh", "Trạng thái"
+                "Mã nhân viên", "Tên nhân viên", "Số điện thoại", "CCCD", "Chức vụ", "Giới tính", "Trạng thái"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -200,6 +200,7 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
         lbl_maNV.setPreferredSize(new java.awt.Dimension(100, 16));
         pnl_MaNV.add(lbl_maNV);
 
+        txt_maNV.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         txt_maNV.setEnabled(false);
         txt_maNV.setMaximumSize(new java.awt.Dimension(2147483647, 40));
         txt_maNV.setPreferredSize(new java.awt.Dimension(64, 40));
