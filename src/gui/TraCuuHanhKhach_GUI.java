@@ -26,245 +26,277 @@ public class TraCuuHanhKhach_GUI extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        txt_sdt = new javax.swing.JTextField();
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        pnlNorth = new javax.swing.JPanel();
+        pnl_thongTin = new javax.swing.JPanel();
+        pnl_maHK_tenHK = new javax.swing.JPanel();
+        pnl_maHK = new javax.swing.JPanel();
+        lbl_maHK = new javax.swing.JLabel();
+        txt_maHK = new javax.swing.JTextField();
+        pnl_tenHK = new javax.swing.JPanel();
+        lbl_tenHK = new javax.swing.JLabel();
+        txt_tenHK = new javax.swing.JTextField();
+        pnl_sdt_cccd = new javax.swing.JPanel();
+        pnl_sdt = new javax.swing.JPanel();
         lbl_sdt = new javax.swing.JLabel();
-        lbl_taiKhoan = new javax.swing.JLabel();
-        txt_taiKhoan = new javax.swing.JTextField();
-        lbl_mkMoi = new javax.swing.JLabel();
-        pwd_mkMoi = new javax.swing.JPasswordField();
-        lbl_xacNhanMk = new javax.swing.JLabel();
-        pwd_xacNhanMk = new javax.swing.JPasswordField();
-        pwd_mkCu = new javax.swing.JPasswordField();
-        lbl_mkCu = new javax.swing.JLabel();
-        txt_email = new javax.swing.JTextField();
-        lbl_email = new javax.swing.JLabel();
-        lbl_hoTen = new javax.swing.JLabel();
-        txt_hoTen = new javax.swing.JTextField();
+        txt_sdt = new javax.swing.JTextField();
+        pnl_cccd = new javax.swing.JPanel();
+        lbl_cccd = new javax.swing.JLabel();
+        txt_cccd = new javax.swing.JTextField();
+        pnl_gioiTinh = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        lbl_gioiTinh = new javax.swing.JLabel();
+        rdo_nam = new javax.swing.JRadioButton();
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(40, 0));
+        rdo_nu = new javax.swing.JRadioButton();
+        pnl_button = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        btn_timKiem = new javax.swing.JButton();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        btn_xoaTrang = new javax.swing.JButton();
+        pnl_table = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tbl_thongTinKhachHang = new javax.swing.JTable();
 
-        txt_sdt.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        txt_sdt.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        setLayout(new java.awt.BorderLayout());
+
+        pnlNorth.setBackground(new java.awt.Color(255, 255, 255));
+        pnlNorth.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Thông tin hành khách", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 14), new java.awt.Color(123, 17, 19))); // NOI18N
+        pnlNorth.setPreferredSize(new java.awt.Dimension(1366, 250));
+        pnlNorth.setLayout(new javax.swing.BoxLayout(pnlNorth, javax.swing.BoxLayout.Y_AXIS));
+
+        pnl_thongTin.setBackground(new java.awt.Color(255, 255, 255));
+        pnl_thongTin.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 30, 5, 30));
+        pnl_thongTin.setMinimumSize(new java.awt.Dimension(253, 150));
+        pnl_thongTin.setPreferredSize(new java.awt.Dimension(1356, 180));
+        pnl_thongTin.setLayout(new javax.swing.BoxLayout(pnl_thongTin, javax.swing.BoxLayout.Y_AXIS));
+
+        pnl_maHK_tenHK.setBackground(new java.awt.Color(255, 255, 255));
+        pnl_maHK_tenHK.setMaximumSize(new java.awt.Dimension(32767, 60));
+        pnl_maHK_tenHK.setMinimumSize(new java.awt.Dimension(0, 55));
+        pnl_maHK_tenHK.setPreferredSize(new java.awt.Dimension(1356, 55));
+        pnl_maHK_tenHK.setLayout(new javax.swing.BoxLayout(pnl_maHK_tenHK, javax.swing.BoxLayout.LINE_AXIS));
+
+        pnl_maHK.setBackground(new java.awt.Color(255, 255, 255));
+        pnl_maHK.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 1, 10, 30));
+        pnl_maHK.setMinimumSize(new java.awt.Dimension(630, 46));
+        pnl_maHK.setPreferredSize(new java.awt.Dimension(208, 46));
+        pnl_maHK.setLayout(new javax.swing.BoxLayout(pnl_maHK, javax.swing.BoxLayout.X_AXIS));
+
+        lbl_maHK.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lbl_maHK.setText("Mã HK:");
+        lbl_maHK.setMaximumSize(new java.awt.Dimension(90, 20));
+        lbl_maHK.setMinimumSize(new java.awt.Dimension(90, 16));
+        lbl_maHK.setPreferredSize(new java.awt.Dimension(90, 16));
+        pnl_maHK.add(lbl_maHK);
+
+        txt_maHK.setEditable(false);
+        txt_maHK.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txt_maHK.setText("HK0001");
+        pnl_maHK.add(txt_maHK);
+
+        pnl_maHK_tenHK.add(pnl_maHK);
+
+        pnl_tenHK.setBackground(new java.awt.Color(255, 255, 255));
+        pnl_tenHK.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 1, 10, 30));
+        pnl_tenHK.setLayout(new javax.swing.BoxLayout(pnl_tenHK, javax.swing.BoxLayout.X_AXIS));
+
+        lbl_tenHK.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lbl_tenHK.setText("Tên HK:");
+        lbl_tenHK.setMaximumSize(new java.awt.Dimension(90, 20));
+        lbl_tenHK.setMinimumSize(new java.awt.Dimension(90, 20));
+        lbl_tenHK.setPreferredSize(new java.awt.Dimension(90, 20));
+        pnl_tenHK.add(lbl_tenHK);
+
+        txt_tenHK.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txt_tenHK.setText("Lê Minh Phúc");
+        txt_tenHK.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_tenHKActionPerformed(evt);
+            }
+        });
+        pnl_tenHK.add(txt_tenHK);
+
+        pnl_maHK_tenHK.add(pnl_tenHK);
+
+        pnl_thongTin.add(pnl_maHK_tenHK);
+
+        pnl_sdt_cccd.setBackground(new java.awt.Color(255, 255, 255));
+        pnl_sdt_cccd.setMaximumSize(new java.awt.Dimension(32767, 60));
+        pnl_sdt_cccd.setMinimumSize(new java.awt.Dimension(0, 55));
+        pnl_sdt_cccd.setPreferredSize(new java.awt.Dimension(1356, 55));
+        pnl_sdt_cccd.setLayout(new javax.swing.BoxLayout(pnl_sdt_cccd, javax.swing.BoxLayout.LINE_AXIS));
+
+        pnl_sdt.setBackground(new java.awt.Color(255, 255, 255));
+        pnl_sdt.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 1, 10, 30));
+        pnl_sdt.setMinimumSize(new java.awt.Dimension(208, 46));
+        pnl_sdt.setLayout(new javax.swing.BoxLayout(pnl_sdt, javax.swing.BoxLayout.X_AXIS));
+
+        lbl_sdt.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lbl_sdt.setText("Số điện thoại:");
+        lbl_sdt.setMaximumSize(new java.awt.Dimension(90, 20));
+        lbl_sdt.setMinimumSize(new java.awt.Dimension(90, 16));
+        lbl_sdt.setPreferredSize(new java.awt.Dimension(90, 16));
+        pnl_sdt.add(lbl_sdt);
+
+        txt_sdt.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txt_sdt.setText("0966531172");
-        txt_sdt.setPreferredSize(new java.awt.Dimension(60, 30));
-        txt_sdt.addActionListener(new java.awt.event.ActionListener() {
+        pnl_sdt.add(txt_sdt);
+
+        pnl_sdt_cccd.add(pnl_sdt);
+
+        pnl_cccd.setBackground(new java.awt.Color(255, 255, 255));
+        pnl_cccd.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 1, 10, 30));
+        pnl_cccd.setLayout(new javax.swing.BoxLayout(pnl_cccd, javax.swing.BoxLayout.X_AXIS));
+
+        lbl_cccd.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lbl_cccd.setText("CCCD:");
+        lbl_cccd.setMaximumSize(new java.awt.Dimension(90, 20));
+        lbl_cccd.setMinimumSize(new java.awt.Dimension(90, 20));
+        lbl_cccd.setPreferredSize(new java.awt.Dimension(90, 20));
+        pnl_cccd.add(lbl_cccd);
+
+        txt_cccd.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txt_cccd.setText("080205002887");
+        txt_cccd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_sdtActionPerformed(evt);
+                txt_cccdActionPerformed(evt);
             }
         });
+        pnl_cccd.add(txt_cccd);
 
-        lbl_sdt.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        lbl_sdt.setLabelFor(txt_sdt);
-        lbl_sdt.setText("Số điện thoại");
-        lbl_sdt.setMaximumSize(new java.awt.Dimension(60, 30));
-        lbl_sdt.setPreferredSize(new java.awt.Dimension(60, 30));
+        pnl_sdt_cccd.add(pnl_cccd);
 
-        lbl_taiKhoan.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        lbl_taiKhoan.setLabelFor(lbl_taiKhoan);
-        lbl_taiKhoan.setText("Tài khoản");
-        lbl_taiKhoan.setMaximumSize(new java.awt.Dimension(60, 30));
-        lbl_taiKhoan.setPreferredSize(new java.awt.Dimension(60, 30));
+        pnl_thongTin.add(pnl_sdt_cccd);
 
-        txt_taiKhoan.setEditable(false);
-        txt_taiKhoan.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        txt_taiKhoan.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txt_taiKhoan.setText("NV0002");
-        txt_taiKhoan.setPreferredSize(new java.awt.Dimension(60, 30));
-        txt_taiKhoan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_taiKhoanActionPerformed(evt);
+        pnl_gioiTinh.setBackground(new java.awt.Color(255, 255, 255));
+        pnl_gioiTinh.setMaximumSize(new java.awt.Dimension(32767, 55));
+        pnl_gioiTinh.setMinimumSize(new java.awt.Dimension(253, 55));
+        pnl_gioiTinh.setPreferredSize(new java.awt.Dimension(1356, 55));
+        pnl_gioiTinh.setLayout(new javax.swing.BoxLayout(pnl_gioiTinh, javax.swing.BoxLayout.LINE_AXIS));
+
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel4.setMaximumSize(new java.awt.Dimension(648, 32767));
+        jPanel4.setPreferredSize(new java.awt.Dimension(648, 55));
+        jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.LINE_AXIS));
+
+        lbl_gioiTinh.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lbl_gioiTinh.setText("Giới tính:");
+        lbl_gioiTinh.setMaximumSize(new java.awt.Dimension(90, 20));
+        lbl_gioiTinh.setMinimumSize(new java.awt.Dimension(90, 20));
+        lbl_gioiTinh.setPreferredSize(new java.awt.Dimension(90, 20));
+        jPanel4.add(lbl_gioiTinh);
+
+        rdo_nam.setBackground(new java.awt.Color(255, 255, 255));
+        buttonGroup1.add(rdo_nam);
+        rdo_nam.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        rdo_nam.setSelected(true);
+        rdo_nam.setText("Nam");
+        jPanel4.add(rdo_nam);
+        jPanel4.add(filler3);
+
+        buttonGroup1.add(rdo_nu);
+        rdo_nu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        rdo_nu.setText("Nữ");
+        jPanel4.add(rdo_nu);
+
+        pnl_gioiTinh.add(jPanel4);
+
+        pnl_thongTin.add(pnl_gioiTinh);
+
+        pnlNorth.add(pnl_thongTin);
+
+        pnl_button.setBackground(new java.awt.Color(255, 255, 255));
+        pnl_button.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 20, 5, 20));
+        pnl_button.setMaximumSize(new java.awt.Dimension(2147483647, 100));
+        pnl_button.setPreferredSize(new java.awt.Dimension(1356, 50));
+        pnl_button.setLayout(new java.awt.BorderLayout());
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setMaximumSize(new java.awt.Dimension(300, 30));
+        jPanel3.setPreferredSize(new java.awt.Dimension(300, 30));
+
+        btn_timKiem.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btn_timKiem.setText("Tiềm kiếm");
+        btn_timKiem.setMaximumSize(new java.awt.Dimension(120, 30));
+        btn_timKiem.setPreferredSize(new java.awt.Dimension(120, 30));
+        jPanel3.add(btn_timKiem);
+        jPanel3.add(filler1);
+
+        btn_xoaTrang.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btn_xoaTrang.setText("Xóa trắng");
+        btn_xoaTrang.setMaximumSize(new java.awt.Dimension(120, 30));
+        btn_xoaTrang.setPreferredSize(new java.awt.Dimension(120, 30));
+        jPanel3.add(btn_xoaTrang);
+
+        pnl_button.add(jPanel3, java.awt.BorderLayout.LINE_END);
+
+        pnlNorth.add(pnl_button);
+
+        add(pnlNorth, java.awt.BorderLayout.PAGE_START);
+
+        pnl_table.setBackground(new java.awt.Color(255, 255, 255));
+        pnl_table.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Bảng thông tin khách hàng", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 14), new java.awt.Color(123, 17, 19))); // NOI18N
+        pnl_table.setLayout(new javax.swing.BoxLayout(pnl_table, javax.swing.BoxLayout.LINE_AXIS));
+
+        tbl_thongTinKhachHang.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
             }
-        });
+        ));
+        jScrollPane1.setViewportView(tbl_thongTinKhachHang);
 
-        lbl_mkMoi.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        lbl_mkMoi.setLabelFor(pwd_mkMoi);
-        lbl_mkMoi.setText("Nhập mật khẩu mới");
-        lbl_mkMoi.setMaximumSize(new java.awt.Dimension(60, 30));
-        lbl_mkMoi.setPreferredSize(new java.awt.Dimension(60, 30));
+        pnl_table.add(jScrollPane1);
 
-        pwd_mkMoi.setPreferredSize(new java.awt.Dimension(60, 30));
-        pwd_mkMoi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                pwd_mkMoiActionPerformed(evt);
-            }
-        });
-
-        lbl_xacNhanMk.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        lbl_xacNhanMk.setLabelFor(pwd_xacNhanMk);
-        lbl_xacNhanMk.setText("Xác nhận mật khẩu mới");
-        lbl_xacNhanMk.setMaximumSize(new java.awt.Dimension(60, 30));
-        lbl_xacNhanMk.setPreferredSize(new java.awt.Dimension(60, 30));
-
-        pwd_xacNhanMk.setPreferredSize(new java.awt.Dimension(60, 30));
-        pwd_xacNhanMk.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                pwd_xacNhanMkActionPerformed(evt);
-            }
-        });
-
-        pwd_mkCu.setPreferredSize(new java.awt.Dimension(60, 30));
-        pwd_mkCu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                pwd_mkCuActionPerformed(evt);
-            }
-        });
-
-        lbl_mkCu.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        lbl_mkCu.setLabelFor(pwd_mkCu);
-        lbl_mkCu.setText("Nhập mật khẩu cũ");
-        lbl_mkCu.setMaximumSize(new java.awt.Dimension(60, 30));
-        lbl_mkCu.setPreferredSize(new java.awt.Dimension(60, 30));
-
-        txt_email.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        txt_email.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txt_email.setText("phuc531172@gmai.com");
-        txt_email.setPreferredSize(new java.awt.Dimension(60, 30));
-        txt_email.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_emailActionPerformed(evt);
-            }
-        });
-
-        lbl_email.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        lbl_email.setLabelFor(txt_email);
-        lbl_email.setText("Email");
-        lbl_email.setMaximumSize(new java.awt.Dimension(60, 30));
-        lbl_email.setPreferredSize(new java.awt.Dimension(60, 30));
-
-        lbl_hoTen.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        lbl_hoTen.setText("Họ tên");
-        lbl_hoTen.setMaximumSize(new java.awt.Dimension(855, 50));
-
-        txt_hoTen.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        txt_hoTen.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txt_hoTen.setText("Lê Minh Phúc");
-        txt_hoTen.setMaximumSize(new java.awt.Dimension(120, 60));
-        txt_hoTen.setMinimumSize(new java.awt.Dimension(30, 10));
-        txt_hoTen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_hoTenActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(413, 413, 413)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txt_hoTen, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbl_hoTen, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(699, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 428, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(lbl_sdt, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(30, 30, 30)
-                            .addComponent(lbl_email, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(txt_sdt, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(30, 30, 30)
-                            .addComponent(txt_email, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(lbl_mkMoi, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
-                                .addComponent(pwd_mkMoi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGap(30, 30, 30)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(pwd_xacNhanMk, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(lbl_xacNhanMk, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(lbl_taiKhoan, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
-                                .addComponent(txt_taiKhoan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGap(30, 30, 30)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(pwd_mkCu, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(lbl_mkCu, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGap(0, 428, Short.MAX_VALUE)))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(130, 130, 130)
-                .addComponent(lbl_hoTen, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txt_hoTen, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(533, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 269, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(lbl_sdt, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lbl_email, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGap(10, 10, 10)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(txt_sdt, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txt_email, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGap(40, 40, 40)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(lbl_taiKhoan, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-                        .addComponent(lbl_mkCu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGap(10, 10, 10)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(txt_taiKhoan, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-                        .addComponent(pwd_mkCu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGap(60, 60, 60)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(lbl_mkMoi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lbl_xacNhanMk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(pwd_mkMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(pwd_xacNhanMk, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGap(0, 139, Short.MAX_VALUE)))
-        );
+        add(pnl_table, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txt_sdtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_sdtActionPerformed
+    private void txt_cccdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_cccdActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txt_sdtActionPerformed
+    }//GEN-LAST:event_txt_cccdActionPerformed
 
-    private void txt_taiKhoanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_taiKhoanActionPerformed
+    private void txt_tenHKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_tenHKActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txt_taiKhoanActionPerformed
-
-    private void pwd_mkMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pwd_mkMoiActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_pwd_mkMoiActionPerformed
-
-    private void pwd_xacNhanMkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pwd_xacNhanMkActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_pwd_xacNhanMkActionPerformed
-
-    private void pwd_mkCuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pwd_mkCuActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_pwd_mkCuActionPerformed
-
-    private void txt_emailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_emailActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_emailActionPerformed
-
-    private void txt_hoTenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_hoTenActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_hoTenActionPerformed
+    }//GEN-LAST:event_txt_tenHKActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel lbl_email;
-    private javax.swing.JLabel lbl_hoTen;
-    private javax.swing.JLabel lbl_mkCu;
-    private javax.swing.JLabel lbl_mkMoi;
+    private javax.swing.JButton btn_timKiem;
+    private javax.swing.JButton btn_xoaTrang;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler3;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lbl_cccd;
+    private javax.swing.JLabel lbl_gioiTinh;
+    private javax.swing.JLabel lbl_maHK;
     private javax.swing.JLabel lbl_sdt;
-    private javax.swing.JLabel lbl_taiKhoan;
-    private javax.swing.JLabel lbl_xacNhanMk;
-    private javax.swing.JPasswordField pwd_mkCu;
-    private javax.swing.JPasswordField pwd_mkMoi;
-    private javax.swing.JPasswordField pwd_xacNhanMk;
-    private javax.swing.JTextField txt_email;
-    private javax.swing.JTextField txt_hoTen;
+    private javax.swing.JLabel lbl_tenHK;
+    private javax.swing.JPanel pnlNorth;
+    private javax.swing.JPanel pnl_button;
+    private javax.swing.JPanel pnl_cccd;
+    private javax.swing.JPanel pnl_gioiTinh;
+    private javax.swing.JPanel pnl_maHK;
+    private javax.swing.JPanel pnl_maHK_tenHK;
+    private javax.swing.JPanel pnl_sdt;
+    private javax.swing.JPanel pnl_sdt_cccd;
+    private javax.swing.JPanel pnl_table;
+    private javax.swing.JPanel pnl_tenHK;
+    private javax.swing.JPanel pnl_thongTin;
+    private javax.swing.JRadioButton rdo_nam;
+    private javax.swing.JRadioButton rdo_nu;
+    private javax.swing.JTable tbl_thongTinKhachHang;
+    private javax.swing.JTextField txt_cccd;
+    private javax.swing.JTextField txt_maHK;
     private javax.swing.JTextField txt_sdt;
-    private javax.swing.JTextField txt_taiKhoan;
+    private javax.swing.JTextField txt_tenHK;
     // End of variables declaration//GEN-END:variables
 }
