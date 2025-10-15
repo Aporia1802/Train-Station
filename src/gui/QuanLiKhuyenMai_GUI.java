@@ -98,6 +98,7 @@ public class QuanLiKhuyenMai_GUI extends javax.swing.JPanel {
         pnl_btnTimKiem.setPreferredSize(new java.awt.Dimension(79, 23));
         pnl_btnTimKiem.setLayout(new java.awt.BorderLayout());
 
+        btn_timKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btn_timKiem.setText("Tìm kiếm");
         pnl_btnTimKiem.add(btn_timKiem, java.awt.BorderLayout.CENTER);
 
@@ -108,7 +109,8 @@ public class QuanLiKhuyenMai_GUI extends javax.swing.JPanel {
         pnl_cta.setPreferredSize(new java.awt.Dimension(500, 50));
         pnl_cta.setLayout(new java.awt.GridLayout(1, 0));
 
-        cbo_loaiKM.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Loại khuyến mãi", " " }));
+        cbo_loaiKM.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        cbo_loaiKM.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Loại ", " " }));
         cbo_loaiKM.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbo_loaiKMActionPerformed(evt);
@@ -116,6 +118,7 @@ public class QuanLiKhuyenMai_GUI extends javax.swing.JPanel {
         });
         pnl_cta.add(cbo_loaiKM);
 
+        cbo_trangThaiKM.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         cbo_trangThaiKM.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Trạng thái", " " }));
         cbo_trangThaiKM.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -124,11 +127,13 @@ public class QuanLiKhuyenMai_GUI extends javax.swing.JPanel {
         });
         pnl_cta.add(cbo_trangThaiKM);
 
+        btn_Loc.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btn_Loc.setText("Lọc");
         btn_Loc.setMaximumSize(new java.awt.Dimension(100, 50));
         btn_Loc.setPreferredSize(new java.awt.Dimension(100, 50));
         pnl_cta.add(btn_Loc);
 
+        btn_Reset.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btn_Reset.setText("Reset");
         btn_Reset.setMaximumSize(new java.awt.Dimension(100, 50));
         btn_Reset.setPreferredSize(new java.awt.Dimension(100, 50));
@@ -382,13 +387,13 @@ public class QuanLiKhuyenMai_GUI extends javax.swing.JPanel {
 
         tbl_khuyenMai.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4", "Title 5"
+                "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
         jScrollPane1.setViewportView(tbl_khuyenMai);
