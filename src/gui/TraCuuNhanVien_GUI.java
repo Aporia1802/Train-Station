@@ -31,24 +31,24 @@ public class TraCuuNhanVien_GUI extends javax.swing.JPanel {
         jTable1 = new javax.swing.JTable();
         pnl_header = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
-        pnl_ga = new javax.swing.JPanel();
-        lbl_maGa = new javax.swing.JLabel();
+        pnl_1 = new javax.swing.JPanel();
+        lbl_maNV = new javax.swing.JLabel();
         txt_maNV = new javax.swing.JTextField();
         lbl_next2 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        txt_tinhThanh = new javax.swing.JTextField();
+        lbl_tenNV = new javax.swing.JLabel();
+        txt_tenNV = new javax.swing.JTextField();
         lbl_next6 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        pnl_ngay = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        lbl_cccd = new javax.swing.JLabel();
+        txt_cccd = new javax.swing.JTextField();
+        pnl_2 = new javax.swing.JPanel();
+        lbl_sdt = new javax.swing.JLabel();
+        txt_sdt = new javax.swing.JTextField();
         lbl_next5 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        lbl_gioitinh = new javax.swing.JLabel();
+        cbo_gioitinh = new javax.swing.JComboBox<>();
         lbl_next3 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        cb_tenGa = new javax.swing.JComboBox<>();
+        lbl_trangthai = new javax.swing.JLabel();
+        cbo_trangthai = new javax.swing.JComboBox<>();
         pnl_timKiem = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
@@ -83,16 +83,16 @@ public class TraCuuNhanVien_GUI extends javax.swing.JPanel {
         jPanel3.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder("Thông tin nhân viên"), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
         jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.Y_AXIS));
 
-        pnl_ga.setBackground(new java.awt.Color(255, 255, 255));
-        pnl_ga.setMaximumSize(new java.awt.Dimension(65736, 70));
-        pnl_ga.setMinimumSize(new java.awt.Dimension(1000, 25));
-        pnl_ga.setPreferredSize(new java.awt.Dimension(100, 70));
-        pnl_ga.setLayout(new javax.swing.BoxLayout(pnl_ga, javax.swing.BoxLayout.LINE_AXIS));
+        pnl_1.setBackground(new java.awt.Color(255, 255, 255));
+        pnl_1.setMaximumSize(new java.awt.Dimension(65736, 70));
+        pnl_1.setMinimumSize(new java.awt.Dimension(1000, 25));
+        pnl_1.setPreferredSize(new java.awt.Dimension(100, 70));
+        pnl_1.setLayout(new javax.swing.BoxLayout(pnl_1, javax.swing.BoxLayout.LINE_AXIS));
 
-        lbl_maGa.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        lbl_maGa.setText("Mã nhân viên:");
-        lbl_maGa.setPreferredSize(new java.awt.Dimension(100, 16));
-        pnl_ga.add(lbl_maGa);
+        lbl_maNV.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lbl_maNV.setText("Mã nhân viên:");
+        lbl_maNV.setPreferredSize(new java.awt.Dimension(100, 16));
+        pnl_1.add(lbl_maNV);
 
         txt_maNV.setMaximumSize(new java.awt.Dimension(2147483647, 50));
         txt_maNV.addActionListener(new java.awt.event.ActionListener() {
@@ -100,91 +100,96 @@ public class TraCuuNhanVien_GUI extends javax.swing.JPanel {
                 txt_maNVActionPerformed(evt);
             }
         });
-        pnl_ga.add(txt_maNV);
+        pnl_1.add(txt_maNV);
 
         lbl_next2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbl_next2.setPreferredSize(new java.awt.Dimension(30, 16));
-        pnl_ga.add(lbl_next2);
+        pnl_1.add(lbl_next2);
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel4.setText("Tên nhân viên:");
-        jLabel4.setPreferredSize(new java.awt.Dimension(100, 25));
-        pnl_ga.add(jLabel4);
+        lbl_tenNV.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lbl_tenNV.setText("Tên nhân viên:");
+        lbl_tenNV.setPreferredSize(new java.awt.Dimension(100, 25));
+        pnl_1.add(lbl_tenNV);
 
-        txt_tinhThanh.setMaximumSize(new java.awt.Dimension(2147483647, 50));
-        pnl_ga.add(txt_tinhThanh);
+        txt_tenNV.setMaximumSize(new java.awt.Dimension(2147483647, 50));
+        txt_tenNV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_tenNVActionPerformed(evt);
+            }
+        });
+        pnl_1.add(txt_tenNV);
 
         lbl_next6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbl_next6.setPreferredSize(new java.awt.Dimension(30, 16));
-        pnl_ga.add(lbl_next6);
+        pnl_1.add(lbl_next6);
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel5.setText("Số CCCD:");
-        jLabel5.setPreferredSize(new java.awt.Dimension(70, 20));
-        pnl_ga.add(jLabel5);
+        lbl_cccd.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lbl_cccd.setText("Số CCCD:");
+        lbl_cccd.setPreferredSize(new java.awt.Dimension(70, 20));
+        pnl_1.add(lbl_cccd);
 
-        jTextField3.setMaximumSize(new java.awt.Dimension(2147483647, 50));
-        pnl_ga.add(jTextField3);
+        txt_cccd.setMaximumSize(new java.awt.Dimension(2147483647, 50));
+        pnl_1.add(txt_cccd);
 
-        jPanel3.add(pnl_ga);
+        jPanel3.add(pnl_1);
 
-        pnl_ngay.setBackground(new java.awt.Color(255, 255, 255));
-        pnl_ngay.setMaximumSize(new java.awt.Dimension(65679, 70));
-        pnl_ngay.setMinimumSize(new java.awt.Dimension(1000, 25));
-        pnl_ngay.setLayout(new javax.swing.BoxLayout(pnl_ngay, javax.swing.BoxLayout.LINE_AXIS));
+        pnl_2.setBackground(new java.awt.Color(255, 255, 255));
+        pnl_2.setMaximumSize(new java.awt.Dimension(65679, 70));
+        pnl_2.setMinimumSize(new java.awt.Dimension(1000, 25));
+        pnl_2.setLayout(new javax.swing.BoxLayout(pnl_2, javax.swing.BoxLayout.LINE_AXIS));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel2.setText("Số điện thoại:");
-        jLabel2.setPreferredSize(new java.awt.Dimension(100, 16));
-        pnl_ngay.add(jLabel2);
+        lbl_sdt.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lbl_sdt.setText("Số điện thoại:");
+        lbl_sdt.setPreferredSize(new java.awt.Dimension(100, 16));
+        pnl_2.add(lbl_sdt);
 
-        jTextField2.setMaximumSize(txt_maNV.getMaximumSize());
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        txt_sdt.setMaximumSize(txt_maNV.getMaximumSize());
+        txt_sdt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                txt_sdtActionPerformed(evt);
             }
         });
-        pnl_ngay.add(jTextField2);
+        pnl_2.add(txt_sdt);
 
         lbl_next5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbl_next5.setPreferredSize(new java.awt.Dimension(30, 16));
-        pnl_ngay.add(lbl_next5);
+        pnl_2.add(lbl_next5);
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel3.setText("Giới tính:");
-        jLabel3.setPreferredSize(new java.awt.Dimension(80, 25));
-        pnl_ngay.add(jLabel3);
+        lbl_gioitinh.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lbl_gioitinh.setText("Giới tính:");
+        lbl_gioitinh.setPreferredSize(new java.awt.Dimension(80, 25));
+        pnl_2.add(lbl_gioitinh);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox1.setMaximumSize(new java.awt.Dimension(32767, 50));
-        jComboBox1.setPreferredSize(new java.awt.Dimension(120, 22));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        cbo_gioitinh.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nam", "Nữ" }));
+        cbo_gioitinh.setMaximumSize(new java.awt.Dimension(32767, 50));
+        cbo_gioitinh.setPreferredSize(new java.awt.Dimension(120, 22));
+        cbo_gioitinh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                cbo_gioitinhActionPerformed(evt);
             }
         });
-        pnl_ngay.add(jComboBox1);
+        pnl_2.add(cbo_gioitinh);
 
         lbl_next3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbl_next3.setPreferredSize(new java.awt.Dimension(30, 16));
-        pnl_ngay.add(lbl_next3);
+        pnl_2.add(lbl_next3);
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel1.setText("Trạng thái:");
-        jLabel1.setPreferredSize(new java.awt.Dimension(80, 25));
-        pnl_ngay.add(jLabel1);
+        lbl_trangthai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lbl_trangthai.setText("Trạng thái:");
+        lbl_trangthai.setPreferredSize(new java.awt.Dimension(80, 25));
+        pnl_2.add(lbl_trangthai);
 
-        cb_tenGa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cb_tenGa.setMaximumSize(new java.awt.Dimension(32767, 50));
-        cb_tenGa.setPreferredSize(new java.awt.Dimension(120, 22));
-        cb_tenGa.addActionListener(new java.awt.event.ActionListener() {
+        cbo_trangthai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Còn làm", "Nghỉ làm" }));
+        cbo_trangthai.setMaximumSize(new java.awt.Dimension(32767, 50));
+        cbo_trangthai.setPreferredSize(new java.awt.Dimension(120, 22));
+        cbo_trangthai.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cb_tenGaActionPerformed(evt);
+                cbo_trangthaiActionPerformed(evt);
             }
         });
-        pnl_ngay.add(cb_tenGa);
+        pnl_2.add(cbo_trangthai);
 
-        jPanel3.add(pnl_ngay);
+        jPanel3.add(pnl_2);
 
         pnl_timKiem.setBackground(new java.awt.Color(255, 255, 255));
         pnl_timKiem.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 1, 1, 1));
@@ -213,50 +218,54 @@ public class TraCuuNhanVien_GUI extends javax.swing.JPanel {
         add(pnl_header, java.awt.BorderLayout.PAGE_START);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cb_tenGaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_tenGaActionPerformed
+    private void cbo_trangthaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbo_trangthaiActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cb_tenGaActionPerformed
+    }//GEN-LAST:event_cbo_trangthaiActionPerformed
 
     private void txt_maNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_maNVActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_maNVActionPerformed
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void txt_sdtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_sdtActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_txt_sdtActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void cbo_gioitinhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbo_gioitinhActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_cbo_gioitinhActionPerformed
+
+    private void txt_tenNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_tenNVActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_tenNVActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> cb_tenGa;
+    private javax.swing.JComboBox<String> cbo_gioitinh;
+    private javax.swing.JComboBox<String> cbo_trangthai;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JLabel lbl_maGa;
+    private javax.swing.JLabel lbl_cccd;
+    private javax.swing.JLabel lbl_gioitinh;
+    private javax.swing.JLabel lbl_maNV;
     private javax.swing.JLabel lbl_next2;
     private javax.swing.JLabel lbl_next3;
     private javax.swing.JLabel lbl_next5;
     private javax.swing.JLabel lbl_next6;
-    private javax.swing.JPanel pnl_ga;
+    private javax.swing.JLabel lbl_sdt;
+    private javax.swing.JLabel lbl_tenNV;
+    private javax.swing.JLabel lbl_trangthai;
+    private javax.swing.JPanel pnl_1;
+    private javax.swing.JPanel pnl_2;
     private javax.swing.JPanel pnl_header;
-    private javax.swing.JPanel pnl_ngay;
     private javax.swing.JPanel pnl_timKiem;
+    private javax.swing.JTextField txt_cccd;
     private javax.swing.JTextField txt_maNV;
-    private javax.swing.JTextField txt_tinhThanh;
+    private javax.swing.JTextField txt_sdt;
+    private javax.swing.JTextField txt_tenNV;
     // End of variables declaration//GEN-END:variables
 }
