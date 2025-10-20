@@ -4,10 +4,24 @@
  */
 package gui;
 
+import gui.quanLyVe.TraVe_GUI;
+import gui.quanLyVe.DoiVe_GUI;
+import gui.quanLy.QuanLyTau_GUI;
+import gui.quanLy.QuanLyGaTau_GUI;
+import gui.quanLy.QuanLyNhanVien_GUI;
+import gui.quanLy.QuanLyKhuyenMai_GUI;
+import gui.quanLy.QuanLyThongTinCaNhan_GUI;
+import gui.quanLy.QuanLyChuyenTau_GUI;
+import gui.traCuu.TraCuuChuyenTau_GUI;
+import gui.traCuu.TraCuuHanhKhach_GUI;
+import gui.traCuu.TraCuuGaTau_GUI;
+import gui.traCuu.TraCuuNhanVien_GUI;
+import gui.traCuu.TraCuuVe_GUI;
+import gui.traCuu.TraCuuTau_GUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.util.UIScale;
-import gui.bookTicket.DatVe_GUI;
+import gui.quanLyVe.DatVe_GUI;
 import gui.menu.Menu;
 import gui.menu.MenuAction;
 import java.awt.BorderLayout;
@@ -133,13 +147,13 @@ public class MainForm extends JLayeredPane{
                     Application.showForm(new QuanLyNhanVien_GUI());
                     break;
                 case 7:
-                    Application.showForm(new QuanLiKhuyenMai_GUI());
+                    Application.showForm(new QuanLyKhuyenMai_GUI());
                     break;
                 case 8:
-                    Application.showForm(new QuanLyChuyenDi_GUI());
+                    Application.showForm(new QuanLyChuyenTau_GUI());
                     break;
                 case 9:
-                    Application.showForm(new QuanLiThongTinCaNhan_GUI());
+                    Application.showForm(new QuanLyThongTinCaNhan_GUI());
                     break;
                 case 10:
                     if (JOptionPane.showConfirmDialog(this, "Bạn có thật sự muốn đăng xuất", "Xác nhận hành động", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {

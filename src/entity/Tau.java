@@ -13,6 +13,7 @@ import java.time.LocalDate;
  */
 public class Tau {
     private String maTau;
+    private String tenTau;
     private int soToaTau;
     private int sucChua;
     private LocalDate ngayHoatDong;
@@ -24,8 +25,10 @@ public class Tau {
         setMaTau(maTau);
     }
     
-    public Tau(int soToaTau, int sucChua, LocalDate ngayHoatDong, 
+    public Tau(String maTau, String tenTau, int soToaTau, int sucChua, LocalDate ngayHoatDong, 
               TrangThaiTau trangThai) throws Exception {
+        setMaTau(maTau);
+        setTenTau(tenTau);
         setSoToaTau(soToaTau);
         setSucChua(sucChua);
         setNgayHoatDong(ngayHoatDong);
@@ -38,6 +41,14 @@ public class Tau {
     
     public void setMaTau(String maTau) {
         this.maTau = maTau;
+    }
+    
+    public String getTenTau() {
+        return tenTau;
+    }
+
+    public void setTenTau(String tenTau) {
+        this.tenTau = tenTau;
     }
     
     public int getSoToaTau() {
