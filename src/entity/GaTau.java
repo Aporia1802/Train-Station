@@ -26,7 +26,8 @@ public class GaTau {
         this.maGa = maGa;
     }
     
-    public GaTau(String tenGa, String diaChi, String soDienThoai) throws Exception {
+    public GaTau(String maGa, String tenGa, String diaChi, String soDienThoai) throws Exception {
+        setMaGa(maGa);
         setTenGa(tenGa);
         setDiaChi(diaChi);
         setSoDienThoai(soDienThoai);

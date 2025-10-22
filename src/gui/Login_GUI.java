@@ -86,7 +86,7 @@ public class Login_GUI extends javax.swing.JPanel {
         pnl_logo.setLayout(new java.awt.BorderLayout());
 
         lbl_logo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbl_logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/login/Large_logo.png"))); // NOI18N
+        lbl_logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/Large_logo.png"))); // NOI18N
         lbl_logo.setMaximumSize(new java.awt.Dimension(630, 650));
         lbl_logo.setMinimumSize(new java.awt.Dimension(630, 650));
         lbl_logo.setPreferredSize(new java.awt.Dimension(630, 650));
