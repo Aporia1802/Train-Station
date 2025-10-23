@@ -64,9 +64,17 @@ public class TraCuuNhanVien_GUI extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Mã nhân viên", "Tên nhân viên", "Ngày sinh", "Số điện thoại", "CCCD", "Địa chỉ ", "Chức vụ", "Giới tính", "Trạng thái"
+                "Mã NV", "Họ tên", "Giới tính", "Ngày sinh", "Email", "SDT", "CCCD", "Địa chỉ ", "Chức vụ", "Trạng thái"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tbl_thongTinNhanVien.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(tbl_thongTinNhanVien);
 
