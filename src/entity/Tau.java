@@ -20,6 +20,10 @@ public class Tau {
     private TrangThaiTau trangThai;
     
     public static final String SOTOA_INVALID = "Số toa tàu phải lớn hơn 0!";
+
+    public Tau() {
+    }
+    
     
     public Tau(String maTau) {
         setMaTau(maTau);

@@ -49,7 +49,7 @@ CREATE TABLE GaTau (
 -- 5. BẢNG TÀU
 CREATE TABLE Tau (
     maTau VARCHAR(20) PRIMARY KEY,
-	tenTau NVARCHAR(50),
+    tenTau NVARCHAR(50),
     soToaTau INT NOT NULL,
     sucChua INT NOT NULL,
     ngayHoatDong DATE NOT NULL,

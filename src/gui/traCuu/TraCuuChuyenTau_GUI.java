@@ -4,19 +4,51 @@
  */
 package gui.traCuu;
 
+import bus.QuanLyGaTau_BUS;
+import bus.TraCuuChuyenTau_BUS;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+import entity.GaTau;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author CÔNG HOÀNG
  */
 public class TraCuuChuyenTau_GUI extends javax.swing.JPanel {
-
+    private TraCuuChuyenTau_BUS bus;
+    private DefaultTableModel tblModel_thongTinChuyenTau;
     /**
      * Creates new form TraCuuChuyenTau
      */
     public TraCuuChuyenTau_GUI() {
         initComponents();
+        init();
+    }
+    
+    private void init() {
+        bus = new TraCuuChuyenTau_BUS();
+        
+//      setModel
+        tblModel_thongTinChuyenTau = new DefaultTableModel(new String[] {"Mã chuyến tàu", "Tàu", "Ngày đi", "Ngày đến", "Thòi gian đi", "Thòi gian đến", "Số ghế còn tróng", "Giá "}, 0);
+        tbl_thongTinChuyenTau.setModel(tblModel_thongTinChuyenTau);
+        
+        
+        loadDataToTable();
+        loadDataToCbo();
+    }
+    
+//  Load dữ liệu lên table
+    private void loadDataToTable() {
+        
+    }
+    
+    private void loadDataToCbo() {
+        ArrayList<GaTau> dsGaTau = bus.getAllGaTau();
+        
+        for(GaTau gaTau : dsGaTau) {
+            cbo_gaDi.addItem(gaTau.getTenGa());
+        }
     }
 
     /**
@@ -32,10 +64,10 @@ public class TraCuuChuyenTau_GUI extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         pnl_ga = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        cb_gaDi = new javax.swing.JComboBox<>();
+        cbo_gaDi = new javax.swing.JComboBox<>();
         lbl_next1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        cb_gaDen = new javax.swing.JComboBox<>();
+        cbo_gaDen = new javax.swing.JComboBox<>();
         pnl_ngay = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         date_ngayDi = new com.toedter.calendar.JDateChooser();
@@ -71,9 +103,9 @@ public class TraCuuChuyenTau_GUI extends javax.swing.JPanel {
         jLabel1.setPreferredSize(new java.awt.Dimension(80, 16));
         pnl_ga.add(jLabel1);
 
-        cb_gaDi.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cb_gaDi.setMaximumSize(new java.awt.Dimension(32767, 50));
-        pnl_ga.add(cb_gaDi);
+        cbo_gaDi.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "---Chọn ga đi---" }));
+        cbo_gaDi.setMaximumSize(new java.awt.Dimension(32767, 50));
+        pnl_ga.add(cbo_gaDi);
 
         lbl_next1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbl_next1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/fast-forward.png"))); // NOI18N
@@ -85,9 +117,9 @@ public class TraCuuChuyenTau_GUI extends javax.swing.JPanel {
         jLabel3.setPreferredSize(new java.awt.Dimension(80, 25));
         pnl_ga.add(jLabel3);
 
-        cb_gaDen.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cb_gaDen.setMaximumSize(new java.awt.Dimension(32767, 50));
-        pnl_ga.add(cb_gaDen);
+        cbo_gaDen.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "--Chọn ga đến---" }));
+        cbo_gaDen.setMaximumSize(new java.awt.Dimension(32767, 50));
+        pnl_ga.add(cbo_gaDen);
 
         jPanel2.add(pnl_ga);
 
@@ -100,8 +132,8 @@ public class TraCuuChuyenTau_GUI extends javax.swing.JPanel {
         jLabel4.setPreferredSize(new java.awt.Dimension(80, 25));
         pnl_ngay.add(jLabel4);
 
-        date_ngayDi.setMaximumSize(cb_gaDi.getMaximumSize());
-        date_ngayDi.setPreferredSize(cb_gaDi.getPreferredSize());
+        date_ngayDi.setMaximumSize(cbo_gaDi.getMaximumSize());
+        date_ngayDi.setPreferredSize(cbo_gaDi.getPreferredSize());
         pnl_ngay.add(date_ngayDi);
 
         lbl_next2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -114,7 +146,7 @@ public class TraCuuChuyenTau_GUI extends javax.swing.JPanel {
         jLabel6.setPreferredSize(new java.awt.Dimension(80, 25));
         pnl_ngay.add(jLabel6);
 
-        cb_tau.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cb_tau.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "---Chọn tàu---" }));
         cb_tau.setMaximumSize(new java.awt.Dimension(32767, 50));
         cb_tau.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -167,11 +199,11 @@ public class TraCuuChuyenTau_GUI extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Tàu", "Thời gian đi", "Thời gian đến", "Số lượng chỗ trống"
+                "Tàu", "Ngày đi", "Thời gian đi", "Ngày đến", "Thời gian đến", "Số lượng chỗ trống", "Giá vé"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -202,9 +234,9 @@ public class TraCuuChuyenTau_GUI extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnTimKiem;
     private javax.swing.JButton btn_xoaTrang;
-    private javax.swing.JComboBox<String> cb_gaDen;
-    private javax.swing.JComboBox<String> cb_gaDi;
     private javax.swing.JComboBox<String> cb_tau;
+    private javax.swing.JComboBox<String> cbo_gaDen;
+    private javax.swing.JComboBox<String> cbo_gaDi;
     private com.toedter.calendar.JDateChooser date_ngayDi;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
