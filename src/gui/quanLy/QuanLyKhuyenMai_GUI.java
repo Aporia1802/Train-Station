@@ -99,9 +99,19 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
     private void handleActionLamMoi() {
         tbl_thongTinKhuyenMai.clearSelection();
         getTableData(bus.getAllKhuyenMai());
-        txt_timKiem.setText("Nhập mã hoặc tên ga cần tìm...");
+        txt_timKiem.setText("Nhập mã hoặc tên khuyến mãi cần tìm...");
         txt_timKiem.setForeground(Color.GRAY);
     }
+    
+    private void handleActionTimKiem() {
+        String keyword = txt_timKiem.getText().trim();
+        getTableData(bus.getGaTauByKeyword(keyword));
+    }
+    
+    private void handleActionLoc() {
+        String trangThai = cbo_trangThaiKM.getSelectedItem().toString().trim();
+        getTableData(bus.filterByTrangThai(trangThai));
+}
     
 //    private void handleActionTimKiem() {
 //        String keyword = txt_timKiem.getText().trim();
@@ -171,16 +181,15 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
 
         pnl_timKiem.setLayout(new javax.swing.BoxLayout(pnl_timKiem, javax.swing.BoxLayout.LINE_AXIS));
 
+        txt_timKiem.setForeground(new java.awt.Color(153, 153, 153));
+        txt_timKiem.setText("Nhập mã hoặc tên khuyến mãi cần tìm...");
         txt_timKiem.setPreferredSize(new java.awt.Dimension(500, 30));
-        txt_timKiem.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        txt_timKiem.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
                 txt_timKiemFocusGained(evt);
-                txt_timKiemFocusLost(evt);
             }
-        });
-        txt_timKiem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_timKiemActionPerformed(evt);
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txt_timKiemFocusLost(evt);
             }
         });
         pnl_timKiem.add(txt_timKiem);
@@ -190,6 +199,11 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
 
         btn_timKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btn_timKiem.setText("Tìm kiếm");
+        btn_timKiem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_timKiemActionPerformed(evt);
+            }
+        });
         pnl_btnTimKiem.add(btn_timKiem, java.awt.BorderLayout.CENTER);
 
         pnl_timKiem.add(pnl_btnTimKiem);
@@ -201,17 +215,17 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
 
         cbo_trangThaiKM.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         cbo_trangThaiKM.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Trạng thái", "Còn hiệu lực", "Hết hạn" }));
-        cbo_trangThaiKM.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbo_trangThaiKMActionPerformed(evt);
-            }
-        });
         pnl_cta.add(cbo_trangThaiKM);
 
         btn_Loc.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btn_Loc.setText("Lọc");
         btn_Loc.setMaximumSize(new java.awt.Dimension(100, 50));
         btn_Loc.setPreferredSize(new java.awt.Dimension(100, 50));
+        btn_Loc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_LocActionPerformed(evt);
+            }
+        });
         pnl_cta.add(btn_Loc);
 
         btn_Reset.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -487,14 +501,6 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_tienKhuyenMaiToiDaActionPerformed
 
-    private void cbo_trangThaiKMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbo_trangThaiKMActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbo_trangThaiKMActionPerformed
-
-    private void txt_timKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_timKiemActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_timKiemActionPerformed
-
     private void btn_taoKMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_taoKMActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btn_taoKMActionPerformed
@@ -518,21 +524,31 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
         handleActionLamMoi();
     }//GEN-LAST:event_btn_ResetMouseClicked
 
-    private void txt_timKiemFocusGained(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txt_timKiemFocusGained
+    private void txt_timKiemFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_timKiemFocusGained
         // TODO add your handling code here:
-        if (txt_timKiem.getText().equals("Nhập mã hoặc tên ga cần tìm...")) {
+        if (txt_timKiem.getText().equals("Nhập mã hoặc tên khuyến mãi cần tìm...")) {
             txt_timKiem.setText("");
             txt_timKiem.setForeground(Color.BLACK);
         }
     }//GEN-LAST:event_txt_timKiemFocusGained
 
-    private void txt_timKiemFocusLost(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txt_timKiemFocusLost
+    private void txt_timKiemFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_timKiemFocusLost
         // TODO add your handling code here:
         if (txt_timKiem.getText().equals("")) {
-            txt_timKiem.setText("Nhập mã hoặc tên ga cần tìm...");
+            txt_timKiem.setText("Nhập mã hoặc tên khuyến mãi cần tìm...");
             txt_timKiem.setForeground(Color.GRAY);
         }
     }//GEN-LAST:event_txt_timKiemFocusLost
+
+    private void btn_timKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_timKiemActionPerformed
+        // TODO add your handling code here:
+        handleActionTimKiem();
+    }//GEN-LAST:event_btn_timKiemActionPerformed
+
+    private void btn_LocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_LocActionPerformed
+        // TODO add your handling code here:
+        handleActionLoc();
+    }//GEN-LAST:event_btn_LocActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
