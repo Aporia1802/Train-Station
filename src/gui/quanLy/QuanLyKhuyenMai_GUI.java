@@ -12,6 +12,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -19,8 +20,10 @@ import javax.swing.table.DefaultTableModel;
  * @author Laptopone
  */
 public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
+
     private QuanLyKhuyenMai_BUS bus;
     private DefaultTableModel tblModel_thongTinKhuyenMai;
+
     /**
      * Creates new form TraCuuHanhKhach_GUI
      */
@@ -28,25 +31,25 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
         initComponents();
         init();
     }
-    
+
     private void init() {
         bus = new QuanLyKhuyenMai_BUS();
-        
-    //setModel
-        tblModel_thongTinKhuyenMai = new DefaultTableModel(new String[] {"Mã KM", "Tên KM", "Mức giảm", "Ngày bắt đầu", "Ngày kết thúc", "Tổng tiền tối thiểu", "Tiền khuyến mãi tối đa", "Trạng thái"}, 0);
+
+        //setModel
+        tblModel_thongTinKhuyenMai = new DefaultTableModel(new String[]{"Mã KM", "Tên KM", "Mức giảm", "Ngày bắt đầu", "Ngày kết thúc", "Tổng tiền tối thiểu", "Tiền khuyến mãi tối đa", "Trạng thái"}, 0);
         tbl_thongTinKhuyenMai.setModel(tblModel_thongTinKhuyenMai);
-        
+
         getTableData(bus.getAllKhuyenMai());
     }
-    
+
     private void getTableData(ArrayList<KhuyenMai> dsKhuyenMai) {
         tblModel_thongTinKhuyenMai.setRowCount(0);
-        for(KhuyenMai khuyenMai : dsKhuyenMai) {
+        for (KhuyenMai khuyenMai : dsKhuyenMai) {
             String[] newRow = {khuyenMai.getMaKhuyenMai(), khuyenMai.getTenKhuyenMai(), String.valueOf(khuyenMai.getHeSoKhuyenMai()), String.valueOf(khuyenMai.getNgayBatDau()), String.valueOf(khuyenMai.getNgayKetThuc()), String.valueOf(khuyenMai.getTongTienToiThieu()), String.valueOf(khuyenMai.getTienKhuyenMaiToiDa()), khuyenMai.getTrangThai() ? "Còn hiệu lực" : "Hết hạn"};
             tblModel_thongTinKhuyenMai.addRow(newRow);
         }
     }
-    
+
     private void getThongTinKhuyenMai() {
         int row = tbl_thongTinKhuyenMai.getSelectedRow(); // lấy dòng được chọn
         if (row != -1) {
@@ -64,13 +67,12 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
             txt_maKhuyenMai.setText(maKhuyenMai);
             txt_tenKhuyenMai.setText(tenKhuyenMai);
             txt_mucGiam.setText(mucGiam);
-            
+
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate localDate = LocalDate.parse(ngayBatDau, formatter);
             java.util.Date ngayBD = java.sql.Date.valueOf(localDate);
             txt_ngayBatDau.setDate(ngayBD); // Gán vào JDateChooser
 
-            
             localDate = LocalDate.parse(ngayKetThuc, formatter);
             java.util.Date ngayKT = java.sql.Date.valueOf(localDate);
             txt_ngayKetThuc.setDate(ngayKT); // Gán vào JDateChooser
@@ -80,7 +82,7 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
             cbo_trangThai.setSelectedItem(trangThai);
         }
     }
-    
+
     private void handleActionXoaTrang() {
         tbl_thongTinKhuyenMai.clearSelection();
         txt_maKhuyenMai.setText("");
@@ -95,29 +97,79 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
 
         cbo_trangThai.setSelectedIndex(0);
     }
-    
+
     private void handleActionLamMoi() {
         tbl_thongTinKhuyenMai.clearSelection();
         getTableData(bus.getAllKhuyenMai());
         txt_timKiem.setText("Nhập mã hoặc tên khuyến mãi cần tìm...");
         txt_timKiem.setForeground(Color.GRAY);
+        cbo_trangThai.setSelectedIndex(0);
     }
-    
+
     private void handleActionTimKiem() {
         String keyword = txt_timKiem.getText().trim();
         getTableData(bus.getGaTauByKeyword(keyword));
     }
-    
+
     private void handleActionLoc() {
         String trangThai = cbo_trangThaiKM.getSelectedItem().toString().trim();
         getTableData(bus.filterByTrangThai(trangThai));
-}
-    
+    }
+
+    private void handleActionThem() {
+        try {
+            String maKM = bus.generateMaKhuyenMai();
+            String tenKM = txt_tenKhuyenMai.getText().trim();
+            double heSo = Double.parseDouble(txt_mucGiam.getText().trim());
+            LocalDate ngayBatDau = txt_ngayBatDau.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate ngayKetThuc = txt_ngayKetThuc.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            double tongTienTT = Double.parseDouble(txt_tongTienToiThieu.getText().trim());
+            double tienKMToiDa = Double.parseDouble(txt_tienKhuyenMaiToiDa.getText().trim());
+            boolean trangThai = cbo_trangThai.getSelectedItem().toString().equals("Còn hiệu lực");
+
+            KhuyenMai km = new KhuyenMai(maKM, tenKM, heSo, ngayBatDau, ngayKetThuc, tongTienTT, tienKMToiDa, trangThai);
+
+            if (bus.themKhuyenMai(km)) {
+                JOptionPane.showMessageDialog(this, "Thêm khuyến mãi thành công!");
+                getTableData(bus.getAllKhuyenMai());
+            } else {
+                JOptionPane.showMessageDialog(this, "Không thể thêm khuyến mãi!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Dữ liệu nhập không hợp lệ!");
+        }
+    }
+
+    private void handleActionCapNhat() {
+        try {
+            String maKM = txt_maKhuyenMai.getText().trim();
+            String tenKM = txt_tenKhuyenMai.getText().trim();
+            double heSo = Double.parseDouble(txt_mucGiam.getText().trim());
+            LocalDate ngayBatDau =txt_ngayBatDau.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate ngayKetThuc = txt_ngayKetThuc.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            double tongTienTT = Double.parseDouble(txt_tongTienToiThieu.getText().trim());
+            double tienKMToiDa = Double.parseDouble(txt_tienKhuyenMaiToiDa.getText().trim());
+            boolean trangThai = cbo_trangThai.getSelectedItem().toString().equals("Còn hiệu lực");
+
+            KhuyenMai km = new KhuyenMai(maKM, tenKM, heSo, ngayBatDau, ngayKetThuc, tongTienTT, tienKMToiDa, trangThai);
+
+            if (bus.capNhatKhuyenMai(km)) {
+                JOptionPane.showMessageDialog(this, "Cập nhật khuyến mãi thành công!");
+                getTableData(bus.getAllKhuyenMai());
+            } else {
+                JOptionPane.showMessageDialog(this, "Không thể cập nhật khuyến mãi!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Dữ liệu nhập không hợp lệ!");
+        }
+    }
+
 //    private void handleActionTimKiem() {
 //        String keyword = txt_timKiem.getText().trim();
 //        getTableData(bus.getGaTauByKeyword(keyword));
 //    }
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -214,7 +266,7 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
         pnl_cta.setLayout(new java.awt.GridLayout(1, 0));
 
         cbo_trangThaiKM.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        cbo_trangThaiKM.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Trạng thái", "Còn hiệu lực", "Hết hạn" }));
+        cbo_trangThaiKM.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Còn hiệu lực", "Hết hạn" }));
         pnl_cta.add(cbo_trangThaiKM);
 
         btn_Loc.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -307,6 +359,11 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
 
         btn_capNhat.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btn_capNhat.setText("Cập nhật");
+        btn_capNhat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_capNhatActionPerformed(evt);
+            }
+        });
         jPanel1.add(btn_capNhat);
 
         pnl_button.add(jPanel1, java.awt.BorderLayout.CENTER);
@@ -351,7 +408,6 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
         pnl_tenKM.add(lbl_tenKM);
 
         txt_tenKhuyenMai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txt_tenKhuyenMai.setText("Giảm 10%");
         txt_tenKhuyenMai.setMaximumSize(new java.awt.Dimension(2147483647, 40));
         txt_tenKhuyenMai.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -373,7 +429,6 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
         pnl_mucGiam.add(lbl_mucGiam);
 
         txt_mucGiam.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txt_mucGiam.setText("0.1");
         txt_mucGiam.setMaximumSize(new java.awt.Dimension(2147483647, 40));
         txt_mucGiam.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -427,7 +482,6 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
         pnl_tongTienToiThieu.add(lbl_tongTienToiThieu);
 
         txt_tongTienToiThieu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txt_tongTienToiThieu.setText("100.000");
         txt_tongTienToiThieu.setMaximumSize(new java.awt.Dimension(2147483647, 40));
         txt_tongTienToiThieu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -449,7 +503,6 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
         pnl_tienKhuyenMaiToiDa.add(lbl_tienKhuyenMaiToiDa);
 
         txt_tienKhuyenMaiToiDa.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txt_tienKhuyenMaiToiDa.setText("100.000");
         txt_tienKhuyenMaiToiDa.setMaximumSize(new java.awt.Dimension(2147483647, 40));
         txt_tienKhuyenMaiToiDa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -503,6 +556,7 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
 
     private void btn_taoKMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_taoKMActionPerformed
         // TODO add your handling code here:
+        handleActionThem();
     }//GEN-LAST:event_btn_taoKMActionPerformed
 
     private void btn_xoaTrangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_xoaTrangActionPerformed
@@ -549,6 +603,11 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
         // TODO add your handling code here:
         handleActionLoc();
     }//GEN-LAST:event_btn_LocActionPerformed
+
+    private void btn_capNhatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_capNhatActionPerformed
+        // TODO add your handling code here:
+        handleActionCapNhat();
+    }//GEN-LAST:event_btn_capNhatActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

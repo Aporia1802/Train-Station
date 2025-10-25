@@ -105,10 +105,9 @@
                   <Font name="Segoe UI" size="14" style="0"/>
                 </Property>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="3">
-                    <StringItem index="0" value="Tr&#x1ea1;ng th&#xe1;i"/>
-                    <StringItem index="1" value="C&#xf2;n hi&#x1ec7;u l&#x1ef1;c"/>
-                    <StringItem index="2" value="H&#x1ebf;t h&#x1ea1;n"/>
+                  <StringArray count="2">
+                    <StringItem index="0" value="C&#xf2;n hi&#x1ec7;u l&#x1ef1;c"/>
+                    <StringItem index="1" value="H&#x1ebf;t h&#x1ea1;n"/>
                   </StringArray>
                 </Property>
               </Properties>
@@ -363,6 +362,9 @@
                             </Property>
                             <Property name="text" type="java.lang.String" value="C&#x1ead;p nh&#x1ead;t"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_capNhatActionPerformed"/>
+                          </Events>
                         </Component>
                       </SubComponents>
                     </Container>
@@ -474,7 +476,6 @@
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Segoe UI" size="14" style="0"/>
                             </Property>
-                            <Property name="text" type="java.lang.String" value="Gi&#x1ea3;m 10%"/>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                               <Dimension value="[2147483647, 40]"/>
                             </Property>
@@ -516,7 +517,6 @@
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Segoe UI" size="14" style="0"/>
                             </Property>
-                            <Property name="text" type="java.lang.String" value="0.1"/>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                               <Dimension value="[2147483647, 40]"/>
                             </Property>
@@ -634,7 +634,6 @@
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Segoe UI" size="14" style="0"/>
                             </Property>
-                            <Property name="text" type="java.lang.String" value="100.000"/>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                               <Dimension value="[2147483647, 40]"/>
                             </Property>
@@ -676,7 +675,6 @@
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Segoe UI" size="14" style="0"/>
                             </Property>
-                            <Property name="text" type="java.lang.String" value="100.000"/>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                               <Dimension value="[2147483647, 40]"/>
                             </Property>
