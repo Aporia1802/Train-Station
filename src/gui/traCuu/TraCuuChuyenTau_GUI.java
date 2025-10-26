@@ -7,9 +7,18 @@ package gui.traCuu;
 import bus.QuanLyGaTau_BUS;
 import bus.TraCuuChuyenTau_BUS;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+import entity.ChuyenTau;
 import entity.GaTau;
+import java.awt.event.ItemEvent;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
+import raven.toast.Notifications;
+import utils.FormatUtil;
 
 /**
  *
@@ -18,6 +27,9 @@ import javax.swing.table.DefaultTableModel;
 public class TraCuuChuyenTau_GUI extends javax.swing.JPanel {
     private TraCuuChuyenTau_BUS bus;
     private DefaultTableModel tblModel_thongTinChuyenTau;
+    private String gaDi;
+    private String gaDen;
+    private LocalDate ngayDi;
     /**
      * Creates new form TraCuuChuyenTau
      */
@@ -30,17 +42,48 @@ public class TraCuuChuyenTau_GUI extends javax.swing.JPanel {
         bus = new TraCuuChuyenTau_BUS();
         
 //      setModel
-        tblModel_thongTinChuyenTau = new DefaultTableModel(new String[] {"Mã chuyến tàu", "Tàu", "Ngày đi", "Ngày đến", "Thòi gian đi", "Thòi gian đến", "Số ghế còn tróng", "Giá "}, 0);
+        tblModel_thongTinChuyenTau = new DefaultTableModel(new String[] {"Mã chuyến tàu", "Tàu", "Ga đi", "Ga đến", "Thòi gian đi", "Thòi gian đến", "Số ghế còn trống", "Giá vé"}, 0);
         tbl_thongTinChuyenTau.setModel(tblModel_thongTinChuyenTau);
         
+        cbo_gaDi.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) { // chỉ xử lý khi có lựa chọn mới
+                cbo_gaDen.removeAllItems();
+                cbo_gaDen.addItem("---Chọn ga đến---");
+                if (cbo_gaDi.getSelectedIndex() != 0) {
+                    for(int i = 0; i < cbo_gaDi.getItemCount(); i++) {
+                        if(i != cbo_gaDi.getSelectedIndex() && i != 0) {
+                            cbo_gaDen.addItem(cbo_gaDi.getItemAt(i));
+                        }
+                    }
+                    cbo_gaDen.setEnabled(true); // bật combobox ga đến khi ga đi đã chọn
+                    gaDi = cbo_gaDi.getSelectedItem().toString();   
+                } else {
+                    cbo_gaDen.setEnabled(false); // tắt nếu người dùng chọn lại "--Chọn ga đi--"
+                }
+            }
+        });
         
-        loadDataToTable();
+        cbo_gaDen.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) { // chỉ xử lý khi có lựa chọn mới
+                if (cbo_gaDen.getSelectedIndex() != 0) {
+                    gaDen = cbo_gaDen.getSelectedItem().toString();   
+                }
+            }
+        });
+        
+        
+        loadDataToTable(bus.getAllChuyenTau());
         loadDataToCbo();
     }
     
 //  Load dữ liệu lên table
-    private void loadDataToTable() {
-        
+    private void loadDataToTable(ArrayList<ChuyenTau> dsChuyenTau) {
+        tblModel_thongTinChuyenTau.setRowCount(0);
+        for(ChuyenTau ct : dsChuyenTau) {
+            String[] newRow = {ct.getMaChuyenTau(), ct.getTau().getMaTau() + "-" + ct.getTau().getTenTau(), ct.getTuyenDuong().getGaDi().getTenGa(),  ct.getTuyenDuong().getGaDen().getTenGa(),FormatUtil.formatDateTime(ct.getThoiGianDi()), 
+                FormatUtil.formatDateTime(ct.getThoiGianDen()), String.valueOf(ct.getSoGheConTrong()), FormatUtil.formatCurrency(ct.getTuyenDuong().getQuangDuong() * ct.getTuyenDuong().getSoTienMotKm())};
+            tblModel_thongTinChuyenTau.addRow(newRow);
+        }
     }
     
     private void loadDataToCbo() {
@@ -48,6 +91,35 @@ public class TraCuuChuyenTau_GUI extends javax.swing.JPanel {
         
         for(GaTau gaTau : dsGaTau) {
             cbo_gaDi.addItem(gaTau.getTenGa());
+        }
+    }
+    
+    private void handleXoaTrang() {
+        cbo_gaDi.setSelectedIndex(0);
+        cbo_gaDen.setSelectedIndex(0);
+        date_ngayDi.setDate(new Date());
+        loadDataToTable(bus.getAllChuyenTau());
+    }
+    
+    private void handleTimKiem() {
+        try {
+            ngayDi = date_ngayDi.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            if(cbo_gaDi.getSelectedIndex() == 0) {
+                Notifications.getInstance().show(Notifications.Type.WARNING,
+                        "Vui lòng chọn ga đi!");
+                return;
+            }
+            
+            if(cbo_gaDen.getSelectedIndex() == 0) {
+                Notifications.getInstance().show(Notifications.Type.WARNING,
+                        "Vui lòng chọn ga đến!");
+                return;
+            }
+            
+            loadDataToTable(bus.filter(gaDi, gaDen, ngayDi));
+        } catch (Exception e) {
+            Notifications.getInstance().show(Notifications.Type.ERROR,
+                        e.getMessage());
         }
     }
 
@@ -61,19 +133,17 @@ public class TraCuuChuyenTau_GUI extends javax.swing.JPanel {
     private void initComponents() {
 
         pnl_header = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        pnl_ga = new javax.swing.JPanel();
+        pnl_thongTinHanhTrinh = new javax.swing.JPanel();
+        pnl_thongTin = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         cbo_gaDi = new javax.swing.JComboBox<>();
-        lbl_next1 = new javax.swing.JLabel();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         jLabel3 = new javax.swing.JLabel();
         cbo_gaDen = new javax.swing.JComboBox<>();
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         pnl_ngay = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         date_ngayDi = new com.toedter.calendar.JDateChooser();
-        lbl_next2 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        cb_tau = new javax.swing.JComboBox<>();
         pnl_timKiem = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         btnTimKiem = new javax.swing.JButton();
@@ -86,42 +156,45 @@ public class TraCuuChuyenTau_GUI extends javax.swing.JPanel {
         setLayout(new java.awt.BorderLayout());
 
         pnl_header.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        pnl_header.setPreferredSize(new java.awt.Dimension(1366, 250));
+        pnl_header.setPreferredSize(new java.awt.Dimension(1366, 200));
         pnl_header.setLayout(new java.awt.BorderLayout());
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder("Thông tin hành trình"), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
-        jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.Y_AXIS));
+        pnl_thongTinHanhTrinh.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder("Thông tin hành trình"), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        pnl_thongTinHanhTrinh.setMaximumSize(new java.awt.Dimension(65766, 150));
+        pnl_thongTinHanhTrinh.setPreferredSize(new java.awt.Dimension(247, 150));
+        pnl_thongTinHanhTrinh.setLayout(new javax.swing.BoxLayout(pnl_thongTinHanhTrinh, javax.swing.BoxLayout.Y_AXIS));
 
-        pnl_ga.setMaximumSize(new java.awt.Dimension(65736, 70));
-        pnl_ga.setMinimumSize(new java.awt.Dimension(1000, 25));
-        pnl_ga.setPreferredSize(new java.awt.Dimension(100, 70));
-        pnl_ga.setLayout(new javax.swing.BoxLayout(pnl_ga, javax.swing.BoxLayout.LINE_AXIS));
+        pnl_thongTin.setMaximumSize(new java.awt.Dimension(65736, 70));
+        pnl_thongTin.setMinimumSize(new java.awt.Dimension(1000, 25));
+        pnl_thongTin.setPreferredSize(new java.awt.Dimension(100, 70));
+        pnl_thongTin.setLayout(new javax.swing.BoxLayout(pnl_thongTin, javax.swing.BoxLayout.LINE_AXIS));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel1.setText("Ga đi:");
         jLabel1.setMaximumSize(new java.awt.Dimension(100, 16));
         jLabel1.setPreferredSize(new java.awt.Dimension(80, 16));
-        pnl_ga.add(jLabel1);
+        pnl_thongTin.add(jLabel1);
 
         cbo_gaDi.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "---Chọn ga đi---" }));
         cbo_gaDi.setMaximumSize(new java.awt.Dimension(32767, 50));
-        pnl_ga.add(cbo_gaDi);
-
-        lbl_next1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbl_next1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/fast-forward.png"))); // NOI18N
-        lbl_next1.setPreferredSize(new java.awt.Dimension(70, 16));
-        pnl_ga.add(lbl_next1);
+        pnl_thongTin.add(cbo_gaDi);
+        pnl_thongTin.add(filler1);
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel3.setText("Ga đến:");
         jLabel3.setPreferredSize(new java.awt.Dimension(80, 25));
-        pnl_ga.add(jLabel3);
+        pnl_thongTin.add(jLabel3);
 
         cbo_gaDen.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "--Chọn ga đến---" }));
+        cbo_gaDen.setEnabled(false);
         cbo_gaDen.setMaximumSize(new java.awt.Dimension(32767, 50));
-        pnl_ga.add(cbo_gaDen);
-
-        jPanel2.add(pnl_ga);
+        cbo_gaDen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbo_gaDenActionPerformed(evt);
+            }
+        });
+        pnl_thongTin.add(cbo_gaDen);
+        pnl_thongTin.add(filler2);
 
         pnl_ngay.setMaximumSize(new java.awt.Dimension(65679, 70));
         pnl_ngay.setMinimumSize(new java.awt.Dimension(1000, 25));
@@ -133,29 +206,12 @@ public class TraCuuChuyenTau_GUI extends javax.swing.JPanel {
         pnl_ngay.add(jLabel4);
 
         date_ngayDi.setMaximumSize(cbo_gaDi.getMaximumSize());
-        date_ngayDi.setPreferredSize(cbo_gaDi.getPreferredSize());
+        date_ngayDi.setMinimumSize(cbo_gaDi.getMinimumSize());
         pnl_ngay.add(date_ngayDi);
 
-        lbl_next2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbl_next2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/fast-forward.png"))); // NOI18N
-        lbl_next2.setPreferredSize(new java.awt.Dimension(70, 16));
-        pnl_ngay.add(lbl_next2);
+        pnl_thongTin.add(pnl_ngay);
 
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel6.setText("Tàu:");
-        jLabel6.setPreferredSize(new java.awt.Dimension(80, 25));
-        pnl_ngay.add(jLabel6);
-
-        cb_tau.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "---Chọn tàu---" }));
-        cb_tau.setMaximumSize(new java.awt.Dimension(32767, 50));
-        cb_tau.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cb_tauActionPerformed(evt);
-            }
-        });
-        pnl_ngay.add(cb_tau);
-
-        jPanel2.add(pnl_ngay);
+        pnl_thongTinHanhTrinh.add(pnl_thongTin);
 
         pnl_timKiem.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 1, 1, 1));
         pnl_timKiem.setMaximumSize(new java.awt.Dimension(32767, 60));
@@ -185,9 +241,9 @@ public class TraCuuChuyenTau_GUI extends javax.swing.JPanel {
 
         pnl_timKiem.add(jPanel3, java.awt.BorderLayout.CENTER);
 
-        jPanel2.add(pnl_timKiem);
+        pnl_thongTinHanhTrinh.add(pnl_timKiem);
 
-        pnl_header.add(jPanel2, java.awt.BorderLayout.CENTER);
+        pnl_header.add(pnl_thongTinHanhTrinh, java.awt.BorderLayout.CENTER);
 
         add(pnl_header, java.awt.BorderLayout.PAGE_START);
 
@@ -218,39 +274,39 @@ public class TraCuuChuyenTau_GUI extends javax.swing.JPanel {
         add(jPanel1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cb_tauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_tauActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cb_tauActionPerformed
-
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
         // TODO add your handling code here:
+        handleTimKiem();
     }//GEN-LAST:event_btnTimKiemActionPerformed
 
     private void btn_xoaTrangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_xoaTrangActionPerformed
         // TODO add your handling code here:
+        handleXoaTrang();
     }//GEN-LAST:event_btn_xoaTrangActionPerformed
+
+    private void cbo_gaDenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbo_gaDenActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbo_gaDenActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnTimKiem;
     private javax.swing.JButton btn_xoaTrang;
-    private javax.swing.JComboBox<String> cb_tau;
     private javax.swing.JComboBox<String> cbo_gaDen;
     private javax.swing.JComboBox<String> cbo_gaDi;
     private com.toedter.calendar.JDateChooser date_ngayDi;
+    private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lbl_next1;
-    private javax.swing.JLabel lbl_next2;
-    private javax.swing.JPanel pnl_ga;
     private javax.swing.JPanel pnl_header;
     private javax.swing.JPanel pnl_ngay;
+    private javax.swing.JPanel pnl_thongTin;
+    private javax.swing.JPanel pnl_thongTinHanhTrinh;
     private javax.swing.JPanel pnl_timKiem;
     private javax.swing.JTable tbl_thongTinChuyenTau;
     // End of variables declaration//GEN-END:variables

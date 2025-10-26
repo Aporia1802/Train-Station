@@ -9,6 +9,7 @@ import entity.GaTau;
 import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
+import raven.toast.Notifications;
 
 /**
  *
@@ -32,10 +33,11 @@ public class QuanLyGaTau_GUI extends javax.swing.JPanel {
         tblModel_thongTinGa = new DefaultTableModel(new String[] {"Mã ga", "Tên ga", "Địa chỉ", "Số điện thoại"}, 0);
         tbl_thongTinGa.setModel(tblModel_thongTinGa);
         
-        getTableData(bus.getAllGaTau());
+        loadDataToTable(bus.getAllGaTau());
     }
     
-    private void getTableData(ArrayList<GaTau> dsGaTau) {
+//  load dữ liệu lên table
+    private void loadDataToTable(ArrayList<GaTau> dsGaTau) {
         tblModel_thongTinGa.setRowCount(0);
         for(GaTau gaTau : dsGaTau) {
             String[] newRow = {gaTau.getMaGa(), gaTau.getTenGa(), gaTau.getDiaChi(), gaTau.getSoDienThoai()};
@@ -43,7 +45,8 @@ public class QuanLyGaTau_GUI extends javax.swing.JPanel {
         }
     }
     
-    private void getThongTinNhanVien() {
+//  Lấy thông tin ga đổ lên text field
+    private void loadThongTinGaToTextField() {
         int row = tbl_thongTinGa.getSelectedRow(); // lấy dòng được chọn
         if (row != -1) {
             // Lấy dữ liệu từng cột trong dòng đó
@@ -60,7 +63,7 @@ public class QuanLyGaTau_GUI extends javax.swing.JPanel {
         }
     }
     
-    private void handleActionXoaTrang() {
+    private void handleXoaTrang() {
         tbl_thongTinGa.clearSelection();
         txt_maGa.setText("");
         txt_tenGa.setText("");
@@ -68,16 +71,119 @@ public class QuanLyGaTau_GUI extends javax.swing.JPanel {
         txt_soDienThoai.setText("");
     }
     
-    private void handleActionLamMoi() {
+    private void handleLamMoi() {
         tbl_thongTinGa.clearSelection();
-        getTableData(bus.getAllGaTau());
+        loadDataToTable(bus.getAllGaTau());
         txt_timKiem.setText("Nhập mã hoặc tên ga cần tìm...");
         txt_timKiem.setForeground(Color.GRAY);
     }
     
-    private void handleActionTimKiem() {
+    private void handleTimKiem() {
         String keyword = txt_timKiem.getText().trim();
-        getTableData(bus.getGaTauByKeyword(keyword));
+        
+        if(keyword.isEmpty() || keyword.equals("Nhập mã hoặc tên ga cần tìm...")) {
+            Notifications.getInstance().show(Notifications.Type.INFO, "Cần nhập mã hoặc tên ga cần tìm!");
+            return;
+        }
+        
+        loadDataToTable(bus.getGaTauByKeyword(keyword));
+    }
+    
+    private Boolean validateData() {
+        if(txt_tenGa.getText().equals("")) {
+            Notifications.getInstance().show(Notifications.Type.INFO, "Tên ga không được rỗng!");
+            txt_tenGa.requestFocus();
+            return false;
+        }
+        
+        for(GaTau gaTau : bus.getAllGaTau()) {
+            if(gaTau.getTenGa().equalsIgnoreCase(txt_tenGa.getText())) {
+                Notifications.getInstance().show(Notifications.Type.INFO, "Tên ga đã tồn tại!");
+                txt_tenGa.requestFocus();
+                return false;
+            }
+        }
+        
+        if(!txt_diaChi.getText().matches("^[\\p{L}0-9\\s,\\.\\-/]{5,100}$")) {
+            Notifications.getInstance().show(Notifications.Type.INFO, "Địa chỉ không hợp lệ!");
+            txt_diaChi.requestFocus();
+            return false;
+        }
+        
+        if(!txt_soDienThoai.getText().matches("^0[3|5|7|8|9][0-9]{8}$")) {
+            Notifications.getInstance().show(Notifications.Type.INFO, "Số điện thoại không hợp lệ!");
+            txt_soDienThoai.requestFocus();
+            return false;
+        }
+        
+        for(GaTau gaTau : bus.getAllGaTau()) {
+            if(gaTau.getSoDienThoai().equalsIgnoreCase(txt_soDienThoai.getText())) {
+                Notifications.getInstance().show(Notifications.Type.INFO, "Số điện thoại đã tồn tại!");
+                txt_soDienThoai.requestFocus();
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    private GaTau getCurrentValue()throws Exception {
+        String maGa = txt_maGa.getText();
+        String tenGa = txt_tenGa.getText();
+        String diaChi = txt_diaChi.getText();
+        String sdt = txt_soDienThoai.getText();
+        GaTau gaTau = new GaTau(maGa, tenGa, diaChi, sdt);
+      
+        return gaTau;
+    }
+    
+    private GaTau getNewValue()throws Exception {
+        String maGa = bus.generateID();
+        String tenGa = txt_tenGa.getText();
+        String diaChi = txt_diaChi.getText();
+        String sdt = txt_soDienThoai.getText();
+        GaTau gaTau = new GaTau(maGa, tenGa, diaChi, sdt);
+      
+        return gaTau;
+    }
+    
+    private void handleCapNhatThongTin() {
+        try {
+            if(tbl_thongTinGa.getSelectedRow() == -1) {
+                Notifications.getInstance().show(Notifications.Type.ERROR, "Chưa chọn ga cần thay đổi thông tin!");
+                return;
+            }
+            
+            if(!validateData()) {
+                return;
+            }
+            
+            GaTau gaTau = getCurrentValue();
+            if(bus.updateThongTinGa(gaTau)) {
+                Notifications.getInstance().show(Notifications.Type.SUCCESS, "Cập nhật thành công!");
+                loadDataToTable(bus.getAllGaTau());
+                handleXoaTrang();
+            } 
+        } catch (Exception e) {
+            Notifications.getInstance().show(Notifications.Type.ERROR, "Cập nhật thất bại!");
+        }
+    }
+    
+    private void handleThemMoi() {
+        try {
+            if(!validateData()) {
+                return;
+            }
+            
+            GaTau gaTau = getNewValue();
+            if(bus.themGaTau(gaTau)) {
+                Notifications.getInstance().show(Notifications.Type.SUCCESS, "Thêm mới thành công!");
+                loadDataToTable(bus.getAllGaTau());
+                handleXoaTrang();
+            } 
+        } catch (Exception e) {
+            Notifications.getInstance().show(Notifications.Type.ERROR, "Thêm thất bại!");
+        }
     }
    
     /**
@@ -297,6 +403,11 @@ public class QuanLyGaTau_GUI extends javax.swing.JPanel {
                 txt_timKiemFocusLost(evt);
             }
         });
+        txt_timKiem.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txt_timKiemKeyPressed(evt);
+            }
+        });
         pnl_timKiem.add(txt_timKiem);
 
         btn_timKiem.setText("Tìm kiếm");
@@ -326,30 +437,32 @@ public class QuanLyGaTau_GUI extends javax.swing.JPanel {
     
     private void btn_themGaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_themGaActionPerformed
         // TODO add your handling code here:
+        handleThemMoi();
     }//GEN-LAST:event_btn_themGaActionPerformed
 
     private void btn_capNhatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_capNhatActionPerformed
         // TODO add your handling code here:
+        handleCapNhatThongTin();
     }//GEN-LAST:event_btn_capNhatActionPerformed
 
     private void btn_xoaTrangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_xoaTrangActionPerformed
         // TODO add your handling code here:
-        handleActionXoaTrang();
+        handleXoaTrang();
     }//GEN-LAST:event_btn_xoaTrangActionPerformed
 
     private void btn_timKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_timKiemActionPerformed
         // TODO add your handling code here:
-        handleActionTimKiem();
+        handleTimKiem();
     }//GEN-LAST:event_btn_timKiemActionPerformed
 
     private void btn_lamMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_lamMoiActionPerformed
         // TODO add your handling code here:
-        handleActionLamMoi();
+        handleLamMoi();
     }//GEN-LAST:event_btn_lamMoiActionPerformed
 
     private void tbl_thongTinGaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_thongTinGaMouseClicked
         // TODO add your handling code here:
-        getThongTinNhanVien();
+        loadThongTinGaToTextField();
     }//GEN-LAST:event_tbl_thongTinGaMouseClicked
 
     private void txt_timKiemFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_timKiemFocusGained
@@ -367,6 +480,13 @@ public class QuanLyGaTau_GUI extends javax.swing.JPanel {
             txt_timKiem.setForeground(Color.GRAY);
         }
     }//GEN-LAST:event_txt_timKiemFocusLost
+
+    private void txt_timKiemKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_timKiemKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == 10) {
+            handleTimKiem();
+        }
+    }//GEN-LAST:event_txt_timKiemKeyPressed
 
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
