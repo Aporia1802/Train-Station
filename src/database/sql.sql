@@ -144,7 +144,7 @@ CREATE TABLE HanhKhach (
     maHanhKhach VARCHAR(20) PRIMARY KEY,
     tenHanhKhach NVARCHAR(50) NOT NULL,
     cccd VARCHAR(12) NOT NULL,
-    ngaySinh INT NOT NULL,
+    ngaySinh Date NOT NULL,
 );
 
 -- 14. BẢNG KHUYẾN MÃI
@@ -152,8 +152,8 @@ CREATE TABLE KhuyenMai (
     maKhuyenMai VARCHAR(20) PRIMARY KEY,
     tenKhuyenMai NVARCHAR(50) NOT NULL,
     heSoKhuyenMai FLOAT NOT NULL,
-    ngayBatDau DATETIME NOT NULL,
-    ngayKetThuc DATETIME NOT NULL,
+    ngayBatDau DATE NOT NULL,
+    ngayKetThuc DATE NOT NULL,
     tongTienToiThieu FLOAT,
     tienKhuyenMaiToiDa FLOAT,
     trangThai BIT NOT NULL,
@@ -321,14 +321,14 @@ INSERT INTO LoaiVe (maLoaiVe, tenLoaiVe, moTa, heSoLoaiVe) VALUES
 
 -- 13. HÀNH KHÁCH
 INSERT INTO HanhKhach (maHanhKhach, tenHanhKhach, cccd, ngaySinh) VALUES
-('HK-001', N'Nguyễn Minh Tuấn', '079095001001', 1995),
-('HK-002', N'Trần Thị Hoa', '079096002002', 1996),
-('HK-003', N'Lê Văn Bình', '079097003003', 1997),
-('HK-004', N'Phạm Thị Chi', '079098004004', 1998),
-('HK-005', N'Hoàng Văn Đức', '079099005005', 1999),
-('HK-006', N'Vũ Thị Lan', '079000006006', 2000),
-('HK-007', N'Nguyễn Văn Giang', '079001007007', 2015),
-('HK-008', N'Trần Thị Hạnh', '079002008008', 1960);
+('HK-001', N'Nguyễn Minh Tuấn', '079095001001', '2001-10-21 14:00:00'),
+('HK-002', N'Trần Thị Hoa', '079096002002', '2002-10-21 14:00:00'),
+('HK-003', N'Lê Văn Bình', '079097003003', '2003-10-21 14:00:00'),
+('HK-004', N'Phạm Thị Chi', '079098004004', '2004-10-21 14:00:00'),
+('HK-005', N'Hoàng Văn Đức', '079099005005', '2005-10-21 14:00:00'),
+('HK-006', N'Vũ Thị Lan', '079000006006', '2006-01-21 14:00:00'),
+('HK-007', N'Nguyễn Văn Giang', '079001007007', '2002-10-21 14:00:00'),
+('HK-008', N'Trần Thị Hạnh', '079002008008', '2004-10-21 14:00:00');
 
 -- 14. KHUYẾN MÃI
 INSERT INTO KhuyenMai (maKhuyenMai, tenKhuyenMai, heSoKhuyenMai, ngayBatDau, ngayKetThuc, tongTienToiThieu, tienKhuyenMaiToiDa, trangThai) VALUES
