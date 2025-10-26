@@ -43,7 +43,7 @@ public class QuanLyGaTau_GUI extends javax.swing.JPanel {
         }
     }
     
-    private void getThongTinNhanVien() {
+    private void getThongTinGa() {
         int row = tbl_thongTinGa.getSelectedRow(); // lấy dòng được chọn
         if (row != -1) {
             // Lấy dữ liệu từng cột trong dòng đó
@@ -69,16 +69,111 @@ public class QuanLyGaTau_GUI extends javax.swing.JPanel {
     }
     
     private void handleActionLamMoi() {
-        tbl_thongTinGa.clearSelection();
-        getTableData(bus.getAllGaTau());
-        txt_timKiem.setText("Nhập mã hoặc tên ga cần tìm...");
-        txt_timKiem.setForeground(Color.GRAY);
+    
+    tbl_thongTinGa.clearSelection();
+    txt_maGa.setText("");
+    txt_tenGa.setText("");
+    txt_diaChi.setText("");
+    txt_soDienThoai.setText("");
+    txt_timKiem.setText("Nhập mã hoặc tên ga cần tìm...");
+    txt_timKiem.setForeground(Color.GRAY);
+    ArrayList<GaTau> dsGaTau = bus.getAllGaTau();
+    getTableData(dsGaTau);
+    
     }
     
     private void handleActionTimKiem() {
         String keyword = txt_timKiem.getText().trim();
         getTableData(bus.getGaTauByKeyword(keyword));
     }
+    private void handleActionThem() {
+    try {
+       
+        String tenGa = txt_tenGa.getText().trim();
+        String diaChi = txt_diaChi.getText().trim();
+        String soDienThoai = txt_soDienThoai.getText().trim();
+        if (tenGa.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Vui lòng nhập tên ga!");
+            txt_tenGa.requestFocus();
+            return;
+        }
+          String maGa = bus.generateMaGa(tenGa);
+        if (diaChi.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Vui lòng nhập địa chỉ!");
+            txt_diaChi.requestFocus();
+            return;
+        }
+        if (soDienThoai.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Vui lòng nhập số điện thoại!");
+            txt_soDienThoai.requestFocus();
+            return;
+        }
+        GaTau gaTau = new GaTau(maGa, tenGa, diaChi, soDienThoai);
+        int confirm = javax.swing.JOptionPane.showConfirmDialog(this,
+            "Thêm ga mới?\n" +
+            "Mã: " + maGa + "\n" +
+            "Tên: " + tenGa + "\n" +
+            "Địa chỉ: " + diaChi + "\n" +
+            "SĐT: " + soDienThoai,
+            "Xác nhận",
+            javax.swing.JOptionPane.YES_NO_OPTION);
+        
+        if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+            if (bus.createGaTau(gaTau)) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Thêm thành công!\nMã: " + maGa);
+                handleActionLamMoi();
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this, "Thêm thất bại!");
+            }
+        }
+        
+    } catch (Exception e) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage());
+        e.printStackTrace();
+    }
+}
+private void handleActionCapNhat() {
+    try {
+        int row = tbl_thongTinGa.getSelectedRow();
+        if (row == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Vui lòng chọn ga cần cập nhật!");
+            return;
+        }
+        
+        String maGa = txt_maGa.getText().trim();
+        String tenGa = txt_tenGa.getText().trim();
+        String diaChi = txt_diaChi.getText().trim();
+        String soDienThoai = txt_soDienThoai.getText().trim();
+        
+        // Validate
+        if (maGa.isEmpty() || tenGa.isEmpty() || diaChi.isEmpty() || soDienThoai.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Vui lòng điền đầy đủ thông tin!");
+            return;
+        }
+        
+        // Tạo đối tượng GaTau mới
+        GaTau gaTau = new GaTau(maGa, tenGa, diaChi, soDienThoai);
+        
+        // Xác nhận
+        int confirm = javax.swing.JOptionPane.showConfirmDialog(this,
+            "Xác nhận cập nhật ga " + maGa + "?",
+            "Xác nhận",
+            javax.swing.JOptionPane.YES_NO_OPTION);
+        
+        if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+            if (bus.updateGaTau(maGa, gaTau)) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Cập nhật thành công!");
+                handleActionLamMoi();
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this, "Cập nhật thất bại!");
+            }
+        }
+        
+    } catch (Exception e) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage());
+        e.printStackTrace();
+    }
+}
    
     /**
      * This method is called from within the constructor to initialize the form.
@@ -325,11 +420,13 @@ public class QuanLyGaTau_GUI extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
     
     private void btn_themGaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_themGaActionPerformed
-        // TODO add your handling code here:
+        // TODO add your handling code here:han
+        handleActionThem();
     }//GEN-LAST:event_btn_themGaActionPerformed
 
     private void btn_capNhatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_capNhatActionPerformed
         // TODO add your handling code here:
+        handleActionCapNhat();
     }//GEN-LAST:event_btn_capNhatActionPerformed
 
     private void btn_xoaTrangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_xoaTrangActionPerformed
@@ -349,7 +446,7 @@ public class QuanLyGaTau_GUI extends javax.swing.JPanel {
 
     private void tbl_thongTinGaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_thongTinGaMouseClicked
         // TODO add your handling code here:
-        getThongTinNhanVien();
+        getThongTinGa();
     }//GEN-LAST:event_tbl_thongTinGaMouseClicked
 
     private void txt_timKiemFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_timKiemFocusGained
