@@ -74,7 +74,15 @@ public class ChuyenTau {
         }
         this.thoiGianDi = thoiGianDi;
     }
-    
+    public void setThoiGianDi(LocalDateTime thoiGianDi, boolean validate) throws Exception {
+        if (validate) {
+            
+            setThoiGianDi(thoiGianDi);
+        } else {
+           
+            this.thoiGianDi = thoiGianDi;
+        }
+    }
     public LocalDateTime getThoiGianDen() {
         return thoiGianDen;
     }
