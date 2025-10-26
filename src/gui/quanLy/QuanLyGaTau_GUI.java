@@ -464,7 +464,7 @@ public class QuanLyGaTau_GUI extends javax.swing.JPanel {
         // TODO add your handling code here:
         loadThongTinGaToTextField();
     }//GEN-LAST:event_tbl_thongTinGaMouseClicked
-
+     
     private void txt_timKiemFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_timKiemFocusGained
         // TODO add your handling code here:
         if (txt_timKiem.getText().equals("Nhập mã hoặc tên ga cần tìm...")) {
