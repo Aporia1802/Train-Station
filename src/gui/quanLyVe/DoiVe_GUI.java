@@ -140,7 +140,7 @@ public class DoiVe_GUI extends javax.swing.JPanel {
         jPanel14.setLayout(new java.awt.BorderLayout());
 
         jPanel8.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 0, 10));
-        jPanel8.setPreferredSize(new java.awt.Dimension(500, 136));
+        jPanel8.setPreferredSize(new java.awt.Dimension(600, 136));
         jPanel8.setLayout(new java.awt.BorderLayout());
 
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));

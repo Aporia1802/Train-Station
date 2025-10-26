@@ -94,14 +94,11 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="cb_gaDi">
+                <Component class="javax.swing.JComboBox" name="cbo_gaDi">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                      <StringArray count="4">
-                        <StringItem index="0" value="Item 1"/>
-                        <StringItem index="1" value="Item 2"/>
-                        <StringItem index="2" value="Item 3"/>
-                        <StringItem index="3" value="Item 4"/>
+                      <StringArray count="1">
+                        <StringItem index="0" value="---Ch&#x1ecd;n ga &#x111;i---"/>
                       </StringArray>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -134,14 +131,11 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="cb_gaDen">
+                <Component class="javax.swing.JComboBox" name="cbo_gaDen">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                      <StringArray count="4">
-                        <StringItem index="0" value="Item 1"/>
-                        <StringItem index="1" value="Item 2"/>
-                        <StringItem index="2" value="Item 3"/>
-                        <StringItem index="3" value="Item 4"/>
+                      <StringArray count="1">
+                        <StringItem index="0" value="--Ch&#x1ecd;n ga &#x111;&#x1ebf;n---"/>
                       </StringArray>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -180,10 +174,10 @@
                 <Component class="com.toedter.calendar.JDateChooser" name="date_ngayDi">
                   <Properties>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection component="cb_gaDi" name="getMaximumSize" type="method"/>
+                      <Connection component="cbo_gaDi" name="getMaximumSize" type="method"/>
                     </Property>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection component="cb_gaDi" name="getPreferredSize" type="method"/>
+                      <Connection component="cbo_gaDi" name="getPreferredSize" type="method"/>
                     </Property>
                   </Properties>
                 </Component>
@@ -212,11 +206,8 @@
                 <Component class="javax.swing.JComboBox" name="cb_tau">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                      <StringArray count="4">
-                        <StringItem index="0" value="Item 1"/>
-                        <StringItem index="1" value="Item 2"/>
-                        <StringItem index="2" value="Item 3"/>
-                        <StringItem index="3" value="Item 4"/>
+                      <StringArray count="1">
+                        <StringItem index="0" value="---Ch&#x1ecd;n t&#xe0;u---"/>
                       </StringArray>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -324,11 +315,14 @@
             <Component class="javax.swing.JTable" name="tbl_thongTinChuyenTau">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                  <Table columnCount="4" rowCount="0">
+                  <Table columnCount="7" rowCount="0">
                     <Column editable="false" title="T&#xe0;u" type="java.lang.Object"/>
+                    <Column editable="false" title="Ng&#xe0;y &#x111;i" type="java.lang.Object"/>
                     <Column editable="false" title="Th&#x1edd;i gian &#x111;i" type="java.lang.Object"/>
+                    <Column editable="false" title="Ng&#xe0;y &#x111;&#x1ebf;n" type="java.lang.Object"/>
                     <Column editable="false" title="Th&#x1edd;i gian &#x111;&#x1ebf;n" type="java.lang.Object"/>
                     <Column editable="false" title="S&#x1ed1; l&#x1b0;&#x1ee3;ng ch&#x1ed7; tr&#x1ed1;ng" type="java.lang.Object"/>
+                    <Column editable="false" title="Gi&#xe1; v&#xe9;" type="java.lang.Object"/>
                   </Table>
                 </Property>
                 <Property name="selectionMode" type="int" value="0"/>
