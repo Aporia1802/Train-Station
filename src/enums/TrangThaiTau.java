@@ -9,18 +9,24 @@ package enums;
  * @author CÔNG HOÀNG
  */
 public enum TrangThaiTau {
-    HOAT_DONG(1),
-    BAO_TRI(2),
-    NGUNG_HOAT_DONG(3);
+    HOAT_DONG(1, "Hoạt động"),
+    BAO_TRI(2, "Bảo trì"),
+    NGUNG_HOAT_DONG(3, "Ngừng hoạt động");
     
     private final int value;
+    private final String display;
 
-    private TrangThaiTau(int value) {
+    private TrangThaiTau(int value, String display) {
         this.value = value;
+        this.display = display;
     }
 
     public int getValue() {
         return value;
+    }
+
+    public String getDisplay() {
+        return display;
     }
 
     public boolean compare(int value) {

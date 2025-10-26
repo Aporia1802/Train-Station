@@ -86,43 +86,44 @@ public class NhanVien_DAO implements DAOBase<NhanVien>{
         return new NhanVien(maNV, tenNV, gioiTinh, ngaySinh, email, soDienThoai, cccd, diaChi, chucVu, trangThai);
 }
     
- public ArrayList<NhanVien> filterByComboBox(String chucVu, String trangThai) {
-    ArrayList<NhanVien> dsNV = new ArrayList<>();
-    StringBuilder sql = new StringBuilder("SELECT * FROM NhanVien WHERE 1=1");
+    public ArrayList<NhanVien> filterByComboBox(String chucVu, String trangThai) {
+       ArrayList<NhanVien> dsNV = new ArrayList<>();
+       StringBuilder sql = new StringBuilder("SELECT * FROM NhanVien WHERE 1=1");
 
-    // Nếu chọn chức vụ thực sự
-    if (chucVu != null && !chucVu.equals("Chức vụ")) {
-        sql.append(" AND chucVu = ?");
-    }
+       // Nếu chọn chức vụ thực sự
+       if (chucVu != null && !chucVu.equals("Chức vụ")) {
+          sql.append(" AND LTRIM(RTRIM(chucVu)) LIKE ?");
 
-    // Nếu chọn trạng thái thực sự
-    if (trangThai != null && !trangThai.equals("Trạng thái")) {
-        sql.append(" AND trangThai = ?");
-    }
+       }
 
-    try (PreparedStatement ps = conn.prepareStatement(sql.toString())) {
-        int index = 1;
+       // Nếu chọn trạng thái thực sự
+       if (trangThai != null && !trangThai.equals("Trạng thái")) {
+           sql.append(" AND trangThai = ?");
+       }
 
-        if (chucVu != null && !chucVu.equals("Chức vụ")) {
-            ps.setString(index++, chucVu);
-        }
+       try (PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+           int index = 1;
 
-        if (trangThai != null && !trangThai.equals("Trạng thái")) {
-            // Chuyển "Đang làm" -> true, "Đã nghỉ" -> false
-            ps.setBoolean(index++, trangThai.equals("Đang làm"));
-        }
+           if (chucVu != null && !chucVu.equals("Chức vụ")) {
+               ps.setString(index++, "%" + chucVu.trim() + "%");
+           }
 
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            dsNV.add(getData(rs));
-        }
+           if (trangThai != null && !trangThai.equals("Trạng thái")) {
+               // Chuyển "Đang làm" -> true, "Đã nghỉ" -> false
+               ps.setBoolean(index++, trangThai.equals("Đang làm"));
+           }
 
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
+           ResultSet rs = ps.executeQuery();
+           while (rs.next()) {
+               dsNV.add(getData(rs));
+           }
 
-    return dsNV;
-}
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
+
+       return dsNV;
+   }
 
 
     public ArrayList<NhanVien> getNhanVienBySoDienThoai(String soDienThoai) {
@@ -141,6 +142,64 @@ public class NhanVien_DAO implements DAOBase<NhanVien>{
         }
         return dsNhanVien;
 }
+   public ArrayList<NhanVien> timKiemNhanVien(String maNV, String tenNV, String cccd, String sdt, String gioiTinh, String trangThai) {
+    ArrayList<NhanVien> dsNhanVien = new ArrayList<>();
+    StringBuilder sql = new StringBuilder("SELECT * FROM NhanVien WHERE 1=1");
+
+    // Chỉ thêm điều kiện khi người dùng có nhập dữ liệu
+    if (maNV != null && !maNV.trim().isEmpty()) {
+        sql.append(" AND maNV LIKE ?");
+    }
+    if (tenNV != null && !tenNV.trim().isEmpty()) {
+        sql.append(" AND tenNV LIKE ?");
+    }
+    if (cccd != null && !cccd.trim().isEmpty()) {
+        sql.append(" AND cccd LIKE ?");
+    }
+    if (sdt != null && !sdt.trim().isEmpty()) {
+        sql.append(" AND soDienThoai LIKE ?");
+    }
+    if (gioiTinh != null && !gioiTinh.equals("Tất cả")) {
+        sql.append(" AND gioiTinh = ?");
+    }
+    if (trangThai != null && !trangThai.equals("Tất cả")) {
+        sql.append(" AND trangThai = ?");
+    }
+
+    try (PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+        int index = 1;
+
+        if (maNV != null && !maNV.trim().isEmpty()) {
+            ps.setString(index++, "%" + maNV.trim() + "%");
+        }
+        if (tenNV != null && !tenNV.trim().isEmpty()) {
+            ps.setString(index++, "%" + tenNV.trim() + "%");
+        }
+        if (cccd != null && !cccd.trim().isEmpty()) {
+            ps.setString(index++, "%" + cccd.trim() + "%");
+        }
+        if (sdt != null && !sdt.trim().isEmpty()) {
+            ps.setString(index++, "%" + sdt.trim() + "%");
+        }
+        if (gioiTinh != null && !gioiTinh.equals("Tất cả")) {
+            ps.setBoolean(index++, gioiTinh.equalsIgnoreCase("Nam"));
+        }
+        if (trangThai != null && !trangThai.equals("Tất cả")) {
+            ps.setBoolean(index++, trangThai.equals("Đang làm"));
+        }
+
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            dsNhanVien.add(getData(rs));
+        }
+        rs.close();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return dsNhanVien;
+}
+
 
 
     @Override
