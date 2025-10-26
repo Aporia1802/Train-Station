@@ -17,8 +17,8 @@ import java.util.ArrayList;
  *
  * @author CÔNG HOÀNG
  */
-public class NhanVien_DAO implements DAOBase<NhanVien>{
-    
+public class NhanVien_DAO implements DAOBase<NhanVien> {
+
     @Override
     public NhanVien getOne(String id) {
         NhanVien nhanVien = null;
@@ -36,7 +36,7 @@ public class NhanVien_DAO implements DAOBase<NhanVien>{
                 String cccd = rs.getString("cccd");
                 String chucVu = rs.getString("chucVu");
                 Boolean trangThai = rs.getBoolean("trangThai");
-                String diaChi = "";
+                String diaChi = rs.getString("diaChi");
 
                 nhanVien = new NhanVien(id, tenNV, gioiTinh, ngaySinh, email, soDienThoai, cccd, diaChi, chucVu, trangThai);
             }
@@ -64,12 +64,25 @@ public class NhanVien_DAO implements DAOBase<NhanVien>{
 
     @Override
     public Boolean update(String id, NhanVien newObject) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        int n = 0;
+        try {
+            PreparedStatement st = ConnectDB.conn.prepareStatement(
+                    "UPDATE NhanVien SET tenNV=?, ngaySinh=?, email=?, diaChi=? WHERE maNV=?");
+            st.setString(1, newObject.getTenNV());
+            st.setDate(2, Date.valueOf(newObject.getNgaySinh()));
+            st.setString(3, newObject.getEmail());
+            st.setString(4, newObject.getDiaChi());
+            st.setString(5, id);
+            n = st.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return n > 0;
     }
 
     @Override
     public Boolean delete(String id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
 }
