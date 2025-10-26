@@ -26,8 +26,7 @@ import enums.TrangThaiVe;
 import interfaces.DAOBase;
 import java.util.ArrayList;
 import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.time.LocalDate;
 
 /**
  *
@@ -39,8 +38,8 @@ public class Ve_DAO implements DAOBase<Ve>{
     public Ve getOne(String id) {
         Ve ve = null;
 
-         try {
-        String sql = "SELECT *, " +
+        try {
+            String sql = "SELECT *, " +
             "gdi.maGa AS maGaDi, gdi.tenGa AS tenGaDi, gdi.diaChi AS diaChiGaDi, gdi.soDienThoai AS sdtGaDi, " +
             "gden.maGa AS maGaDen, gden.tenGa AS tenGaDen, gden.diaChi AS diaChiGaDen, gden.soDienThoai AS sdtGaDen " +
             "FROM Ve v " +
@@ -61,18 +60,18 @@ public class Ve_DAO implements DAOBase<Ve>{
             "LEFT JOIN KhuyenMai km ON hd.maKhuyenMai = km.maKhuyenMai " +
             "WHERE v.maVe = ?";
 
-        PreparedStatement pst = ConnectDB.conn.prepareStatement(sql);
-        pst.setString(1, id);
-        ResultSet rs = pst.executeQuery();
+            PreparedStatement pst = ConnectDB.conn.prepareStatement(sql);
+            pst.setString(1, id);
+            ResultSet rs = pst.executeQuery();
 
-        if (rs.next()) {
-            ve = getData(rs);
+            if (rs.next()) {
+                ve = getData(rs);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-    return ve;
+        return ve;
     }
 
     @Override
@@ -258,5 +257,79 @@ public class Ve_DAO implements DAOBase<Ve>{
                     rs.getDouble("giaVe")
             );
         return ve;
+    }
+    
+    public ArrayList<Ve> search(String maVe, String hoTen, String cccd, LocalDate ngayDi) {
+        ArrayList<Ve> dsVe = new ArrayList<>();
+        StringBuilder sql = new StringBuilder(
+            "SELECT v.maVe, v.trangThai, v.giaVe, " +
+            "hk.maHanhKhach, hk.tenHanhKhach, hk.cccd, hk.ngaySinh, " +
+            "g.maGhe, g.soGhe, g.trangThaiGhe, " +
+            "lg.maLoaiGhe, lg.tenLoaiGhe, lg.heSoGhe, " +
+            "t.maTau, t.tenTau, " +
+            "ct.maChuyenTau, ct.thoiGianDi, ct.thoiGianDen, " +
+            "gaDi.maGa AS maGaDi, gaDi.tenGa AS tenGaDi, " +
+            "gaDen.maGa AS maGaDen, gaDen.tenGa AS tenGaDen " +
+            "FROM Ve v " +
+            "JOIN HanhKhach hk ON v.maHanhKhach = hk.maHanhKhach " +
+            "JOIN Ghe g ON v.maGhe = g.maGhe " +
+            "JOIN LoaiGhe lg ON g.maLoaiGhe = lg.maLoaiGhe " +
+            "JOIN KhoangTau kt ON g.maKhoangTau = kt.maKhoangTau " +
+            "JOIN ToaTau tt ON kt.maToaTau = tt.maToaTau " +
+            "JOIN Tau t ON tt.maTau = t.maTau " +
+            "JOIN ChuyenTau ct ON v.maChuyenTau = ct.maChuyenTau " +
+            "JOIN TuyenDuong td ON ct.maTuyenDuong = td.maTuyenDuong " +
+            "JOIN GaTau gaDi ON td.gaDi = gaDi.maGa " +
+            "JOIN GaTau gaDen ON td.gaDen = gaDen.maGa " +
+            "WHERE 1=1"
+        );
+        
+        ArrayList<Object> params = new ArrayList<>();
+        
+        if (maVe != null && !maVe.trim().isEmpty()) {
+            sql.append(" AND v.maVe LIKE ?");
+            params.add("%" + maVe.trim() + "%");
+        }
+        
+        if (hoTen != null && !hoTen.trim().isEmpty()) {
+            sql.append(" AND hk.tenHanhKhach LIKE ?");
+            params.add("%" + hoTen.trim() + "%");
+        }
+        
+        if (cccd != null && !cccd.trim().isEmpty()) {
+            sql.append(" AND hk.cccd LIKE ?");
+            params.add("%" + cccd.trim() + "%");
+        }
+        
+        if (ngayDi != null) {
+            sql.append(" AND CAST(ct.thoiGianDi AS DATE) = ?");
+            params.add(Date.valueOf(ngayDi));
+        }
+        
+        try {
+            PreparedStatement ps = ConnectDB.conn.prepareStatement(sql.toString());
+            
+            for (int i = 0; i < params.size(); i++) {
+                ps.setObject(i + 1, params.get(i));
+            }
+            
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                Ve ve = getData(rs);
+                if (ve != null) {
+                    dsVe.add(ve);
+                }
+            }
+            
+            
+            rs.close();
+            ps.close();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return dsVe;
     }
 }

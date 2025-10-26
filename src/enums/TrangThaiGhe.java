@@ -1,28 +1,24 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Enum.java to edit this template
- */
 package enums;
 
-import static enums.TrangThaiTau.values;
-
-/**
- *
- * @author CÔNG HOÀNG
- */
 public enum TrangThaiGhe {
-    TRONG(1),
-    DA_DAT(2),
-    DANG_CHON(3);
+    TRONG(1, "Trống"),
+    DA_DAT(2, "Đã đặt"),
+    DANG_GIU_CHO(3, "Đang giữ chỗ");
     
     private final int value;
+    private final String displayName; 
 
-    private TrangThaiGhe(int value) {
+    private TrangThaiGhe(int value, String displayName) { 
         this.value = value;
+        this.displayName = displayName;
     }
 
     public int getValue() {
         return value;
+    }
+
+    public String getDisplayName() { 
+        return displayName;
     }
 
     public boolean compare(int value) {
@@ -35,6 +31,29 @@ public enum TrangThaiGhe {
                 return type;
             }
         }
-        return null;
+        return TRONG; 
+    }
+
+    public static TrangThaiGhe fromString(String str) {
+        if (str == null || str.trim().isEmpty()) {
+            return TRONG;
+        }
+        
+        String normalized = str.trim();
+        
+        for (TrangThaiGhe type : values()) {
+           
+            if (type.displayName.equalsIgnoreCase(normalized) || 
+                type.name().equalsIgnoreCase(normalized)) {
+                return type;
+            }
+        }
+        
+        return TRONG; 
+    }
+
+    @Override
+    public String toString() {
+        return displayName;
     }
 }

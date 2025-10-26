@@ -5,15 +5,11 @@
 package gui.quanLyVe;
 
 import bus.QuanLyTraVe_BUS;
-import bus.QuanLyVe_BUS;
-import com.formdev.flatlaf.FlatClientProperties;
 import entity.HoaDonTra;
 import entity.NhanVien;
 import entity.Ve;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import main.Application;
 import raven.toast.Notifications;
@@ -106,7 +102,6 @@ public class TraVe_GUI extends javax.swing.JPanel {
             lbl_thongBao.setText("Không đủ điều kiện trả vé");
             lbl_chiTietThongBao.setText("Vé chỉ có thể trả trước 4 giờ tàu chạy (tàu chạy lúc " + FormatUtil.formatDateTime(gioTauChay) + ")");
             pnl_thongBao.setVisible(true);
-            return;
         }
     }
     
