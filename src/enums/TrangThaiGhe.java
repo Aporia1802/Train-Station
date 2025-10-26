@@ -13,7 +13,7 @@ import static enums.TrangThaiTau.values;
 public enum TrangThaiGhe {
     TRONG(1),
     DA_DAT(2),
-    DANG_GIU_CHO(3);
+    DANG_CHON(3);
     
     private final int value;
 

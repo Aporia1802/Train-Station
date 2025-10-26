@@ -8,33 +8,27 @@ package enums;
  *
  * @author CÔNG HOÀNG
  */
-public enum TrangThaiTau {
-    HOAT_DONG(1, "Hoạt động"),
-    BAO_TRI(2, "Bảo trì"),
-    NGUNG_HOAT_DONG(3, "Ngừng hoạt động");
+public enum TrangThaiVe {
+    CHUA_SU_DUNG(1),
+    DA_SU_DUNG(2),
+    DA_HUY(3);
     
     private final int value;
-    private final String display;
 
-    private TrangThaiTau(int value, String display) {
+    private TrangThaiVe(int value) {
         this.value = value;
-        this.display = display;
     }
 
     public int getValue() {
         return value;
     }
 
-    public String getDisplay() {
-        return display;
-    }
-
     public boolean compare(int value) {
         return this.value == value;
     }
 
-    public static TrangThaiTau fromInt(int value) {
-        for (TrangThaiTau type : values()) {
+    public static TrangThaiVe fromInt(int value) {
+        for (TrangThaiVe type : values()) {
             if (type.compare(value)) {
                 return type;
             }

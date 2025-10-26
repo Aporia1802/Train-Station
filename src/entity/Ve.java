@@ -4,17 +4,19 @@
  */
 package entity;
 
+import enums.TrangThaiVe;
+
 /**
  *
  * @author CÔNG HOÀNG
  */
 public class Ve {
       private String maVe;
-    private ChuyenTau chuyenDi;
+    private ChuyenTau chuyenTau;
     private HanhKhach hanhKhach;
     private Ghe ghe;
     private HoaDon hoaDon;
-    private String trangThai;
+    private TrangThaiVe trangThai;
     private double giaVe;
     private LoaiVe loaiVe;
     
@@ -29,17 +31,17 @@ public class Ve {
     public Ve() {
     }
     
-    public Ve(String maVe, ChuyenTau chuyenDi, HanhKhach hanhKhach, 
-              Ghe ghe, HoaDon hoaDon, String trangThai, 
-              double giaVe, LoaiVe loaiVe) throws Exception {
+    public Ve(String maVe, ChuyenTau chuyenTau, HanhKhach hanhKhach, 
+              Ghe ghe, HoaDon hoaDon, TrangThaiVe trangThai, 
+              LoaiVe loaiVe, double giaVe) throws Exception {
         setMaVe(maVe);
-        setChuyenDi(chuyenDi);
+        setChuyenTau(chuyenTau);
         setHanhKhach(hanhKhach);
         setGhe(ghe);
         setHoaDon(hoaDon);
         setTrangThai(trangThai);
-        setGiaVe(giaVe);
         setLoaiVe(loaiVe);
+        setGiaVe(giaVe);
     }
     
     public String getMaVe() {
@@ -50,15 +52,15 @@ public class Ve {
         this.maVe = maVe;
     }
     
-    public ChuyenTau getChuyenDi() {
-        return chuyenDi;
+    public ChuyenTau getChuyenTau() {
+        return chuyenTau;
     }
     
-    public void setChuyenDi(ChuyenTau chuyenDi) throws Exception {
-        if (chuyenDi == null) {
+    public void setChuyenTau(ChuyenTau chuyenTau) throws Exception {
+        if (chuyenTau == null) {
             throw new Exception(CHUYENDI_NULL);
         }
-        this.chuyenDi = chuyenDi;
+        this.chuyenTau = chuyenTau;
     }
     
     public HanhKhach getHanhKhach() {
@@ -93,16 +95,12 @@ public class Ve {
         }
         this.hoaDon = hoaDon;
     }
-    
-    public String getTrangThai() {
+
+    public TrangThaiVe getTrangThai() {
         return trangThai;
     }
-    
-    public void setTrangThai(String trangThai) throws Exception {
-        if (!trangThai.equals("Đã hoàn thành") && !trangThai.equals("Đã đặt") && 
-            !trangThai.equals("Đã hủy")) {
-            throw new Exception(TRANGTHAI_INVALID);
-        }
+
+    public void setTrangThai(TrangThaiVe trangThai) {
         this.trangThai = trangThai;
     }
     

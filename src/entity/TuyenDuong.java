@@ -20,7 +20,9 @@ public class TuyenDuong {
     public static final String GADEN_EMPTY = "Ga đến không được rỗng!";
     public static final String QUANGDUONG_INVALID = "Quãng đường phải lớn hơn 0!";
     public static final String SOTIEN_INVALID = "Số tiền một km phải lớn hơn 0!";
-    
+
+    public TuyenDuong() {
+    }
     
     // Constructor với mã tuyến đường
     public TuyenDuong(String maTuyenDuong) {

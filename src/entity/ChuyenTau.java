@@ -25,7 +25,9 @@ public class ChuyenTau {
     public static final String THOIGIANDEN_INVALID = "Thời gian đến phải lớn hơn thời gian đi!";
     public static final String TAU_EMPTY = "Tàu không được rỗng!";
     public static final String SOGHEDADAT_INVALID = "Số ghế đã đặt không hợp lệ!";
-    
+
+    public ChuyenTau() {
+    }
     
     // Constructor với mã chuyến tàu
     public ChuyenTau(String maChuyenTau) {
@@ -40,8 +42,6 @@ public class ChuyenTau {
         setThoiGianDi(thoiGianDi);
         setThoiGianDen(thoiGianDen);
         setTau(tau);
-        this.soGheDaDat = 0;
-        setSoGheConTrong();
     }
     
     // Getter và Setter
@@ -69,9 +69,9 @@ public class ChuyenTau {
     }
     
     public void setThoiGianDi(LocalDateTime thoiGianDi) throws Exception {
-        if (thoiGianDi == null || thoiGianDi.isBefore(LocalDateTime.now())) {
-            throw new Exception(THOIGIANDI_INVALID);
-        }
+//        if (thoiGianDi == null || thoiGianDi.isBefore(LocalDateTime.now())) {
+//            throw new Exception(THOIGIANDI_INVALID);
+//        }
         this.thoiGianDi = thoiGianDi;
     }
     
@@ -80,9 +80,9 @@ public class ChuyenTau {
     }
     
     public void setThoiGianDen(LocalDateTime thoiGianDen) throws Exception {
-        if (thoiGianDen == null || (this.thoiGianDi != null && thoiGianDen.isBefore(this.thoiGianDi))) {
-            throw new Exception(THOIGIANDEN_INVALID);
-        }
+//        if (thoiGianDen == null || (this.thoiGianDi != null && thoiGianDen.isBefore(this.thoiGianDi))) {
+//            throw new Exception(THOIGIANDEN_INVALID);
+//        }
         this.thoiGianDen = thoiGianDen;
     }
     
@@ -102,26 +102,24 @@ public class ChuyenTau {
     }
     
     public void setSoGheDaDat(int soGheDaDat) throws Exception {
-        if (soGheDaDat < 0 || (this.tau != null && soGheDaDat > this.tau.getSucChua())) {
-            throw new Exception(SOGHEDADAT_INVALID);
-        }
+//        if (soGheDaDat < 0 || (this.tau != null && soGheDaDat > this.tau.getSucChua())) {
+//            throw new Exception(SOGHEDADAT_INVALID);
+//        }
         this.soGheDaDat = soGheDaDat;
-        setSoGheConTrong();
     }
     
     public int getSoGheConTrong() {
         return soGheConTrong;
     }
     
+    public void setSoGheConTrong(int soGheControng) {
+        this.soGheConTrong = soGheControng;
+    }
+    
     /**
      * Tự động cập nhật số ghế còn trống
      */
-    private void setSoGheConTrong() {
-        if (this.tau != null) {
-            this.soGheConTrong = this.tau.getSucChua() - this.soGheDaDat;
-        }
-    }
-    
+
     public void tangSoGheDaDat(int soGhe) throws Exception {
         setSoGheDaDat(this.soGheDaDat + soGhe);
     }

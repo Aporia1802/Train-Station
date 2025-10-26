@@ -42,16 +42,17 @@
             <Component class="javax.swing.JTable" name="tbl_thongTinNhanVien">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                  <Table columnCount="9" rowCount="0">
-                    <Column editable="true" title="M&#xe3; nh&#xe2;n vi&#xea;n" type="java.lang.Object"/>
-                    <Column editable="true" title="T&#xea;n nh&#xe2;n vi&#xea;n" type="java.lang.Object"/>
-                    <Column editable="true" title="Ng&#xe0;y sinh" type="java.lang.Object"/>
-                    <Column editable="true" title="S&#x1ed1; &#x111;i&#x1ec7;n tho&#x1ea1;i" type="java.lang.Object"/>
-                    <Column editable="true" title="CCCD" type="java.lang.Object"/>
-                    <Column editable="true" title="&#x110;&#x1ecb;a ch&#x1ec9; " type="java.lang.Object"/>
-                    <Column editable="true" title="Ch&#x1ee9;c v&#x1ee5;" type="java.lang.Object"/>
-                    <Column editable="true" title="Gi&#x1edb;i t&#xed;nh" type="java.lang.Object"/>
-                    <Column editable="true" title="Tr&#x1ea1;ng th&#xe1;i" type="java.lang.Object"/>
+                  <Table columnCount="10" rowCount="0">
+                    <Column editable="false" title="M&#xe3; NV" type="java.lang.Object"/>
+                    <Column editable="false" title="H&#x1ecd; t&#xea;n" type="java.lang.Object"/>
+                    <Column editable="false" title="Gi&#x1edb;i t&#xed;nh" type="java.lang.Object"/>
+                    <Column editable="false" title="Ng&#xe0;y sinh" type="java.lang.Object"/>
+                    <Column editable="false" title="Email" type="java.lang.Object"/>
+                    <Column editable="false" title="SDT" type="java.lang.Object"/>
+                    <Column editable="false" title="CCCD" type="java.lang.Object"/>
+                    <Column editable="false" title="&#x110;&#x1ecb;a ch&#x1ec9; " type="java.lang.Object"/>
+                    <Column editable="false" title="Ch&#x1ee9;c v&#x1ee5;" type="java.lang.Object"/>
+                    <Column editable="false" title="Tr&#x1ea1;ng th&#xe1;i" type="java.lang.Object"/>
                   </Table>
                 </Property>
                 <Property name="selectionMode" type="int" value="0"/>
@@ -59,6 +60,9 @@
                   <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tbl_thongTinNhanVienMouseClicked"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

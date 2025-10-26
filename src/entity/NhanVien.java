@@ -51,7 +51,6 @@ public class NhanVien {
         setDiaChi(diaChi);
         setChucVu(chucVu);
         setTrangThai(trangThai);
-        
     }
 
     public String getMaNV() {
