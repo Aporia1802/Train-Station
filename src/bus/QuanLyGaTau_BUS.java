@@ -29,4 +29,32 @@ public class QuanLyGaTau_BUS {
         ArrayList<GaTau> gaTau = gaTauDAO.getGaTauByKeyword(keyword);
         return gaTau;
     }
+    
+    public Boolean updateThongTinGa(GaTau gaTau) {
+        return gaTauDAO.update(gaTau.getMaGa(), gaTau);
+    }
+    
+    public String generateID() {
+//      Lấy mã lớn nhất
+        String maxID = gaTauDAO.getMaxID();
+        
+        if(maxID.equals("")) {
+            return "GA001";
+        }
+        
+//      Tách phần số
+        int num = Integer.parseInt(maxID.substring(2));
+        
+//      Tăng lên một đơn vị
+        num++;
+        
+//      Tạo mã mới 
+        String newID = String.format("GA%03d", num);
+        
+        return newID;
+    }
+    
+    public Boolean themGaTau(GaTau gaTau) {
+        return gaTauDAO.create(gaTau);
+    }
 }

@@ -4,20 +4,18 @@
  */
 package enums;
 
-import static enums.TrangThaiTau.values;
-
 /**
  *
  * @author CÔNG HOÀNG
  */
-public enum TrangThaiGhe {
-    TRONG(1),
-    DA_DAT(2),
-    DANG_CHON(3);
+public enum TrangThaiVe {
+    CHUA_SU_DUNG(1),
+    DA_SU_DUNG(2),
+    DA_HUY(3);
     
     private final int value;
 
-    private TrangThaiGhe(int value) {
+    private TrangThaiVe(int value) {
         this.value = value;
     }
 
@@ -29,8 +27,8 @@ public enum TrangThaiGhe {
         return this.value == value;
     }
 
-    public static TrangThaiGhe fromInt(int value) {
-        for (TrangThaiGhe type : values()) {
+    public static TrangThaiVe fromInt(int value) {
+        for (TrangThaiVe type : values()) {
             if (type.compare(value)) {
                 return type;
             }
