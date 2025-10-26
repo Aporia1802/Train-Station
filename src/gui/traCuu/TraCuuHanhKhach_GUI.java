@@ -9,6 +9,7 @@ import entity.HanhKhach;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -70,12 +71,33 @@ public class TraCuuHanhKhach_GUI extends javax.swing.JPanel {
             }
         }
     }
-    
+
     private void handleActionXoaTrang() {
         tbl_thongTinHanhKhach.clearSelection();
         txt_maHK.setText("");
         txt_tenHK.setText("");
         txt_cccd.setText("");
+    }
+
+    private void handleActionTimKiem(java.awt.event.ActionEvent evt) {
+        String ma = txt_maHK.getText().trim();
+        String ten = txt_tenHK.getText().trim();
+        String cccd = txt_cccd.getText().trim();
+
+        // gọi BUS với tên biến đúng
+        List<HanhKhach> ds = bus.timKiemHanhKhach(ma, ten, cccd);
+
+        DefaultTableModel model = (DefaultTableModel) tbl_thongTinHanhKhach.getModel();
+        model.setRowCount(0);
+
+        for (HanhKhach hk : ds) {
+            model.addRow(new Object[]{
+                hk.getMaHanhKhach(),
+                hk.getTenHanhKhach(),
+                hk.getCccd(),
+                hk.getNgaySinh() == null ? "" : hk.getNgaySinh().toString()
+            });
+        }
     }
 
     /**
@@ -226,6 +248,7 @@ public class TraCuuHanhKhach_GUI extends javax.swing.JPanel {
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
         // TODO add your handling code here:
+        handleActionTimKiem(evt);
     }//GEN-LAST:event_btnTimKiemActionPerformed
 
     private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaTrangActionPerformed
