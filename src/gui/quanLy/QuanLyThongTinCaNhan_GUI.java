@@ -9,8 +9,10 @@ import bus.TaiKhoan_BUS;
 import dao.TaiKhoan_DAO;
 import entity.NhanVien;
 import entity.TaiKhoan;
+import java.security.NoSuchAlgorithmException;
 import javax.swing.JOptionPane;
 import main.Application;
+import utils.HashPassword;
 
 /**
  *
@@ -40,7 +42,7 @@ public class QuanLyThongTinCaNhan_GUI extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Vui lòng đăng nhập trước khi truy cập!", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
     private void loadThongTinCaNhan(String maNV) {
         nhanVienHienTai = nvBUS.getNhanVien(maNV);
         if (nhanVienHienTai != null) {
@@ -125,7 +127,21 @@ public class QuanLyThongTinCaNhan_GUI extends javax.swing.JPanel {
                 return;
             }
 
-            if (!tk.getMatKhau().equals(mkHienTai)) {
+            String hashedPasswordFromDB = tk.getMatKhau();
+
+            boolean isPasswordMatch = false;
+            try {
+                isPasswordMatch = HashPassword.comparePasswords(mkHienTai, hashedPasswordFromDB);
+                if (!isPasswordMatch) {
+                    isPasswordMatch = mkHienTai.equals(hashedPasswordFromDB);
+                }
+            } catch (NoSuchAlgorithmException e) {
+                JOptionPane.showMessageDialog(this, "Lỗi khi mã hóa mật khẩu: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+                return;
+            }
+
+            if (!isPasswordMatch) {
                 JOptionPane.showMessageDialog(this, "Mật khẩu hiện tại không đúng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -140,7 +156,16 @@ public class QuanLyThongTinCaNhan_GUI extends javax.swing.JPanel {
                 return;
             }
 
-            if (tkBUS.doiMatKhau(tenDangNhap, mkMoi)) {
+            String hashedMkMoi;
+            try {
+                hashedMkMoi = HashPassword.hashPassword(mkMoi);
+            } catch (NoSuchAlgorithmException e) {
+                JOptionPane.showMessageDialog(this, "Lỗi khi mã hóa mật khẩu mới: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+                return;
+            }
+
+            if (tkBUS.doiMatKhau(tenDangNhap, hashedMkMoi)) {
                 JOptionPane.showMessageDialog(this, "Đổi mật khẩu thành công!");
                 pwd_matKhauHT.setText("");
                 pwd_matKhauMoi.setText("");
@@ -153,7 +178,7 @@ public class QuanLyThongTinCaNhan_GUI extends javax.swing.JPanel {
             e.printStackTrace();
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
