@@ -31,6 +31,11 @@ public class QuanLyNhanVien_BUS {
         ArrayList<NhanVien> nhanVien = nhanVienDao.getNhanVienBySoDienThoai(sdt);
         return nhanVien;
     }
+    
+     public ArrayList<NhanVien> timNhanVien(String maNV, String tenNV, String cccd, String sdt, String gioiTinh, String trangThai){
+        ArrayList<NhanVien> nhanVien = nhanVienDao.timKiemNhanVien(maNV,tenNV,cccd,sdt,gioiTinh,trangThai);
+        return nhanVien;
+    }
 
 
     

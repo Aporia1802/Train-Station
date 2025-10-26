@@ -109,7 +109,7 @@
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="3">
                     <StringItem index="0" value="Ch&#x1ee9;c v&#x1ee5;"/>
-                    <StringItem index="1" value="Nh&#xe2;n vi&#xea;n qu&#x1ea3;n l&#xed;"/>
+                    <StringItem index="1" value="Nh&#xe2;n vi&#xea;n qu&#x1ea3;n l&#xfd;"/>
                     <StringItem index="2" value="Nh&#xe2;n vi&#xea;n b&#xe1;n v&#xe9;"/>
                   </StringArray>
                 </Property>
@@ -163,6 +163,9 @@
                   <Dimension value="[100, 50]"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_ResetActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -670,12 +673,13 @@
                             </Property>
                           </Properties>
                         </Component>
-                        <Component class="javax.swing.JComboBox" name="jComboBox1">
+                        <Component class="javax.swing.JComboBox" name="cbo_ChucVu">
                           <Properties>
                             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                              <StringArray count="2">
-                                <StringItem index="0" value="Nh&#xe2;n vi&#xea;n"/>
-                                <StringItem index="1" value="Qu&#x1ea3;n l&#xfd;"/>
+                              <StringArray count="3">
+                                <StringItem index="0" value="T&#x1ea5;t c&#x1ea3;"/>
+                                <StringItem index="1" value="Nh&#xe2;n vi&#xea;n qu&#x1ea3;n l&#xfd;"/>
+                                <StringItem index="2" value="Nh&#xe2;n vi&#xea;n b&#xe1;n v&#xe9;"/>
                               </StringArray>
                             </Property>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">

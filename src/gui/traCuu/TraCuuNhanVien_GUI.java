@@ -4,18 +4,127 @@
  */
 package gui.traCuu;
 
+import bus.QuanLyNhanVien_BUS;
+import entity.NhanVien;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author CÔNG HOÀNG
  */
 public class TraCuuNhanVien_GUI extends javax.swing.JPanel {
+    
+    private QuanLyNhanVien_BUS bus;
+    private DefaultTableModel tblModel_thongtinNhanVien;
 
     /**
      * Creates new form TraCuuNhanVien
      */
     public TraCuuNhanVien_GUI() {
         initComponents();
+        init();
     }
+    
+     private void init() {
+    bus = new QuanLyNhanVien_BUS();
+    tblModel_thongtinNhanVien = new DefaultTableModel(
+    new String[]{"Mã NV","Họ tên","Giới tính","Ngày sinh","Email","SDT","CCCD","Địa chỉ","Chức vụ","Trạng thái"}, 0);
+    tbl_thongTinNhanVien.setModel(tblModel_thongtinNhanVien);
+    ArrayList<NhanVien> ds = bus.getAllNhanVien();
+    getTableData(ds);
+}
+
+   
+  
+   private void getTableData(ArrayList<NhanVien> dsNV){
+       tblModel_thongtinNhanVien.setRowCount(0);
+       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+       for(NhanVien nv : dsNV){
+           String gioiTinhstr = nv.isGioiTinh() ? "Nam":"Nữ";
+           String trangThaistr = nv.isTrangThai()?"Đang làm":"Đã nghỉ";
+           String ngaySinhstr = "";
+           if(nv.getNgaySinh() != null){
+               ngaySinhstr = nv.getNgaySinh().format(formatter);
+           }
+           String[] newRow = {nv.getMaNV(),nv.getTenNV(),gioiTinhstr,ngaySinhstr,nv.getEmail(),nv.getSoDienThoai(),nv.getCccd(),nv.getDiaChi(),nv.getChucVu(),trangThaistr};
+           tblModel_thongtinNhanVien.addRow(newRow);
+       }
+   }
+   
+    private void getThongTinNhanVien() {
+     int row = tbl_thongTinNhanVien.getSelectedRow(); // Lấy dòng được chọn
+     if (row != -1) {
+         // Lấy dữ liệu từ từng cột trong bảng
+         String maNV = tbl_thongTinNhanVien.getValueAt(row, 0).toString();
+         String hoTen = tbl_thongTinNhanVien.getValueAt(row, 1).toString();
+         String gioiTinh = tbl_thongTinNhanVien.getValueAt(row, 2).toString();
+         String sdt = tbl_thongTinNhanVien.getValueAt(row, 5).toString();
+         String cccd = tbl_thongTinNhanVien.getValueAt(row, 6).toString();
+         String trangThai = tbl_thongTinNhanVien.getValueAt(row, 9).toString();
+
+         // Gán dữ liệu lên các ô nhập
+         txt_maNV.setText(maNV);
+         txt_tenNV.setText(hoTen);
+         txt_soDienThoai.setText(sdt);
+         txt_cccd.setText(cccd);
+
+         // Giới tính
+         for (int i = 0; i < cbo_gioiTinh.getItemCount(); i++) {
+             String item = cbo_gioiTinh.getItemAt(i).toString().trim();
+             if (item.equalsIgnoreCase(gioiTinh)) {
+                 cbo_gioiTinh.setSelectedIndex(i);
+                 break;
+             }
+         }
+
+         // Trạng thái
+         for (int i = 0; i < cbo_trangThai.getItemCount(); i++) {
+             String item = cbo_trangThai.getItemAt(i).toString().trim();
+             if (item.equalsIgnoreCase(trangThai)) {
+                 cbo_trangThai.setSelectedIndex(i);
+                 break;
+             }
+         }
+     }
+ }
+    private void handleActionXoaTrang() {
+     // Bỏ chọn dòng trên bảng (nếu có)
+     tbl_thongTinNhanVien.clearSelection();
+
+     // Xóa nội dung các ô nhập liệu
+     txt_maNV.setText("");
+     txt_tenNV.setText("");
+     txt_cccd.setText("");
+     txt_soDienThoai.setText("");
+
+     // Đặt lại combobox giới tính và trạng thái về lựa chọn đầu tiên
+     if (cbo_gioiTinh.getItemCount() > 0) {
+         cbo_gioiTinh.setSelectedIndex(0); // "Tất cả" hoặc "Nam"
+     }
+
+     if (cbo_trangThai.getItemCount() > 0) {
+         cbo_trangThai.setSelectedIndex(0); // "Tất cả" hoặc "Đang làm"
+     }
+
+     // Đưa focus về ô đầu tiên
+     txt_maNV.requestFocus();
+ }
+    
+    private void handleActionTimKiem() {
+       String maNV = txt_maNV.getText().trim();
+        String tenNV = txt_tenNV.getText().trim();
+        String cccd = txt_cccd.getText().trim();
+        String sdt = txt_soDienThoai.getText().trim();
+        String gioiTinh = cbo_gioiTinh.getSelectedItem().toString();
+        String trangThai = cbo_trangThai.getSelectedItem().toString();
+
+        getTableData(bus.timNhanVien(maNV, tenNV, cccd, sdt, gioiTinh, trangThai));
+    }
+
+
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -76,6 +185,11 @@ public class TraCuuNhanVien_GUI extends javax.swing.JPanel {
             }
         });
         tbl_thongTinNhanVien.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tbl_thongTinNhanVien.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_thongTinNhanVienMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbl_thongTinNhanVien);
 
         jPanel2.add(jScrollPane1);
@@ -242,12 +356,16 @@ public class TraCuuNhanVien_GUI extends javax.swing.JPanel {
     }//GEN-LAST:event_cbo_gioiTinhActionPerformed
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
-        // TODO add your handling code here:
+        handleActionTimKiem();
     }//GEN-LAST:event_btnTimKiemActionPerformed
 
     private void btn_xoaTrangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_xoaTrangActionPerformed
-        // TODO add your handling code here:
+        handleActionXoaTrang();
     }//GEN-LAST:event_btn_xoaTrangActionPerformed
+
+    private void tbl_thongTinNhanVienMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_thongTinNhanVienMouseClicked
+       getThongTinNhanVien();
+    }//GEN-LAST:event_tbl_thongTinNhanVienMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -6,6 +6,7 @@ package gui.quanLy;
 
 import bus.QuanLyNhanVien_BUS;
 import entity.NhanVien;
+import java.awt.Color;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -66,8 +67,9 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
         String sdt = tbl_nhanVien.getValueAt(row, 5).toString();
         String cccd = tbl_nhanVien.getValueAt(row, 6).toString();
         String diaChi = tbl_nhanVien.getValueAt(row, 7).toString();
-        String chucVu = tbl_nhanVien.getValueAt(row, 8).toString();
+        String chucVu = tbl_nhanVien.getValueAt(row, 8).toString().trim();
         String trangThai = tbl_nhanVien.getValueAt(row, 9).toString();
+      
 
         // Gán dữ liệu lên các ô nhập liệu
         txt_maNV.setText(maNV);
@@ -76,7 +78,17 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
         txt_sdt.setText(sdt);
         txt_cccd.setText(cccd);
         txt_diaChi.setText(diaChi);
-        cbo_chucVu.setSelectedItem(chucVu);
+        
+        for (int i = 0; i < cbo_ChucVu.getItemCount(); i++) {
+             String item = cbo_ChucVu.getItemAt(i).toString().trim();
+             if (item.equalsIgnoreCase(chucVu)) {
+                 cbo_ChucVu.setSelectedIndex(i);
+                 break;
+             }
+         }
+        
+        
+
 
         // Giới tính
         if (gioiTinh.equalsIgnoreCase("Nam")) {
@@ -124,8 +136,9 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
     txt_ngaySinh.setDate(null);
     }
 
-    // Đặt combobox "Chức vụ" về lựa chọn đầu tiên
-    cbo_chucVu.setSelectedIndex(0); // "Nhân viên"
+     if (cbo_ChucVu.getItemCount() > 0) {
+         cbo_ChucVu.setSelectedIndex(0); // "Tất cả" hoặc "Nam"
+     }
 
     // Đặt trạng thái về mặc định (Đang làm)
     rad_tt1.setSelected(true);
@@ -135,22 +148,26 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
     txt_maNV.requestFocus();
       
     }
-     private void handleActionTimKiem() {
+    
+    private void handleActionTimKiem() {
         String sdt = txt_timKiem.getText().trim();
         getTableData(bus.getNhanVienbySDT(sdt));
     }
+     
+     
     private void handleActionLoc() {
     // Lấy giá trị từ combobox
     String chucVu = (String) cbo_chucVu.getSelectedItem();
     String trangThai = (String) cbo_trangThai.getSelectedItem();
 
-    // Gọi hàm lọc
-    ArrayList<NhanVien> dsLoc = bus.filter(chucVu, trangThai);
-
-    // Hiển thị lên JTable
-    getTableData(dsLoc);
+        getTableData(bus.filter(chucVu, trangThai));
 }
-
+    private void handleActionLamMoi() {
+            tbl_nhanVien.clearSelection();
+            getTableData(bus.getAllNhanVien());
+            txt_timKiem.setText("Nhập sdt or cccd cần tìm...");
+            txt_timKiem.setForeground(Color.GRAY);
+        }
 
 
     @SuppressWarnings("unchecked")
@@ -203,7 +220,7 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
         txt_diaChi = new javax.swing.JTextField();
         pnl_chucVu = new javax.swing.JPanel();
         lbl_chucVu = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cbo_ChucVu = new javax.swing.JComboBox<>();
         pnl_trangThai = new javax.swing.JPanel();
         lbl_trangThai = new javax.swing.JLabel();
         pnl_radGroup2 = new javax.swing.JPanel();
@@ -254,7 +271,7 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
         pnl_cta.setPreferredSize(new java.awt.Dimension(500, 50));
         pnl_cta.setLayout(new java.awt.GridLayout(1, 0));
 
-        cbo_chucVu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Chức vụ", "Nhân viên quản lí", "Nhân viên bán vé" }));
+        cbo_chucVu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Chức vụ", "Nhân viên quản lý", "Nhân viên bán vé" }));
         cbo_chucVu.setToolTipText("");
         cbo_chucVu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -284,6 +301,11 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
         btn_Reset.setText("Reset");
         btn_Reset.setMaximumSize(new java.awt.Dimension(100, 50));
         btn_Reset.setPreferredSize(new java.awt.Dimension(100, 50));
+        btn_Reset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_ResetActionPerformed(evt);
+            }
+        });
         pnl_cta.add(btn_Reset);
 
         pnl_top.add(pnl_cta);
@@ -512,10 +534,10 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
         lbl_chucVu.setPreferredSize(new java.awt.Dimension(100, 16));
         pnl_chucVu.add(lbl_chucVu);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nhân viên", "Quản lý" }));
-        jComboBox1.setMaximumSize(new java.awt.Dimension(32767, 40));
-        jComboBox1.setPreferredSize(new java.awt.Dimension(230, 40));
-        pnl_chucVu.add(jComboBox1);
+        cbo_ChucVu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả", "Nhân viên quản lý", "Nhân viên bán vé" }));
+        cbo_ChucVu.setMaximumSize(new java.awt.Dimension(32767, 40));
+        cbo_ChucVu.setPreferredSize(new java.awt.Dimension(230, 40));
+        pnl_chucVu.add(cbo_ChucVu);
 
         pnl_thongTinNhanVien.add(pnl_chucVu);
 
@@ -665,6 +687,10 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
         handleActionLoc();
     }//GEN-LAST:event_btn_LocActionPerformed
 
+    private void btn_ResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ResetActionPerformed
+        handleActionLamMoi();
+    }//GEN-LAST:event_btn_ResetActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_Loc;
@@ -677,9 +703,9 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
     private javax.swing.JButton btn_xuatExcel;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
+    private javax.swing.JComboBox<String> cbo_ChucVu;
     private javax.swing.JComboBox<String> cbo_chucVu;
     private javax.swing.JComboBox<String> cbo_trangThai;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JLabel lbl_cccd;
     private javax.swing.JLabel lbl_chucVu;

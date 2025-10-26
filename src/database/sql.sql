@@ -246,14 +246,14 @@ INSERT INTO GaTau (maGa, tenGa, diaChi, soDienThoai) VALUES
 
 -- 5. TÀU
 INSERT INTO Tau (maTau, tenTau, soToaTau, sucChua, ngayHoatDong, trangThai) VALUES
-('SE1', N'Thống nhất',12, 600, '2020-01-01', 1),
-('SE2', N'Thống nhất',12, 600, '2020-01-01', 1),
-('SE3', N'Thống nhất',10, 500, '2020-06-01', 1),
-('SE4', N'Thống nhất',10, 500, '2020-06-01', 1),
-('SE5', N'Thống nhất',8, 400, '2021-01-01', 1),
-('SE6', N'Thống nhất',8, 400, '2021-01-01', 1),
-('SE7', N'Thống nhất',12, 600, '2021-06-01', 2),
-('SE8', N'Thống nhất',10, 500, '2022-01-01', 1);
+('SE1', N'Tàu Thống Nhất Bắc - Nam', 12, 600, '2020-01-01', N'Hoạt động'),
+('SE2', N'Tàu Thống Nhất Bắc - Nam', 12, 600, '2020-01-01', N'Hoạt động'),
+('SE4', N'Tàu Thống Nhất Bắc - Nam', 10, 500, '2020-06-01', N'Hoạt động'),
+('SE3', N'Tàu Thống Nhất Bắc - Nam', 10, 500, '2020-06-01', N'Hoạt động'),
+('SE5', N'Tàu Thống Nhất Bắc - Nam', 8, 400, '2021-01-01', N'Hoạt động'),
+('SE6', N'Tàu Thống Nhất Bắc - Nam', 8, 400, '2021-01-01', N'Hoạt động'),
+('SE7', N'Tàu Thống Nhất Bắc - Nam', 12, 600, '2021-06-01', N'Bảo trì'),
+('SE8', N'Tàu Thống Nhất Bắc - Nam', 10, 500, '2022-01-01', N'Hoạt động');
 
 -- 6. TOA TÀU (ví dụ cho tàu SE1)
 INSERT INTO ToaTau (maToaTau, soKhoangTau, soHieuToa, soCho, maTau) VALUES
