@@ -4,18 +4,107 @@
  */
 package gui.quanLy;
 
+import bus.QuanLyTau_BUS;
+import entity.Tau;
+import enums.TrangThaiTau;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author LAPTOP DELL
  */
 public class QuanLyTau_GUI extends javax.swing.JPanel {
-
-    /**
-     * Creates new form QuanLyTau_GUI
-     */
+    
+    private QuanLyTau_BUS bus;
+    private DefaultTableModel tblModel_thongtinTau;
+    
     public QuanLyTau_GUI() {
         initComponents();
+        init();
     }
+    
+     private void init(){
+       bus = new QuanLyTau_BUS();
+       tblModel_thongtinTau = new DefaultTableModel(new String[]{"Mã tàu","Tên tàu","Số lượng toa","Sức chứa","Ngày hoạt động","Trạng thái"},0);
+       tbl_tau.setModel(tblModel_thongtinTau);
+         getTableData(bus.getAllTau());
+   }
+     
+    private void getTableData(ArrayList<Tau> dsTau) {
+    // Xóa toàn bộ dữ liệu cũ trên bảng
+    tblModel_thongtinTau.setRowCount(0);
+    // Định dạng ngày theo dd/MM/yyyy
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    
+    for(Tau tau : dsTau){
+        String ngayHDStr = "";
+           if(tau.getNgayHoatDong()!= null){
+               ngayHDStr = tau.getNgayHoatDong().format(formatter);
+           }
+        String trangThaistr = tau.getTrangThai().getDisplay();
+        String soLuongToaStr = String.valueOf(tau.getSoToaTau());
+        String suChuaStr = String.valueOf(tau.getSucChua());
+        String[]newRow = {tau.getMaTau(),tau.getTenTau(),soLuongToaStr,suChuaStr,ngayHDStr,trangThaistr};
+        tblModel_thongtinTau.addRow(newRow);
+    }
+
+    
+}
+    
+    private void getThongTinTau() {
+    int row = tbl_tau.getSelectedRow(); // lấy dòng được chọn
+    if (row != -1) {
+        // Lấy dữ liệu từng cột
+        String maTau = tbl_tau.getValueAt(row, 0).toString();
+        String tenTau = tbl_tau.getValueAt(row, 1).toString();
+        int soToaTau = Integer.parseInt(tbl_tau.getValueAt(row, 2).toString());
+        int sucChua = Integer.parseInt(tbl_tau.getValueAt(row, 3).toString());
+        String ngayHoatDongStr = tbl_tau.getValueAt(row, 4).toString();
+        String trangThaiStr = tbl_tau.getValueAt(row, 5).toString();
+
+        // Gán dữ liệu lên textfield
+        txt_maTau.setText(maTau);
+        txt_tenTau.setText(tenTau);
+        txt_soLuongToa.setText(String.valueOf(soToaTau));
+        txt_sucChua.setText(String.valueOf(sucChua));
+        
+        for (int i = 0; i < cbo_trangThai.getItemCount(); i++) {
+            String item = cbo_trangThai.getItemAt(i).toString().trim();
+            if (item.equalsIgnoreCase(trangThaiStr)) {
+                cbo_trangThai.setSelectedIndex(i);
+                break;
+            }
+        }
+
+
+       if (ngayHoatDongStr != null && !ngayHoatDongStr.isEmpty()) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate localDate = LocalDate.parse(ngayHoatDongStr, formatter);
+            java.util.Date ngaySinh = java.sql.Date.valueOf(localDate);
+            txt_ngayHD.setDate(ngaySinh); // Gán vào JDateChooser
+        } else {
+            txt_ngayHD.setDate(null); // Nếu trống thì xóa giá trị
+        }
+            }
+        }
+
+
+//        // Xử lý trạng thái (chuyển chuỗi -> enum)
+//        TrangThaiTau trangThai = switch (trangThaiStr) {
+//            case "Hoạt động" -> TrangThaiTau.HOAT_DONG;
+//            case "Bảo trì" -> TrangThaiTau.BAO_TRI;
+//            case "Ngừng hoạt động" -> TrangThaiTau.NGUNG_HOAT_DONG;
+//            default -> null;
+//        };
+
+        // Nếu combo chứa chuỗi tiếng Việt, chọn theo tên hiển thị
+        
+   
+
+   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -40,21 +129,24 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         pnl_center = new javax.swing.JPanel();
         spl_container = new javax.swing.JSplitPane();
         src_nhanVien = new javax.swing.JScrollPane();
-        tbl_nhanVien = new javax.swing.JTable();
+        tbl_tau = new javax.swing.JTable();
         pnl_container = new javax.swing.JPanel();
         pnl_thongTinNhanVien = new javax.swing.JPanel();
         pnl_maTau = new javax.swing.JPanel();
         lbl_maTau = new javax.swing.JLabel();
         txt_maTau = new javax.swing.JTextField();
-        pnl_hoTen = new javax.swing.JPanel();
+        pnl_tenTau = new javax.swing.JPanel();
         lbl_tenTau = new javax.swing.JLabel();
         txt_tenTau = new javax.swing.JTextField();
-        pnl_diaChi = new javax.swing.JPanel();
-        lbl_sucChua = new javax.swing.JLabel();
-        txt_sucChua = new javax.swing.JTextField();
-        pnl_cccd = new javax.swing.JPanel();
+        pnl_slToa = new javax.swing.JPanel();
         lbl_soLuongToa = new javax.swing.JLabel();
         txt_soLuongToa = new javax.swing.JTextField();
+        pnl_sucChua = new javax.swing.JPanel();
+        lbl_sucChua = new javax.swing.JLabel();
+        txt_sucChua = new javax.swing.JTextField();
+        pnl_ngayHD = new javax.swing.JPanel();
+        lbl_sucChua1 = new javax.swing.JLabel();
+        txt_ngayHD = new com.toedter.calendar.JDateChooser();
         pnl_trangThai = new javax.swing.JPanel();
         lbl_trangThai = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
@@ -139,29 +231,34 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         src_nhanVien.setMinimumSize(new java.awt.Dimension(400, 20));
         src_nhanVien.setPreferredSize(new java.awt.Dimension(800, 402));
 
-        tbl_nhanVien.setModel(new javax.swing.table.DefaultTableModel(
+        tbl_tau.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Mã tàu", "Tên tàu", "Số lượng toa", "Sức chứa", "Trạng thái"
+                "Mã tàu", "Tên tàu", "Số lượng toa", "Sức chứa", "Ngày hoạt động", "Trạng thái"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, true, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        tbl_nhanVien.setMaximumSize(new java.awt.Dimension(1000, 80));
-        tbl_nhanVien.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        tbl_nhanVien.setShowGrid(false);
-        src_nhanVien.setViewportView(tbl_nhanVien);
+        tbl_tau.setMaximumSize(new java.awt.Dimension(1000, 80));
+        tbl_tau.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tbl_tau.setShowGrid(false);
+        tbl_tau.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_tauMouseClicked(evt);
+            }
+        });
+        src_nhanVien.setViewportView(tbl_tau);
 
         spl_container.setLeftComponent(src_nhanVien);
 
@@ -196,53 +293,31 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
 
         pnl_thongTinNhanVien.add(pnl_maTau);
 
-        pnl_hoTen.setMaximumSize(pnl_maTau.getMaximumSize());
-        pnl_hoTen.setPreferredSize(pnl_maTau.getPreferredSize());
-        pnl_hoTen.setLayout(new javax.swing.BoxLayout(pnl_hoTen, javax.swing.BoxLayout.LINE_AXIS));
+        pnl_tenTau.setMaximumSize(pnl_maTau.getMaximumSize());
+        pnl_tenTau.setPreferredSize(pnl_maTau.getPreferredSize());
+        pnl_tenTau.setLayout(new javax.swing.BoxLayout(pnl_tenTau, javax.swing.BoxLayout.LINE_AXIS));
 
         lbl_tenTau.setText("Tên tàu:");
         lbl_tenTau.setMaximumSize(lbl_maTau.getMaximumSize());
         lbl_tenTau.setMinimumSize(new java.awt.Dimension(45, 16));
         lbl_tenTau.setPreferredSize(lbl_maTau.getPreferredSize());
-        pnl_hoTen.add(lbl_tenTau);
+        pnl_tenTau.add(lbl_tenTau);
 
         txt_tenTau.setMaximumSize(txt_maTau.getMaximumSize());
         txt_tenTau.setPreferredSize(txt_maTau.getPreferredSize());
-        pnl_hoTen.add(txt_tenTau);
+        pnl_tenTau.add(txt_tenTau);
 
-        pnl_thongTinNhanVien.add(pnl_hoTen);
+        pnl_thongTinNhanVien.add(pnl_tenTau);
 
-        pnl_diaChi.setMaximumSize(pnl_maTau.getMaximumSize());
-        pnl_diaChi.setMinimumSize(new java.awt.Dimension(118, 6));
-        pnl_diaChi.setPreferredSize(pnl_maTau.getPreferredSize());
-        pnl_diaChi.setLayout(new javax.swing.BoxLayout(pnl_diaChi, javax.swing.BoxLayout.LINE_AXIS));
-
-        lbl_sucChua.setText("Sức chứa:");
-        lbl_sucChua.setMaximumSize(new java.awt.Dimension(45, 16));
-        lbl_sucChua.setMinimumSize(new java.awt.Dimension(45, 16));
-        lbl_sucChua.setPreferredSize(new java.awt.Dimension(100, 16));
-        pnl_diaChi.add(lbl_sucChua);
-
-        txt_sucChua.setMaximumSize(txt_maTau.getMaximumSize());
-        txt_sucChua.setMinimumSize(new java.awt.Dimension(64, 30));
-        txt_sucChua.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_sucChuaActionPerformed(evt);
-            }
-        });
-        pnl_diaChi.add(txt_sucChua);
-
-        pnl_thongTinNhanVien.add(pnl_diaChi);
-
-        pnl_cccd.setMaximumSize(pnl_maTau.getMaximumSize());
-        pnl_cccd.setMinimumSize(new java.awt.Dimension(118, 6));
-        pnl_cccd.setPreferredSize(new java.awt.Dimension(230, 50));
-        pnl_cccd.setLayout(new javax.swing.BoxLayout(pnl_cccd, javax.swing.BoxLayout.LINE_AXIS));
+        pnl_slToa.setMaximumSize(pnl_maTau.getMaximumSize());
+        pnl_slToa.setMinimumSize(new java.awt.Dimension(118, 6));
+        pnl_slToa.setPreferredSize(new java.awt.Dimension(230, 50));
+        pnl_slToa.setLayout(new javax.swing.BoxLayout(pnl_slToa, javax.swing.BoxLayout.LINE_AXIS));
 
         lbl_soLuongToa.setText("Số lượng toa:");
         lbl_soLuongToa.setMaximumSize(lbl_maTau.getMaximumSize());
         lbl_soLuongToa.setPreferredSize(lbl_maTau.getPreferredSize());
-        pnl_cccd.add(lbl_soLuongToa);
+        pnl_slToa.add(lbl_soLuongToa);
 
         txt_soLuongToa.setMaximumSize(txt_maTau.getMaximumSize());
         txt_soLuongToa.setPreferredSize(txt_maTau.getPreferredSize());
@@ -251,9 +326,45 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
                 txt_soLuongToaActionPerformed(evt);
             }
         });
-        pnl_cccd.add(txt_soLuongToa);
+        pnl_slToa.add(txt_soLuongToa);
 
-        pnl_thongTinNhanVien.add(pnl_cccd);
+        pnl_thongTinNhanVien.add(pnl_slToa);
+
+        pnl_sucChua.setMaximumSize(pnl_maTau.getMaximumSize());
+        pnl_sucChua.setMinimumSize(new java.awt.Dimension(118, 6));
+        pnl_sucChua.setPreferredSize(pnl_maTau.getPreferredSize());
+        pnl_sucChua.setLayout(new javax.swing.BoxLayout(pnl_sucChua, javax.swing.BoxLayout.LINE_AXIS));
+
+        lbl_sucChua.setText("Sức chứa:");
+        lbl_sucChua.setMaximumSize(new java.awt.Dimension(45, 16));
+        lbl_sucChua.setMinimumSize(new java.awt.Dimension(45, 16));
+        lbl_sucChua.setPreferredSize(new java.awt.Dimension(100, 16));
+        pnl_sucChua.add(lbl_sucChua);
+
+        txt_sucChua.setMaximumSize(txt_maTau.getMaximumSize());
+        txt_sucChua.setMinimumSize(new java.awt.Dimension(64, 30));
+        txt_sucChua.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_sucChuaActionPerformed(evt);
+            }
+        });
+        pnl_sucChua.add(txt_sucChua);
+
+        pnl_thongTinNhanVien.add(pnl_sucChua);
+
+        pnl_ngayHD.setMaximumSize(pnl_maTau.getMaximumSize());
+        pnl_ngayHD.setMinimumSize(new java.awt.Dimension(118, 6));
+        pnl_ngayHD.setPreferredSize(pnl_maTau.getPreferredSize());
+        pnl_ngayHD.setLayout(new javax.swing.BoxLayout(pnl_ngayHD, javax.swing.BoxLayout.LINE_AXIS));
+
+        lbl_sucChua1.setText("Sức chứa:");
+        lbl_sucChua1.setMaximumSize(new java.awt.Dimension(45, 16));
+        lbl_sucChua1.setMinimumSize(new java.awt.Dimension(45, 16));
+        lbl_sucChua1.setPreferredSize(new java.awt.Dimension(100, 16));
+        pnl_ngayHD.add(lbl_sucChua1);
+        pnl_ngayHD.add(txt_ngayHD);
+
+        pnl_thongTinNhanVien.add(pnl_ngayHD);
 
         pnl_trangThai.setMaximumSize(pnl_maTau.getMaximumSize());
         pnl_trangThai.setPreferredSize(new java.awt.Dimension(230, 50));
@@ -353,6 +464,10 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_btn_xoaTrangActionPerformed
 
+    private void tbl_tauMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_tauMouseClicked
+        getThongTinTau();
+    }//GEN-LAST:event_tbl_tauMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_Loc;
@@ -369,25 +484,28 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
     private javax.swing.JLabel lbl_maTau;
     private javax.swing.JLabel lbl_soLuongToa;
     private javax.swing.JLabel lbl_sucChua;
+    private javax.swing.JLabel lbl_sucChua1;
     private javax.swing.JLabel lbl_tenTau;
     private javax.swing.JLabel lbl_trangThai;
     private javax.swing.JPanel pnl_btnGroup;
     private javax.swing.JPanel pnl_btnTimKiem;
-    private javax.swing.JPanel pnl_cccd;
     private javax.swing.JPanel pnl_center;
     private javax.swing.JPanel pnl_container;
     private javax.swing.JPanel pnl_cta;
-    private javax.swing.JPanel pnl_diaChi;
-    private javax.swing.JPanel pnl_hoTen;
     private javax.swing.JPanel pnl_maTau;
+    private javax.swing.JPanel pnl_ngayHD;
+    private javax.swing.JPanel pnl_slToa;
+    private javax.swing.JPanel pnl_sucChua;
+    private javax.swing.JPanel pnl_tenTau;
     private javax.swing.JPanel pnl_thongTinNhanVien;
     private javax.swing.JPanel pnl_timKiem;
     private javax.swing.JPanel pnl_top;
     private javax.swing.JPanel pnl_trangThai;
     private javax.swing.JSplitPane spl_container;
     private javax.swing.JScrollPane src_nhanVien;
-    private javax.swing.JTable tbl_nhanVien;
+    private javax.swing.JTable tbl_tau;
     private javax.swing.JTextField txt_maTau;
+    private com.toedter.calendar.JDateChooser txt_ngayHD;
     private javax.swing.JTextField txt_soLuongToa;
     private javax.swing.JTextField txt_sucChua;
     private javax.swing.JTextField txt_tenTau;
