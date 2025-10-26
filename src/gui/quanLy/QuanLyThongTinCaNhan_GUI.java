@@ -4,19 +4,156 @@
  */
 package gui.quanLy;
 
+import bus.NhanVien_BUS;
+import bus.TaiKhoan_BUS;
+import dao.TaiKhoan_DAO;
+import entity.NhanVien;
+import entity.TaiKhoan;
+import javax.swing.JOptionPane;
+import main.Application;
+
 /**
  *
  * @author Laptopone
  */
 public class QuanLyThongTinCaNhan_GUI extends javax.swing.JPanel {
 
+    private NhanVien_BUS nvBUS = new NhanVien_BUS();
+    private TaiKhoan_BUS tkBUS = new TaiKhoan_BUS();
+    private NhanVien nhanVienHienTai;
+    private String tenDangNhap;
+
     /**
      * Creates new form QLTT_GUI
      */
     public QuanLyThongTinCaNhan_GUI() {
         initComponents();
+        if (Application.nhanVien != null) {
+            String maNV = Application.nhanVien.getMaNV();
+            tenDangNhap = Application.nhanVien.getSoDienThoai(); // Giả sử tenDangNhap là soDienThoai, kiểm tra lại
+            if (maNV != null) {
+                loadThongTinCaNhan(maNV);
+            } else {
+                JOptionPane.showMessageDialog(this, "Không thể tải thông tin. Mã nhân viên không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Vui lòng đăng nhập trước khi truy cập!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void loadThongTinCaNhan(String maNV) {
+        nhanVienHienTai = nvBUS.getNhanVien(maNV);
+        if (nhanVienHienTai != null) {
+            txt_maNV.setText(nhanVienHienTai.getMaNV() != null ? nhanVienHienTai.getMaNV() : "");
+            txt_hoTen.setText(nhanVienHienTai.getTenNV() != null ? nhanVienHienTai.getTenNV() : "");
+            txt_soDienThoai.setText(nhanVienHienTai.getSoDienThoai() != null ? nhanVienHienTai.getSoDienThoai() : "");
+            txt_email.setText(nhanVienHienTai.getEmail() != null ? nhanVienHienTai.getEmail() : "");
+            txt_diaChi.setText(nhanVienHienTai.getDiaChi() != null ? nhanVienHienTai.getDiaChi() : "");
+            if (nhanVienHienTai.getNgaySinh() != null) {
+                date_ngaySinh.setDate(java.sql.Date.valueOf(nhanVienHienTai.getNgaySinh()));
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Không tìm thấy thông tin nhân viên với mã: " + maNV, "Lỗi", JOptionPane.ERROR_MESSAGE);
+            txt_maNV.setText("");
+            txt_hoTen.setText("");
+            txt_soDienThoai.setText("");
+            txt_email.setText("");
+            txt_diaChi.setText("");
+            date_ngaySinh.setDate(null);
+        }
     }
 
+    private void handleActionLuu(java.awt.event.ActionEvent evt) {
+        try {
+            if (nhanVienHienTai == null) {
+                JOptionPane.showMessageDialog(this, "Không có thông tin nhân viên để cập nhật!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            String tenNV = txt_hoTen.getText().trim();
+            String email = txt_email.getText().trim();
+            String diaChi = txt_diaChi.getText().trim();
+            java.util.Date d = date_ngaySinh.getDate();
+
+            if (tenNV.isEmpty() || email.isEmpty() || diaChi.isEmpty() || d == null) {
+                JOptionPane.showMessageDialog(this, "Vui lòng điền đầy đủ thông tin!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
+                JOptionPane.showMessageDialog(this, "Email không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            nhanVienHienTai.setTenNV(tenNV);
+            nhanVienHienTai.setEmail(email);
+            nhanVienHienTai.setDiaChi(diaChi);
+            nhanVienHienTai.setNgaySinh(new java.sql.Date(d.getTime()).toLocalDate());
+
+            if (nvBUS.updateThongTin(nhanVienHienTai)) {
+                JOptionPane.showMessageDialog(this, "Cập nhật thông tin thành công!");
+            } else {
+                JOptionPane.showMessageDialog(this, "Cập nhật thất bại! Vui lòng kiểm tra lại dữ liệu hoặc kết nối.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }
+
+    private void handleActionDoiMK(java.awt.event.ActionEvent evt) {
+        try {
+            String mkHienTai = new String(pwd_matKhauHT.getPassword()).trim();
+            String mkMoi = new String(pwd_matKhauMoi.getPassword()).trim();
+            String xacNhan = new String(pwd_xacNhan.getPassword()).trim();
+
+            if (mkHienTai.isEmpty() || mkMoi.isEmpty() || xacNhan.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng điền đầy đủ thông tin mật khẩu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (tenDangNhap == null) {
+                JOptionPane.showMessageDialog(this, "Tên đăng nhập không hợp lệ. Vui lòng kiểm tra lại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            TaiKhoan_DAO tkDAO = new TaiKhoan_DAO();
+            TaiKhoan tk = tkDAO.getOne(tenDangNhap);
+
+            if (tk == null) {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy tài khoản với tên đăng nhập: " + tenDangNhap, "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!tk.getMatKhau().equals(mkHienTai)) {
+                JOptionPane.showMessageDialog(this, "Mật khẩu hiện tại không đúng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!mkMoi.equals(xacNhan)) {
+                JOptionPane.showMessageDialog(this, "Xác nhận mật khẩu không khớp!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (mkMoi.length() < 8) {
+                JOptionPane.showMessageDialog(this, "Mật khẩu mới phải có ít nhất 8 ký tự!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (tkBUS.doiMatKhau(tenDangNhap, mkMoi)) {
+                JOptionPane.showMessageDialog(this, "Đổi mật khẩu thành công!");
+                pwd_matKhauHT.setText("");
+                pwd_matKhauMoi.setText("");
+                pwd_xacNhan.setText("");
+            } else {
+                JOptionPane.showMessageDialog(this, "Đổi mật khẩu thất bại! Vui lòng thử lại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi đổi mật khẩu: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -246,10 +383,12 @@ public class QuanLyThongTinCaNhan_GUI extends javax.swing.JPanel {
 
     private void btn_luuThongTinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_luuThongTinActionPerformed
         // TODO add your handling code here:
+        handleActionLuu(evt);
     }//GEN-LAST:event_btn_luuThongTinActionPerformed
 
     private void btn_doiMKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_doiMKActionPerformed
         // TODO add your handling code here:
+        handleActionDoiMK(evt);
     }//GEN-LAST:event_btn_doiMKActionPerformed
 
 
