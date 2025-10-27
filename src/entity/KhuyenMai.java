@@ -4,7 +4,7 @@
  */
 package entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 /**
  *
@@ -14,11 +14,11 @@ public class KhuyenMai {
     private String maKhuyenMai;
     private String tenKhuyenMai;
     private double heSoKhuyenMai;
-    private LocalDateTime ngayBatDau;
-    private LocalDateTime ngayKetThuc;
+    private LocalDate ngayBatDau;
+    private LocalDate ngayKetThuc;
     private double tongTienToiThieu;
     private double tienKhuyenMaiToiDa;
-    private String trangThai;
+    private Boolean trangThai;
     
     public static final String TENKHUYENMAI_EMPTY = "Tên khuyến mãi không được rỗng!";
     public static final String HESO_INVALID = "Hệ số khuyến mãi phải từ 0.0 đến 1.0!";
@@ -30,8 +30,8 @@ public class KhuyenMai {
     }
     
     public KhuyenMai(String maKhuyenMai, String tenKhuyenMai, double heSoKhuyenMai,
-                     LocalDateTime ngayBatDau, LocalDateTime ngayKetThuc,
-                     double tongTienToiThieu, double tienKhuyenMaiToiDa) throws Exception {
+                     LocalDate ngayBatDau, LocalDate ngayKetThuc,
+                     double tongTienToiThieu, double tienKhuyenMaiToiDa, Boolean trangThai) throws Exception {
         setMaKhuyenMai(maKhuyenMai);
         setTenKhuyenMai(tenKhuyenMai);
         setHeSoKhuyenMai(heSoKhuyenMai);
@@ -39,6 +39,7 @@ public class KhuyenMai {
         setNgayKetThuc(ngayKetThuc);
         setTongTienToiThieu(tongTienToiThieu);
         setTienKhuyenMaiToiDa(tienKhuyenMaiToiDa);
+        setTrangThai(trangThai);
     }
     
     public String getMaKhuyenMai() {
@@ -72,22 +73,22 @@ public class KhuyenMai {
         this.heSoKhuyenMai = heSoKhuyenMai;
     }
     
-    public LocalDateTime getNgayBatDau() {
+    public LocalDate getNgayBatDau() {
         return ngayBatDau;
     }
     
-    public void setNgayBatDau(LocalDateTime ngayBatDau) throws Exception {
+    public void setNgayBatDau(LocalDate ngayBatDau) throws Exception {
         if (ngayKetThuc != null && ngayBatDau.isAfter(ngayKetThuc)) {
             throw new Exception(NGAYBATDAU_INVALID);
         }
         this.ngayBatDau = ngayBatDau;
     }
     
-    public LocalDateTime getNgayKetThuc() {
+    public LocalDate getNgayKetThuc() {
         return ngayKetThuc;
     }
     
-    public void setNgayKetThuc(LocalDateTime ngayKetThuc) throws Exception {
+    public void setNgayKetThuc(LocalDate ngayKetThuc) throws Exception {
         if (ngayBatDau != null && ngayKetThuc.isBefore(ngayBatDau)) {
             throw new Exception(NGAYKETTHUC_INVALID);
         }
@@ -113,11 +114,11 @@ public class KhuyenMai {
         this.tienKhuyenMaiToiDa = tienKhuyenMaiToiDa;
     }
     
-    public String getTrangThai() {
+    public Boolean getTrangThai() {
         return trangThai;
     }
     
-    public void setTrangThai(String trangThai) {
+    public void setTrangThai(Boolean trangThai) {
         this.trangThai = trangThai;
     }
 }

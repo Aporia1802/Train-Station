@@ -5,6 +5,7 @@
 package gui.traCuu;
 
 import bus.QuanLyGaTau_BUS;
+import bus.TraCuuGaTau_BUS;
 import entity.GaTau;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
@@ -14,7 +15,7 @@ import javax.swing.table.DefaultTableModel;
  * @author CÔNG HOÀNG
  */
 public class TraCuuGaTau_GUI extends javax.swing.JPanel {
-    private QuanLyGaTau_BUS bus;
+    private TraCuuGaTau_BUS bus;
     private DefaultTableModel tblModel_thongTinGa;
     /**
      * Creates new form TraCuuGaTau_GUI
@@ -25,16 +26,16 @@ public class TraCuuGaTau_GUI extends javax.swing.JPanel {
     }
     
     private void init() {
-        bus = new QuanLyGaTau_BUS();
+        bus = new TraCuuGaTau_BUS();
         
 //      setModel
         tblModel_thongTinGa = new DefaultTableModel(new String[] {"Mã ga", "Tên ga", "Địa chỉ", "Số điện thoại"}, 0);
         tbl_thongTinGa.setModel(tblModel_thongTinGa);
         
-        getTableData(bus.getAllGaTau());
+        loadDataToTable(bus.getAllGaTau());
     }
     
-    private void getTableData(ArrayList<GaTau> dsGaTau) {
+    private void loadDataToTable(ArrayList<GaTau> dsGaTau) {
         tblModel_thongTinGa.setRowCount(0);
         for(GaTau gaTau : dsGaTau) {
             String[] newRow = {gaTau.getMaGa(), gaTau.getTenGa(), gaTau.getDiaChi(), gaTau.getSoDienThoai()};
@@ -42,22 +43,22 @@ public class TraCuuGaTau_GUI extends javax.swing.JPanel {
         }
     }
     
-    private void handleActionXoaTrang() {
+    private void handleXoaTrang() {
         tbl_thongTinGa.clearSelection();
-        getTableData(bus.getAllGaTau());
+        loadDataToTable(bus.getAllGaTau());
         txt_maGa.setText("");
         txt_tenGa.setText("");
         txt_tinhThanh.setText("");
         txt_soDienThoai.setText("");
     }
     
-    private void handleActionTimKiem() {
+    private void handleTimKiem() {
         String maGa = txt_maGa.getText().trim();
         String tenGa = txt_tenGa.getText().trim();
         String tinhThanh = txt_tinhThanh.getText().trim();
         String soDienThoai = txt_soDienThoai.getText().trim();
         
-        getTableData(bus.filter(maGa, tenGa, tinhThanh, soDienThoai));
+        loadDataToTable(bus.filter(maGa, tenGa, tinhThanh, soDienThoai));
     }
 
     /**
@@ -217,12 +218,12 @@ public class TraCuuGaTau_GUI extends javax.swing.JPanel {
 
     private void btn_timKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_timKiemActionPerformed
         // TODO add your handling code here:
-        handleActionTimKiem();
+        handleTimKiem();
     }//GEN-LAST:event_btn_timKiemActionPerformed
 
     private void btn_xoaTrangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_xoaTrangActionPerformed
         // TODO add your handling code here:
-        handleActionXoaTrang();
+        handleXoaTrang();
     }//GEN-LAST:event_btn_xoaTrangActionPerformed
 
 

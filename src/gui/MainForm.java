@@ -24,6 +24,8 @@ import com.formdev.flatlaf.util.UIScale;
 import gui.quanLyVe.DatVe_GUI;
 import gui.menu.Menu;
 import gui.menu.MenuAction;
+import gui.thongKe.ThongKeDoanhThu_GUI;
+import gui.thongKe.ThongKeHanhKhach_GUI;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
@@ -137,6 +139,16 @@ public class MainForm extends JLayeredPane{
                             break;
                     }
                     break; 
+                case 3: 
+                    switch (subIndex) {
+                        case 1: 
+                            Application.showForm(new ThongKeDoanhThu_GUI());
+                            break;
+                        case 2: 
+                            Application.showForm(new ThongKeHanhKhach_GUI());
+                            break;
+                    }
+                    break;
                 case 4:
                     Application.showForm(new QuanLyTau_GUI());
                     break;

@@ -2,18 +2,18 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package gui.quanLyVe;
+package gui.thongKe;
 
 /**
  *
  * @author CÔNG HOÀNG
  */
-public class DatVe_GUI extends javax.swing.JPanel {
+public class ThongKeHanhKhach_GUI extends javax.swing.JPanel {
 
     /**
-     * Creates new form DatVe_GUI
+     * Creates new form ThongKeHanhKhach_GUI
      */
-    public DatVe_GUI() {
+    public ThongKeHanhKhach_GUI() {
         initComponents();
     }
 
@@ -26,7 +26,16 @@ public class DatVe_GUI extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setLayout(new java.awt.BorderLayout());
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1366, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 768, Short.MAX_VALUE)
+        );
     }// </editor-fold>//GEN-END:initComponents
 
 

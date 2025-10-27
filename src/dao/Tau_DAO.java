@@ -1,108 +1,196 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dao;
 
 import database.ConnectDB;
-import static database.ConnectDB.conn;
 import entity.Tau;
 import enums.TrangThaiTau;
 import interfaces.DAOBase;
-import java.sql.Statement;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.sql.SQLException;
-/**
- *
- * @author CÔNG HOÀNG
- */
-public class Tau_DAO implements DAOBase<Tau>{
 
-    
+public class Tau_DAO implements DAOBase {
+
     @Override
     public Tau getOne(String id) {
-      Tau tau = null;
 
+        String sql = "SELECT * FROM Tau WHERE maTau = ?";
+        
         try {
-            PreparedStatement st = ConnectDB.conn.prepareStatement("Select * from Tau where maTau = ?");
-            st.setString(1, id);
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
-                String tenTau = rs.getString("tenTau");
-                int soToaTau = rs.getInt("soToaTau");
-                int sucChua = rs.getInt("sucChua");
-                LocalDate ngayHoatDong = rs.getDate("ngayHoatDong").toLocalDate();
-                TrangThaiTau trangThai = TrangThaiTau.valueOf(rs.getString("trangThai"));
-                tau = new Tau(id, tenTau, soToaTau, sucChua, ngayHoatDong, trangThai);
+            PreparedStatement ps = ConnectDB.conn.prepareStatement(sql);
+            ps.setString(1, id);
+            
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Tau tau = getData(rs);
+                rs.close();
+                ps.close();
+                return tau;
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return tau;
+        return null;
     }
 
-
-     @Override
+    @Override
     public ArrayList<Tau> getAll() {
         ArrayList<Tau> dsTau = new ArrayList<>();
+        String sql = "SELECT * FROM Tau";
+        
         try {
-            String sql = "SELECT * FROM Tau";
             Statement st = ConnectDB.conn.createStatement();
             ResultSet rs = st.executeQuery(sql);
+            
             while (rs.next()) {
-                dsTau.add(getData(rs));
+                Tau tau = getData(rs);
+                if (tau != null) {
+                    dsTau.add(tau);
+                }
             }
+            
+            rs.close();
+            st.close();
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
         return dsTau;
     }
-    
-  public Tau getData(ResultSet rs) throws SQLException, Exception {
-    String maTau = rs.getString("maTau");
-    String tenTau = rs.getString("tenTau");
-    int soToaTau = rs.getInt("soToaTau");
-    int sucChua = rs.getInt("sucChua");
-    LocalDate ngayHoatDong = null;
-    java.sql.Date d = rs.getDate("ngayHoatDong");
-    if (d != null) ngayHoatDong = d.toLocalDate();
 
-    String trangThaiStr = rs.getString("trangThai");
-    TrangThaiTau trangThai = TrangThaiTau.fromDisplay(trangThaiStr);
-
-    if (trangThai == null) {
-        // gán mặc định để không làm vỡ luồng xử lý
-        trangThai = TrangThaiTau.HOAT_DONG;
+    public Tau getData(ResultSet rs) {
+        try {
+            String maTau = rs.getString("maTau");
+            String tenTau = rs.getString("tenTau");
+            int soToaTau = rs.getInt("soToaTau");
+            int sucChua = rs.getInt("sucChua");
+            
+            java.sql.Date ngayHoatDongSQL = rs.getDate("ngayHoatDong");
+            LocalDate ngayHoatDong = ngayHoatDongSQL != null ? 
+                ngayHoatDongSQL.toLocalDate() : null;
+            
+            String trangThaiStr = rs.getString("trangThai");
+            
+            Tau tau = new Tau(maTau);
+            tau.setTenTau(tenTau);
+            
+            try {
+                tau.setSoToaTau(soToaTau);
+            } catch (Exception e) {
+                System.err.println("⚠️ Số toa tàu không hợp lệ: " + soToaTau);
+            }
+            
+            tau.setSucChua(sucChua);
+            tau.setNgayHoatDong(ngayHoatDong);
+            
+            // Convert trạng thái
+            if (trangThaiStr != null && !trangThaiStr.trim().isEmpty()) {
+                TrangThaiTau trangThai = TrangThaiTau.fromString(trangThaiStr);
+                tau.setTrangThai(trangThai);
+            }
+            
+            return tau;
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    return new Tau(maTau, tenTau, soToaTau, sucChua, ngayHoatDong, trangThai);
-}
-
-
-
     @Override
-    public String generateID() {
-        throw new UnsupportedOperationException("Not supported yet."); 
+    public Boolean create(Object object) {
+        Tau tau = (Tau) object;
+        String sql = "INSERT INTO Tau (maTau, tenTau, soToaTau, sucChua, ngayHoatDong, trangThai) VALUES (?, ?, ?, ?, ?, ?)";
+        
+        try {
+            PreparedStatement ps = ConnectDB.conn.prepareStatement(sql);
+            ps.setString(1, tau.getMaTau());
+            ps.setString(2, tau.getTenTau());
+            ps.setInt(3, tau.getSoToaTau());
+            ps.setInt(4, tau.getSucChua());
+            ps.setDate(5, Date.valueOf(tau.getNgayHoatDong()));
+            ps.setString(6, tau.getTrangThai().getDisplay());
+            
+            int result = ps.executeUpdate();
+            ps.close();
+            
+            return result > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
-    public Boolean create(Tau object) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public Boolean update(String id, Tau newObject) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Boolean update(String id, Object newObject) {
+        Tau tau = (Tau) newObject;
+        String sql = "UPDATE Tau SET tenTau = ?, soToaTau = ?, sucChua = ?, ngayHoatDong = ?, trangThai = ? WHERE maTau = ?";
+        
+        try {
+            PreparedStatement ps = ConnectDB.conn.prepareStatement(sql);
+            ps.setString(1, tau.getTenTau());
+            ps.setInt(2, tau.getSoToaTau());
+            ps.setInt(3, tau.getSucChua());
+            ps.setDate(4, Date.valueOf(tau.getNgayHoatDong()));
+            ps.setString(5, tau.getTrangThai().getDisplay());
+            ps.setString(6, id);
+            
+            int result = ps.executeUpdate();
+            ps.close();
+            
+            return result > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
     public Boolean delete(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String sql = "DELETE FROM Tau WHERE maTau = ?";
+        
+        try {
+            PreparedStatement ps = ConnectDB.conn.prepareStatement(sql);
+            ps.setString(1, id);
+            
+            int result = ps.executeUpdate();
+            ps.close();
+            
+            return result > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
-    
+
+    @Override
+    public String generateID() {
+        String newID = "SE1";
+        String sql = "SELECT TOP 1 maTau FROM Tau ORDER BY maTau DESC";
+        
+        try {
+            Statement st = ConnectDB.conn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            
+            if (rs.next()) {
+                String lastID = rs.getString("maTau");
+                String numberPart = lastID.replaceAll("[^0-9]", "");
+                
+                try {
+                    int number = Integer.parseInt(numberPart);
+                    newID = "SE" + (number + 1);
+                } catch (NumberFormatException e) {
+                    newID = "SE" + System.currentTimeMillis();
+                }
+            }
+            
+            rs.close();
+            st.close();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return newID;
+    }
 }

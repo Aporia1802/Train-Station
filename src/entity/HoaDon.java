@@ -28,14 +28,12 @@ public class HoaDon {
     }
     
     public HoaDon(String maHoaDon, NhanVien nhanVien, KhachHang khachHang,
-                  LocalDate ngayLapHoaDon, KhuyenMai khuyenMai,
-                  double tongTien) throws Exception {
+                  LocalDate ngayLapHoaDon, KhuyenMai khuyenMai) throws Exception {
         setMaHoaDon(maHoaDon);
         setNhanVien(nhanVien);
         setKhachHang(khachHang);
         setNgayLapHoaDon(ngayLapHoaDon);
         setKhuyenMai(khuyenMai);
-        setTongTien(tongTien);
     }
     
     public String getMaHoaDon() {
@@ -73,9 +71,9 @@ public class HoaDon {
     }
     
     public void setNgayLapHoaDon(LocalDate ngayLapHoaDon) throws Exception {
-        if (!ngayLapHoaDon.equals(LocalDate.now())) {
-            throw new Exception(NGAYLAP_INVALID);
-        }
+//        if (!ngayLapHoaDon.equals(LocalDate.now())) {
+//            throw new Exception(NGAYLAP_INVALID);
+//        }
         this.ngayLapHoaDon = ngayLapHoaDon;
     }
 

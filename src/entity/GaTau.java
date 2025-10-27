@@ -74,9 +74,9 @@ public class GaTau {
         if (soDienThoai.isEmpty()) {
             throw new Exception(SDT_EMPTY);
         }
-        if (!soDienThoai.matches("^(02|03|05|07|08|09)\\d{8}$")) {
-            throw new Exception(SDT_INVALID);
-        }
+//        if (!soDienThoai.matches("^(02|03|05|07|08|09)\\d{8}$")) {
+//            throw new Exception(SDT_INVALID);
+//        }
         this.soDienThoai = soDienThoai;
     }
 
