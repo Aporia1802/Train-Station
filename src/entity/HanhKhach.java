@@ -23,10 +23,11 @@ public class HanhKhach {
     public HanhKhach() {
     }
     
-    public HanhKhach(String maHanhKhach, String tenHanhKhach, String cccd) throws Exception {
+    public HanhKhach(String maHanhKhach, String tenHanhKhach, String cccd, LocalDate ngaySinh) throws Exception {
         setMaHanhKhach(maHanhKhach);
         setTenHanhKhach(tenHanhKhach);
         setCccd(cccd);
+        setNgaySinh(ngaySinh);
     }
     
     public String getMaHanhKhach() {

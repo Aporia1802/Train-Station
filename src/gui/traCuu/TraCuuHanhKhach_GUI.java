@@ -4,17 +4,100 @@
  */
 package gui.traCuu;
 
+import bus.TraCuuHanhKhach_BUS;
+import entity.HanhKhach;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Laptopone
  */
 public class TraCuuHanhKhach_GUI extends javax.swing.JPanel {
 
+    private TraCuuHanhKhach_BUS bus;
+    private DefaultTableModel tblModel_thongTinHanhKhach;
+
     /**
      * Creates new form TraCuuHanhKhach_GUI
      */
     public TraCuuHanhKhach_GUI() {
         initComponents();
+        init();
+    }
+
+    private void init() {
+        bus = new TraCuuHanhKhach_BUS();
+
+        //setModel
+        tblModel_thongTinHanhKhach = new DefaultTableModel(new String[]{"Mã hành khách", "Tên hành khách", "Căn cước công dân", "Ngày sinh"}, 0);
+        tbl_thongTinHanhKhach.setModel(tblModel_thongTinHanhKhach);
+
+        getTableData(bus.getAllHanhKhach());
+    }
+
+    private void getTableData(ArrayList<HanhKhach> dsHanhKhach) {
+        tblModel_thongTinHanhKhach.setRowCount(0);
+        for (HanhKhach hanhKhach : dsHanhKhach) {
+            String[] newRow = {hanhKhach.getMaHanhKhach(), hanhKhach.getTenHanhKhach(), hanhKhach.getCccd(), String.valueOf(hanhKhach.getNgaySinh())};
+            tblModel_thongTinHanhKhach.addRow(newRow);
+        }
+    }
+
+    private void getThongTinHanhKhach() {
+        int row = tbl_thongTinHanhKhach.getSelectedRow(); // lấy dòng được chọn
+        if (row != -1) {
+            // Lấy dữ liệu từng cột trong dòng đó
+            String maHanhKhach = tbl_thongTinHanhKhach.getValueAt(row, 0).toString();
+            String tenHanhKhach = tbl_thongTinHanhKhach.getValueAt(row, 1).toString();
+            String cccd = tbl_thongTinHanhKhach.getValueAt(row, 2).toString();
+            String ngaySinh = tbl_thongTinHanhKhach.getValueAt(row, 3).toString();
+
+            // Đổ lên textfield
+            txt_maHK.setText(maHanhKhach);
+            txt_tenHK.setText(tenHanhKhach);
+            txt_cccd.setText(cccd);
+
+            // Định dạng ngày
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDate localDate = LocalDate.parse(ngaySinh, formatter);
+                java.util.Date ngay = java.sql.Date.valueOf(localDate);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void handleActionXoaTrang() {
+        tbl_thongTinHanhKhach.clearSelection();
+        txt_maHK.setText("");
+        txt_tenHK.setText("");
+        txt_cccd.setText("");
+    }
+
+    private void handleActionTimKiem(java.awt.event.ActionEvent evt) {
+        String ma = txt_maHK.getText().trim();
+        String ten = txt_tenHK.getText().trim();
+        String cccd = txt_cccd.getText().trim();
+
+        // gọi BUS với tên biến đúng
+        List<HanhKhach> ds = bus.timKiemHanhKhach(ma, ten, cccd);
+
+        DefaultTableModel model = (DefaultTableModel) tbl_thongTinHanhKhach.getModel();
+        model.setRowCount(0);
+
+        for (HanhKhach hk : ds) {
+            model.addRow(new Object[]{
+                hk.getMaHanhKhach(),
+                hk.getTenHanhKhach(),
+                hk.getCccd(),
+                hk.getNgaySinh() == null ? "" : hk.getNgaySinh().toString()
+            });
+        }
     }
 
     /**
@@ -62,6 +145,11 @@ public class TraCuuHanhKhach_GUI extends javax.swing.JPanel {
                 "Mã hành khách", "Tên hành khách", "CCCD", "Ngày sinh"
             }
         ));
+        tbl_thongTinHanhKhach.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_thongTinHanhKhachMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbl_thongTinHanhKhach);
 
         pnl_table.add(jScrollPane1);
@@ -160,11 +248,18 @@ public class TraCuuHanhKhach_GUI extends javax.swing.JPanel {
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
         // TODO add your handling code here:
+        handleActionTimKiem(evt);
     }//GEN-LAST:event_btnTimKiemActionPerformed
 
     private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaTrangActionPerformed
         // TODO add your handling code here:
+        handleActionXoaTrang();
     }//GEN-LAST:event_btnXoaTrangActionPerformed
+
+    private void tbl_thongTinHanhKhachMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_thongTinHanhKhachMouseClicked
+        // TODO add your handling code here:
+        getThongTinHanhKhach();
+    }//GEN-LAST:event_tbl_thongTinHanhKhachMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

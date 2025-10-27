@@ -49,7 +49,7 @@ CREATE TABLE GaTau (
 -- 5. BẢNG TÀU
 CREATE TABLE Tau (
     maTau VARCHAR(20) PRIMARY KEY,
-    tenTau NVARCHAR(50),
+    tenTau NVARCHAR(50) NOT NULL,
     soToaTau INT NOT NULL,
     sucChua INT NOT NULL,
     ngayHoatDong DATE NOT NULL,
@@ -92,7 +92,7 @@ CREATE TABLE LoaiGhe (
 CREATE TABLE Ghe (
     maGhe VARCHAR(20) PRIMARY KEY,
     soGhe INT NOT NULL,
-    trangThaiGhe NVARCHAR(50) NOT NULL,
+    trangThaiGhe INT NOT NULL,
     maLoaiGhe VARCHAR(20) NOT NULL,
     maKhoangTau VARCHAR(20) NOT NULL,
     
@@ -144,7 +144,7 @@ CREATE TABLE HanhKhach (
     maHanhKhach VARCHAR(20) PRIMARY KEY,
     tenHanhKhach NVARCHAR(50) NOT NULL,
     cccd VARCHAR(12) NOT NULL,
-    ngaySinh INT NOT NULL,
+    ngaySinh DATE NOT NULL,
 );
 
 -- 14. BẢNG KHUYẾN MÃI
@@ -152,8 +152,8 @@ CREATE TABLE KhuyenMai (
     maKhuyenMai VARCHAR(20) PRIMARY KEY,
     tenKhuyenMai NVARCHAR(50) NOT NULL,
     heSoKhuyenMai FLOAT NOT NULL,
-    ngayBatDau DATETIME NOT NULL,
-    ngayKetThuc DATETIME NOT NULL,
+    ngayBatDau DATE NOT NULL,
+    ngayKetThuc DATE NOT NULL,
     tongTienToiThieu FLOAT,
     tienKhuyenMaiToiDa FLOAT,
     trangThai BIT NOT NULL,
@@ -184,7 +184,7 @@ CREATE TABLE Ve (
     maHanhKhach VARCHAR(20) NOT NULL,
     maGhe VARCHAR(20) NOT NULL,
     maHoaDon VARCHAR(20) NOT NULL,
-    trangThai NVARCHAR(20) NOT NULL,
+    trangThai INT NOT NULL,
     giaVe MONEY NOT NULL,
     
     -- Ràng buộc
@@ -193,6 +193,18 @@ CREATE TABLE Ve (
     CONSTRAINT FK_V_HanhKhach FOREIGN KEY (maHanhKhach) REFERENCES HanhKhach(maHanhKhach),
     CONSTRAINT FK_V_Ghe FOREIGN KEY (maGhe) REFERENCES Ghe(maGhe),
     CONSTRAINT FK_V_HoaDon FOREIGN KEY (maHoaDon) REFERENCES HoaDon(maHoaDon),
+);
+
+-- 17. BẢNG HÓA ĐƠN TRẢ
+CREATE TABLE HoaDonTra (
+    maHDT VARCHAR(20) PRIMARY KEY,
+    ngayTra DATETIME NOT NULL,
+    maVe VARCHAR(20) NOT NULL,
+    maNV VARCHAR(20) NOT NULL,
+    
+    -- Ràng buộc
+    CONSTRAINT FK_HDT_Ve FOREIGN KEY (maVe) REFERENCES Ve(maVe),
+    CONSTRAINT FK_HDT_NhanVien FOREIGN KEY (maNV) REFERENCES NhanVien(maNV),
 );
 
 
@@ -223,14 +235,14 @@ INSERT INTO KhachHang (maKH, tenKH, soDienThoai, cccd, ngaySinh, gioiTinh) VALUE
 
 -- 4. GA TÀU
 INSERT INTO GaTau (maGa, tenGa, diaChi, soDienThoai) VALUES
-('GA-SG', N'Ga Sài Gòn', N'1 Nguyễn Thông, Q3, TP.HCM', '0283822625'),
-('GA-HN', N'Ga Hà Nội', N'120 Lê Duẩn, Hoàn Kiếm, Hà Nội', '0243942594'),
-('GA-DN', N'Ga Đà Nẵng', N'791 Hai Phòng, Hải Châu, Đà Nẵng', '0236382381'),
-('GA-NT', N'Ga Nha Trang', N'17 Thái Nguyên, Nha Trang, Khánh Hòa', '0258352211'),
-('GA-HP', N'Ga Hải Phòng', N'75 Lương Khánh Thiện, Ngô Quyền, Hải Phòng', '0312522192'),
-('GA-HUE', N'Ga Huế', N'2 Bùi Thị Xuân, Huế', '0234382217'),
-('GA-QN', N'Ga Quảng Ngãi', N'56 Quang Trung, Quảng Ngãi', '0553826661'),
-('GA-VT', N'Ga Vũng Tàu', N'1 Nam Kỳ Khởi Nghĩa, Vũng Tàu', '0643856527');
+('GA-SG', N'Sài Gòn', N'1 Nguyễn Thông, Q3, TP.HCM', '0283822625'),
+('GA-HN', N'Hà Nội', N'120 Lê Duẩn, Hoàn Kiếm, Hà Nội', '0243942594'),
+('GA-DN', N'Đà Nẵng', N'791 Hai Phòng, Hải Châu, Đà Nẵng', '0236382381'),
+('GA-NT', N'Nha Trang', N'17 Thái Nguyên, Nha Trang, Khánh Hòa', '0258352211'),
+('GA-HP', N'Hải Phòng', N'75 Lương Khánh Thiện, Ngô Quyền, Hải Phòng', '0312522192'),
+('GA-HUE', N'Huế', N'2 Bùi Thị Xuân, Huế', '0234382217'),
+('GA-QN', N'Quảng Ngãi', N'56 Quang Trung, Quảng Ngãi', '0553826661'),
+('GA-VT', N'Vũng Tàu', N'1 Nam Kỳ Khởi Nghĩa, Vũng Tàu', '0643856527');
 
 -- 5. TÀU
 INSERT INTO Tau (maTau, tenTau, soToaTau, sucChua, ngayHoatDong, trangThai) VALUES
@@ -268,42 +280,42 @@ INSERT INTO KhoangTau (maKhoangTau, soHieuKhoang, soChua, maToaTau) VALUES
 -- 8. LOẠI GHẾ
 INSERT INTO LoaiGhe (maLoaiGhe, tenLoaiGhe, moTa, heSoGhe) VALUES
 ('LG-NM', N'Ngồi mềm', N'Ghế ngồi mềm có điều hòa', 1.0),
-('LG-GN4', N'Giường nằm 4 chỗ', N'Giường nằm 4 chỗ/khoang, có điều hòa', 1.5),
+('LG-GN4', N'Giường nằm 4 chỗ', N'Giường nằm 4 chỗ/khoang, có điều hòa', 1.4),
 ('LG-GN6', N'Giường nằm 6 chỗ', N'Giường nằm 6 chỗ/khoang, có điều hòa', 1.2);
 
 -- 9. GHẾ (ví dụ cho khoang KT-SE1-01-1)
 INSERT INTO Ghe (maGhe, soGhe, trangThaiGhe, maLoaiGhe, maKhoangTau) VALUES
-('G-SE1-01-1-01', 1, N'Trống', 'LG-GN4', 'KT-SE1-01-1'),
-('G-SE1-01-1-02', 2, N'Trống', 'LG-GN4', 'KT-SE1-01-1'),
-('G-SE1-01-1-03', 3, N'Trống', 'LG-GN4', 'KT-SE1-01-1'),
-('G-SE1-01-1-04', 4, N'Trống', 'LG-GN4', 'KT-SE1-01-1'),
-('G-SE1-01-2-01', 1, N'Trống', 'LG-GN4', 'KT-SE1-01-2'),
-('G-SE1-01-2-02', 2, N'Trống', 'LG-GN4', 'KT-SE1-01-2'),
-('G-SE1-01-2-03', 3, N'Trống', 'LG-GN4', 'KT-SE1-01-2'),
-('G-SE1-01-2-04', 4, N'Trống', 'LG-GN4', 'KT-SE1-01-2'),
-('G-SE1-01-3-01', 1, N'Trống', 'LG-GN6', 'KT-SE1-01-3'),
-('G-SE1-01-3-02', 2, N'Trống', 'LG-GN6', 'KT-SE1-01-3'),
-('G-SE1-01-3-03', 3, N'Trống', 'LG-GN6', 'KT-SE1-01-3'),
-('G-SE1-01-3-04', 4, N'Trống', 'LG-GN6', 'KT-SE1-01-3'),
-('G-SE1-01-3-05', 5, N'Trống', 'LG-GN6', 'KT-SE1-01-3'),
-('G-SE1-01-3-06', 6, N'Trống', 'LG-GN6', 'KT-SE1-01-3');
+('G-SE1-01-1-01', 1, 1, 'LG-GN4', 'KT-SE1-01-1'),
+('G-SE1-01-1-02', 2, 1, 'LG-GN4', 'KT-SE1-01-1'),
+('G-SE1-01-1-03', 3, 1, 'LG-GN4', 'KT-SE1-01-1'),
+('G-SE1-01-1-04', 4, 1, 'LG-GN4', 'KT-SE1-01-1'),
+('G-SE1-01-2-01', 1, 1, 'LG-GN4', 'KT-SE1-01-2'),
+('G-SE1-01-2-02', 2, 1, 'LG-GN4', 'KT-SE1-01-2'),
+('G-SE1-01-2-03', 3, 1, 'LG-GN4', 'KT-SE1-01-2'),
+('G-SE1-01-2-04', 4, 1, 'LG-GN4', 'KT-SE1-01-2'),
+('G-SE1-01-3-01', 1, 1, 'LG-GN6', 'KT-SE1-01-3'),
+('G-SE1-01-3-02', 2, 1, 'LG-GN6', 'KT-SE1-01-3'),
+('G-SE1-01-3-03', 3, 1, 'LG-GN6', 'KT-SE1-01-3'),
+('G-SE1-01-3-04', 4, 1, 'LG-GN6', 'KT-SE1-01-3'),
+('G-SE1-01-3-05', 5, 1, 'LG-GN6', 'KT-SE1-01-3'),
+('G-SE1-01-3-06', 6, 1, 'LG-GN6', 'KT-SE1-01-3');
 
 -- 10. TUYẾN ĐƯỜNG
 INSERT INTO TuyenDuong (maTuyenDuong, quangDuong, soTienMotKm, gaDi, gaDen) VALUES
-('TD-SG-HN', 1726, 15, 'GA-SG', 'GA-HN'),
-('TD-HN-SG', 1726, 15, 'GA-HN', 'GA-SG'),
-('TD-SG-DN', 964, 15, 'GA-SG', 'GA-DN'),
-('TD-DN-SG', 964, 15, 'GA-DN', 'GA-SG'),
-('TD-SG-NT', 411, 15, 'GA-SG', 'GA-NT'),
-('TD-NT-SG', 411, 15, 'GA-NT', 'GA-SG'),
-('TD-HN-HP', 102, 15, 'GA-HN', 'GA-HP'),
-('TD-HP-HN', 102, 15, 'GA-HP', 'GA-HN'),
-('TD-DN-HUE', 105, 15, 'GA-DN', 'GA-HUE'),
-('TD-HUE-DN', 105, 15, 'GA-HUE', 'GA-DN');
+('TD-SG-HN', 1726, 700, 'GA-SG', 'GA-HN'),
+('TD-HN-SG', 1726, 700, 'GA-HN', 'GA-SG'),
+('TD-SG-DN', 964, 700, 'GA-SG', 'GA-DN'),
+('TD-DN-SG', 964, 700, 'GA-DN', 'GA-SG'),
+('TD-SG-NT', 411, 700, 'GA-SG', 'GA-NT'),
+('TD-NT-SG', 411, 700, 'GA-NT', 'GA-SG'),
+('TD-HN-HP', 102, 700, 'GA-HN', 'GA-HP'),
+('TD-HP-HN', 102, 700, 'GA-HP', 'GA-HN'),
+('TD-DN-HUE', 105, 700, 'GA-DN', 'GA-HUE'),
+('TD-HUE-DN', 105, 700, 'GA-HUE', 'GA-DN');
 
 -- 11. CHUYẾN TÀU
 INSERT INTO ChuyenTau (maChuyenTau, thoiGianDi, thoiGianDen, soGheDaDat, soGheConTrong, maTau, maTuyenDuong) VALUES
-('CT-SE1-241020', '2024-10-20 19:00:00', '2024-10-21 14:00:00', 150, 450, 'SE1', 'TD-SG-HN'),
+('CT-SE1-241020', '2025-10-30 19:00:00', '2024-10-21 14:00:00', 150, 450, 'SE1', 'TD-SG-HN'),
 ('CT-SE2-241020', '2024-10-20 19:30:00', '2024-10-21 14:30:00', 180, 420, 'SE2', 'TD-HN-SG'),
 ('CT-SE3-241021', '2024-10-21 06:00:00', '2024-10-21 19:30:00', 200, 300, 'SE3', 'TD-SG-DN'),
 ('CT-SE4-241021', '2024-10-21 22:00:00', '2024-10-22 07:30:00', 120, 380, 'SE4', 'TD-SG-NT'),
@@ -321,14 +333,14 @@ INSERT INTO LoaiVe (maLoaiVe, tenLoaiVe, moTa, heSoLoaiVe) VALUES
 
 -- 13. HÀNH KHÁCH
 INSERT INTO HanhKhach (maHanhKhach, tenHanhKhach, cccd, ngaySinh) VALUES
-('HK-001', N'Nguyễn Minh Tuấn', '079095001001', 1995),
-('HK-002', N'Trần Thị Hoa', '079096002002', 1996),
-('HK-003', N'Lê Văn Bình', '079097003003', 1997),
-('HK-004', N'Phạm Thị Chi', '079098004004', 1998),
-('HK-005', N'Hoàng Văn Đức', '079099005005', 1999),
-('HK-006', N'Vũ Thị Lan', '079000006006', 2000),
-('HK-007', N'Nguyễn Văn Giang', '079001007007', 2015),
-('HK-008', N'Trần Thị Hạnh', '079002008008', 1960);
+('HK-001', N'Nguyễn Minh Tuấn', '079095001001', '2005-02-18'),
+('HK-002', N'Trần Thị Hoa', '079096002002', '2005-02-18'),
+('HK-003', N'Lê Văn Bình', '079097003003', '2005-02-18'),
+('HK-004', N'Phạm Thị Chi', '079098004004', '2005-02-18'),
+('HK-005', N'Hoàng Văn Đức', '079099005005', '2005-02-18'),
+('HK-006', N'Vũ Thị Lan', '079000006006', '2005-02-18'),
+('HK-007', N'Nguyễn Văn Giang', '079001007007', '2005-02-18'),
+('HK-008', N'Trần Thị Hạnh', '079002008008', '2005-02-18');
 
 -- 14. KHUYẾN MÃI
 INSERT INTO KhuyenMai (maKhuyenMai, tenKhuyenMai, heSoKhuyenMai, ngayBatDau, ngayKetThuc, tongTienToiThieu, tienKhuyenMaiToiDa, trangThai) VALUES
@@ -348,14 +360,14 @@ INSERT INTO HoaDon (maHoaDon, maNhanVien, maKhachHang, ngayLapHoaDon, VAT, maKhu
 
 -- 16. VÉ
 INSERT INTO Ve (maVe, maLoaiVe, maChuyenTau, maHanhKhach, maGhe, maHoaDon, trangThai, giaVe) VALUES
-('V-001', 'LV-NL', 'CT-SE1-241020', 'HK-001', 'G-SE1-01-1-01', 'HD-001', N'Đã thanh toán', 600000),
-('V-002', 'LV-NL', 'CT-SE1-241020', 'HK-002', 'G-SE1-01-1-02', 'HD-001', N'Đã thanh toán', 600000),
-('V-003', 'LV-HSSV', 'CT-SE2-241020', 'HK-003', 'G-SE1-01-2-01', 'HD-002', N'Đã thanh toán', 800000),
-('V-004', 'LV-NL', 'CT-SE3-241021', 'HK-004', 'G-SE1-01-2-02', 'HD-003', N'Đã thanh toán', 600000),
-('V-005', 'LV-NL', 'CT-SE3-241021', 'HK-005', 'G-SE1-01-2-03', 'HD-003', N'Đã thanh toán', 600000),
-('V-006', 'LV-NL', 'CT-SE3-241021', 'HK-006', 'G-SE1-01-2-04', 'HD-003', N'Đã thanh toán', 600000),
-('V-007', 'LV-TE', 'CT-SE4-241021', 'HK-007', 'G-SE1-01-3-01', 'HD-004', N'Đã thanh toán', 600000),
-('V-008', 'LV-NL', 'CT-SE5-241022', 'HK-001', 'G-SE1-01-3-02', 'HD-005', N'Đã thanh toán', 600000),
-('V-009', 'LV-NL', 'CT-SE5-241022', 'HK-002', 'G-SE1-01-3-03', 'HD-005', N'Đã thanh toán', 600000),
-('V-010', 'LV-NL', 'CT-SE5-241022', 'HK-003', 'G-SE1-01-3-04', 'HD-005', N'Đã thanh toán', 600000),
-('V-011', 'LV-NC', 'CT-SE5-241022', 'HK-008', 'G-SE1-01-3-05', 'HD-005', N'Đã thanh toán', 600000);
+('V001', 'LV-NL', 'CT-SE1-241020', 'HK-001', 'G-SE1-01-1-01', 'HD-001', 1, 600000),
+('V002', 'LV-NL', 'CT-SE1-241020', 'HK-002', 'G-SE1-01-1-02', 'HD-001', 2, 600000),
+('V003', 'LV-HSSV', 'CT-SE2-241020', 'HK-003', 'G-SE1-01-2-01', 'HD-002', 3, 800000),
+('V004', 'LV-NL', 'CT-SE3-241021', 'HK-004', 'G-SE1-01-2-02', 'HD-003', 1, 600000),
+('V005', 'LV-NL', 'CT-SE3-241021', 'HK-005', 'G-SE1-01-2-03', 'HD-003', 1, 600000),
+('V006', 'LV-NL', 'CT-SE3-241021', 'HK-006', 'G-SE1-01-2-04', 'HD-003', 1, 600000),
+('V007', 'LV-TE', 'CT-SE4-241021', 'HK-007', 'G-SE1-01-3-01', 'HD-004', 1, 600000),
+('V008', 'LV-NL', 'CT-SE5-241022', 'HK-001', 'G-SE1-01-3-02', 'HD-005', 1, 600000),
+('V009', 'LV-NL', 'CT-SE5-241022', 'HK-002', 'G-SE1-01-3-03', 'HD-005', 1, 600000),
+('V010', 'LV-NL', 'CT-SE5-241022', 'HK-003', 'G-SE1-01-3-04', 'HD-005', 1, 600000),
+('V011', 'LV-NC', 'CT-SE5-241022', 'HK-008', 'G-SE1-01-3-05', 'HD-005', 1, 600000)

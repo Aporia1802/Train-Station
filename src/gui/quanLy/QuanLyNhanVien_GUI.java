@@ -167,7 +167,7 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
     private void handleActionLamMoi() {
             tbl_nhanVien.clearSelection();
             getTableData(bus.getAllNhanVien());
-            txt_timKiem.setText("Nhập sdt or cccd cần tìm...");
+            txt_timKiem.setText("Nhập sdt cần tìm...");
             txt_timKiem.setForeground(Color.GRAY);
         }
 

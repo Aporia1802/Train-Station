@@ -7,6 +7,7 @@ package gui.quanLy;
 import bus.QuanLyTau_BUS;
 import entity.Tau;
 import enums.TrangThaiTau;
+import java.awt.Color;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -94,7 +95,7 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
     }
 }
 
-        private void xoaTrang() {
+    private void xoaTrang() {
         // Xóa các ô nhập liệu văn bản
         txt_maTau.setText("");
         txt_tenTau.setText("");
@@ -113,6 +114,27 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         // Bỏ chọn hàng đang được chọn trong bảng (nếu có)
         tbl_tau.clearSelection();
     }
+    
+    private void handleActionTimKiem() {
+        String ma = txt_timKiem.getText().trim();
+        getTableData(bus.getTauTheoMa(ma));
+    }
+     
+     
+    private void handleActionLoc() {
+    // Lấy giá trị từ combobox
+    String trangThai = (String) cbo_trangThai.getSelectedItem();
+        getTableData(bus.filter(trangThai));
+}
+    private void handleActionLamMoi() {
+            tbl_tau.clearSelection();
+            getTableData(bus.getAllTau());
+            txt_timKiem.setText("Nhập mã tàu cần tìm...");
+            txt_timKiem.setForeground(Color.GRAY);
+        }
+
+        
+    
 
 
 
@@ -201,6 +223,11 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         pnl_btnTimKiem.setLayout(new java.awt.BorderLayout());
 
         btn_timKiem.setText("Tìm kiếm");
+        btn_timKiem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_timKiemActionPerformed(evt);
+            }
+        });
         pnl_btnTimKiem.add(btn_timKiem, java.awt.BorderLayout.CENTER);
 
         pnl_timKiem.add(pnl_btnTimKiem);
@@ -210,7 +237,7 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         pnl_cta.setPreferredSize(new java.awt.Dimension(500, 50));
         pnl_cta.setLayout(new java.awt.GridLayout(1, 0));
 
-        cbo_trangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Trạng thái", "Đang hoạt động", "Bảo trì", "Ngừng hoạt động" }));
+        cbo_trangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Trạng thái", "Hoạt động", "Bảo trì", "Ngừng hoạt động" }));
         cbo_trangThai.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbo_trangThaiActionPerformed(evt);
@@ -221,11 +248,21 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         btn_Loc.setText("Lọc");
         btn_Loc.setMaximumSize(new java.awt.Dimension(100, 50));
         btn_Loc.setPreferredSize(new java.awt.Dimension(100, 50));
+        btn_Loc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_LocActionPerformed(evt);
+            }
+        });
         pnl_cta.add(btn_Loc);
 
         btn_Reset.setText("Reset");
         btn_Reset.setMaximumSize(new java.awt.Dimension(100, 50));
         btn_Reset.setPreferredSize(new java.awt.Dimension(100, 50));
+        btn_Reset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_ResetActionPerformed(evt);
+            }
+        });
         pnl_cta.add(btn_Reset);
 
         pnl_top.add(pnl_cta);
@@ -477,6 +514,18 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
     private void tbl_tauMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_tauMouseClicked
         getThongTinTau();
     }//GEN-LAST:event_tbl_tauMouseClicked
+
+    private void btn_timKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_timKiemActionPerformed
+        handleActionTimKiem();
+    }//GEN-LAST:event_btn_timKiemActionPerformed
+
+    private void btn_LocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_LocActionPerformed
+        handleActionLoc();
+    }//GEN-LAST:event_btn_LocActionPerformed
+
+    private void btn_ResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ResetActionPerformed
+        handleActionLamMoi();
+    }//GEN-LAST:event_btn_ResetActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
