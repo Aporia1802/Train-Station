@@ -135,6 +135,8 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
     if (txt_ngaySinh.getDate() != null) {
     txt_ngaySinh.setDate(null);
     }
+   
+
 
      if (cbo_ChucVu.getItemCount() > 0) {
          cbo_ChucVu.setSelectedIndex(0); // "Tất cả" hoặc "Nam"

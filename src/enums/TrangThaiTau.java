@@ -28,6 +28,15 @@ public enum TrangThaiTau {
     public String getDisplay() {
         return display;
     }
+    public static TrangThaiTau fromDisplay(String display) {
+    for (TrangThaiTau t : TrangThaiTau.values()) {
+        if (t.getDisplay().equalsIgnoreCase(display.trim())) {
+            return t;
+        }
+    }
+    return null;
+}
+
 
     public boolean compare(int value) {
         return this.value == value;

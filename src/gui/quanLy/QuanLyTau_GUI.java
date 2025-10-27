@@ -50,8 +50,6 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         String[]newRow = {tau.getMaTau(),tau.getTenTau(),soLuongToaStr,suChuaStr,ngayHDStr,trangThaistr};
         tblModel_thongtinTau.addRow(newRow);
     }
-
-    
 }
     
     private void getThongTinTau() {
@@ -70,41 +68,53 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         txt_tenTau.setText(tenTau);
         txt_soLuongToa.setText(String.valueOf(soToaTau));
         txt_sucChua.setText(String.valueOf(sucChua));
-        
-        for (int i = 0; i < cbo_trangThai.getItemCount(); i++) {
-            String item = cbo_trangThai.getItemAt(i).toString().trim();
-            if (item.equalsIgnoreCase(trangThaiStr)) {
-                cbo_trangThai.setSelectedIndex(i);
+
+        // Gán trạng thái vào combobox
+        for (int i = 0; i < jComboBox1.getItemCount(); i++) {
+            String item = jComboBox1.getItemAt(i).trim();
+            if (item.equalsIgnoreCase(trangThaiStr.trim())) {
+                jComboBox1.setSelectedIndex(i);
                 break;
             }
         }
 
-
-       if (ngayHoatDongStr != null && !ngayHoatDongStr.isEmpty()) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            LocalDate localDate = LocalDate.parse(ngayHoatDongStr, formatter);
-            java.util.Date ngaySinh = java.sql.Date.valueOf(localDate);
-            txt_ngayHD.setDate(ngaySinh); // Gán vào JDateChooser
-        } else {
-            txt_ngayHD.setDate(null); // Nếu trống thì xóa giá trị
-        }
+        // Gán ngày hoạt động vào JDateChooser
+        if (ngayHoatDongStr != null && !ngayHoatDongStr.isEmpty()) {
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDate localDate = LocalDate.parse(ngayHoatDongStr, formatter);
+                java.util.Date ngayHoatDong = java.sql.Date.valueOf(localDate);
+                txt_ngayHD.setDate(ngayHoatDong);
+            } catch (Exception e) { 
+                txt_ngayHD.setDate(null);
             }
+        } else {
+            txt_ngayHD.setDate(null);
         }
+    }
+}
+
+        private void xoaTrang() {
+        // Xóa các ô nhập liệu văn bản
+        txt_maTau.setText("");
+        txt_tenTau.setText("");
+        txt_soLuongToa.setText("");
+        txt_sucChua.setText("");
+        txt_timKiem.setText("");
+
+         // Xóa ngày sinh
+        if (txt_ngayHD.getDate() != null) {
+        txt_ngayHD.setDate(null);
+        }
+  
+        if (jComboBox1.getItemCount() > 0) {
+            jComboBox1.setSelectedIndex(0); // "Tất cả" hoặc "Nam"
+        }
+        // Bỏ chọn hàng đang được chọn trong bảng (nếu có)
+        tbl_tau.clearSelection();
+    }
 
 
-//        // Xử lý trạng thái (chuyển chuỗi -> enum)
-//        TrangThaiTau trangThai = switch (trangThaiStr) {
-//            case "Hoạt động" -> TrangThaiTau.HOAT_DONG;
-//            case "Bảo trì" -> TrangThaiTau.BAO_TRI;
-//            case "Ngừng hoạt động" -> TrangThaiTau.NGUNG_HOAT_DONG;
-//            default -> null;
-//        };
-
-        // Nếu combo chứa chuỗi tiếng Việt, chọn theo tên hiển thị
-        
-   
-
-   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -145,7 +155,7 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         lbl_sucChua = new javax.swing.JLabel();
         txt_sucChua = new javax.swing.JTextField();
         pnl_ngayHD = new javax.swing.JPanel();
-        lbl_sucChua1 = new javax.swing.JLabel();
+        lbl_NgayHD = new javax.swing.JLabel();
         txt_ngayHD = new com.toedter.calendar.JDateChooser();
         pnl_trangThai = new javax.swing.JPanel();
         lbl_trangThai = new javax.swing.JLabel();
@@ -357,11 +367,11 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         pnl_ngayHD.setPreferredSize(pnl_maTau.getPreferredSize());
         pnl_ngayHD.setLayout(new javax.swing.BoxLayout(pnl_ngayHD, javax.swing.BoxLayout.LINE_AXIS));
 
-        lbl_sucChua1.setText("Sức chứa:");
-        lbl_sucChua1.setMaximumSize(new java.awt.Dimension(45, 16));
-        lbl_sucChua1.setMinimumSize(new java.awt.Dimension(45, 16));
-        lbl_sucChua1.setPreferredSize(new java.awt.Dimension(100, 16));
-        pnl_ngayHD.add(lbl_sucChua1);
+        lbl_NgayHD.setText("Ngày hoạt động:");
+        lbl_NgayHD.setMaximumSize(new java.awt.Dimension(45, 16));
+        lbl_NgayHD.setMinimumSize(new java.awt.Dimension(45, 16));
+        lbl_NgayHD.setPreferredSize(new java.awt.Dimension(100, 16));
+        pnl_ngayHD.add(lbl_NgayHD);
         pnl_ngayHD.add(txt_ngayHD);
 
         pnl_thongTinNhanVien.add(pnl_ngayHD);
@@ -374,7 +384,7 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         lbl_trangThai.setPreferredSize(new java.awt.Dimension(100, 16));
         pnl_trangThai.add(lbl_trangThai);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Đang hoạt động", "Bảo trì", "Ngừng hoạt động" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Bảo trì", "Hoạt động", "Ngừng hoạt động" }));
         jComboBox1.setMaximumSize(new java.awt.Dimension(32767, 40));
         jComboBox1.setPreferredSize(new java.awt.Dimension(230, 40));
         pnl_trangThai.add(jComboBox1);
@@ -461,7 +471,7 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_themActionPerformed
 
     private void btn_xoaTrangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_xoaTrangActionPerformed
-        // TODO add your handling code here:
+        xoaTrang();
     }//GEN-LAST:event_btn_xoaTrangActionPerformed
 
     private void tbl_tauMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_tauMouseClicked
@@ -481,10 +491,10 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JLabel lbl_NgayHD;
     private javax.swing.JLabel lbl_maTau;
     private javax.swing.JLabel lbl_soLuongToa;
     private javax.swing.JLabel lbl_sucChua;
-    private javax.swing.JLabel lbl_sucChua1;
     private javax.swing.JLabel lbl_tenTau;
     private javax.swing.JLabel lbl_trangThai;
     private javax.swing.JPanel pnl_btnGroup;

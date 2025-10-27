@@ -445,9 +445,9 @@
 
                       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
                       <SubComponents>
-                        <Component class="javax.swing.JLabel" name="lbl_sucChua1">
+                        <Component class="javax.swing.JLabel" name="lbl_NgayHD">
                           <Properties>
-                            <Property name="text" type="java.lang.String" value="S&#x1ee9;c ch&#x1ee9;a:"/>
+                            <Property name="text" type="java.lang.String" value="Ng&#xe0;y ho&#x1ea1;t &#x111;&#x1ed9;ng:"/>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                               <Dimension value="[45, 16]"/>
                             </Property>
@@ -487,8 +487,8 @@
                           <Properties>
                             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                               <StringArray count="3">
-                                <StringItem index="0" value="&#x110;ang ho&#x1ea1;t &#x111;&#x1ed9;ng"/>
-                                <StringItem index="1" value="B&#x1ea3;o tr&#xec;"/>
+                                <StringItem index="0" value="B&#x1ea3;o tr&#xec;"/>
+                                <StringItem index="1" value="Ho&#x1ea1;t &#x111;&#x1ed9;ng"/>
                                 <StringItem index="2" value="Ng&#x1eeb;ng ho&#x1ea1;t &#x111;&#x1ed9;ng"/>
                               </StringArray>
                             </Property>

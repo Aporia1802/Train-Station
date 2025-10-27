@@ -53,7 +53,7 @@ CREATE TABLE Tau (
     soToaTau INT NOT NULL,
     sucChua INT NOT NULL,
     ngayHoatDong DATE NOT NULL,
-    trangThai VARCHAR(20) NOT NULL,
+    trangThai NVARCHAR(20) NOT NULL,
 );
 
 -- 6. BẢNG TOA TÀU
