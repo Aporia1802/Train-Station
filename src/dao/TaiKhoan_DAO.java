@@ -54,7 +54,20 @@ public class TaiKhoan_DAO implements DAOBase<TaiKhoan> {
 
     @Override
     public Boolean create(TaiKhoan object) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        int n = 0;
+        String sql = "INSERT INTO TaiKhoan (tenDangNhap, matKhau, maNV) VALUES (?, ?, ?)";
+    
+        try {
+            PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
+            st.setString(1, object.getTenDangNhap());
+            st.setString(2, object.getMatKhau());
+            st.setString(3, object.getNhanVien().getMaNV());
+        
+            n = st.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return n > 0;
     }
 
     @Override

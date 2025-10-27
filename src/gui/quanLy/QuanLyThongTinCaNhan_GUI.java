@@ -270,6 +270,7 @@ public class QuanLyThongTinCaNhan_GUI extends javax.swing.JPanel {
         txt_maNV.setEditable(false);
         txt_maNV.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         txt_maNV.setEnabled(false);
+        txt_maNV.setMaximumSize(new java.awt.Dimension(2147483647, 50));
         txt_maNV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_maNVActionPerformed(evt);

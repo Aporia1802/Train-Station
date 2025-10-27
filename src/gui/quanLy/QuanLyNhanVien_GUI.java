@@ -7,10 +7,24 @@ package gui.quanLy;
 import bus.QuanLyNhanVien_BUS;
 import entity.NhanVien;
 import java.awt.Color;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
+import javax.swing.JFileChooser;
 import javax.swing.table.DefaultTableModel;
+import main.Application;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.streaming.*;
+import raven.toast.Notifications;
 
 /**
  *
@@ -23,6 +37,7 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
      */
     private QuanLyNhanVien_BUS bus;
     private DefaultTableModel tblModel_thongtinNhanVien;
+    private static CellStyle cellStyleFormatNumber = null;
     
     
     public QuanLyNhanVien_GUI() {
@@ -52,9 +67,6 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
            tblModel_thongtinNhanVien.addRow(newRow);
        }
    }
-
-    
-    
     private void getThongTinNhanVien() {
     int row = tbl_nhanVien.getSelectedRow(); // lấy dòng được chọn
     if (row != -1) {
@@ -86,10 +98,6 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
                  break;
              }
          }
-        
-        
-
-
         // Giới tính
         if (gioiTinh.equalsIgnoreCase("Nam")) {
             rad_Nam.setSelected(true);
@@ -115,38 +123,76 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
         }
             }
         }
+    
+    public NhanVien getFormData() throws Exception {
+        String maNV = txt_maNV.getText().trim();
+        String tenNV = txt_hoTen.getText().trim();
+        String email = txt_email.getText().trim();
+        String sdt = txt_sdt.getText().trim();
+        String cccd = txt_cccd.getText().trim();
+        String diaChi = txt_diaChi.getText().trim();
+        String chucVu = cbo_ChucVu.getSelectedItem().toString();
+        
+        // Giới tính
+        boolean gioiTinh = rad_Nam.isSelected(); // true = Nam, false = Nữ
+
+        // Ngày sinh
+        LocalDate ngaySinh = txt_ngaySinh.getDate().toInstant()
+                                 .atZone(ZoneId.systemDefault())
+                                 .toLocalDate();
+
+        // Trạng thái
+        boolean trangThai = rad_tt1.isSelected(); // true = Đang làm, false = Nghỉ
+
+
+        // Tạo đối tượng NhanVien
+        NhanVien nv = new NhanVien();
+        nv.setMaNV(maNV);
+        nv.setTenNV(tenNV);
+        nv.setGioiTinh(gioiTinh);
+        nv.setNgaySinh(ngaySinh);
+        nv.setEmail(email);
+        nv.setSoDienThoai(sdt);
+        nv.setCccd(cccd);
+        nv.setDiaChi(diaChi);
+        nv.setChucVu(chucVu);
+        nv.setTrangThai(trangThai);
+
+        return nv;
+    } 
+
+
 
     private void handleActionXoaTrang() {
-         tbl_nhanVien.clearSelection();
+        tbl_nhanVien.clearSelection();
 
-    // Xóa nội dung trong các ô nhập liệu
-    txt_maNV.setText("");
-    txt_hoTen.setText("");
-    txt_diaChi.setText("");
-    txt_email.setText("");
-    txt_sdt.setText("");
-    txt_cccd.setText("");
+        // Xóa nội dung trong các ô nhập liệu
+        txt_maNV.setText("");
+        txt_hoTen.setText("");
+        txt_diaChi.setText("");
+        txt_email.setText("");
+        txt_sdt.setText("");
+        txt_cccd.setText("");
 
-    // Đặt lại giới tính về mặc định (Nam)
-    rad_Nam.setSelected(true);
-    rad_Nu.setSelected(false);
+        // Đặt lại giới tính về mặc định (Nam)
+        rad_Nam.setSelected(true);
+        rad_Nu.setSelected(false);
 
-    // Xóa ngày sinh
-    if (txt_ngaySinh.getDate() != null) {
-    txt_ngaySinh.setDate(null);
-    }
+        // Xóa ngày sinh
+        if (txt_ngaySinh.getDate() != null) {
+            txt_ngaySinh.setDate(new Date());
+        }
 
-     if (cbo_ChucVu.getItemCount() > 0) {
-         cbo_ChucVu.setSelectedIndex(0); // "Tất cả" hoặc "Nam"
-     }
+        if (cbo_ChucVu.getItemCount() > 0) {
+            cbo_ChucVu.setSelectedIndex(0); // "Tất cả" hoặc "Nam"
+        }
 
-    // Đặt trạng thái về mặc định (Đang làm)
-    rad_tt1.setSelected(true);
-    rad_tt2.setSelected(false);
+        // Đặt trạng thái về mặc định (Đang làm)
+        rad_tt1.setSelected(true);
+        rad_tt2.setSelected(false);
 
-    // Đưa focus về ô đầu tiên (nếu muốn)
-    txt_maNV.requestFocus();
-      
+        // Đưa focus về ô đầu tiên (nếu muốn)
+        txt_maNV.requestFocus();
     }
     
     private void handleActionTimKiem() {
@@ -156,18 +202,198 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
      
      
     private void handleActionLoc() {
-    // Lấy giá trị từ combobox
-    String chucVu = (String) cbo_chucVu.getSelectedItem();
-    String trangThai = (String) cbo_trangThai.getSelectedItem();
+    //  Lấy giá trị từ combobox
+        String chucVu = (String) cbo_chucVu.getSelectedItem();
+        String trangThai = (String) cbo_trangThai.getSelectedItem();
 
         getTableData(bus.filter(chucVu, trangThai));
-}
+    }
+    
     private void handleActionLamMoi() {
-            tbl_nhanVien.clearSelection();
-            getTableData(bus.getAllNhanVien());
-            txt_timKiem.setText("Nhập sdt or cccd cần tìm...");
-            txt_timKiem.setForeground(Color.GRAY);
+        tbl_nhanVien.clearSelection();
+        getTableData(bus.getAllNhanVien());
+        txt_timKiem.setText("Nhập sdt or cccd cần tìm...");
+        txt_timKiem.setForeground(Color.GRAY);
+    }
+    
+    private void handleCapNhat() {
+        try {
+            if(tbl_nhanVien.getSelectedRow() == -1) {
+                Notifications.getInstance().show(Notifications.Type.ERROR, "Chưa chọn nhân viên cần thay đổi thông tin!");
+                return;
+            }
+            
+            NhanVien nv = getFormData();
+            if(bus.capNhatNhanVien(nv)) {
+                Notifications.getInstance().show(Notifications.Type.SUCCESS, "Cập nhật thành công!");
+                getTableData(bus.getAllNhanVien());
+                handleActionXoaTrang();
+            } 
+        } catch (Exception e) {
+            Notifications.getInstance().show(Notifications.Type.ERROR, "Cập nhật thất bại!");
         }
+    }
+    
+    private void handleThemNV() {
+        try {
+           String maNV  = bus.generateID();
+            
+            NhanVien nv = getFormData();
+            nv.setMaNV(maNV);
+            if(bus.themNhanVien(nv)) {
+                Notifications.getInstance().show(Notifications.Type.SUCCESS, "Thêm mới thành công!");
+                getTableData(bus.getAllNhanVien());
+                handleActionXoaTrang();
+            } 
+        } catch (Exception e) {
+            Notifications.getInstance().show(Notifications.Type.ERROR, "Thêm thất bại!");
+        }
+    }
+    
+    private void createExcel(ArrayList<NhanVien> dsNhanVien, String filePath) {
+        try {
+            SXSSFWorkbook workbook = new SXSSFWorkbook();
+            SXSSFSheet sheet = workbook.createSheet("Danh Sách Nhân Viên");
+            
+            sheet.trackAllColumnsForAutoSizing();
+            int rowIndex = 0;
+            writeHeader(sheet, rowIndex);
+            rowIndex = 4;
+            for (NhanVien nv: dsNhanVien) {
+                SXSSFRow row = sheet.createRow(rowIndex);
+                writeEmployee(nv, row);
+                rowIndex++;
+            }
+            writeFooter(sheet, rowIndex);
+            
+            createOutputFile(workbook, filePath);
+            Notifications.getInstance().show(Notifications.Type.SUCCESS, "Xuất file thành công!");
+         
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+    private static void writeHeader(SXSSFSheet sheet, int rowIndex) {
+        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 8));
+        sheet.addMergedRegion(new CellRangeAddress(1, 1, 0, 3));
+        sheet.addMergedRegion(new CellRangeAddress(2, 2, 0, 3));
+
+        String[] title = {"MÃ NHÂN VIÊN", "TÊN NHÂN VIÊN", "GIỚI TÍNH", "NGÀY SINH", "CHỨC VỤ", "TRẠNG THÁI", "SỐ ĐIỆN THOẠI", "CĂN CƯỚC CÔNG DÂN", "ĐỊA CHỈ"};
+
+        CellStyle cellStyle = createStyleForHeader(sheet);
+        CellStyle headerCellStyle = createStyleForTitle(sheet);
+        
+        SXSSFRow headerRow = sheet.createRow(rowIndex++);
+        SXSSFCell headerCell = headerRow.createCell(0);
+        headerCell.setCellValue("DANH SÁCH NHÂN VIÊN");
+        headerCell.setCellStyle(headerCellStyle);
+        
+        SXSSFRow dateRow = sheet.createRow(rowIndex++);
+        SXSSFCell dateCell = dateRow.createCell(0);
+        dateCell.setCellValue("Ngày in: " + LocalDate.now());
+        
+        SXSSFRow empRow = sheet.createRow(rowIndex++);
+        SXSSFCell empCell = empRow.createCell(0);
+        empCell.setCellValue("Nhân viên in: " + Application.nhanVien.getTenNV());
+        
+        SXSSFRow row = sheet.createRow(rowIndex++);
+        
+        // Create cells
+        SXSSFCell cell = row.createCell(0);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("MÃ NHÂN VIÊN");
+        for (int i = 0; i < title.length - 1; i++) {
+            cell = row.createCell(i+1);
+            cell.setCellStyle(cellStyle);
+            cell.setCellValue(title[i+1]);
+        }        
+    }
+    private void writeEmployee(NhanVien nv, SXSSFRow row) {
+        if (cellStyleFormatNumber == null) {
+            short format = (short) BuiltinFormats.getBuiltinFormat("#,##0");
+            SXSSFWorkbook workbook = row.getSheet().getWorkbook();
+            cellStyleFormatNumber = workbook.createCellStyle();
+            cellStyleFormatNumber.setDataFormat(format);
+        }
+ 
+        SXSSFCell cell = row.createCell(0);
+        cell.setCellValue(nv.getMaNV());
+ 
+        cell = row.createCell(1);
+        cell.setCellValue(nv.getTenNV());
+ 
+        cell = row.createCell(2);
+        String gender = "Nam";
+        if(!nv.isGioiTinh())
+            gender = "Nữ";
+        cell.setCellValue(gender);
+        
+ 
+        cell = row.createCell(3);
+        cell.setCellValue(nv.getNgaySinh().toString());
+        
+        cell = row.createCell(4);
+        cell.setCellValue(nv.getChucVu());
+        
+        cell = row.createCell(5);
+        String status = "Đã nghỉ";
+        if(nv.isTrangThai())
+            status = "Đang làm việc";
+        cell.setCellValue(status);
+        
+        cell = row.createCell(6);
+        cell.setCellValue(nv.getSoDienThoai());
+        
+        cell = row.createCell(7);
+        cell.setCellValue(nv.getCccd());
+        
+        cell = row.createCell(8);
+        cell.setCellValue(nv.getDiaChi());
+    }
+    private void writeFooter(SXSSFSheet sheet, int rowIndex) {
+        SXSSFRow row = sheet.createRow(rowIndex);
+        SXSSFCell cell = row.createCell(9, CellType.FORMULA);
+        cell.setCellFormula("COUNT(A2:A11)");
+    }
+    private static CellStyle createStyleForTitle(Sheet sheet) {
+        Font font = sheet.getWorkbook().createFont();
+        font.setFontName("Times New Roman");
+        font.setBold(true);
+        font.setFontHeightInPoints((short) 20); // font size
+        font.setColor(IndexedColors.GREEN.getIndex()); // text color
+        
+ 
+        // Create CellStyle
+        CellStyle cellStyle = sheet.getWorkbook().createCellStyle();
+        cellStyle.setFont(font);
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        return cellStyle;
+    }
+    private static CellStyle createStyleForHeader(Sheet sheet) {
+        // Create font
+        Font font = sheet.getWorkbook().createFont();
+        font.setFontName("Times New Roman");
+        font.setBold(true);
+        font.setFontHeightInPoints((short) 14); // font size
+        font.setColor(IndexedColors.VIOLET.getIndex()); // text color
+ 
+        // Create CellStyle
+        CellStyle cellStyle = sheet.getWorkbook().createCellStyle();
+        cellStyle.setFont(font);
+        cellStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        cellStyle.setBorderBottom(BorderStyle.THIN);
+        cellStyle.setBorderTop(BorderStyle.THIN);
+        cellStyle.setBorderLeft(BorderStyle.THIN);
+        cellStyle.setBorderRight(BorderStyle.THIN);
+        return cellStyle;
+    }
+    private static void createOutputFile(SXSSFWorkbook workbook, String excelFilePath) throws FileNotFoundException, IOException {
+        try (OutputStream os = new FileOutputStream(excelFilePath)) {
+            workbook.write(os);
+        }
+    }
 
 
     @SuppressWarnings("unchecked")
@@ -230,9 +456,8 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
         jPanel5 = new javax.swing.JPanel();
         btn_xoaTrang = new javax.swing.JButton();
         btn_capNhat = new javax.swing.JButton();
-        btn_datLaiMK = new javax.swing.JButton();
-        btn_xuatExcel = new javax.swing.JButton();
         btn_themNV = new javax.swing.JButton();
+        btn_xuatExcel = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(1366, 768));
         setLayout(new java.awt.BorderLayout());
@@ -246,11 +471,6 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
         pnl_timKiem.setLayout(new javax.swing.BoxLayout(pnl_timKiem, javax.swing.BoxLayout.LINE_AXIS));
 
         txt_timKiem.setPreferredSize(new java.awt.Dimension(500, 30));
-        txt_timKiem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_timKiemActionPerformed(evt);
-            }
-        });
         pnl_timKiem.add(txt_timKiem);
 
         pnl_btnTimKiem.setPreferredSize(new java.awt.Dimension(79, 23));
@@ -273,19 +493,9 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
 
         cbo_chucVu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Chức vụ", "Nhân viên quản lý", "Nhân viên bán vé" }));
         cbo_chucVu.setToolTipText("");
-        cbo_chucVu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbo_chucVuActionPerformed(evt);
-            }
-        });
         pnl_cta.add(cbo_chucVu);
 
         cbo_trangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Trạng thái", "Đang làm", "Đã nghỉ" }));
-        cbo_trangThai.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbo_trangThaiActionPerformed(evt);
-            }
-        });
         pnl_cta.add(cbo_trangThai);
 
         btn_Loc.setText("Lọc");
@@ -375,11 +585,6 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
         txt_maNV.setEnabled(false);
         txt_maNV.setMaximumSize(new java.awt.Dimension(2147483647, 40));
         txt_maNV.setPreferredSize(new java.awt.Dimension(64, 40));
-        txt_maNV.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_maNVActionPerformed(evt);
-            }
-        });
         pnl_MaNV.add(txt_maNV);
 
         pnl_thongTinNhanVien.add(pnl_MaNV);
@@ -422,11 +627,6 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
 
         buttonGroup1.add(rad_Nu);
         rad_Nu.setText("Nữ");
-        rad_Nu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rad_NuActionPerformed(evt);
-            }
-        });
         pnl_radGroup.add(rad_Nu);
 
         pnl_gioiTinh.add(pnl_radGroup);
@@ -464,11 +664,6 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
         txt_email.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         txt_email.setMaximumSize(new java.awt.Dimension(2147483647, 40));
         txt_email.setPreferredSize(new java.awt.Dimension(64, 40));
-        txt_email.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_emailActionPerformed(evt);
-            }
-        });
         pnl_email.add(txt_email);
 
         pnl_thongTinNhanVien.add(pnl_email);
@@ -517,11 +712,6 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
         txt_diaChi.setMaximumSize(txt_maNV.getMaximumSize());
         txt_diaChi.setMinimumSize(new java.awt.Dimension(64, 30));
         txt_diaChi.setPreferredSize(txt_maNV.getPreferredSize());
-        txt_diaChi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_diaChiActionPerformed(evt);
-            }
-        });
         pnl_diaChi.add(txt_diaChi);
 
         pnl_thongTinNhanVien.add(pnl_diaChi);
@@ -555,11 +745,6 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
 
         buttonGroup2.add(rad_tt1);
         rad_tt1.setText("Đang làm");
-        rad_tt1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rad_tt1ActionPerformed(evt);
-            }
-        });
         pnl_radGroup2.add(rad_tt1);
 
         buttonGroup2.add(rad_tt2);
@@ -572,12 +757,12 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
 
         pnl_container.add(pnl_thongTinNhanVien, java.awt.BorderLayout.CENTER);
 
-        pnl_btnGroup.setMaximumSize(new java.awt.Dimension(260, 100));
-        pnl_btnGroup.setMinimumSize(new java.awt.Dimension(220, 100));
-        pnl_btnGroup.setPreferredSize(new java.awt.Dimension(245, 150));
+        pnl_btnGroup.setPreferredSize(new java.awt.Dimension(10, 100));
         pnl_btnGroup.setLayout(new java.awt.BorderLayout());
 
-        jPanel5.setLayout(new java.awt.GridLayout(2, 2, 5, 5));
+        jPanel5.setMaximumSize(new java.awt.Dimension(32767, 100));
+        jPanel5.setMinimumSize(new java.awt.Dimension(281, 100));
+        jPanel5.setLayout(new java.awt.GridLayout(2, 2, 3, 3));
 
         btn_xoaTrang.setText("Xóa trắng");
         btn_xoaTrang.setMaximumSize(new java.awt.Dimension(120, 50));
@@ -599,28 +784,28 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
         });
         jPanel5.add(btn_capNhat);
 
-        btn_datLaiMK.setText("Đặt lại mật khẩu");
-        btn_datLaiMK.setMaximumSize(new java.awt.Dimension(120, 50));
-        btn_datLaiMK.setPreferredSize(new java.awt.Dimension(120, 50));
-        btn_datLaiMK.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_datLaiMKActionPerformed(evt);
-            }
-        });
-        jPanel5.add(btn_datLaiMK);
-
-        btn_xuatExcel.setText("Xuất Excel");
-        btn_xuatExcel.setMaximumSize(new java.awt.Dimension(120, 50));
-        btn_xuatExcel.setPreferredSize(new java.awt.Dimension(120, 50));
-        jPanel5.add(btn_xuatExcel);
-
-        pnl_btnGroup.add(jPanel5, java.awt.BorderLayout.CENTER);
-
         btn_themNV.setText("Thêm nhân viên");
         btn_themNV.setMaximumSize(new java.awt.Dimension(139, 23));
         btn_themNV.setMinimumSize(new java.awt.Dimension(139, 23));
         btn_themNV.setPreferredSize(new java.awt.Dimension(72, 50));
-        pnl_btnGroup.add(btn_themNV, java.awt.BorderLayout.PAGE_END);
+        btn_themNV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_themNVActionPerformed(evt);
+            }
+        });
+        jPanel5.add(btn_themNV);
+
+        btn_xuatExcel.setText("Xuất Excel");
+        btn_xuatExcel.setMaximumSize(new java.awt.Dimension(120, 50));
+        btn_xuatExcel.setPreferredSize(new java.awt.Dimension(120, 50));
+        btn_xuatExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_xuatExcelActionPerformed(evt);
+            }
+        });
+        jPanel5.add(btn_xuatExcel);
+
+        pnl_btnGroup.add(jPanel5, java.awt.BorderLayout.CENTER);
 
         pnl_container.add(pnl_btnGroup, java.awt.BorderLayout.PAGE_END);
 
@@ -631,45 +816,10 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
         add(pnl_center, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txt_timKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_timKiemActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_timKiemActionPerformed
-
-    private void cbo_chucVuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbo_chucVuActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbo_chucVuActionPerformed
-
-    private void txt_diaChiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_diaChiActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_diaChiActionPerformed
-
-    private void rad_NuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rad_NuActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_rad_NuActionPerformed
-
-    private void txt_maNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_maNVActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_maNVActionPerformed
-
-    private void cbo_trangThaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbo_trangThaiActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbo_trangThaiActionPerformed
-
-    private void rad_tt1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rad_tt1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_rad_tt1ActionPerformed
-
-    private void btn_datLaiMKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_datLaiMKActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btn_datLaiMKActionPerformed
-
     private void btn_capNhatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_capNhatActionPerformed
         // TODO add your handling code here:
+        handleCapNhat();
     }//GEN-LAST:event_btn_capNhatActionPerformed
-
-    private void txt_emailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_emailActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_emailActionPerformed
 
     private void btn_xoaTrangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_xoaTrangActionPerformed
         handleActionXoaTrang();
@@ -691,12 +841,38 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
         handleActionLamMoi();
     }//GEN-LAST:event_btn_ResetActionPerformed
 
+    private void btn_themNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_themNVActionPerformed
+        // TODO add your handling code here:
+        handleThemNV();
+    }//GEN-LAST:event_btn_themNVActionPerformed
+
+    private void btn_xuatExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_xuatExcelActionPerformed
+        // TODO add your handling code here:
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Chọn đường dẫn và tên file");
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+        // Hiển thị hộp thoại và kiểm tra nếu người dùng chọn OK
+        int userSelection = fileChooser.showSaveDialog(null);
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            try {
+                // Lấy đường dẫn và tên file được chọn
+                File fileToSave = fileChooser.getSelectedFile();
+                String filePath = fileToSave.getAbsolutePath();
+                // Gọi phương thức để tạo file Excel với đường dẫn và tên file đã chọn
+                createExcel(bus.getAllNhanVien(), filePath+".xlsx");
+                Desktop.getDesktop().open(new File(filePath+".xlsx"));
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_btn_xuatExcelActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_Loc;
     private javax.swing.JButton btn_Reset;
     private javax.swing.JButton btn_capNhat;
-    private javax.swing.JButton btn_datLaiMK;
     private javax.swing.JButton btn_themNV;
     private javax.swing.JButton btn_timKiem;
     private javax.swing.JButton btn_xoaTrang;

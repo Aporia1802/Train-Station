@@ -4,17 +4,61 @@
  */
 package gui.traCuu;
 
+import bus.TraCuuTau_BUS;
+import entity.Tau;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author CÔNG HOÀNG
  */
 public class TraCuuTau_GUI extends javax.swing.JPanel {
-
+    private TraCuuTau_BUS bus;
+    private DefaultTableModel tblModel_thongTinTau;
     /**
      * Creates new form TraCuuTau_GUI
      */
     public TraCuuTau_GUI() {
         initComponents();
+        init();
+    }
+    
+    private void init() {
+        bus = new TraCuuTau_BUS();
+        String[] columns = {"Mã tàu", "Tên tàu", "Số lượng toa", "Sức chứa", "Trạng thái"};
+        tblModel_thongTinTau = new DefaultTableModel(columns, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        tbl_thongTinTau.setModel(tblModel_thongTinTau);
+        
+        loadDataToTable(bus.getAllTau());
+    }
+    
+    private void loadDataToTable(ArrayList<Tau> dsTau) {
+        tblModel_thongTinTau.setRowCount(0);
+        for(Tau tau : dsTau) {
+            String[] newRow = {tau.getMaTau(), tau.getTenTau(), String.valueOf(tau.getSoToaTau()), String.valueOf(tau.getSucChua()), tau.getTrangThai().getDisplayName()};
+            tblModel_thongTinTau.addRow(newRow);
+        }
+    }
+    
+    private void handleTimKiem() {
+        String maTau = txt_maTau.getText().trim();
+        String tenTau = txt_tenTau.getText().trim();
+        int trangThai = cbo_trangThai.getSelectedIndex();
+        
+        loadDataToTable(bus.timKiemTau(maTau, tenTau, trangThai));
+    }
+    
+    private void handleXoaTrang() {
+        txt_maTau.setText("");
+        txt_tenTau.setText("");
+        cbo_trangThai.setSelectedIndex(0);
+        loadDataToTable(bus.getAllTau());
     }
 
     /**
@@ -31,13 +75,10 @@ public class TraCuuTau_GUI extends javax.swing.JPanel {
         pnl_ga = new javax.swing.JPanel();
         lbl_maTau = new javax.swing.JLabel();
         txt_maTau = new javax.swing.JTextField();
-        lbl_next2 = new javax.swing.JLabel();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         lbl_tenTau = new javax.swing.JLabel();
         txt_tenTau = new javax.swing.JTextField();
-        pnl_ngay = new javax.swing.JPanel();
-        lbl_sucChua = new javax.swing.JLabel();
-        txt_sucChua = new javax.swing.JTextField();
-        lbl_next1 = new javax.swing.JLabel();
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         lbl_trangThai = new javax.swing.JLabel();
         cbo_trangThai = new javax.swing.JComboBox<>();
         pnl_timKiem = new javax.swing.JPanel();
@@ -51,10 +92,10 @@ public class TraCuuTau_GUI extends javax.swing.JPanel {
         setLayout(new java.awt.BorderLayout());
 
         pnl_header.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        pnl_header.setPreferredSize(new java.awt.Dimension(1366, 250));
+        pnl_header.setPreferredSize(new java.awt.Dimension(1366, 200));
         pnl_header.setLayout(new java.awt.BorderLayout());
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder("Thông tin tàu"), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        jPanel2.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder(null, "Thông tin tàu", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 14), new java.awt.Color(123, 17, 19)), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10))); // NOI18N
         jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.Y_AXIS));
 
         pnl_ga.setMaximumSize(new java.awt.Dimension(65736, 70));
@@ -69,10 +110,7 @@ public class TraCuuTau_GUI extends javax.swing.JPanel {
 
         txt_maTau.setMaximumSize(new java.awt.Dimension(2147483647, 50));
         pnl_ga.add(txt_maTau);
-
-        lbl_next2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbl_next2.setPreferredSize(new java.awt.Dimension(70, 16));
-        pnl_ga.add(lbl_next2);
+        pnl_ga.add(filler1);
 
         lbl_tenTau.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lbl_tenTau.setText("Tên tàu:");
@@ -81,37 +119,19 @@ public class TraCuuTau_GUI extends javax.swing.JPanel {
 
         txt_tenTau.setMaximumSize(new java.awt.Dimension(2147483647, 50));
         pnl_ga.add(txt_tenTau);
-
-        jPanel2.add(pnl_ga);
-
-        pnl_ngay.setMaximumSize(new java.awt.Dimension(65679, 70));
-        pnl_ngay.setMinimumSize(new java.awt.Dimension(1000, 25));
-        pnl_ngay.setLayout(new javax.swing.BoxLayout(pnl_ngay, javax.swing.BoxLayout.LINE_AXIS));
-
-        lbl_sucChua.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        lbl_sucChua.setText("Sức chứa:");
-        lbl_sucChua.setPreferredSize(new java.awt.Dimension(80, 25));
-        pnl_ngay.add(lbl_sucChua);
-
-        txt_sucChua.setMaximumSize(txt_maTau.getMaximumSize());
-        txt_sucChua.setPreferredSize(txt_maTau.getPreferredSize());
-        pnl_ngay.add(txt_sucChua);
-
-        lbl_next1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbl_next1.setPreferredSize(new java.awt.Dimension(70, 16));
-        pnl_ngay.add(lbl_next1);
+        pnl_ga.add(filler2);
 
         lbl_trangThai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lbl_trangThai.setText("Trạng thái:");
         lbl_trangThai.setPreferredSize(new java.awt.Dimension(80, 25));
-        pnl_ngay.add(lbl_trangThai);
+        pnl_ga.add(lbl_trangThai);
 
-        cbo_trangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả", "Đang hoạt động", "Ngừng hoạt động", "Bảo trì" }));
+        cbo_trangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả", "Hoạt động", "Bảo trì", "Ngừng hoạt động" }));
         cbo_trangThai.setMaximumSize(txt_maTau.getMaximumSize());
         cbo_trangThai.setPreferredSize(txt_maTau.getPreferredSize());
-        pnl_ngay.add(cbo_trangThai);
+        pnl_ga.add(cbo_trangThai);
 
-        jPanel2.add(pnl_ngay);
+        jPanel2.add(pnl_ga);
 
         pnl_timKiem.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 1, 1, 1));
         pnl_timKiem.setMaximumSize(new java.awt.Dimension(32767, 60));
@@ -167,6 +187,7 @@ public class TraCuuTau_GUI extends javax.swing.JPanel {
             }
         });
         tbl_thongTinTau.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tbl_thongTinTau.setShowHorizontalLines(true);
         jScrollPane1.setViewportView(tbl_thongTinTau);
 
         jPanel1.add(jScrollPane1, java.awt.BorderLayout.CENTER);
@@ -176,10 +197,12 @@ public class TraCuuTau_GUI extends javax.swing.JPanel {
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
         // TODO add your handling code here:
+        handleTimKiem();
     }//GEN-LAST:event_btnTimKiemActionPerformed
 
     private void btn_xoaTrangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_xoaTrangActionPerformed
         // TODO add your handling code here:
+        handleXoaTrang();
     }//GEN-LAST:event_btn_xoaTrangActionPerformed
 
 
@@ -187,23 +210,20 @@ public class TraCuuTau_GUI extends javax.swing.JPanel {
     private javax.swing.JButton btnTimKiem;
     private javax.swing.JButton btn_xoaTrang;
     private javax.swing.JComboBox<String> cbo_trangThai;
+    private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbl_maTau;
-    private javax.swing.JLabel lbl_next1;
-    private javax.swing.JLabel lbl_next2;
-    private javax.swing.JLabel lbl_sucChua;
     private javax.swing.JLabel lbl_tenTau;
     private javax.swing.JLabel lbl_trangThai;
     private javax.swing.JPanel pnl_ga;
     private javax.swing.JPanel pnl_header;
-    private javax.swing.JPanel pnl_ngay;
     private javax.swing.JPanel pnl_timKiem;
     private javax.swing.JTable tbl_thongTinTau;
     private javax.swing.JTextField txt_maTau;
-    private javax.swing.JTextField txt_sucChua;
     private javax.swing.JTextField txt_tenTau;
     // End of variables declaration//GEN-END:variables
 }

@@ -632,6 +632,8 @@ private void loadComboBoxData() {
         lbl_diaChi4.setMinimumSize(new java.awt.Dimension(45, 16));
         lbl_diaChi4.setPreferredSize(new java.awt.Dimension(100, 16));
         pnl_diaChi3.add(lbl_diaChi4);
+
+        cb_TuyenDuong.setMaximumSize(new java.awt.Dimension(32767, 40));
         pnl_diaChi3.add(cb_TuyenDuong);
 
         pnl_thongTinNhanVien.add(pnl_diaChi3);
@@ -646,6 +648,8 @@ private void loadComboBoxData() {
         lbl_diaChi5.setMinimumSize(new java.awt.Dimension(45, 16));
         lbl_diaChi5.setPreferredSize(new java.awt.Dimension(100, 16));
         pnl_diaChi4.add(lbl_diaChi5);
+
+        cb_Tau.setMaximumSize(new java.awt.Dimension(32767, 40));
         pnl_diaChi4.add(cb_Tau);
 
         pnl_thongTinNhanVien.add(pnl_diaChi4);
@@ -656,7 +660,6 @@ private void loadComboBoxData() {
         pnl_btnGroup.setMinimumSize(new java.awt.Dimension(220, 100));
         pnl_btnGroup.setLayout(new java.awt.BorderLayout());
 
-        jPanel5.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 2, 0));
         jPanel5.setMaximumSize(new java.awt.Dimension(32767, 50));
         jPanel5.setMinimumSize(new java.awt.Dimension(167, 50));
         jPanel5.setLayout(new java.awt.GridLayout(1, 2, 5, 5));

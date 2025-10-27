@@ -1,24 +1,18 @@
 package enums;
 
 public enum TrangThaiGhe {
-    TRONG(1, "Trống"),
-    DA_DAT(2, "Đã đặt"),
-    DANG_GIU_CHO(3, "Đang giữ chỗ");
+    TRONG(1),
+    DA_DAT(2),
+    DANG_GIU_CHO(3);
     
     private final int value;
-    private final String displayName; 
 
-    private TrangThaiGhe(int value, String displayName) { 
+    private TrangThaiGhe(int value) { 
         this.value = value;
-        this.displayName = displayName;
     }
 
     public int getValue() {
         return value;
-    }
-
-    public String getDisplayName() { 
-        return displayName;
     }
 
     public boolean compare(int value) {
@@ -31,29 +25,6 @@ public enum TrangThaiGhe {
                 return type;
             }
         }
-        return TRONG; 
-    }
-
-    public static TrangThaiGhe fromString(String str) {
-        if (str == null || str.trim().isEmpty()) {
-            return TRONG;
-        }
-        
-        String normalized = str.trim();
-        
-        for (TrangThaiGhe type : values()) {
-           
-            if (type.displayName.equalsIgnoreCase(normalized) || 
-                type.name().equalsIgnoreCase(normalized)) {
-                return type;
-            }
-        }
-        
-        return TRONG; 
-    }
-
-    @Override
-    public String toString() {
-        return displayName;
+        return null; 
     }
 }

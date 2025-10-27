@@ -5,10 +5,12 @@
 package gui.traCuu;
 
 import bus.QuanLyNhanVien_BUS;
+import bus.TraCuuNhanVien_BUS;
 import entity.NhanVien;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
+import static utils.FormatUtil.formatDate;
 
 /**
  *
@@ -16,7 +18,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class TraCuuNhanVien_GUI extends javax.swing.JPanel {
     
-    private QuanLyNhanVien_BUS bus;
+    private TraCuuNhanVien_BUS bus;
     private DefaultTableModel tblModel_thongtinNhanVien;
 
     /**
@@ -27,69 +29,38 @@ public class TraCuuNhanVien_GUI extends javax.swing.JPanel {
         init();
     }
     
-     private void init() {
-    bus = new QuanLyNhanVien_BUS();
-    tblModel_thongtinNhanVien = new DefaultTableModel(
-    new String[]{"Mã NV","Họ tên","Giới tính","Ngày sinh","Email","SDT","CCCD","Địa chỉ","Chức vụ","Trạng thái"}, 0);
-    tbl_thongTinNhanVien.setModel(tblModel_thongtinNhanVien);
-    ArrayList<NhanVien> ds = bus.getAllNhanVien();
-    getTableData(ds);
-}
+    private void init() {
+        bus = new TraCuuNhanVien_BUS();
+   
+        String[] columns = {"Mã NV","Họ tên","Giới tính","Ngày sinh","Email","SDT","CCCD","Chức vụ","Trạng thái"};
+        
+        tblModel_thongtinNhanVien = new DefaultTableModel(columns, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        tbl_thongTinNhanVien.setModel(tblModel_thongtinNhanVien);
+        
+        tbl_thongTinNhanVien.getColumnModel().getColumn(4).setPreferredWidth(150);
+    
+        loadDataToTable(bus.getAllNhanVien());
+    }
 
    
   
-   private void getTableData(ArrayList<NhanVien> dsNV){
+   private void loadDataToTable(ArrayList<NhanVien> dsNV){
        tblModel_thongtinNhanVien.setRowCount(0);
-       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
        for(NhanVien nv : dsNV){
-           String gioiTinhstr = nv.isGioiTinh() ? "Nam":"Nữ";
-           String trangThaistr = nv.isTrangThai()?"Đang làm":"Đã nghỉ";
-           String ngaySinhstr = "";
-           if(nv.getNgaySinh() != null){
-               ngaySinhstr = nv.getNgaySinh().format(formatter);
-           }
-           String[] newRow = {nv.getMaNV(),nv.getTenNV(),gioiTinhstr,ngaySinhstr,nv.getEmail(),nv.getSoDienThoai(),nv.getCccd(),nv.getDiaChi(),nv.getChucVu(),trangThaistr};
+           String gioiTinh = nv.isGioiTinh() ? "Nam":"Nữ";
+           String trangThai = nv.isTrangThai()?"Đang làm":"Đã nghỉ";
+           String[] newRow = {nv.getMaNV(),nv.getTenNV(),gioiTinh, formatDate(nv.getNgaySinh()),nv.getEmail(),nv.getSoDienThoai(),nv.getCccd(),nv.getChucVu(),trangThai};
            tblModel_thongtinNhanVien.addRow(newRow);
        }
    }
    
-    private void getThongTinNhanVien() {
-     int row = tbl_thongTinNhanVien.getSelectedRow(); // Lấy dòng được chọn
-     if (row != -1) {
-         // Lấy dữ liệu từ từng cột trong bảng
-         String maNV = tbl_thongTinNhanVien.getValueAt(row, 0).toString();
-         String hoTen = tbl_thongTinNhanVien.getValueAt(row, 1).toString();
-         String gioiTinh = tbl_thongTinNhanVien.getValueAt(row, 2).toString();
-         String sdt = tbl_thongTinNhanVien.getValueAt(row, 5).toString();
-         String cccd = tbl_thongTinNhanVien.getValueAt(row, 6).toString();
-         String trangThai = tbl_thongTinNhanVien.getValueAt(row, 9).toString();
-
-         // Gán dữ liệu lên các ô nhập
-         txt_maNV.setText(maNV);
-         txt_tenNV.setText(hoTen);
-         txt_soDienThoai.setText(sdt);
-         txt_cccd.setText(cccd);
-
-         // Giới tính
-         for (int i = 0; i < cbo_gioiTinh.getItemCount(); i++) {
-             String item = cbo_gioiTinh.getItemAt(i).toString().trim();
-             if (item.equalsIgnoreCase(gioiTinh)) {
-                 cbo_gioiTinh.setSelectedIndex(i);
-                 break;
-             }
-         }
-
-         // Trạng thái
-         for (int i = 0; i < cbo_trangThai.getItemCount(); i++) {
-             String item = cbo_trangThai.getItemAt(i).toString().trim();
-             if (item.equalsIgnoreCase(trangThai)) {
-                 cbo_trangThai.setSelectedIndex(i);
-                 break;
-             }
-         }
-     }
- }
-    private void handleActionXoaTrang() {
+    
+    private void handleXoaTrang() {
      // Bỏ chọn dòng trên bảng (nếu có)
      tbl_thongTinNhanVien.clearSelection();
 
@@ -107,12 +78,13 @@ public class TraCuuNhanVien_GUI extends javax.swing.JPanel {
      if (cbo_trangThai.getItemCount() > 0) {
          cbo_trangThai.setSelectedIndex(0); // "Tất cả" hoặc "Đang làm"
      }
-
+     
+    loadDataToTable(bus.getAllNhanVien());
      // Đưa focus về ô đầu tiên
      txt_maNV.requestFocus();
  }
     
-    private void handleActionTimKiem() {
+    private void handleTimKiem() {
        String maNV = txt_maNV.getText().trim();
         String tenNV = txt_tenNV.getText().trim();
         String cccd = txt_cccd.getText().trim();
@@ -120,11 +92,8 @@ public class TraCuuNhanVien_GUI extends javax.swing.JPanel {
         String gioiTinh = cbo_gioiTinh.getSelectedItem().toString();
         String trangThai = cbo_trangThai.getSelectedItem().toString();
 
-        getTableData(bus.timNhanVien(maNV, tenNV, cccd, sdt, gioiTinh, trangThai));
+        loadDataToTable(bus.timNhanVien(maNV, tenNV, cccd, sdt, gioiTinh, trangThai));
     }
-
-
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -185,11 +154,7 @@ public class TraCuuNhanVien_GUI extends javax.swing.JPanel {
             }
         });
         tbl_thongTinNhanVien.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        tbl_thongTinNhanVien.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tbl_thongTinNhanVienMouseClicked(evt);
-            }
-        });
+        tbl_thongTinNhanVien.setShowHorizontalLines(true);
         jScrollPane1.setViewportView(tbl_thongTinNhanVien);
 
         jPanel2.add(jScrollPane1);
@@ -200,7 +165,7 @@ public class TraCuuNhanVien_GUI extends javax.swing.JPanel {
         pnl_header.setPreferredSize(new java.awt.Dimension(1366, 250));
         pnl_header.setLayout(new java.awt.BorderLayout());
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder("Thông tin nhân viên"), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        jPanel3.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder(null, "Thông tin nhân viên", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 14), new java.awt.Color(123, 17, 19)), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10))); // NOI18N
         jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.Y_AXIS));
 
         pnl_ga.setMaximumSize(new java.awt.Dimension(65736, 70));
@@ -214,11 +179,6 @@ public class TraCuuNhanVien_GUI extends javax.swing.JPanel {
         pnl_ga.add(lbl_maNV);
 
         txt_maNV.setMaximumSize(new java.awt.Dimension(2147483647, 50));
-        txt_maNV.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_maNVActionPerformed(evt);
-            }
-        });
         pnl_ga.add(txt_maNV);
 
         lbl_next2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -257,11 +217,6 @@ public class TraCuuNhanVien_GUI extends javax.swing.JPanel {
         pnl_ngay.add(lbl_soDienThoai);
 
         txt_soDienThoai.setMaximumSize(txt_maNV.getMaximumSize());
-        txt_soDienThoai.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_soDienThoaiActionPerformed(evt);
-            }
-        });
         pnl_ngay.add(txt_soDienThoai);
 
         lbl_next5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -276,11 +231,6 @@ public class TraCuuNhanVien_GUI extends javax.swing.JPanel {
         cbo_gioiTinh.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả", "Nam ", "Nữ" }));
         cbo_gioiTinh.setMaximumSize(new java.awt.Dimension(32767, 50));
         cbo_gioiTinh.setPreferredSize(new java.awt.Dimension(120, 22));
-        cbo_gioiTinh.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbo_gioiTinhActionPerformed(evt);
-            }
-        });
         pnl_ngay.add(cbo_gioiTinh);
 
         lbl_next3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -295,11 +245,6 @@ public class TraCuuNhanVien_GUI extends javax.swing.JPanel {
         cbo_trangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả", "Đang làm", "Đã nghỉ" }));
         cbo_trangThai.setMaximumSize(new java.awt.Dimension(32767, 50));
         cbo_trangThai.setPreferredSize(new java.awt.Dimension(120, 22));
-        cbo_trangThai.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbo_trangThaiActionPerformed(evt);
-            }
-        });
         pnl_ngay.add(cbo_trangThai);
 
         jPanel3.add(pnl_ngay);
@@ -339,33 +284,13 @@ public class TraCuuNhanVien_GUI extends javax.swing.JPanel {
         add(pnl_header, java.awt.BorderLayout.PAGE_START);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cbo_trangThaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbo_trangThaiActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbo_trangThaiActionPerformed
-
-    private void txt_maNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_maNVActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_maNVActionPerformed
-
-    private void txt_soDienThoaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_soDienThoaiActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_soDienThoaiActionPerformed
-
-    private void cbo_gioiTinhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbo_gioiTinhActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbo_gioiTinhActionPerformed
-
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
-        handleActionTimKiem();
+        handleTimKiem();
     }//GEN-LAST:event_btnTimKiemActionPerformed
 
     private void btn_xoaTrangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_xoaTrangActionPerformed
-        handleActionXoaTrang();
+        handleXoaTrang();
     }//GEN-LAST:event_btn_xoaTrangActionPerformed
-
-    private void tbl_thongTinNhanVienMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_thongTinNhanVienMouseClicked
-       getThongTinNhanVien();
-    }//GEN-LAST:event_tbl_thongTinNhanVienMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

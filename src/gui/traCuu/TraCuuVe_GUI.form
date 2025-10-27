@@ -41,7 +41,10 @@
               <Border info="org.netbeans.modules.form.compat2.border.CompoundBorderInfo">
                 <CompoundBorder>
                   <Border PropertyName="outside" info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                    <TitledBorder title="Th&#xf4;ng tin v&#xe9;"/>
+                    <TitledBorder title="Th&#xf4;ng tin v&#xe9;">
+                      <Font PropertyName="font" name="Segoe UI" size="14" style="1"/>
+                      <Color PropertyName="color" blue="13" green="11" red="7b" type="rgb"/>
+                    </TitledBorder>
                   </Border>
                   <Border PropertyName="inside" info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
                     <EmptyBorder bottom="10" left="10" right="10" top="10"/>
@@ -331,6 +334,7 @@
                     </Column>
                   </TableColumnModel>
                 </Property>
+                <Property name="showHorizontalLines" type="boolean" value="true"/>
                 <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                   <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                 </Property>

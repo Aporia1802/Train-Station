@@ -16,6 +16,10 @@ import java.util.ArrayList;
 public class QuanLyKhuyenMai_BUS {
 
     private final KhuyenMai_DAO khuyenMaiDAO = new KhuyenMai_DAO();
+    
+    public KhuyenMai getById(String maKhuyenMai) {
+        return khuyenMaiDAO.getOne(maKhuyenMai);
+    }
 
     public ArrayList<KhuyenMai> getAllKhuyenMai() {
         ArrayList<KhuyenMai> dsKhuyenMai = khuyenMaiDAO.getAll();
@@ -44,20 +48,23 @@ public class QuanLyKhuyenMai_BUS {
         return khuyenMaiDAO.update(km.getMaKhuyenMai(), km);
     }
 
-    public String generateMaKhuyenMai() {
-        String lastMa = khuyenMaiDAO.getLastMaKhuyenMai();
-        int newNumber = 1;
-
-        if (lastMa != null && lastMa.startsWith("KM-")) {
-            try {
-                String numPart = lastMa.substring(3); // lấy phần số sau "KM-"
-                newNumber = Integer.parseInt(numPart) + 1;
-            } catch (NumberFormatException e) {
-                newNumber = 1; // fallback nếu lỗi
-            }
+    public String generateID() {
+        String maxID = khuyenMaiDAO.getMaxID();
+        
+        if(maxID.equals("")) {
+            return "KM001";
         }
-
-        return String.format("KM-%05d", newNumber);
+        
+//      Tách phần số
+        int num = Integer.parseInt(maxID.substring(2));
+        
+//      Tăng lên một đơn vị
+        num++;
+        
+//      Tạo mã mới 
+        String newID = String.format("KM%03d", num);
+        
+        return newID;
     }
 
 }

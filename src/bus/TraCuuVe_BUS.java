@@ -5,9 +5,11 @@
 package bus;
 
 import dao.Ve_DAO;
+import static database.ConnectDB.conn;
 import entity.Ve;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.sql.*;
 
 public class TraCuuVe_BUS {
     private Ve_DAO dao;
@@ -16,44 +18,11 @@ public class TraCuuVe_BUS {
         this.dao = new Ve_DAO();
     }
     
-    public ArrayList<Ve> searchVe(String maVe, String hoTen, String cccd, LocalDate ngayDi) {
-        try {
-           
-            if ((maVe == null || maVe.trim().isEmpty()) &&
-                (hoTen == null || hoTen.trim().isEmpty()) &&
-                (cccd == null || cccd.trim().isEmpty()) &&
-                ngayDi == null) {
-                
-                System.out.println("️ Chưa nhập điều kiện tìm kiếm");
-                return new ArrayList<>();
-            }
-            
-            return dao.search(maVe, hoTen, cccd, ngayDi);
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
-    }
-
-    public Ve getVeByMa(String maVe) {
-        try {
-            if (maVe == null || maVe.trim().isEmpty()) {
-                return null;
-            }
-            return dao.getOne(maVe);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     public ArrayList<Ve> getAllVe() {
-        try {
-            return dao.getAll();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
+        return dao.getAll();
+    }
+    
+    public ArrayList<Ve> timKiemVe(String maVe, String hoTen, String cccd, LocalDate ngayDi) {
+        return dao.timKiemVe(maVe, hoTen, cccd, ngayDi);
     }
 }

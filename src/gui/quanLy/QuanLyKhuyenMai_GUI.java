@@ -11,9 +11,10 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import static utils.FormatUtil.formatCurrency;
+import static utils.FormatUtil.formatDate;
 
 /**
  *
@@ -23,6 +24,7 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
 
     private QuanLyKhuyenMai_BUS bus;
     private DefaultTableModel tblModel_thongTinKhuyenMai;
+    private KhuyenMai khuyenMai;
 
     /**
      * Creates new form TraCuuHanhKhach_GUI
@@ -38,14 +40,16 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
         //setModel
         tblModel_thongTinKhuyenMai = new DefaultTableModel(new String[]{"Mã KM", "Tên KM", "Mức giảm", "Ngày bắt đầu", "Ngày kết thúc", "Tổng tiền tối thiểu", "Tiền khuyến mãi tối đa", "Trạng thái"}, 0);
         tbl_thongTinKhuyenMai.setModel(tblModel_thongTinKhuyenMai);
-
         getTableData(bus.getAllKhuyenMai());
     }
 
     private void getTableData(ArrayList<KhuyenMai> dsKhuyenMai) {
         tblModel_thongTinKhuyenMai.setRowCount(0);
         for (KhuyenMai khuyenMai : dsKhuyenMai) {
-            String[] newRow = {khuyenMai.getMaKhuyenMai(), khuyenMai.getTenKhuyenMai(), String.valueOf(khuyenMai.getHeSoKhuyenMai()), String.valueOf(khuyenMai.getNgayBatDau()), String.valueOf(khuyenMai.getNgayKetThuc()), String.valueOf(khuyenMai.getTongTienToiThieu()), String.valueOf(khuyenMai.getTienKhuyenMaiToiDa()), khuyenMai.getTrangThai() ? "Còn hiệu lực" : "Hết hạn"};
+            String[] newRow = {khuyenMai.getMaKhuyenMai(), khuyenMai.getTenKhuyenMai(), 
+                                String.valueOf(khuyenMai.getHeSoKhuyenMai() * 100) + "%", String.valueOf(khuyenMai.getNgayBatDau()), 
+                                String.valueOf(khuyenMai.getNgayKetThuc()), String.valueOf(khuyenMai.getTongTienToiThieu()), 
+                                String.valueOf(khuyenMai.getTienKhuyenMaiToiDa()), khuyenMai.getTrangThai() ? "Còn hiệu lực" : "Hết hạn"};
             tblModel_thongTinKhuyenMai.addRow(newRow);
         }
     }
@@ -118,7 +122,7 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
 
     private void handleActionThem() {
         try {
-            String maKM = bus.generateMaKhuyenMai();
+            String maKM = bus.generateID();
             String tenKM = txt_tenKhuyenMai.getText().trim();
             double heSo = Double.parseDouble(txt_mucGiam.getText().trim());
             LocalDate ngayBatDau = txt_ngayBatDau.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -166,10 +170,6 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
         }
     }
 
-//    private void handleActionTimKiem() {
-//        String keyword = txt_timKiem.getText().trim();
-//        getTableData(bus.getGaTauByKeyword(keyword));
-//    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -227,15 +227,15 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
 
         setLayout(new java.awt.BorderLayout());
 
-        pnlNorth.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 0, 5, 0));
         pnlNorth.setPreferredSize(new java.awt.Dimension(1366, 55));
         pnlNorth.setLayout(new javax.swing.BoxLayout(pnlNorth, javax.swing.BoxLayout.LINE_AXIS));
 
         pnl_timKiem.setLayout(new javax.swing.BoxLayout(pnl_timKiem, javax.swing.BoxLayout.LINE_AXIS));
 
+        txt_timKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txt_timKiem.setForeground(new java.awt.Color(153, 153, 153));
         txt_timKiem.setText("Nhập mã hoặc tên khuyến mãi cần tìm...");
-        txt_timKiem.setPreferredSize(new java.awt.Dimension(500, 30));
+        txt_timKiem.setPreferredSize(new java.awt.Dimension(700, 30));
         txt_timKiem.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 txt_timKiemFocusGained(evt);
@@ -246,7 +246,6 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
         });
         pnl_timKiem.add(txt_timKiem);
 
-        pnl_btnTimKiem.setPreferredSize(new java.awt.Dimension(79, 23));
         pnl_btnTimKiem.setLayout(new java.awt.BorderLayout());
 
         btn_timKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -266,7 +265,7 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
         pnl_cta.setLayout(new java.awt.GridLayout(1, 0));
 
         cbo_trangThaiKM.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        cbo_trangThaiKM.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Còn hiệu lực", "Hết hạn" }));
+        cbo_trangThaiKM.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Trạng Thái", "Còn hiệu lực", "Hết hạn" }));
         pnl_cta.add(cbo_trangThaiKM);
 
         btn_Loc.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -297,7 +296,7 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
 
         pnl_center.setLayout(new javax.swing.BoxLayout(pnl_center, javax.swing.BoxLayout.LINE_AXIS));
 
-        spl_container.setResizeWeight(0.9);
+        spl_container.setResizeWeight(0.8);
         spl_container.setMinimumSize(new java.awt.Dimension(805, 416));
         spl_container.setPreferredSize(new java.awt.Dimension(1055, 718));
 
@@ -345,7 +344,6 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
         });
         pnl_button.add(btn_taoKM, java.awt.BorderLayout.PAGE_END);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 2, 0));
         jPanel1.setLayout(new java.awt.GridLayout(1, 2, 5, 5));
 
         btn_xoaTrang.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -378,21 +376,17 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
         pnl_MaNV.setPreferredSize(new java.awt.Dimension(230, 50));
         pnl_MaNV.setLayout(new javax.swing.BoxLayout(pnl_MaNV, javax.swing.BoxLayout.X_AXIS));
 
+        lbl_maKM.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lbl_maKM.setText("Mã KM:");
         lbl_maKM.setMaximumSize(new java.awt.Dimension(45, 16));
         lbl_maKM.setMinimumSize(new java.awt.Dimension(45, 16));
-        lbl_maKM.setPreferredSize(new java.awt.Dimension(100, 16));
+        lbl_maKM.setPreferredSize(new java.awt.Dimension(120, 16));
         pnl_MaNV.add(lbl_maKM);
 
         txt_maKhuyenMai.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         txt_maKhuyenMai.setEnabled(false);
         txt_maKhuyenMai.setMaximumSize(new java.awt.Dimension(2147483647, 40));
         txt_maKhuyenMai.setPreferredSize(new java.awt.Dimension(64, 40));
-        txt_maKhuyenMai.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_maKhuyenMaiActionPerformed(evt);
-            }
-        });
         pnl_MaNV.add(txt_maKhuyenMai);
 
         pnl_thongTin.add(pnl_MaNV);
@@ -404,16 +398,11 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
         lbl_tenKM.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lbl_tenKM.setLabelFor(lbl_tenKM);
         lbl_tenKM.setText("Tên KM:");
-        lbl_tenKM.setPreferredSize(new java.awt.Dimension(100, 20));
+        lbl_tenKM.setPreferredSize(new java.awt.Dimension(120, 20));
         pnl_tenKM.add(lbl_tenKM);
 
         txt_tenKhuyenMai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txt_tenKhuyenMai.setMaximumSize(new java.awt.Dimension(2147483647, 40));
-        txt_tenKhuyenMai.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_tenKhuyenMaiActionPerformed(evt);
-            }
-        });
         pnl_tenKM.add(txt_tenKhuyenMai);
 
         pnl_thongTin.add(pnl_tenKM);
@@ -425,16 +414,11 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
         lbl_mucGiam.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lbl_mucGiam.setLabelFor(pnl_mucGiam);
         lbl_mucGiam.setText("Mức giảm:");
-        lbl_mucGiam.setPreferredSize(new java.awt.Dimension(100, 20));
+        lbl_mucGiam.setPreferredSize(new java.awt.Dimension(120, 20));
         pnl_mucGiam.add(lbl_mucGiam);
 
         txt_mucGiam.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txt_mucGiam.setMaximumSize(new java.awt.Dimension(2147483647, 40));
-        txt_mucGiam.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_mucGiamActionPerformed(evt);
-            }
-        });
         pnl_mucGiam.add(txt_mucGiam);
 
         pnl_thongTin.add(pnl_mucGiam);
@@ -446,7 +430,7 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
         lbl_ngayBatDau.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lbl_ngayBatDau.setLabelFor(txt_ngayBatDau);
         lbl_ngayBatDau.setText("Ngày bắt đầu:");
-        lbl_ngayBatDau.setPreferredSize(new java.awt.Dimension(100, 20));
+        lbl_ngayBatDau.setPreferredSize(new java.awt.Dimension(120, 20));
         pnl_ngayBatDau.add(lbl_ngayBatDau);
 
         txt_ngayBatDau.setMaximumSize(new java.awt.Dimension(2147483647, 40));
@@ -462,7 +446,7 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
         lbl_ngayKetThuc.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lbl_ngayKetThuc.setLabelFor(txt_ngayKetThuc);
         lbl_ngayKetThuc.setText("Ngày kết thúc:");
-        lbl_ngayKetThuc.setPreferredSize(new java.awt.Dimension(100, 20));
+        lbl_ngayKetThuc.setPreferredSize(new java.awt.Dimension(120, 20));
         pnl_ngayKetThuc.add(lbl_ngayKetThuc);
 
         txt_ngayKetThuc.setMaximumSize(new java.awt.Dimension(2147483647, 40));
@@ -477,17 +461,12 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
 
         lbl_tongTienToiThieu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lbl_tongTienToiThieu.setLabelFor(pnl_tongTienToiThieu);
-        lbl_tongTienToiThieu.setText("Tổng tiền tối thiểu");
-        lbl_tongTienToiThieu.setPreferredSize(new java.awt.Dimension(100, 20));
+        lbl_tongTienToiThieu.setText("Tổng tiền tối thiểu:");
+        lbl_tongTienToiThieu.setPreferredSize(new java.awt.Dimension(120, 20));
         pnl_tongTienToiThieu.add(lbl_tongTienToiThieu);
 
         txt_tongTienToiThieu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txt_tongTienToiThieu.setMaximumSize(new java.awt.Dimension(2147483647, 40));
-        txt_tongTienToiThieu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_tongTienToiThieuActionPerformed(evt);
-            }
-        });
         pnl_tongTienToiThieu.add(txt_tongTienToiThieu);
 
         pnl_thongTin.add(pnl_tongTienToiThieu);
@@ -498,17 +477,12 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
 
         lbl_tienKhuyenMaiToiDa.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lbl_tienKhuyenMaiToiDa.setLabelFor(pnl_tienKhuyenMaiToiDa);
-        lbl_tienKhuyenMaiToiDa.setText("Khuyến mãi tối đa");
-        lbl_tienKhuyenMaiToiDa.setPreferredSize(new java.awt.Dimension(100, 20));
+        lbl_tienKhuyenMaiToiDa.setText("Tiền KM tối đa:");
+        lbl_tienKhuyenMaiToiDa.setPreferredSize(new java.awt.Dimension(120, 20));
         pnl_tienKhuyenMaiToiDa.add(lbl_tienKhuyenMaiToiDa);
 
         txt_tienKhuyenMaiToiDa.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txt_tienKhuyenMaiToiDa.setMaximumSize(new java.awt.Dimension(2147483647, 40));
-        txt_tienKhuyenMaiToiDa.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_tienKhuyenMaiToiDaActionPerformed(evt);
-            }
-        });
         pnl_tienKhuyenMaiToiDa.add(txt_tienKhuyenMaiToiDa);
 
         pnl_thongTin.add(pnl_tienKhuyenMaiToiDa);
@@ -520,7 +494,7 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
         lbl_trangThai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lbl_trangThai.setLabelFor(pnl_mucGiam);
         lbl_trangThai.setText("Trạng thái:");
-        lbl_trangThai.setPreferredSize(new java.awt.Dimension(100, 20));
+        lbl_trangThai.setPreferredSize(new java.awt.Dimension(120, 20));
         pnl_trangThai.add(lbl_trangThai);
 
         cbo_trangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Còn hiệu lực", "Hết hạn" }));
@@ -538,22 +512,6 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
         add(pnl_center, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txt_tenKhuyenMaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_tenKhuyenMaiActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_tenKhuyenMaiActionPerformed
-
-    private void txt_mucGiamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_mucGiamActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_mucGiamActionPerformed
-
-    private void txt_tongTienToiThieuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_tongTienToiThieuActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_tongTienToiThieuActionPerformed
-
-    private void txt_tienKhuyenMaiToiDaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_tienKhuyenMaiToiDaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_tienKhuyenMaiToiDaActionPerformed
-
     private void btn_taoKMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_taoKMActionPerformed
         // TODO add your handling code here:
         handleActionThem();
@@ -563,10 +521,6 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
         // TODO add your handling code here:
         handleActionXoaTrang();
     }//GEN-LAST:event_btn_xoaTrangActionPerformed
-
-    private void txt_maKhuyenMaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_maKhuyenMaiActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_maKhuyenMaiActionPerformed
 
     private void tbl_thongTinKhuyenMaiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_thongTinKhuyenMaiMouseClicked
         // TODO add your handling code here:
