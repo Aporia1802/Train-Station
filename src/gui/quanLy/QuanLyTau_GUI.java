@@ -71,10 +71,10 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         txt_sucChua.setText(String.valueOf(sucChua));
 
         // Gán trạng thái vào combobox
-        for (int i = 0; i < jComboBox1.getItemCount(); i++) {
-            String item = jComboBox1.getItemAt(i).trim();
+        for (int i = 0; i < cbo_tt.getItemCount(); i++) {
+            String item = cbo_tt.getItemAt(i).trim();
             if (item.equalsIgnoreCase(trangThaiStr.trim())) {
-                jComboBox1.setSelectedIndex(i);
+                cbo_tt.setSelectedIndex(i);
                 break;
             }
         }
@@ -108,9 +108,9 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         txt_ngayHD.setDate(null);
         }
   
-        if (jComboBox1.getItemCount() > 0) {
-            jComboBox1.setSelectedIndex(0); // "Tất cả" hoặc "Nam"
-        }
+         if (cbo_tt.getItemCount() > 0) {
+         cbo_tt.setSelectedIndex(0); 
+     }
         // Bỏ chọn hàng đang được chọn trong bảng (nếu có)
         tbl_tau.clearSelection();
     }
@@ -181,7 +181,7 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         txt_ngayHD = new com.toedter.calendar.JDateChooser();
         pnl_trangThai = new javax.swing.JPanel();
         lbl_trangThai = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cbo_tt = new javax.swing.JComboBox<>();
         pnl_btnGroup = new javax.swing.JPanel();
         btn_them = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
@@ -421,10 +421,10 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         lbl_trangThai.setPreferredSize(new java.awt.Dimension(100, 16));
         pnl_trangThai.add(lbl_trangThai);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Bảo trì", "Hoạt động", "Ngừng hoạt động" }));
-        jComboBox1.setMaximumSize(new java.awt.Dimension(32767, 40));
-        jComboBox1.setPreferredSize(new java.awt.Dimension(230, 40));
-        pnl_trangThai.add(jComboBox1);
+        cbo_tt.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Bảo trì", "Hoạt động", "Ngừng hoạt động" }));
+        cbo_tt.setMaximumSize(new java.awt.Dimension(32767, 40));
+        cbo_tt.setPreferredSize(new java.awt.Dimension(230, 40));
+        pnl_trangThai.add(cbo_tt);
 
         pnl_thongTinNhanVien.add(pnl_trangThai);
 
@@ -536,7 +536,7 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
     private javax.swing.JButton btn_timKiem;
     private javax.swing.JButton btn_xoaTrang;
     private javax.swing.JComboBox<String> cbo_trangThai;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> cbo_tt;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
