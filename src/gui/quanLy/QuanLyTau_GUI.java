@@ -7,6 +7,7 @@ package gui.quanLy;
 import bus.QuanLyTau_BUS;
 import entity.Tau;
 import enums.TrangThaiTau;
+import java.awt.Color;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -43,46 +44,92 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
                             String.valueOf(tau.getSucChua()), formatDate(tau.getNgayHoatDong()), tau.getTrangThai().getDisplayName()};
         tblModel_thongtinTau.addRow(newRow);
     }
-
-    
 }
     
     private void getThongTinTau() {
-        int row = tbl_tau.getSelectedRow();
-        if (row != -1) {
-            // Lấy dữ liệu từng cột
-            String maTau = tbl_tau.getValueAt(row, 0).toString();
-            String tenTau = tbl_tau.getValueAt(row, 1).toString();
-            int soToaTau = Integer.parseInt(tbl_tau.getValueAt(row, 2).toString());
-            int sucChua = Integer.parseInt(tbl_tau.getValueAt(row, 3).toString());
-            String ngayHoatDongStr = tbl_tau.getValueAt(row, 4).toString();
-            String trangThaiStr = tbl_tau.getValueAt(row, 5).toString();
+    int row = tbl_tau.getSelectedRow(); // lấy dòng được chọn
+    if (row != -1) {
+        // Lấy dữ liệu từng cột
+        String maTau = tbl_tau.getValueAt(row, 0).toString();
+        String tenTau = tbl_tau.getValueAt(row, 1).toString();
+        int soToaTau = Integer.parseInt(tbl_tau.getValueAt(row, 2).toString());
+        int sucChua = Integer.parseInt(tbl_tau.getValueAt(row, 3).toString());
+        String ngayHoatDongStr = tbl_tau.getValueAt(row, 4).toString();
+        String trangThaiStr = tbl_tau.getValueAt(row, 5).toString();
 
-            // Gán dữ liệu lên textfield
-            txt_maTau.setText(maTau);
-            txt_tenTau.setText(tenTau);
-            txt_soLuongToa.setText(String.valueOf(soToaTau));
-            txt_sucChua.setText(String.valueOf(sucChua));
-        
-            for (int i = 0; i < cbo_trangThai.getItemCount(); i++) {
-                String item = cbo_trangThai.getItemAt(i).trim();
-                if (item.equalsIgnoreCase(trangThaiStr)) {
-                    cbo_trangThai.setSelectedIndex(i);
-                    break;
-                }
+        // Gán dữ liệu lên textfield
+        txt_maTau.setText(maTau);
+        txt_tenTau.setText(tenTau);
+        txt_soLuongToa.setText(String.valueOf(soToaTau));
+        txt_sucChua.setText(String.valueOf(sucChua));
+
+        // Gán trạng thái vào combobox
+        for (int i = 0; i < cbo_tt.getItemCount(); i++) {
+            String item = cbo_tt.getItemAt(i).trim();
+            if (item.equalsIgnoreCase(trangThaiStr.trim())) {
+                cbo_tt.setSelectedIndex(i);
+                break;
             }
 
-
-            if (ngayHoatDongStr != null && !ngayHoatDongStr.isEmpty()) {
+        // Gán ngày hoạt động vào JDateChooser
+        if (ngayHoatDongStr != null && !ngayHoatDongStr.isEmpty()) {
+            try {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                 LocalDate localDate = LocalDate.parse(ngayHoatDongStr, formatter);
-                java.util.Date ngaySinh = java.sql.Date.valueOf(localDate);
-                txt_ngayHD.setDate(ngaySinh); // Gán vào JDateChooser
-            } else {
-                txt_ngayHD.setDate(null); // Nếu trống thì xóa giá trị
+                java.util.Date ngayHoatDong = java.sql.Date.valueOf(localDate);
+                txt_ngayHD.setDate(ngayHoatDong);
+            } catch (Exception e) { 
+                txt_ngayHD.setDate(null);
             }
+        } else {
+            txt_ngayHD.setDate(null);
         }
     }
+}
+
+    private void xoaTrang() {
+        // Xóa các ô nhập liệu văn bản
+        txt_maTau.setText("");
+        txt_tenTau.setText("");
+        txt_soLuongToa.setText("");
+        txt_sucChua.setText("");
+        txt_timKiem.setText("");
+
+         // Xóa ngày sinh
+        if (txt_ngayHD.getDate() != null) {
+        txt_ngayHD.setDate(null);
+        }
+  
+         if (cbo_tt.getItemCount() > 0) {
+         cbo_tt.setSelectedIndex(0); 
+     }
+        // Bỏ chọn hàng đang được chọn trong bảng (nếu có)
+        tbl_tau.clearSelection();
+    }
+    
+    private void handleActionTimKiem() {
+        String ma = txt_timKiem.getText().trim();
+        getTableData(bus.getTauTheoMa(ma));
+    }
+     
+     
+    private void handleActionLoc() {
+    // Lấy giá trị từ combobox
+    String trangThai = (String) cbo_trangThai.getSelectedItem();
+        getTableData(bus.filter(trangThai));
+}
+    private void handleActionLamMoi() {
+            tbl_tau.clearSelection();
+            getTableData(bus.getAllTau());
+            txt_timKiem.setText("Nhập mã tàu cần tìm...");
+            txt_timKiem.setForeground(Color.GRAY);
+        }
+
+        
+    
+
+
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -122,11 +169,11 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         lbl_sucChua = new javax.swing.JLabel();
         txt_sucChua = new javax.swing.JTextField();
         pnl_ngayHD = new javax.swing.JPanel();
-        lbl_sucChua1 = new javax.swing.JLabel();
+        lbl_NgayHD = new javax.swing.JLabel();
         txt_ngayHD = new com.toedter.calendar.JDateChooser();
         pnl_trangThai = new javax.swing.JPanel();
         lbl_trangThai = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cbo_tt = new javax.swing.JComboBox<>();
         pnl_btnGroup = new javax.swing.JPanel();
         btn_them = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
@@ -168,6 +215,11 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         pnl_btnTimKiem.setLayout(new java.awt.BorderLayout());
 
         btn_timKiem.setText("Tìm kiếm");
+        btn_timKiem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_timKiemActionPerformed(evt);
+            }
+        });
         pnl_btnTimKiem.add(btn_timKiem, java.awt.BorderLayout.CENTER);
 
         pnl_timKiem.add(pnl_btnTimKiem);
@@ -188,11 +240,21 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         btn_Loc.setText("Lọc");
         btn_Loc.setMaximumSize(new java.awt.Dimension(100, 50));
         btn_Loc.setPreferredSize(new java.awt.Dimension(100, 50));
+        btn_Loc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_LocActionPerformed(evt);
+            }
+        });
         pnl_cta.add(btn_Loc);
 
         btn_Reset.setText("Reset");
         btn_Reset.setMaximumSize(new java.awt.Dimension(100, 50));
         btn_Reset.setPreferredSize(new java.awt.Dimension(100, 50));
+        btn_Reset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_ResetActionPerformed(evt);
+            }
+        });
         pnl_cta.add(btn_Reset);
 
         pnl_top.add(pnl_cta);
@@ -332,13 +394,11 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         pnl_ngayHD.setPreferredSize(pnl_maTau.getPreferredSize());
         pnl_ngayHD.setLayout(new javax.swing.BoxLayout(pnl_ngayHD, javax.swing.BoxLayout.LINE_AXIS));
 
-        lbl_sucChua1.setText("Ngày hoạt động:");
-        lbl_sucChua1.setMaximumSize(new java.awt.Dimension(45, 16));
-        lbl_sucChua1.setMinimumSize(new java.awt.Dimension(45, 16));
-        lbl_sucChua1.setPreferredSize(new java.awt.Dimension(100, 16));
-        pnl_ngayHD.add(lbl_sucChua1);
-
-        txt_ngayHD.setMaximumSize(new java.awt.Dimension(2147483647, 40));
+        lbl_NgayHD.setText("Ngày hoạt động:");
+        lbl_NgayHD.setMaximumSize(new java.awt.Dimension(45, 16));
+        lbl_NgayHD.setMinimumSize(new java.awt.Dimension(45, 16));
+        lbl_NgayHD.setPreferredSize(new java.awt.Dimension(100, 16));
+        pnl_ngayHD.add(lbl_NgayHD);
         pnl_ngayHD.add(txt_ngayHD);
 
         pnl_thongTinNhanVien.add(pnl_ngayHD);
@@ -351,10 +411,10 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         lbl_trangThai.setPreferredSize(new java.awt.Dimension(100, 16));
         pnl_trangThai.add(lbl_trangThai);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Hoạt động", "Bảo trì", "Ngừng hoạt động" }));
-        jComboBox1.setMaximumSize(new java.awt.Dimension(32767, 40));
-        jComboBox1.setPreferredSize(new java.awt.Dimension(230, 40));
-        pnl_trangThai.add(jComboBox1);
+        cbo_tt.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Bảo trì", "Hoạt động", "Ngừng hoạt động" }));
+        cbo_tt.setMaximumSize(new java.awt.Dimension(32767, 40));
+        cbo_tt.setPreferredSize(new java.awt.Dimension(230, 40));
+        pnl_trangThai.add(cbo_tt);
 
         pnl_thongTinNhanVien.add(pnl_trangThai);
 
@@ -443,12 +503,24 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_themActionPerformed
 
     private void btn_xoaTrangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_xoaTrangActionPerformed
-        // TODO add your handling code here:
+        xoaTrang();
     }//GEN-LAST:event_btn_xoaTrangActionPerformed
 
     private void tbl_tauMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_tauMouseClicked
         getThongTinTau();
     }//GEN-LAST:event_tbl_tauMouseClicked
+
+    private void btn_timKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_timKiemActionPerformed
+        handleActionTimKiem();
+    }//GEN-LAST:event_btn_timKiemActionPerformed
+
+    private void btn_LocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_LocActionPerformed
+        handleActionLoc();
+    }//GEN-LAST:event_btn_LocActionPerformed
+
+    private void btn_ResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ResetActionPerformed
+        handleActionLamMoi();
+    }//GEN-LAST:event_btn_ResetActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -459,14 +531,14 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
     private javax.swing.JButton btn_timKiem;
     private javax.swing.JButton btn_xoaTrang;
     private javax.swing.JComboBox<String> cbo_trangThai;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> cbo_tt;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JLabel lbl_NgayHD;
     private javax.swing.JLabel lbl_maTau;
     private javax.swing.JLabel lbl_soLuongToa;
     private javax.swing.JLabel lbl_sucChua;
-    private javax.swing.JLabel lbl_sucChua1;
     private javax.swing.JLabel lbl_tenTau;
     private javax.swing.JLabel lbl_trangThai;
     private javax.swing.JPanel pnl_btnGroup;

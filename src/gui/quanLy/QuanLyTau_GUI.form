@@ -83,6 +83,9 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="T&#xec;m ki&#x1ebf;m"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_timKiemActionPerformed"/>
+                  </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
                       <BorderConstraints direction="Center"/>
@@ -133,6 +136,9 @@
                   <Dimension value="[100, 50]"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_LocActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btn_Reset">
               <Properties>
@@ -144,6 +150,9 @@
                   <Dimension value="[100, 50]"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_ResetActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -446,7 +455,7 @@
 
                       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
                       <SubComponents>
-                        <Component class="javax.swing.JLabel" name="lbl_sucChua1">
+                        <Component class="javax.swing.JLabel" name="lbl_NgayHD">
                           <Properties>
                             <Property name="text" type="java.lang.String" value="Ng&#xe0;y ho&#x1ea1;t &#x111;&#x1ed9;ng:"/>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -489,12 +498,12 @@
                             </Property>
                           </Properties>
                         </Component>
-                        <Component class="javax.swing.JComboBox" name="jComboBox1">
+                        <Component class="javax.swing.JComboBox" name="cbo_tt">
                           <Properties>
                             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                               <StringArray count="3">
-                                <StringItem index="0" value="Ho&#x1ea1;t &#x111;&#x1ed9;ng"/>
-                                <StringItem index="1" value="B&#x1ea3;o tr&#xec;"/>
+                                <StringItem index="0" value="B&#x1ea3;o tr&#xec;"/>
+                                <StringItem index="1" value="Ho&#x1ea1;t &#x111;&#x1ed9;ng"/>
                                 <StringItem index="2" value="Ng&#x1eeb;ng ho&#x1ea1;t &#x111;&#x1ed9;ng"/>
                               </StringArray>
                             </Property>

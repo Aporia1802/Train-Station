@@ -17,18 +17,18 @@ public class QuanLyTau_BUS {
 
     public ArrayList<Tau> getAllTau(){
         
-        ArrayList<Tau> dsNV = tauDao.getAll(); 
-        return dsNV;
+        ArrayList<Tau> dsTau = tauDao.getAll(); 
+        return dsTau;
     }
     
-//    public ArrayList<NhanVien> filter(String chucVu, String trangThai){
-//        ArrayList<NhanVien> dsNV = nhanVienDao.filterByComboBox(chucVu, trangThai);
-//        return dsNV;
-//        
-//    }
-//    
-//    public ArrayList<NhanVien> getNhanVienbySDT(String sdt){
-//        ArrayList<NhanVien> nhanVien = nhanVienDao.getNhanVienBySoDienThoai(sdt);
-//        return nhanVien;
-//    }
+public ArrayList<Tau> filter(String trangThai){
+        ArrayList<Tau> dsTau = tauDao.filterByComboBoxTrangThai(trangThai);
+        return dsTau;
+        
+    }
+    
+    public ArrayList<Tau> getTauTheoMa(String maTau){
+        ArrayList<Tau> dsTau = tauDao.getTauByMaTau(maTau);
+        return dsTau;
+    }
 }

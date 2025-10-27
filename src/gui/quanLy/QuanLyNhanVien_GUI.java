@@ -91,10 +91,10 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
         txt_cccd.setText(cccd);
         txt_diaChi.setText(diaChi);
         
-        for (int i = 0; i < cbo_ChucVu.getItemCount(); i++) {
-             String item = cbo_ChucVu.getItemAt(i).toString().trim();
+        for (int i = 0; i < cbo_cv.getItemCount(); i++) {
+             String item = cbo_cv.getItemAt(i).toString().trim();
              if (item.equalsIgnoreCase(chucVu)) {
-                 cbo_ChucVu.setSelectedIndex(i);
+                 cbo_cv.setSelectedIndex(i);
                  break;
              }
          }
@@ -199,8 +199,7 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
         String sdt = txt_timKiem.getText().trim();
         getTableData(bus.getNhanVienbySDT(sdt));
     }
-     
-     
+      
     private void handleActionLoc() {
     //  Lấy giá trị từ combobox
         String chucVu = (String) cbo_chucVu.getSelectedItem();
@@ -446,7 +445,7 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
         txt_diaChi = new javax.swing.JTextField();
         pnl_chucVu = new javax.swing.JPanel();
         lbl_chucVu = new javax.swing.JLabel();
-        cbo_ChucVu = new javax.swing.JComboBox<>();
+        cbo_cv = new javax.swing.JComboBox<>();
         pnl_trangThai = new javax.swing.JPanel();
         lbl_trangThai = new javax.swing.JLabel();
         pnl_radGroup2 = new javax.swing.JPanel();
@@ -724,10 +723,10 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
         lbl_chucVu.setPreferredSize(new java.awt.Dimension(100, 16));
         pnl_chucVu.add(lbl_chucVu);
 
-        cbo_ChucVu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả", "Nhân viên quản lý", "Nhân viên bán vé" }));
-        cbo_ChucVu.setMaximumSize(new java.awt.Dimension(32767, 40));
-        cbo_ChucVu.setPreferredSize(new java.awt.Dimension(230, 40));
-        pnl_chucVu.add(cbo_ChucVu);
+        cbo_cv.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả", "Nhân viên quản lý", "Nhân viên bán vé" }));
+        cbo_cv.setMaximumSize(new java.awt.Dimension(32767, 40));
+        cbo_cv.setPreferredSize(new java.awt.Dimension(230, 40));
+        pnl_chucVu.add(cbo_cv);
 
         pnl_thongTinNhanVien.add(pnl_chucVu);
 
@@ -879,8 +878,8 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
     private javax.swing.JButton btn_xuatExcel;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
-    private javax.swing.JComboBox<String> cbo_ChucVu;
     private javax.swing.JComboBox<String> cbo_chucVu;
+    private javax.swing.JComboBox<String> cbo_cv;
     private javax.swing.JComboBox<String> cbo_trangThai;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JLabel lbl_cccd;

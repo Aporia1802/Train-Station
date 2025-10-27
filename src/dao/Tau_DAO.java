@@ -1,16 +1,19 @@
 package dao;
 
 import database.ConnectDB;
+import static database.ConnectDB.conn;
 import entity.Tau;
 import enums.TrangThaiTau;
 import interfaces.DAOBase;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Tau_DAO implements DAOBase<Tau>{
 
     @Override
     public Tau getOne(String id) {
+
         String sql = "SELECT * FROM Tau WHERE maTau = ?";
         
         try {
@@ -55,6 +58,52 @@ public class Tau_DAO implements DAOBase<Tau>{
         
         return dsTau;
     }
+    
+     public ArrayList<Tau> getTauByMaTau(String maTau) {
+        ArrayList<Tau> dsTau = new ArrayList<>();
+        String sql = "SELECT * FROM Tau WHERE maTau LIKE ?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1,maTau);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                dsTau.add(getData(rs)); // getData là hàm chuyển ResultSet → đối tượng Tau
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return dsTau;
+}
+     
+       public ArrayList<Tau> filterByComboBoxTrangThai(String trangThai) {
+       ArrayList<Tau> dsTau = new ArrayList<>();
+       StringBuilder sql = new StringBuilder("SELECT * FROM Tau WHERE 1=1");
+
+       // Nếu người dùng chọn một trạng thái thật sự
+       if (trangThai != null && !trangThai.equals("Trạng thái")) {
+           sql.append(" AND trangThai = ?");
+       }
+
+       try (PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+           int index = 1;
+
+           if (trangThai != null && !trangThai.equals("Trạng thái")) {
+               // Gán giá trị tương ứng với chuỗi trạng thái
+               ps.setString(index++, trangThai);
+           }
+
+           ResultSet rs = ps.executeQuery();
+           while (rs.next()) {
+               dsTau.add(getData(rs)); // Chuyển ResultSet → đối tượng Tau
+           }
+
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
+
+       return dsTau;
+   }
+
 
     public Tau getData(ResultSet rs) {
         try {
@@ -63,7 +112,7 @@ public class Tau_DAO implements DAOBase<Tau>{
             int soToaTau = rs.getInt("soToaTau");
             int sucChua = rs.getInt("sucChua");
             java.sql.Date ngayHoatDongSQL = rs.getDate("ngayHoatDong");
-            java.time.LocalDate ngayHoatDong = ngayHoatDongSQL != null ? 
+            LocalDate ngayHoatDong = ngayHoatDongSQL != null ? 
                 ngayHoatDongSQL.toLocalDate() : null;
             
             Tau tau = new Tau(maTau);
