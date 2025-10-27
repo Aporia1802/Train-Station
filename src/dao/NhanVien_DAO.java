@@ -209,7 +209,28 @@ public class NhanVien_DAO implements DAOBase<NhanVien> {
 
     @Override
     public Boolean create(NhanVien object) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        int n = 0;
+        String sql = "INSERT INTO NhanVien (maNV, tenNV, gioiTinh, ngaySinh, email, soDienThoai, cccd, diaChi, chucVu, trangThai) "
+               + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    
+        try {
+            PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
+            st.setString(1, object.getMaNV());
+            st.setString(2, object.getTenNV());
+            st.setBoolean(3, object.isGioiTinh());
+            st.setDate(4, Date.valueOf(object.getNgaySinh()));
+            st.setString(5, object.getEmail());
+            st.setString(6, object.getSoDienThoai());
+            st.setString(7, object.getCccd());
+            st.setString(8, object.getDiaChi());
+            st.setString(9, object.getChucVu());
+            st.setBoolean(10, object.isTrangThai());
+        
+            n = st.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return n > 0;
     }
 
     @Override
@@ -228,6 +249,23 @@ public class NhanVien_DAO implements DAOBase<NhanVien> {
             e.printStackTrace();
         }
         return n > 0;
+    }
+    
+    public String getMaxID() {
+        String maxID = ""; // giá trị mặc định nếu bảng rỗng
+    
+        try{
+            String sql = "SELECT TOP 1 * FROM NhanVien ORDER BY MaNV DESC";
+            PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
+            ResultSet rs = st.executeQuery();
+
+            if (rs.next()) {
+                maxID = rs.getString("maNV");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return maxID;
     }
 
     @Override

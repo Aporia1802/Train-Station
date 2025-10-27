@@ -11,18 +11,16 @@ package entity;
 public class LoaiVe {
     private String maLoaiVe;
     private String tenLoaiVe;
+    private String moTa;
     private double heSoLoaiVe;
-    
-    public static final String MALOAIVE_INVALID = "Mã loại vé không hợp lệ!";
-    public static final String TENLOAIVE_EMPTY = "Tên loại vé không được rỗng!";
-    public static final String HESOVE_INVALID = "Hệ số vé phải lớn hơn 0 và nhỏ hơn hoặc bằng 1!";
     
     public LoaiVe() {
     }
     
-    public LoaiVe(String maLoaiVe, String tenLoaiVe, double heSoLoaiVe) throws Exception {
+    public LoaiVe(String maLoaiVe, String tenLoaiVe, String moTa, double heSoLoaiVe) throws Exception {
         setMaLoaiVe(maLoaiVe);
         setTenLoaiVe(tenLoaiVe);
+        setMoTa(moTa);
         setHeSoLoaiVe(heSoLoaiVe);
     }
     
@@ -31,10 +29,6 @@ public class LoaiVe {
     }
     
     public void setMaLoaiVe(String maLoaiVe) throws Exception {
-        if (!maLoaiVe.equals("LV-TE") && !maLoaiVe.equals("LV-HSSV") && 
-            !maLoaiVe.equals("LV-NL")) {
-            throw new Exception(MALOAIVE_INVALID);
-        }
         this.maLoaiVe = maLoaiVe;
     }
     
@@ -43,10 +37,6 @@ public class LoaiVe {
     }
     
     public void setTenLoaiVe(String tenLoaiVe) throws Exception {
-        tenLoaiVe = tenLoaiVe.trim();
-        if (tenLoaiVe.isEmpty()) {
-            throw new Exception(TENLOAIVE_EMPTY);
-        }
         this.tenLoaiVe = tenLoaiVe;
     }
     
@@ -55,9 +45,16 @@ public class LoaiVe {
     }
     
     public void setHeSoLoaiVe(double heSoLoaiVe) throws Exception {
-        if (heSoLoaiVe <= 0 || heSoLoaiVe > 1) {
-            throw new Exception(HESOVE_INVALID);
-        }
         this.heSoLoaiVe = heSoLoaiVe;
     }
+
+    public String getMoTa() {
+        return moTa;
+    }
+
+    public void setMoTa(String moTa) {
+        this.moTa = moTa;
+    }
+    
+    
 }

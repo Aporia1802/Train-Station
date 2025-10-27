@@ -46,7 +46,10 @@
               <Border info="org.netbeans.modules.form.compat2.border.CompoundBorderInfo">
                 <CompoundBorder>
                   <Border PropertyName="outside" info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                    <TitledBorder title="Th&#xf4;ng tin h&#xe0;nh tr&#xec;nh"/>
+                    <TitledBorder title="Th&#xf4;ng tin h&#xe0;nh tr&#xec;nh">
+                      <Font PropertyName="font" name="Segoe UI" size="14" style="1"/>
+                      <Color PropertyName="color" blue="13" green="11" red="7b" type="rgb"/>
+                    </TitledBorder>
                   </Border>
                   <Border PropertyName="inside" info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
                     <EmptyBorder bottom="10" left="10" right="10" top="10"/>
@@ -154,9 +157,6 @@
                       <Dimension value="[32767, 50]"/>
                     </Property>
                   </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbo_gaDenActionPerformed"/>
-                  </Events>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                   </AuxValues>
@@ -317,6 +317,7 @@
                   </Table>
                 </Property>
                 <Property name="selectionMode" type="int" value="0"/>
+                <Property name="showHorizontalLines" type="boolean" value="true"/>
               </Properties>
             </Component>
           </SubComponents>

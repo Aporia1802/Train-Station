@@ -42,7 +42,13 @@ public class TraCuuChuyenTau_GUI extends javax.swing.JPanel {
         bus = new TraCuuChuyenTau_BUS();
         
 //      setModel
-        tblModel_thongTinChuyenTau = new DefaultTableModel(new String[] {"Mã chuyến tàu", "Tàu", "Ga đi", "Ga đến", "Thòi gian đi", "Thòi gian đến", "Số ghế còn trống", "Giá vé"}, 0);
+        String[] columns = {"Mã chuyến tàu", "Tàu", "Ga đi", "Ga đến", "Thòi gian đi", "Thòi gian đến", "Số ghế còn trống", "Giá vé"};
+        tblModel_thongTinChuyenTau = new DefaultTableModel(columns, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         tbl_thongTinChuyenTau.setModel(tblModel_thongTinChuyenTau);
         
         cbo_gaDi.addItemListener(e -> {
@@ -71,7 +77,6 @@ public class TraCuuChuyenTau_GUI extends javax.swing.JPanel {
             }
         });
         
-        
         loadDataToTable(bus.getAllChuyenTau());
         loadDataToCbo();
     }
@@ -80,8 +85,14 @@ public class TraCuuChuyenTau_GUI extends javax.swing.JPanel {
     private void loadDataToTable(ArrayList<ChuyenTau> dsChuyenTau) {
         tblModel_thongTinChuyenTau.setRowCount(0);
         for(ChuyenTau ct : dsChuyenTau) {
-            String[] newRow = {ct.getMaChuyenTau(), ct.getTau().getMaTau() + "-" + ct.getTau().getTenTau(), ct.getTuyenDuong().getGaDi().getTenGa(),  ct.getTuyenDuong().getGaDen().getTenGa(),FormatUtil.formatDateTime(ct.getThoiGianDi()), 
-                FormatUtil.formatDateTime(ct.getThoiGianDen()), String.valueOf(ct.getSoGheConTrong()), FormatUtil.formatCurrency(ct.getTuyenDuong().getQuangDuong() * ct.getTuyenDuong().getSoTienMotKm())};
+            String[] newRow = {ct.getMaChuyenTau(), 
+                               ct.getTau().getMaTau() + " - " + ct.getTau().getTenTau(), 
+                               ct.getTuyenDuong().getGaDi().getTenGa(),  
+                               ct.getTuyenDuong().getGaDen().getTenGa(),
+                               FormatUtil.formatDateTime(ct.getThoiGianDi()), 
+                               FormatUtil.formatDateTime(ct.getThoiGianDen()), 
+                               String.valueOf(ct.getSoGheConTrong()), 
+                               FormatUtil.formatCurrency(ct.getTuyenDuong().getQuangDuong() * ct.getTuyenDuong().getSoTienMotKm())};
             tblModel_thongTinChuyenTau.addRow(newRow);
         }
     }
@@ -159,7 +170,7 @@ public class TraCuuChuyenTau_GUI extends javax.swing.JPanel {
         pnl_header.setPreferredSize(new java.awt.Dimension(1366, 200));
         pnl_header.setLayout(new java.awt.BorderLayout());
 
-        pnl_thongTinHanhTrinh.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder("Thông tin hành trình"), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        pnl_thongTinHanhTrinh.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder(null, "Thông tin hành trình", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 14), new java.awt.Color(123, 17, 19)), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10))); // NOI18N
         pnl_thongTinHanhTrinh.setMaximumSize(new java.awt.Dimension(65766, 150));
         pnl_thongTinHanhTrinh.setPreferredSize(new java.awt.Dimension(247, 150));
         pnl_thongTinHanhTrinh.setLayout(new javax.swing.BoxLayout(pnl_thongTinHanhTrinh, javax.swing.BoxLayout.Y_AXIS));
@@ -188,11 +199,6 @@ public class TraCuuChuyenTau_GUI extends javax.swing.JPanel {
         cbo_gaDen.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "--Chọn ga đến---" }));
         cbo_gaDen.setEnabled(false);
         cbo_gaDen.setMaximumSize(new java.awt.Dimension(32767, 50));
-        cbo_gaDen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbo_gaDenActionPerformed(evt);
-            }
-        });
         pnl_thongTin.add(cbo_gaDen);
         pnl_thongTin.add(filler2);
 
@@ -267,6 +273,7 @@ public class TraCuuChuyenTau_GUI extends javax.swing.JPanel {
             }
         });
         tbl_thongTinChuyenTau.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tbl_thongTinChuyenTau.setShowHorizontalLines(true);
         jScrollPane1.setViewportView(tbl_thongTinChuyenTau);
 
         jPanel1.add(jScrollPane1, java.awt.BorderLayout.CENTER);
@@ -283,10 +290,6 @@ public class TraCuuChuyenTau_GUI extends javax.swing.JPanel {
         // TODO add your handling code here:
         handleXoaTrang();
     }//GEN-LAST:event_btn_xoaTrangActionPerformed
-
-    private void cbo_gaDenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbo_gaDenActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbo_gaDenActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

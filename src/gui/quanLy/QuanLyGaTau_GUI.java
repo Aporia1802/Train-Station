@@ -324,7 +324,6 @@ public class QuanLyGaTau_GUI extends javax.swing.JPanel {
         pnl_btnGroup.setMinimumSize(new java.awt.Dimension(220, 100));
         pnl_btnGroup.setLayout(new java.awt.BorderLayout());
 
-        jPanel5.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 2, 0));
         jPanel5.setLayout(new java.awt.GridLayout(1, 2, 5, 5));
 
         btn_xoaTrang.setText("Xóa trắng");

@@ -5,6 +5,7 @@
 package dao;
 
 import database.ConnectDB;
+import static database.ConnectDB.conn;
 import entity.ChuyenTau;
 import entity.GaTau;
 import entity.Ghe;
@@ -27,6 +28,8 @@ import interfaces.DAOBase;
 import java.util.ArrayList;
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -60,9 +63,9 @@ public class Ve_DAO implements DAOBase<Ve>{
             "LEFT JOIN KhuyenMai km ON hd.maKhuyenMai = km.maKhuyenMai " +
             "WHERE v.maVe = ?";
 
-            PreparedStatement pst = ConnectDB.conn.prepareStatement(sql);
-            pst.setString(1, id);
-            ResultSet rs = pst.executeQuery();
+            PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
+            st.setString(1, id);
+            ResultSet rs = st.executeQuery();
 
             if (rs.next()) {
                 ve = getData(rs);
@@ -76,7 +79,41 @@ public class Ve_DAO implements DAOBase<Ve>{
 
     @Override
     public ArrayList<Ve> getAll() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        ArrayList<Ve> dsVe = new ArrayList<>();
+        String sql = "SELECT *, " +
+            "gdi.maGa AS maGaDi, gdi.tenGa AS tenGaDi, gdi.diaChi AS diaChiGaDi, gdi.soDienThoai AS sdtGaDi, " +
+            "gden.maGa AS maGaDen, gden.tenGa AS tenGaDen, gden.diaChi AS diaChiGaDen, gden.soDienThoai AS sdtGaDen " +
+            "FROM Ve v " +
+            "JOIN LoaiVe lv ON v.maLoaiVe = lv.maLoaiVe " +
+            "JOIN HanhKhach hk ON v.maHanhKhach = hk.maHanhKhach " +
+            "JOIN Ghe g ON v.maGhe = g.maGhe " +
+            "JOIN LoaiGhe lg ON g.maLoaiGhe = lg.maLoaiGhe " +
+            "JOIN KhoangTau kt ON g.maKhoangTau = kt.maKhoangTau " +
+            "JOIN ToaTau tt ON kt.maToaTau = tt.maToaTau " +
+            "JOIN Tau t ON tt.maTau = t.maTau " +
+            "JOIN ChuyenTau ct ON v.maChuyenTau = ct.maChuyenTau " +
+            "JOIN TuyenDuong td ON ct.maTuyenDuong = td.maTuyenDuong " +
+            "JOIN GaTau gdi ON td.gaDi = gdi.maGa " +
+            "JOIN GaTau gden ON td.gaDen = gden.maGa " +
+            "JOIN HoaDon hd ON v.maHoaDon = hd.maHoaDon " +
+            "JOIN NhanVien nv ON hd.maNhanVien = nv.maNV " +
+            "JOIN KhachHang kh ON hd.maKhachHang = kh.maKH " +
+            "JOIN KhuyenMai km ON hd.maKhuyenMai = km.maKhuyenMai ";
+
+        try {
+            PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
+            ResultSet rs = st.executeQuery();
+            
+            while (rs.next()) {
+                dsVe.add(getData(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception ex) {
+            Logger.getLogger(Ve_DAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return dsVe;
     }
 
     @Override
@@ -119,6 +156,7 @@ public class Ve_DAO implements DAOBase<Ve>{
             LoaiVe loaiVe = new LoaiVe(
                     rs.getString("maLoaiVe"),
                     rs.getString("tenLoaiVe"),
+                    rs.getString("moTa"),
                     rs.getDouble("heSoLoaiVe")
             );
             
@@ -259,77 +297,55 @@ public class Ve_DAO implements DAOBase<Ve>{
         return ve;
     }
     
-    public ArrayList<Ve> search(String maVe, String hoTen, String cccd, LocalDate ngayDi) {
+    public ArrayList<Ve> timKiemVe(String maVe, String hoTen, String cccd, LocalDate ngayDi) {
         ArrayList<Ve> dsVe = new ArrayList<>();
-        StringBuilder sql = new StringBuilder(
-            "SELECT v.maVe, v.trangThai, v.giaVe, " +
-            "hk.maHanhKhach, hk.tenHanhKhach, hk.cccd, hk.ngaySinh, " +
-            "g.maGhe, g.soGhe, g.trangThaiGhe, " +
-            "lg.maLoaiGhe, lg.tenLoaiGhe, lg.heSoGhe, " +
-            "t.maTau, t.tenTau, " +
-            "ct.maChuyenTau, ct.thoiGianDi, ct.thoiGianDen, " +
-            "gaDi.maGa AS maGaDi, gaDi.tenGa AS tenGaDi, " +
-            "gaDen.maGa AS maGaDen, gaDen.tenGa AS tenGaDen " +
-            "FROM Ve v " +
-            "JOIN HanhKhach hk ON v.maHanhKhach = hk.maHanhKhach " +
-            "JOIN Ghe g ON v.maGhe = g.maGhe " +
-            "JOIN LoaiGhe lg ON g.maLoaiGhe = lg.maLoaiGhe " +
-            "JOIN KhoangTau kt ON g.maKhoangTau = kt.maKhoangTau " +
-            "JOIN ToaTau tt ON kt.maToaTau = tt.maToaTau " +
-            "JOIN Tau t ON tt.maTau = t.maTau " +
-            "JOIN ChuyenTau ct ON v.maChuyenTau = ct.maChuyenTau " +
-            "JOIN TuyenDuong td ON ct.maTuyenDuong = td.maTuyenDuong " +
-            "JOIN GaTau gaDi ON td.gaDi = gaDi.maGa " +
-            "JOIN GaTau gaDen ON td.gaDen = gaDen.maGa " +
-            "WHERE 1=1"
-        );
-        
-        ArrayList<Object> params = new ArrayList<>();
-        
+
+        StringBuilder sql = new StringBuilder("""
+            SELECT * FROM Ve v
+            JOIN HanhKhach hk ON v.maHanhKhach = hk.maHanhKhach
+            JOIN ChuyenTau ct ON v.maChuyenTau = ct.maChuyenTau
+            WHERE 1=1
+                """);
+
+        // Xây dựng SQL linh hoạt (chỉ thêm điều kiện khi có dữ liệu)
         if (maVe != null && !maVe.trim().isEmpty()) {
-            sql.append(" AND v.maVe LIKE ?");
-            params.add("%" + maVe.trim() + "%");
+            sql.append(" AND v.maVe = ?");
         }
-        
         if (hoTen != null && !hoTen.trim().isEmpty()) {
             sql.append(" AND hk.tenHanhKhach LIKE ?");
-            params.add("%" + hoTen.trim() + "%");
         }
-        
         if (cccd != null && !cccd.trim().isEmpty()) {
-            sql.append(" AND hk.cccd LIKE ?");
-            params.add("%" + cccd.trim() + "%");
+            sql.append(" AND hk.soCCCD = ?");
         }
-        
         if (ngayDi != null) {
             sql.append(" AND CAST(ct.thoiGianDi AS DATE) = ?");
-            params.add(Date.valueOf(ngayDi));
         }
-        
+
         try {
-            PreparedStatement ps = ConnectDB.conn.prepareStatement(sql.toString());
-            
-            for (int i = 0; i < params.size(); i++) {
-                ps.setObject(i + 1, params.get(i));
+            PreparedStatement st = ConnectDB.conn.prepareStatement(sql.toString());
+
+            int index = 1;
+            if (maVe != null && !maVe.trim().isEmpty()) {
+                st.setString(index++, maVe.trim());
             }
-            
-            ResultSet rs = ps.executeQuery();
-            
+            if (hoTen != null && !hoTen.trim().isEmpty()) {
+                st.setString(index++, "%" + hoTen.trim() + "%");
+            }
+            if (cccd != null && !cccd.trim().isEmpty()) {
+                st.setString(index++, cccd.trim());
+            }
+            if (ngayDi != null) {
+                st.setDate(index++, java.sql.Date.valueOf(ngayDi));
+            }
+
+            ResultSet rs = st.executeQuery();
             while (rs.next()) {
-                Ve ve = getData(rs);
-                if (ve != null) {
-                    dsVe.add(ve);
-                }
+                dsVe.add(getData(rs));
             }
-            
-            
-            rs.close();
-            ps.close();
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
         return dsVe;
     }
 }

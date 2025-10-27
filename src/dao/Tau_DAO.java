@@ -9,7 +9,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class Tau_DAO implements DAOBase {
+public class Tau_DAO implements DAOBase<Tau>{
 
     @Override
     public Tau getOne(String id) {
@@ -111,31 +111,18 @@ public class Tau_DAO implements DAOBase {
             String tenTau = rs.getString("tenTau");
             int soToaTau = rs.getInt("soToaTau");
             int sucChua = rs.getInt("sucChua");
-            
             java.sql.Date ngayHoatDongSQL = rs.getDate("ngayHoatDong");
             LocalDate ngayHoatDong = ngayHoatDongSQL != null ? 
                 ngayHoatDongSQL.toLocalDate() : null;
             
-            String trangThaiStr = rs.getString("trangThai");
-            
             Tau tau = new Tau(maTau);
             tau.setTenTau(tenTau);
-            
-            try {
-                tau.setSoToaTau(soToaTau);
-            } catch (Exception e) {
-                System.err.println("⚠️ Số toa tàu không hợp lệ: " + soToaTau);
-            }
-            
+            tau.setSoToaTau(soToaTau);
             tau.setSucChua(sucChua);
             tau.setNgayHoatDong(ngayHoatDong);
-            
-            // Convert trạng thái
-            if (trangThaiStr != null && !trangThaiStr.trim().isEmpty()) {
-                TrangThaiTau trangThai = TrangThaiTau.fromString(trangThaiStr);
-                tau.setTrangThai(trangThai);
-            }
-            
+            TrangThaiTau trangThai = TrangThaiTau.fromInt(rs.getInt("trangThai"));
+            tau.setTrangThai(trangThai);
+
             return tau;
             
         } catch (Exception e) {
@@ -143,9 +130,47 @@ public class Tau_DAO implements DAOBase {
             return null;
         }
     }
+    
+    public ArrayList<Tau> search(String maTau, String tenTau, int trangThai) {
+         ArrayList<Tau> dsTau = new ArrayList<>();
+        String sql = "SELECT * FROM Tau WHERE 1=1";
+
+        if (maTau != null && !maTau.trim().isEmpty()) {
+            sql += " AND maTau LIKE ?";
+        }
+        if (tenTau != null && !tenTau.trim().isEmpty()) {
+            sql += " AND tenTau LIKE ?";
+        }
+        if (trangThai != 0) {
+            sql += " AND trangThai = ?";
+        }
+
+        try {
+            PreparedStatement ps = ConnectDB.conn.prepareStatement(sql);
+
+            int index = 1;
+            if (maTau != null && !maTau.trim().isEmpty()) {
+                ps.setString(index++, "%" + maTau + "%");
+            }
+            if (tenTau != null && !tenTau.trim().isEmpty()) {
+                ps.setString(index++, "%" + tenTau + "%");
+            }
+            if (trangThai != 0) {
+                ps.setInt(index++, trangThai);
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                dsTau.add(getData(rs));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return dsTau;
+    }
 
     @Override
-    public Boolean create(Object object) {
+    public Boolean create(Tau object) {
         Tau tau = (Tau) object;
         String sql = "INSERT INTO Tau (maTau, tenTau, soToaTau, sucChua, ngayHoatDong, trangThai) VALUES (?, ?, ?, ?, ?, ?)";
         
@@ -156,7 +181,7 @@ public class Tau_DAO implements DAOBase {
             ps.setInt(3, tau.getSoToaTau());
             ps.setInt(4, tau.getSucChua());
             ps.setDate(5, Date.valueOf(tau.getNgayHoatDong()));
-            ps.setString(6, tau.getTrangThai().getDisplay());
+            ps.setInt(6, tau.getTrangThai().getValue());
             
             int result = ps.executeUpdate();
             ps.close();
@@ -169,8 +194,8 @@ public class Tau_DAO implements DAOBase {
     }
 
     @Override
-    public Boolean update(String id, Object newObject) {
-        Tau tau = (Tau) newObject;
+    public Boolean update(String id, Tau newObject) {
+        Tau tau = newObject;
         String sql = "UPDATE Tau SET tenTau = ?, soToaTau = ?, sucChua = ?, ngayHoatDong = ?, trangThai = ? WHERE maTau = ?";
         
         try {
@@ -179,7 +204,7 @@ public class Tau_DAO implements DAOBase {
             ps.setInt(2, tau.getSoToaTau());
             ps.setInt(3, tau.getSucChua());
             ps.setDate(4, Date.valueOf(tau.getNgayHoatDong()));
-            ps.setString(5, tau.getTrangThai().getDisplay());
+            ps.setInt(5, tau.getTrangThai().getValue());
             ps.setString(6, id);
             
             int result = ps.executeUpdate();

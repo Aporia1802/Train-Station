@@ -19,11 +19,24 @@ import java.util.ArrayList;
  *
  * @author CÔNG HOÀNG
  */
-public class KhuyenMai_DAO implements DAOBase {
+public class KhuyenMai_DAO implements DAOBase<KhuyenMai> {
 
     @Override
-    public Object getOne(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public KhuyenMai getOne(String id) {
+        KhuyenMai km = null;
+        String sql = "Select * from KhuyenMai where maKhuyenMai = ?";
+        try {
+            PreparedStatement ps = ConnectDB.conn.prepareStatement(sql);
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery("");
+            if (rs.next()) {
+                km = getData(rs);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return km;
     }
 
     @Override
@@ -167,7 +180,7 @@ public class KhuyenMai_DAO implements DAOBase {
         return dsKM;
     }
 
-    public String getLastMaKhuyenMai() {
+    public String getMaxID() {
         String sql = "SELECT TOP 1 MaKhuyenMai FROM KhuyenMai ORDER BY MaKhuyenMai DESC";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -187,12 +200,12 @@ public class KhuyenMai_DAO implements DAOBase {
     }
 
     @Override
-    public Boolean create(Object object) {
-        KhuyenMai km = (KhuyenMai) object;
+    public Boolean create(KhuyenMai object) {
+        KhuyenMai km = object;
         String sql = """
         INSERT INTO KhuyenMai (MaKhuyenMai, TenKhuyenMai, HeSoKhuyenMai, NgayBatDau, NgayKetThuc, TongTienToiThieu, TienKhuyenMaiToiDa, TrangThai)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    """;
+                                        """;
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, km.getMaKhuyenMai());
@@ -212,14 +225,14 @@ public class KhuyenMai_DAO implements DAOBase {
     }
 
     @Override
-    public Boolean update(String id, Object newObject) {
-        KhuyenMai km = (KhuyenMai) newObject;
+    public Boolean update(String id, KhuyenMai newObject) {
+        KhuyenMai km = newObject;
         String sql = """
         UPDATE KhuyenMai 
         SET TenKhuyenMai = ?, HeSoKhuyenMai = ?, NgayBatDau = ?, NgayKetThuc = ?, 
             TongTienToiThieu = ?, TienKhuyenMaiToiDa = ?, TrangThai = ?
-        WHERE MaKhuyenMai = ?
-    """;
+            WHERE MaKhuyenMai = ?
+                                """;
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, km.getTenKhuyenMai());

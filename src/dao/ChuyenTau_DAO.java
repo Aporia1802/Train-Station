@@ -41,23 +41,18 @@ public class ChuyenTau_DAO implements DAOBase {
     public ArrayList<ChuyenTau> getAll() {
         ArrayList<ChuyenTau> dsChuyenTau = new ArrayList<>();
         
-        String sql = "SELECT * FROM ChuyenTau ct "
-                   + "JOIN Tau t ON t.maTau = ct.maTau "
-                   + "JOIN TuyenDuong td ON td.maTuyenDuong = ct.maTuyenDuong";
+        String sql = "Select *, gdi.maGa AS maGaDi, gdi.tenGa AS tenGaDi," 
+                      + "gden.maGa AS maGaDen, gden.tenGa AS tenGaDen from ChuyenTau ct"
+                      + " JOIN Tau t ON t.maTau = ct.maTau"
+                      + " JOIN TuyenDuong td ON td.maTuyenDuong = ct.maTuyenDuong"
+                      + " JOIN GaTau gdi ON gdi.maGa = td.gaDi"
+                      + " JOIN GaTau gden ON gden.maGa = td.gaDen";
 
         try {
             Statement st = ConnectDB.conn.createStatement();
-            ResultSet rs = st.executeQuery("Select *, gdi.maGa AS maGaDi, gdi.tenGa AS tenGaDi," +
-                                            "gden.maGa AS maGaDen, gden.tenGa AS tenGaDen from ChuyenTau ct"
-                                            + " JOIN Tau t ON t.maTau = ct.maTau"
-                                            + " JOIN TuyenDuong td ON td.maTuyenDuong = ct.maTuyenDuong"
-                                            + " JOIN GaTau gdi ON gdi.maGa = td.gaDi"
-                                            + " JOIN GaTau gden ON gden.maGa = td.gaDen");
-            while (rs.next()) {
-                ChuyenTau ct = getData(rs);
-                if (ct != null) {
-                    dsChuyenTau.add(ct);
-                }
+            ResultSet rs = st.executeQuery(sql);
+            while(rs.next()) {
+                dsChuyenTau.add(getData(rs));
             }
             
             rs.close();
@@ -256,8 +251,12 @@ public class ChuyenTau_DAO implements DAOBase {
             }
         return n > 0;
     }
-
     
+    public ChuyenTau timKiemChuyenTau(String gaDi, String gaDen, boolean motChieu, LocalDate ngayDi, LocalDate ngayVe) {
+        ChuyenTau ct = null;
+        return ct;
+    }
+
     private ChuyenTau getData(ResultSet rs) throws SQLException, Exception { 
         ChuyenTau ct = new ChuyenTau();
         Tau tau = new Tau();
@@ -266,6 +265,7 @@ public class ChuyenTau_DAO implements DAOBase {
         GaTau gaDen = new GaTau();
       
         // Lấy thông tin Tàu
+        tau.setMaTau(rs.getString("maTau"));
         tau.setTenTau(rs.getString("tenTau"));
         tau.setSoToaTau(rs.getInt("soToaTau"));
         tau.setSucChua(rs.getInt("sucChua"));

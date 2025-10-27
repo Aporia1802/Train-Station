@@ -29,7 +29,14 @@ public class TraCuuGaTau_GUI extends javax.swing.JPanel {
         bus = new TraCuuGaTau_BUS();
         
 //      setModel
-        tblModel_thongTinGa = new DefaultTableModel(new String[] {"Mã ga", "Tên ga", "Địa chỉ", "Số điện thoại"}, 0);
+        String[] columns = {"Mã ga", "Tên ga", "Địa chỉ", "Số điện thoại"};
+        
+        tblModel_thongTinGa = new DefaultTableModel(columns, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         tbl_thongTinGa.setModel(tblModel_thongTinGa);
         
         loadDataToTable(bus.getAllGaTau());
@@ -98,7 +105,7 @@ public class TraCuuGaTau_GUI extends javax.swing.JPanel {
         pnl_header.setPreferredSize(new java.awt.Dimension(1366, 250));
         pnl_header.setLayout(new java.awt.BorderLayout());
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder("Thông tin ga tàu"), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        jPanel2.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder(null, "Thông tin ga tàu", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 14), new java.awt.Color(123, 17, 19)), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10))); // NOI18N
         jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.Y_AXIS));
 
         pnl_ga.setMaximumSize(new java.awt.Dimension(65736, 70));
@@ -208,7 +215,8 @@ public class TraCuuGaTau_GUI extends javax.swing.JPanel {
             }
         });
         tbl_thongTinGa.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        tbl_thongTinGa.setShowGrid(true);
+        tbl_thongTinGa.setShowGrid(false);
+        tbl_thongTinGa.setShowHorizontalLines(true);
         jScrollPane1.setViewportView(tbl_thongTinGa);
 
         jPanel1.add(jScrollPane1, java.awt.BorderLayout.CENTER);

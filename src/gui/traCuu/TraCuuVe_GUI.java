@@ -12,16 +12,16 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
+import utils.FormatUtil;
 /**
  *
  * @author PC
  */
 public class TraCuuVe_GUI extends javax.swing.JPanel {
-  private DefaultTableModel tblModel;
+    private DefaultTableModel tblModel;
     private TraCuuVe_BUS bus;
-    private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     public TraCuuVe_GUI() {
         initComponents();
@@ -31,8 +31,8 @@ public class TraCuuVe_GUI extends javax.swing.JPanel {
     private void init() {
         bus = new TraCuuVe_BUS();
         
-        String[] columns = {"Mã vé", "Tàu", "Ga đi", "Ga đến", "Ngày đi", "Ngày đến", 
-                           "Hành khách", "Số ghế", "Trạng thái", "Giá vé"};
+        String[] columns = {"Mã vé", "Tàu", "Tuyến", "Thời gian đi", "Thời gian đến", 
+                           "Hành khách", "CCCD", "Số ghế", "Giá vé"};
         tblModel = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -42,138 +42,60 @@ public class TraCuuVe_GUI extends javax.swing.JPanel {
         tbl_thongTinVe.setModel(tblModel);
         tbl_thongTinVe.setRowHeight(30);
         
-        javax.swing.table.DefaultTableCellRenderer centerRenderer = 
-            new javax.swing.table.DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(javax.swing.JLabel.CENTER);
-        
-        for (int i = 0; i < tbl_thongTinVe.getColumnCount(); i++) {
-            if (i != 6) {
-                tbl_thongTinVe.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-            }
-        }
-         try {
-            tbl_thongTinVe.getColumnModel().getColumn(0).setPreferredWidth(100);
-            tbl_thongTinVe.getColumnModel().getColumn(1).setPreferredWidth(80);
-            tbl_thongTinVe.getColumnModel().getColumn(2).setPreferredWidth(120);
-            tbl_thongTinVe.getColumnModel().getColumn(3).setPreferredWidth(120);
-            tbl_thongTinVe.getColumnModel().getColumn(4).setPreferredWidth(130);
-            tbl_thongTinVe.getColumnModel().getColumn(5).setPreferredWidth(130);
-            tbl_thongTinVe.getColumnModel().getColumn(6).setPreferredWidth(150);
-            tbl_thongTinVe.getColumnModel().getColumn(7).setPreferredWidth(80);
-            tbl_thongTinVe.getColumnModel().getColumn(8).setPreferredWidth(100);
-            tbl_thongTinVe.getColumnModel().getColumn(9).setPreferredWidth(120);
-        } catch (Exception e) {
-            System.err.println("️ Không thể set column width: " + e.getMessage());
-        }
-            date_ngayDi.setDateFormatString("dd/MM/yyyy");
-         
+
+        tbl_thongTinVe.getColumnModel().getColumn(0).setPreferredWidth(100);
+        tbl_thongTinVe.getColumnModel().getColumn(1).setPreferredWidth(80);
+        tbl_thongTinVe.getColumnModel().getColumn(2).setPreferredWidth(120);
+        tbl_thongTinVe.getColumnModel().getColumn(3).setPreferredWidth(120);
+        tbl_thongTinVe.getColumnModel().getColumn(4).setPreferredWidth(130);
+        tbl_thongTinVe.getColumnModel().getColumn(5).setPreferredWidth(130);
+        tbl_thongTinVe.getColumnModel().getColumn(6).setPreferredWidth(150);
+        tbl_thongTinVe.getColumnModel().getColumn(7).setPreferredWidth(80);
+
+        loadTableData(bus.getAllVe());
     }
     
     private void loadTableData(ArrayList<Ve> dsVe) {
         tblModel.setRowCount(0);
         
         for (Ve ve : dsVe) {
-            try {
-                String[] row = {
-                    ve.getMaVe() != null ? ve.getMaVe() : "",
-                    ve.getChuyenTau() != null && ve.getChuyenTau().getTau() != null ? 
-                        ve.getChuyenTau().getTau().getTenTau() : "",
-                    ve.getChuyenTau() != null && ve.getChuyenTau().getTuyenDuong() != null && 
-                        ve.getChuyenTau().getTuyenDuong().getGaDi() != null ?
-                        ve.getChuyenTau().getTuyenDuong().getGaDi().getTenGa() : "",
-                    ve.getChuyenTau() != null && ve.getChuyenTau().getTuyenDuong() != null && 
-                        ve.getChuyenTau().getTuyenDuong().getGaDen() != null ?
-                        ve.getChuyenTau().getTuyenDuong().getGaDen().getTenGa() : "",
-                    ve.getChuyenTau() != null && ve.getChuyenTau().getThoiGianDi() != null ?
-                        ve.getChuyenTau().getThoiGianDi().format(dateTimeFormatter) : "",
-                    ve.getChuyenTau() != null && ve.getChuyenTau().getThoiGianDen() != null ?
-                        ve.getChuyenTau().getThoiGianDen().format(dateTimeFormatter) : "",
-                    ve.getHanhKhach() != null ? ve.getHanhKhach().getTenHanhKhach() : "",
-                    ve.getGhe() != null ? String.valueOf(ve.getGhe().getSoGhe()) : "",
-                    ve.getTrangThai() != null ? ve.getTrangThai().toString() : "",
-                    String.format("%,.0f đ", ve.getGiaVe())
+                String[] newRow = { 
+                    ve.getMaVe(),
+                    ve.getChuyenTau().getTau().getMaTau() + " - " + ve.getChuyenTau().getTau().getTenTau(),
+                    ve.getChuyenTau().getTuyenDuong().getGaDi().getTenGa() + " - " + ve.getChuyenTau().getTuyenDuong().getGaDen().getTenGa(),
+                    FormatUtil.formatDateTime(ve.getChuyenTau().getThoiGianDi()),
+                    FormatUtil.formatDateTime(ve.getChuyenTau().getThoiGianDen()),
+                    ve.getHanhKhach().getTenHanhKhach(),
+                    ve.getHanhKhach().getCccd(),
+                    "Toa " + ve.getGhe().getKhoangTau().getToaTau().getSoHieuToa() + " ghế " + String.valueOf(ve.getGhe().getSoGhe()),
+                    String.valueOf(FormatUtil.formatCurrency(ve.getGiaVe()))
                 };
-                tblModel.addRow(row);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                tblModel.addRow(newRow);
         }
         
     }
     
     private void handleTimKiem() {
-        try {
-            String maVe = txt_maVe.getText().trim();
-            String hoTen = txt_hoTen.getText().trim();
-            String cccd = txt_cccd.getText().trim();
-            LocalDate ngayDi = null;
-            Date selectedDate = date_ngayDi.getDate();
-            if (selectedDate != null) {
-                ngayDi = selectedDate.toInstant()
-                    .atZone(ZoneId.systemDefault())
-                    .toLocalDate();
-            }
-            
-            if (maVe.isEmpty() && hoTen.isEmpty() && cccd.isEmpty() && ngayDi == null) {
-                javax.swing.JOptionPane.showMessageDialog(this,
-                    "Vui lòng nhập ít nhất 1 điều kiện tìm kiếm!",
-                    "Thiếu thông tin",
-                    javax.swing.JOptionPane.WARNING_MESSAGE);
-                txt_maVe.requestFocus();
-                return;
-            }
-            
-            if (!cccd.isEmpty() && !cccd.matches("^\\d{12}$")) {
-                javax.swing.JOptionPane.showMessageDialog(this,
-                    "CCCD phải có đúng 12 số!\nVí dụ: 079095123456",
-                    "Lỗi định dạng",
-                    javax.swing.JOptionPane.ERROR_MESSAGE);
-                txt_cccd.requestFocus();
-                txt_cccd.selectAll();
-                return;
-            }
-                      ArrayList<Ve> dsVe = bus.searchVe(maVe, hoTen, cccd, ngayDi);
-            
-            if (dsVe.isEmpty()) {
-                javax.swing.JOptionPane.showMessageDialog(this,
-                    "Không tìm thấy vé nào phù hợp với điều kiện tìm kiếm!",
-                    "Không có kết quả",
-                    javax.swing.JOptionPane.INFORMATION_MESSAGE);
-                tblModel.setRowCount(0);
-            } else {
-                loadTableData(dsVe);
-                javax.swing.JOptionPane.showMessageDialog(this,
-                    " Tìm thấy " + dsVe.size() + " vé!",
-                    "Kết quả tìm kiếm",
-                    javax.swing.JOptionPane.INFORMATION_MESSAGE);
-            }
-            
-        } catch (Exception e) {
-            javax.swing.JOptionPane.showMessageDialog(this,
-                " Lỗi: " + e.getMessage(),
-                "Lỗi hệ thống",
-                javax.swing.JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+        String maVe = txt_maVe.getText();
+        String hoTen = txt_hoTen.getText();
+        String cccd = txt_cccd.getText();
+        LocalDate ngayDi = null;
+        if(date_ngayDi.getDate() != null) {
+            ngayDi  = date_ngayDi.getDate().toInstant()    
+                                                .atZone(ZoneId.systemDefault())
+                                                .toLocalDate();
         }
+       
+        loadTableData(bus.timKiemVe(maVe, hoTen, cccd, ngayDi));
     }
-    
     private void handleXoaTrang() {
         txt_maVe.setText("");
         txt_hoTen.setText("");
         txt_cccd.setText("");
-        
-        try {
-            date_ngayDi.setDate(null);
-        } catch (Exception e) {
-         
-        }
-        
-        tblModel.setRowCount(0);
+        date_ngayDi.setDate(new Date());
+        loadTableData(bus.getAllVe());
         txt_maVe.requestFocus();
-        
-        System.out.println(" Đã xóa trắng form");
-    
-}
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -211,7 +133,7 @@ public class TraCuuVe_GUI extends javax.swing.JPanel {
         pnl_header.setPreferredSize(new java.awt.Dimension(1366, 250));
         pnl_header.setLayout(new java.awt.BorderLayout());
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder("Thông tin vé"), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        jPanel2.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder(null, "Thông tin vé", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 14), new java.awt.Color(123, 17, 19)), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10))); // NOI18N
         jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.Y_AXIS));
 
         pnl_ga.setMaximumSize(new java.awt.Dimension(65736, 70));
@@ -316,6 +238,7 @@ public class TraCuuVe_GUI extends javax.swing.JPanel {
                 "Mã vé", "Tàu", "Ga đi", "Ga đến", "Ngày đi", "Ngày đến", "Hành khách", "Số ghế", "Trạng thái", "Giá vé"
             }
         ));
+        tbl_thongTinVe.setShowHorizontalLines(true);
         jScrollPane1.setViewportView(tbl_thongTinVe);
 
         jPanel1.add(jScrollPane1, java.awt.BorderLayout.CENTER);

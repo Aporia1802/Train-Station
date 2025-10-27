@@ -43,83 +43,9 @@ public class QuanLyGaTau_BUS {
         }
     }
 
-    public boolean createGaTau(GaTau gaTau) {
-        try {
-            if (gaTau == null) {
-                return false;
-            }
-            
-            String error = validateGaTau(gaTau);
-            if (error != null) {
-                System.err.println("❌ " + error);
-                return false;
-            }
-            
-            return gaTauDAO.create(gaTau);
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public boolean updateGaTau(String maGa, GaTau gaTauMoi) {
-        try {
-            if (maGa == null || maGa.trim().isEmpty() || gaTauMoi == null) {
-                return false;
-            }
-            
-            String error = validateGaTau(gaTauMoi);
-            if (error != null) {
-                System.err.println("❌ " + error);
-                return false;
-            }
-            
-            return gaTauDAO.update(maGa, gaTauMoi);
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-
-  
-    private String validateGaTau(GaTau gaTau) {
-        if (gaTau == null) {
-            return "Ga tàu không được null!";
-        }
-        
-        if (gaTau.getMaGa() == null || gaTau.getMaGa().trim().isEmpty()) {
-            return "Mã ga không được rỗng!";
-        }
-        
-        if (gaTau.getTenGa() == null || gaTau.getTenGa().trim().isEmpty()) {
-            return "Tên ga không được rỗng!";
-        }
-        
-        if (gaTau.getDiaChi() == null || gaTau.getDiaChi().trim().isEmpty()) {
-            return "Địa chỉ không được rỗng!";
-        }
-        
-        if (gaTau.getSoDienThoai() == null || gaTau.getSoDienThoai().trim().isEmpty()) {
-            return "Số điện thoại không được rỗng!";
-        }
- 
-        if (!gaTau.getSoDienThoai().matches("^(02|03|05|07|08|09)\\d{8}$")) {
-            return "Số điện thoại không hợp lệ! (VD: 0901234567)";
-        }
-        
-        return null;
-    }
 
      public ArrayList<GaTau> filter(String maGa, String tenGa, String tinhThanh, String soDienThoai) {
-        try {
-            return gaTauDAO.filter(maGa, tenGa, tinhThanh, soDienThoai);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
+        return gaTauDAO.filter(maGa, tenGa, tinhThanh, soDienThoai);
     }
     
     public Boolean updateThongTinGa(GaTau gaTau) {

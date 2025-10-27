@@ -21,8 +21,20 @@ import java.util.List;
  */
 public class HanhKhach_DAO {
 
-    public Object getOne(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public HanhKhach getOne(String id) {
+        HanhKhach hanhKhach = null;
+        String sql = "SELECT * FROM HanhKhach WHERE maHanhKhach = ?";
+        try { 
+            PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
+            st.setString(1, id);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+               hanhKhach = getData(rs);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return hanhKhach;
     }
 
     public List<HanhKhach> getAll() {

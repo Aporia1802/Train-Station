@@ -29,7 +29,7 @@ public class TaiKhoan {
         setMatKhau(matKhau);
         setNhanVien(nhanVien);
     }
-    
+
     public NhanVien getNhanVien() {
         return nhanVien;
     }
