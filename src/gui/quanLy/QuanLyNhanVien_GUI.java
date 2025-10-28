@@ -204,7 +204,6 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
     //  Lấy giá trị từ combobox
         String chucVu = (String) cbo_chucVu.getSelectedItem();
         String trangThai = (String) cbo_trangThai.getSelectedItem();
-
         getTableData(bus.filter(chucVu, trangThai));
     }
     
@@ -841,7 +840,6 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_ResetActionPerformed
 
     private void btn_themNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_themNVActionPerformed
-        // TODO add your handling code here:
         handleThemNV();
     }//GEN-LAST:event_btn_themNVActionPerformed
 

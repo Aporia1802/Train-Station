@@ -117,11 +117,10 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
     }
      
      
-    private void handleActionLoc() {
-    // Lấy giá trị từ combobox
-    String trangThai = (String) cbo_trangThai.getSelectedItem();
+    private void handleActionLoc(){
+        String trangThai = (String) cbo_trangThai.getSelectedItem();
         getTableData(bus.filter(trangThai));
-}
+    }
     private void handleActionLamMoi() {
             tbl_tau.clearSelection();
             getTableData(bus.getAllTau());
@@ -224,8 +223,23 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
             Notifications.getInstance().show(Notifications.Type.ERROR, "Cập nhật thất bại!");
         }
     }
-
-    
+   
+    private void handleThemTau() {
+        try {
+           String maTau  = bus.generateID();
+            
+            Tau tau = getFormData();
+            tau.setMaTau(maTau);
+            if(bus.themTau(tau)) {
+                Notifications.getInstance().show(Notifications.Type.SUCCESS, "Thêm mới thành công!");
+                getTableData(bus.getAllTau());
+                handleXoaTrang();
+            } 
+        } catch (Exception e) {
+            Notifications.getInstance().show(Notifications.Type.ERROR, "Thêm thất bại!");
+        }
+    }
+     
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -597,7 +611,7 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
     }//GEN-LAST:event_txt_soLuongToaActionPerformed
 
     private void btn_themActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_themActionPerformed
-        handleCapNhat();
+        handleThemTau();
     }//GEN-LAST:event_btn_themActionPerformed
 
     private void btn_xoaTrangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_xoaTrangActionPerformed

@@ -22,7 +22,7 @@ public class QuanLyTau_BUS {
     }
     
 public ArrayList<Tau> filter(String trangThai){
-        ArrayList<Tau> dsTau = tauDao.filterByComboBoxTrangThai(trangThai);
+        ArrayList<Tau> dsTau = tauDao.filterByTrangThai(trangThai);
         return dsTau;
         
     }
