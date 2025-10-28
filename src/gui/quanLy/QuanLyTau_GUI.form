@@ -457,7 +457,7 @@
                       <SubComponents>
                         <Component class="javax.swing.JLabel" name="lbl_NgayHD">
                           <Properties>
-                            <Property name="text" type="java.lang.String" value="Ng&#xe0;y H&#x110;:"/>
+                            <Property name="text" type="java.lang.String" value="Ng&#xe0;y ho&#x1ea1;t &#x111;&#x1ed9;ng:"/>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                               <Dimension value="[45, 16]"/>
                             </Property>

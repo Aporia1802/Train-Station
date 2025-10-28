@@ -2,7 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package gui.custom;
+package gui.components;
+
+import entity.ChuyenTau;
+import utils.FormatUtil;
 
 /**
  *
@@ -16,6 +19,29 @@ public class ChonChuyenTau extends javax.swing.JPanel {
     public ChonChuyenTau() {
         initComponents();
     }
+    
+    private String maChuyenTau; // để lưu tạm id chuyến tàu
+
+    public void setData(ChuyenTau ct) {
+        this.maChuyenTau = ct.getMaChuyenTau();
+        lbl_maTau.setText(ct.getTau().getMaTau());
+        lbl_thoiGianDi.setText("Thời gian đi: " + FormatUtil.formatDateTime(ct.getThoiGianDi()));
+        lbl_thoiGianDen.setText("Thời gian đến: " + FormatUtil.formatDateTime(ct.getThoiGianDen()));
+        lbl_gaDi.setText(ct.getTuyenDuong().getGaDi().getTenGa());
+        lbl_gaDen.setText(ct.getTuyenDuong().getGaDen().getTenGa());
+        lbl_soGheDaDat.setText(String.valueOf(ct.getSoGheDaDat()));
+        lbl_soGheConTrong.setText(String.valueOf(ct.getSoGheConTrong()));
+
+        // Gán sự kiện cho nút chọn
+        btn_chon.addActionListener(e -> {
+            firePropertyChange("chonChuyenTau", false, true); // phát sự kiện ra ngoài
+        });
+    }
+
+    public String getMaChuyenTau() {
+        return maChuyenTau;
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -26,12 +52,6 @@ public class ChonChuyenTau extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        pnl_dsChuyenTau = new javax.swing.JPanel();
-        jPanel20 = new javax.swing.JPanel();
-        jLabel31 = new javax.swing.JLabel();
-        jPanel12 = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jPanel10 = new javax.swing.JPanel();
         panelShadow6 = new gui.custom.PanelShadow();
         lbl_maTau = new javax.swing.JLabel();
         filler14 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
@@ -53,29 +73,8 @@ public class ChonChuyenTau extends javax.swing.JPanel {
         filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         btn_chon = new javax.swing.JButton();
 
-        setLayout(new java.awt.BorderLayout());
-
-        pnl_dsChuyenTau.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 10, 0, 10));
-        pnl_dsChuyenTau.setPreferredSize(new java.awt.Dimension(250, 400));
-        pnl_dsChuyenTau.setLayout(new java.awt.BorderLayout());
-
-        jPanel20.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 4, 10, 0));
-        jPanel20.setLayout(new java.awt.GridLayout());
-
-        jLabel31.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        jLabel31.setText("Chọn chuyến tàu");
-        jPanel20.add(jLabel31);
-
-        pnl_dsChuyenTau.add(jPanel20, java.awt.BorderLayout.PAGE_START);
-
-        jPanel12.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel12.setLayout(new java.awt.BorderLayout());
-
-        jScrollPane3.setBorder(null);
-        jScrollPane3.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-
-        jPanel10.setPreferredSize(null);
-        jPanel10.setLayout(new javax.swing.BoxLayout(jPanel10, javax.swing.BoxLayout.Y_AXIS));
+        setPreferredSize(new java.awt.Dimension(400, 90));
+        setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.LINE_AXIS));
 
         panelShadow6.setBackground(new java.awt.Color(255, 255, 255));
         panelShadow6.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 30, 0, 30));
@@ -160,15 +159,7 @@ public class ChonChuyenTau extends javax.swing.JPanel {
         btn_chon.setPreferredSize(new java.awt.Dimension(100, 40));
         panelShadow6.add(btn_chon);
 
-        jPanel10.add(panelShadow6);
-
-        jScrollPane3.setViewportView(jPanel10);
-
-        jPanel12.add(jScrollPane3, java.awt.BorderLayout.CENTER);
-
-        pnl_dsChuyenTau.add(jPanel12, java.awt.BorderLayout.CENTER);
-
-        add(pnl_dsChuyenTau, java.awt.BorderLayout.PAGE_START);
+        add(panelShadow6);
     }// </editor-fold>//GEN-END:initComponents
 
 
@@ -181,15 +172,10 @@ public class ChonChuyenTau extends javax.swing.JPanel {
     private javax.swing.Box.Filler filler9;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel25;
-    private javax.swing.JLabel jLabel31;
-    private javax.swing.JPanel jPanel10;
-    private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel18;
     private javax.swing.JPanel jPanel19;
-    private javax.swing.JPanel jPanel20;
     private javax.swing.JPanel jPanel21;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lbl_gaDen;
     private javax.swing.JLabel lbl_gaDi;
     private javax.swing.JLabel lbl_maTau;
@@ -198,6 +184,5 @@ public class ChonChuyenTau extends javax.swing.JPanel {
     private javax.swing.JLabel lbl_thoiGianDen;
     private javax.swing.JLabel lbl_thoiGianDi;
     private gui.custom.PanelShadow panelShadow6;
-    private javax.swing.JPanel pnl_dsChuyenTau;
     // End of variables declaration//GEN-END:variables
 }

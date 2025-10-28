@@ -18,6 +18,11 @@ public class LoaiGhe {
     
     public LoaiGhe() {
     }
+
+    public LoaiGhe(String maLoaiGhe) {
+        this.maLoaiGhe = maLoaiGhe;
+    }
+    
     
     public LoaiGhe(String maLoaiGhe, String tenLoaiGhe, String moTa, double heSoLoaiGhe) throws Exception {
         setMaLoaiGhe(maLoaiGhe);

@@ -118,12 +118,53 @@ public class Ve_DAO implements DAOBase<Ve>{
 
     @Override
     public String generateID() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+         String prefix = "VE";
+    String sql = "SELECT MAX(maVe) FROM Ve";
+    String newId = "";
+
+    try {
+        PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
+        ResultSet rs = st.executeQuery();
+
+        if (rs.next()) {
+            String lastId = rs.getString(1); // VD: VE0023
+            if (lastId != null) {
+                int number = Integer.parseInt(lastId.substring(prefix.length()));
+                number++;
+                newId = prefix + String.format("%04d", number); // -> VE0024
+            } else {
+                newId = prefix + "0001";
+            }
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        newId = prefix + "0001";
+    }
+
+    return newId;
     }
 
     @Override
     public Boolean create(Ve object) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        int n = 0;
+        String sql = "INSERT INTO Ve (maVe, maLoaiVe, maChuyenTau, maHanhKhach, maGhe, maHoaDon, trangThai, giaVe)"
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    
+        try {
+            PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
+            st.setString(1, object.getMaVe());
+            st.setString(2, object.getLoaiVe().getMaLoaiVe());
+            st.setString(3, object.getChuyenTau().getMaChuyenTau());
+            st.setString(4, object.getHanhKhach().getMaHanhKhach());
+            st.setString(5, object.getGhe().getMaGhe());
+            st.setString(6, object.getHoaDon().getMaHoaDon());
+            st.setInt(7, object.getTrangThai().getValue());
+            st.setDouble(8, object.getGiaVe());
+            n = st.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return n > 0;
     }
 
     @Override
@@ -279,7 +320,7 @@ public class Ve_DAO implements DAOBase<Ve>{
                     rs.getString("maHoaDon"),
                     nhanVien,
                     khachHang,
-                    rs.getDate("ngayLapHoaDon").toLocalDate(),
+                    rs.getTimestamp("ngayLapHoaDon").toLocalDateTime(),
                     khuyenMai
             );
             

@@ -45,17 +45,15 @@ public class QuanLyGaTau_GUI extends javax.swing.JPanel {
         }
     }
     
-//  Lấy thông tin ga đổ lên text field
     private void loadThongTinGaToTextField() {
-        int row = tbl_thongTinGa.getSelectedRow(); // lấy dòng được chọn
+        int row = tbl_thongTinGa.getSelectedRow(); 
         if (row != -1) {
-            // Lấy dữ liệu từng cột trong dòng đó
+            
             String maGa = tbl_thongTinGa.getValueAt(row, 0).toString();
             String tenGa = tbl_thongTinGa.getValueAt(row, 1).toString();
             String diaChi = tbl_thongTinGa.getValueAt(row, 2).toString();
             String sdt = tbl_thongTinGa.getValueAt(row, 3).toString();
 
-            // Đổ lên textfield
             txt_maGa.setText(maGa);
             txt_tenGa.setText(tenGa);
             txt_diaChi.setText(diaChi);

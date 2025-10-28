@@ -4,7 +4,7 @@
  */
 package entity;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -12,7 +12,7 @@ import java.time.LocalDate;
  */
 public class HoaDon {
     private String maHoaDon;
-    private LocalDate ngayLapHoaDon;
+    private LocalDateTime ngayLapHoaDon;
     private final double VAT = 0.1;
     private KhuyenMai khuyenMai;
     private NhanVien nhanVien;
@@ -24,11 +24,11 @@ public class HoaDon {
     public static final String KHACHHANG_NULL = "Khách hàng không được null!";
     public static final String NGAYLAP_INVALID = "Ngày lập hóa đơn phải là ngày hiện tại!";
     
-    public HoaDon() {
+    public HoaDon(String hdtemp) {
     }
     
     public HoaDon(String maHoaDon, NhanVien nhanVien, KhachHang khachHang,
-                  LocalDate ngayLapHoaDon, KhuyenMai khuyenMai) throws Exception {
+                  LocalDateTime ngayLapHoaDon, KhuyenMai khuyenMai) throws Exception {
         setMaHoaDon(maHoaDon);
         setNhanVien(nhanVien);
         setKhachHang(khachHang);
@@ -66,11 +66,11 @@ public class HoaDon {
         this.khachHang = khachHang;
     }
     
-    public LocalDate getNgayLapHoaDon() {
+    public LocalDateTime getNgayLapHoaDon() {
         return ngayLapHoaDon;
     }
     
-    public void setNgayLapHoaDon(LocalDate ngayLapHoaDon) throws Exception {
+    public void setNgayLapHoaDon(LocalDateTime ngayLapHoaDon) throws Exception {
 //        if (!ngayLapHoaDon.equals(LocalDate.now())) {
 //            throw new Exception(NGAYLAP_INVALID);
 //        }
