@@ -9,9 +9,11 @@ import entity.Tau;
 import enums.TrangThaiTau;
 import java.awt.Color;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
+import raven.toast.Notifications;
 import static utils.FormatUtil.formatDate;
 
 /**
@@ -86,7 +88,8 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
             txt_ngayHD.setDate(null);
         }
     }
-}
+    }
+
  
     private void handleXoaTrang() {
         // Xóa các ô nhập liệu văn bản
@@ -103,7 +106,7 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
   
          if (cbo_tt.getItemCount() > 0) {
          cbo_tt.setSelectedIndex(0); 
-     }
+      }
         // Bỏ chọn hàng đang được chọn trong bảng (nếu có)
         tbl_tau.clearSelection();
     }
@@ -126,12 +129,124 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
             txt_timKiem.setForeground(Color.GRAY);
         }
     
+   
+//     private Tau getCurrentValue() throws Exception {
+//        String maTau = txt_maTau.getText().trim();
+//        String tenTau = txt_tenTau.getText().trim();
+//        int soToaTau = Integer.parseInt(txt_soLuongToa.getText().trim());
+//        int sucChua = Integer.parseInt(txt_sucChua.getText().trim());
+//        LocalDate ngayHoatDong = txt_ngayHD.getDate()
+//                .toInstant()
+//                .atZone(java.time.ZoneId.systemDefault())
+//                .toLocalDate();
+//
+//        // Lấy trạng thái từ combobox
+//        String trangThaiStr = cbo_trangThai.getSelectedItem().toString();
+//        TrangThaiTau trangThai = TrangThaiTau.fromDisplay(trangThaiStr);
+//
+//        // Tạo đối tượng Tau
+//        Tau tau = new Tau(maTau, tenTau, soToaTau, sucChua, ngayHoatDong, trangThai);
+//
+//        return tau;
+//    }
+     
+    public Tau getFormData() throws Exception {
+       // Lấy giá trị từ các ô nhập liệu
+       String maTau = txt_maTau.getText().trim();
+       String tenTau = txt_tenTau.getText().trim();
 
-        
+       // Kiểm tra dữ liệu rỗng
+       if (tenTau.isEmpty()) {
+           Notifications.getInstance().show(Notifications.Type.WARNING, "Tên tàu không được để trống!");
+           txt_tenTau.requestFocus();
+           throw new Exception("Tên tàu trống");
+       }
+
+       // Số toa tàu
+       int soToaTau;
+       try {
+           soToaTau = Integer.parseInt(txt_soLuongToa.getText().trim());
+           if (soToaTau <= 0) throw new NumberFormatException();
+       } catch (NumberFormatException e) {
+           Notifications.getInstance().show(Notifications.Type.WARNING, "Số toa tàu phải là số nguyên dương!");
+           txt_soLuongToa.requestFocus();
+           throw new Exception("Số toa tàu không hợp lệ");
+       }
+
+       // Sức chứa
+       int sucChua;
+       try {
+           sucChua = Integer.parseInt(txt_sucChua.getText().trim());
+           if (sucChua <= 0) throw new NumberFormatException();
+       } catch (NumberFormatException e) {
+           Notifications.getInstance().show(Notifications.Type.WARNING, "Sức chứa phải là số nguyên dương!");
+           txt_sucChua.requestFocus();
+           throw new Exception("Sức chứa không hợp lệ");
+       }
+
+       // Ngày hoạt động
+       if (txt_ngayHD.getDate() == null) {
+           Notifications.getInstance().show(Notifications.Type.WARNING, "Vui lòng chọn ngày hoạt động!");
+           throw new Exception("Ngày hoạt động trống");
+       }
+
+       LocalDate ngayHoatDong = txt_ngayHD.getDate()
+               .toInstant()
+               .atZone(ZoneId.systemDefault())
+               .toLocalDate();
+
+       // ✅ Kiểm tra ngày hoạt động không vượt quá ngày hiện tại
+       if (ngayHoatDong.isAfter(LocalDate.now())) {
+           Notifications.getInstance().show(Notifications.Type.WARNING, "Ngày hoạt động không được lớn hơn ngày hiện tại!");
+           txt_ngayHD.requestFocus();
+           throw new Exception("Ngày hoạt động sai");
+       }
+
+       // Trạng thái tàu (lấy từ ComboBox)
+       String trangThaiStr = cbo_tt.getSelectedItem().toString();
+       TrangThaiTau trangThai = TrangThaiTau.fromDisplay(trangThaiStr);
+
+       // Kiểm tra trạng thái hợp lệ
+       if (trangThai == null) {
+           Notifications.getInstance().show(Notifications.Type.WARNING, "Trạng thái tàu không hợp lệ!");
+           cbo_tt.requestFocus();
+           throw new Exception("Trạng thái null");
+       }
+
+       // ✅ Tạo đối tượng Tau
+       Tau tau = new Tau();
+       tau.setMaTau(maTau);
+       tau.setTenTau(tenTau);
+       tau.setSoToaTau(soToaTau);
+       tau.setSucChua(sucChua);
+       tau.setNgayHoatDong(ngayHoatDong);
+       tau.setTrangThai(trangThai);
+
+       return tau;
+   }
+
+     
+   
     
+   private void handleCapNhat() {
+        try {
+            if(tbl_tau.getSelectedRow() == -1) {
+                Notifications.getInstance().show(Notifications.Type.ERROR, "Chưa chọn tàu cần thay đổi thông tin!");
+                return;
+            }
+            
+            Tau tau = getFormData();
+            if(bus.capNhatTau(tau)) {
+                Notifications.getInstance().show(Notifications.Type.SUCCESS, "Cập nhật thành công!");
+                getTableData(bus.getAllTau());
+                handleXoaTrang();
+            } 
+        } catch (Exception e) {
+            Notifications.getInstance().show(Notifications.Type.ERROR, "Cập nhật thất bại!");
+        }
+    }
 
-
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -396,11 +511,13 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         pnl_ngayHD.setPreferredSize(pnl_maTau.getPreferredSize());
         pnl_ngayHD.setLayout(new javax.swing.BoxLayout(pnl_ngayHD, javax.swing.BoxLayout.LINE_AXIS));
 
-        lbl_NgayHD.setText("Ngày hoạt động:");
+        lbl_NgayHD.setText("Ngày HĐ:");
         lbl_NgayHD.setMaximumSize(new java.awt.Dimension(45, 16));
         lbl_NgayHD.setMinimumSize(new java.awt.Dimension(45, 16));
         lbl_NgayHD.setPreferredSize(new java.awt.Dimension(100, 16));
         pnl_ngayHD.add(lbl_NgayHD);
+
+        txt_ngayHD.setMaximumSize(new java.awt.Dimension(2147483647, 40));
         pnl_ngayHD.add(txt_ngayHD);
 
         pnl_thongTinNhanVien.add(pnl_ngayHD);
@@ -493,7 +610,7 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
     }//GEN-LAST:event_txt_sucChuaActionPerformed
 
     private void btn_capNhatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_capNhatActionPerformed
-        // TODO add your handling code here:
+        handleCapNhat();
     }//GEN-LAST:event_btn_capNhatActionPerformed
 
     private void txt_soLuongToaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_soLuongToaActionPerformed
@@ -501,7 +618,7 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
     }//GEN-LAST:event_txt_soLuongToaActionPerformed
 
     private void btn_themActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_themActionPerformed
-        // TODO add your handling code here:
+        handleCapNhat();
     }//GEN-LAST:event_btn_themActionPerformed
 
     private void btn_xoaTrangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_xoaTrangActionPerformed
