@@ -24,7 +24,7 @@ public class HoaDon {
     public static final String KHACHHANG_NULL = "Khách hàng không được null!";
     public static final String NGAYLAP_INVALID = "Ngày lập hóa đơn phải là ngày hiện tại!";
     
-    public HoaDon() {
+    public HoaDon(String hdtemp) {
     }
     
     public HoaDon(String maHoaDon, NhanVien nhanVien, KhachHang khachHang,
