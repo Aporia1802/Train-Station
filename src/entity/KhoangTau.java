@@ -33,6 +33,8 @@ public class KhoangTau {
     public KhoangTau(String maKhoangTau) {
         setMaKhoangTau(maKhoangTau);
     }
+        public KhoangTau() {
+    }
     
     public KhoangTau(String maKhoangTau, int soHieuKhoang, int sucChua, ToaTau toaTau) throws Exception {
         setMaKhoangTau(maKhoangTau);

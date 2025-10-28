@@ -70,7 +70,7 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
                 cbo_tt.setSelectedIndex(i);
                 break;
             }
-
+        }
         // Gán ngày hoạt động vào JDateChooser
         if (ngayHoatDongStr != null && !ngayHoatDongStr.isEmpty()) {
             try {
@@ -84,7 +84,6 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         } else {
             txt_ngayHD.setDate(null);
         }
-    }
     }
 }
 
@@ -395,13 +394,11 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         pnl_ngayHD.setPreferredSize(pnl_maTau.getPreferredSize());
         pnl_ngayHD.setLayout(new javax.swing.BoxLayout(pnl_ngayHD, javax.swing.BoxLayout.LINE_AXIS));
 
-        lbl_NgayHD.setText("Ngày HĐ:");
+        lbl_NgayHD.setText("Ngày hoạt động:");
         lbl_NgayHD.setMaximumSize(new java.awt.Dimension(45, 16));
         lbl_NgayHD.setMinimumSize(new java.awt.Dimension(45, 16));
         lbl_NgayHD.setPreferredSize(new java.awt.Dimension(100, 16));
         pnl_ngayHD.add(lbl_NgayHD);
-
-        txt_ngayHD.setMaximumSize(new java.awt.Dimension(2147483647, 40));
         pnl_ngayHD.add(txt_ngayHD);
 
         pnl_thongTinNhanVien.add(pnl_ngayHD);

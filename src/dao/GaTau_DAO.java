@@ -17,9 +17,28 @@ import java.util.ArrayList;
  */
 public class GaTau_DAO implements DAOBase<GaTau> {
     
-    @Override
+   @Override
     public GaTau getOne(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        GaTau gaTau = null;
+        String sql = "SELECT * FROM GaTau WHERE maGa = ?";
+        
+        try {
+            PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
+            st.setString(1, id);
+            ResultSet rs = st.executeQuery();
+            
+            if (rs.next()) {
+                gaTau = getData(rs);
+            }
+            
+            rs.close();
+            st.close();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return gaTau;
     }
     
     @Override
