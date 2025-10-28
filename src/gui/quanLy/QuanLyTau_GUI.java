@@ -70,7 +70,7 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
                 cbo_tt.setSelectedIndex(i);
                 break;
             }
-
+        }
         // Gán ngày hoạt động vào JDateChooser
         if (ngayHoatDongStr != null && !ngayHoatDongStr.isEmpty()) {
             try {

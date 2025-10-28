@@ -13,30 +13,39 @@ import java.time.LocalDate;
 
 public class ChuyenTau_DAO implements DAOBase {
 
-    @Override
-    public ChuyenTau getOne(String id) {
-        String sql = "SELECT * FROM ChuyenTau ct "
-                   + "JOIN Tau t ON t.maTau = ct.maTau "
-                   + "JOIN TuyenDuong td ON td.maTuyenDuong = ct.maTuyenDuong "
-                   + "WHERE ct.maChuyenTau = ?";
+   @Override
+public ChuyenTau getOne(String id) {
+    
+    String sql = "SELECT *, " +
+                 "gdi.maGa AS maGaDi, gdi.tenGa AS tenGaDi, " +
+                 "gden.maGa AS maGaDen, gden.tenGa AS tenGaDen " +
+                 "FROM ChuyenTau ct " +
+                 "JOIN Tau t ON t.maTau = ct.maTau " +
+                 "JOIN TuyenDuong td ON td.maTuyenDuong = ct.maTuyenDuong " +
+                 "JOIN GaTau gdi ON gdi.maGa = td.gaDi " +
+                 "JOIN GaTau gden ON gden.maGa = td.gaDen " +
+                 "WHERE ct.maChuyenTau = ?";
+    
+    try {
+        PreparedStatement ps = ConnectDB.conn.prepareStatement(sql);
+        ps.setString(1, id);
+        ResultSet rs = ps.executeQuery();
         
-        try {
-            PreparedStatement ps = ConnectDB.conn.prepareStatement(sql);
-            ps.setString(1, id);
-            ResultSet rs = ps.executeQuery();
-            
-            if (rs.next()) {
-                ChuyenTau ct = getData(rs);
-                rs.close();
-                ps.close();
-                return ct;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (rs.next()) {
+            ChuyenTau ct = getData(rs);
+            rs.close();
+            ps.close();
+            return ct;
         }
-        return null;
+        
+        rs.close();
+        ps.close();
+        
+    } catch (Exception e) {
+        e.printStackTrace();
     }
-
+    return null;
+}
     @Override
     public ArrayList<ChuyenTau> getAll() {
         ArrayList<ChuyenTau> dsChuyenTau = new ArrayList<>();
@@ -64,39 +73,43 @@ public class ChuyenTau_DAO implements DAOBase {
         return dsChuyenTau;
     }
 
-    public ArrayList<ChuyenTau> getChuyenTauByKeyword(String keyword) {
-        ArrayList<ChuyenTau> dsChuyenTau = new ArrayList<>();
-        
-        String sql = "SELECT * FROM ChuyenTau ct "
-                   + "JOIN Tau t ON t.maTau = ct.maTau "
-                   + "JOIN TuyenDuong td ON td.maTuyenDuong = ct.maTuyenDuong "
-                   + "WHERE ct.maChuyenTau LIKE ? OR t.maTau LIKE ? OR td.maTuyenDuong LIKE ?";
-
-        try {
-            PreparedStatement ps = ConnectDB.conn.prepareStatement(sql);
-            String searchPattern = "%" + keyword + "%";
-            ps.setString(1, searchPattern);
-            ps.setString(2, searchPattern);
-            ps.setString(3, searchPattern);
-            
-            ResultSet rs = ps.executeQuery();
-            
-            while (rs.next()) {
-                ChuyenTau ct = getData(rs);
-                if (ct != null) {
-                    dsChuyenTau.add(ct);
-                }
-            }
-            
-            rs.close();
-            ps.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return dsChuyenTau;
-    }
+   public ArrayList<ChuyenTau> getChuyenTauByKeyword(String keyword) {
+    ArrayList<ChuyenTau> dsChuyenTau = new ArrayList<>();
     
+    String sql = "SELECT *, " +
+                 "gdi.maGa AS maGaDi, gdi.tenGa AS tenGaDi, " +
+                 "gden.maGa AS maGaDen, gden.tenGa AS tenGaDen " +
+                 "FROM ChuyenTau ct " +
+                 "JOIN Tau t ON t.maTau = ct.maTau " +
+                 "JOIN TuyenDuong td ON td.maTuyenDuong = ct.maTuyenDuong " +
+                 "JOIN GaTau gdi ON gdi.maGa = td.gaDi " +
+                 "JOIN GaTau gden ON gden.maGa = td.gaDen " +
+                 "WHERE ct.maChuyenTau LIKE ? OR t.maTau LIKE ? OR td.maTuyenDuong LIKE ?";
+
+    try {
+        PreparedStatement ps = ConnectDB.conn.prepareStatement(sql);
+        String searchPattern = "%" + keyword + "%";
+        ps.setString(1, searchPattern);
+        ps.setString(2, searchPattern);
+        ps.setString(3, searchPattern);
+        
+        ResultSet rs = ps.executeQuery();
+        
+        while (rs.next()) {
+            ChuyenTau ct = getData(rs);
+            if (ct != null) {
+                dsChuyenTau.add(ct);
+            }
+        }
+        
+        rs.close();
+        ps.close();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return dsChuyenTau;
+}
     public ArrayList<ChuyenTau> filter(String tenGaDi, String tenGaDen, LocalDate ngayDi) throws Exception {
         ArrayList<ChuyenTau> dsChuyenTau = new ArrayList();
         String sql = """

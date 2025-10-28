@@ -22,7 +22,7 @@ public enum TrangThaiTau {
     }
     public static TrangThaiTau fromDisplay(String display) {
     for (TrangThaiTau t : TrangThaiTau.values()) {
-        if (t.getDisplay().equalsIgnoreCase(display.trim())) {
+        if (t.getDisplayName().equalsIgnoreCase(display.trim())) {
             return t;
         }
     }

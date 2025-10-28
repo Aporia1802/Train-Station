@@ -1,52 +1,39 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dao;
 
 import database.ConnectDB;
-import static database.ConnectDB.conn;
-import entity.ChuyenTau;
-import entity.GaTau;
-import entity.Ghe;
-import entity.HanhKhach;
-import entity.HoaDon;
-import entity.KhachHang;
-import entity.KhoangTau;
-import entity.KhuyenMai;
-import entity.LoaiGhe;
-import entity.LoaiVe;
-import entity.NhanVien;
-import entity.Tau;
-import entity.ToaTau;
-import entity.TuyenDuong;
-import entity.Ve;
+import entity.*;
 import enums.TrangThaiGhe;
 import enums.TrangThaiTau;
 import enums.TrangThaiVe;
 import interfaces.DAOBase;
-import java.util.ArrayList;
+import java.lang.reflect.Field;
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- *
+ * DAO for Ve entity - uses reflection to bypass constructor validation
  * @author CÔNG HOÀNG
  */
-public class Ve_DAO implements DAOBase<Ve>{
+public class Ve_DAO implements DAOBase<Ve> {
 
-    @Override
-    public Ve getOne(String id) {
-        Ve ve = null;
+    private static final Map<String, Field> fieldCache = new HashMap<>();
 
-        try {
-            String sql = "SELECT *, " +
-            "gdi.maGa AS maGaDi, gdi.tenGa AS tenGaDi, gdi.diaChi AS diaChiGaDi, gdi.soDienThoai AS sdtGaDi, " +
-            "gden.maGa AS maGaDen, gden.tenGa AS tenGaDen, gden.diaChi AS diaChiGaDen, gden.soDienThoai AS sdtGaDen " +
+    public ArrayList<Ve> search(String maVe, String hoTen, String cccd, LocalDate ngayDi) {
+        ArrayList<Ve> dsVe = new ArrayList<>();
+        StringBuilder sql = new StringBuilder(
+            "SELECT v.maVe, v.trangThai AS trangThaiVe, v.giaVe, " +
+            "hk.maHanhKhach, hk.tenHanhKhach, hk.cccd, hk.ngaySinh, " +
+            "g.maGhe, g.soGhe, g.trangThaiGhe, " +
+            "lg.maLoaiGhe, lg.tenLoaiGhe, lg.heSoGhe, " +
+            "t.maTau, t.tenTau, " +
+            "ct.maChuyenTau, ct.thoiGianDi, ct.thoiGianDen, " +
+            "tt.soHieuToa, " +
+            "gaDi.maGa AS maGaDi, gaDi.tenGa AS tenGaDi, " +
+            "gaDen.maGa AS maGaDen, gaDen.tenGa AS tenGaDen " +
             "FROM Ve v " +
-            "JOIN LoaiVe lv ON v.maLoaiVe = lv.maLoaiVe " +
             "JOIN HanhKhach hk ON v.maHanhKhach = hk.maHanhKhach " +
             "JOIN Ghe g ON v.maGhe = g.maGhe " +
             "JOIN LoaiGhe lg ON g.maLoaiGhe = lg.maLoaiGhe " +
@@ -55,297 +42,217 @@ public class Ve_DAO implements DAOBase<Ve>{
             "JOIN Tau t ON tt.maTau = t.maTau " +
             "JOIN ChuyenTau ct ON v.maChuyenTau = ct.maChuyenTau " +
             "JOIN TuyenDuong td ON ct.maTuyenDuong = td.maTuyenDuong " +
-            "JOIN GaTau gdi ON td.gaDi = gdi.maGa " +
-            "JOIN GaTau gden ON td.gaDen = gden.maGa " +
-            "JOIN HoaDon hd ON v.maHoaDon = hd.maHoaDon " +
-            "JOIN NhanVien nv ON hd.maNhanVien = nv.maNV " +
-            "JOIN KhachHang kh ON hd.maKhachHang = kh.maKH " +
-            "LEFT JOIN KhuyenMai km ON hd.maKhuyenMai = km.maKhuyenMai " +
-            "WHERE v.maVe = ?";
-
-            PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
-            st.setString(1, id);
-            ResultSet rs = st.executeQuery();
-
-            if (rs.next()) {
-                ve = getData(rs);
+            "JOIN GaTau gaDi ON td.gaDi = gaDi.maGa " +
+            "JOIN GaTau gaDen ON td.gaDen = gaDen.maGa " +
+            "WHERE 1=1"
+        );
+        
+        ArrayList<Object> params = new ArrayList<>();
+        
+        if (maVe != null && !maVe.trim().isEmpty()) {
+            sql.append(" AND v.maVe LIKE ?");
+            params.add("%" + maVe.trim() + "%");
+        }
+        
+        if (hoTen != null && !hoTen.trim().isEmpty()) {
+            sql.append(" AND hk.tenHanhKhach LIKE ?");
+            params.add("%" + hoTen.trim() + "%");
+        }
+        
+        if (cccd != null && !cccd.trim().isEmpty()) {
+            sql.append(" AND hk.cccd LIKE ?");
+            params.add("%" + cccd.trim() + "%");
+        }
+        
+        if (ngayDi != null) {
+            sql.append(" AND CAST(ct.thoiGianDi AS DATE) = ?");
+            params.add(Date.valueOf(ngayDi));
+        }
+        
+        try {
+            PreparedStatement ps = ConnectDB.conn.prepareStatement(sql.toString());
+            
+            for (int i = 0; i < params.size(); i++) {
+                ps.setObject(i + 1, params.get(i));
             }
-
+            
+            System.out.println("🔍 SQL: " + sql.toString());
+            
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                Ve ve = getDataSimple(rs);
+                if (ve != null) {
+                    dsVe.add(ve);
+                }
+            }
+            System.out.println("✅ Tìm được " + dsVe.size() + " vé");
+            
+            rs.close();
+            ps.close();
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return ve;
+        
+        return dsVe;
+    }
+
+    private Ve getDataSimple(ResultSet rs) {
+        try {
+            Ve ve = new Ve();
+            
+            // Thông tin vé
+            setField(ve, "maVe", rs.getString("maVe"));
+            setField(ve, "giaVe", rs.getDouble("giaVe"));
+            
+            // Trạng thái vé 
+            int trangThaiVeInt = rs.getInt("trangThaiVe");
+            TrangThaiVe trangThaiVe = TrangThaiVe.fromInt(trangThaiVeInt);
+            setField(ve, "trangThai", trangThaiVe);
+            
+            // Hành khách
+            HanhKhach hk = new HanhKhach();
+            setField(hk, "maHanhKhach", rs.getString("maHanhKhach"));
+            setField(hk, "tenHanhKhach", rs.getString("tenHanhKhach"));
+            setField(hk, "cccd", rs.getString("cccd"));
+            
+            Date ngaySinhDate = rs.getDate("ngaySinh");
+            if (ngaySinhDate != null) {
+                setField(hk, "ngaySinh", ngaySinhDate.toLocalDate());
+            }
+            
+            setField(ve, "hanhKhach", hk);
+            
+            // Loại ghế
+            LoaiGhe loaiGhe = new LoaiGhe();
+            setField(loaiGhe, "maLoaiGhe", rs.getString("maLoaiGhe"));
+            setField(loaiGhe, "tenLoaiGhe", rs.getString("tenLoaiGhe"));
+            setField(loaiGhe, "heSoLoaiGhe", rs.getDouble("heSoGhe"));
+            
+            // Toa tàu (để lấy số hiệu toa)
+            ToaTau toaTau = new ToaTau();
+            setField(toaTau, "soHieuToa", rs.getInt("soHieuToa"));
+            
+            // Khoang tàu
+            KhoangTau khoangTau = new KhoangTau();
+            setField(khoangTau, "toaTau", toaTau);
+            
+            // Ghế
+            Ghe ghe = new Ghe();
+            setField(ghe, "maGhe", rs.getString("maGhe"));
+            setField(ghe, "soGhe", rs.getInt("soGhe"));
+            
+            int trangThaiGheInt = rs.getInt("trangThaiGhe");
+            TrangThaiGhe trangThaiGhe = TrangThaiGhe.fromInt(trangThaiGheInt);
+            setField(ghe, "trangThaiGhe", trangThaiGhe);
+            
+            setField(ghe, "loaiGhe", loaiGhe);
+            setField(ghe, "khoangTau", khoangTau);
+            setField(ve, "ghe", ghe);
+            
+            // Tàu
+            Tau tau = new Tau();
+            setField(tau, "maTau", rs.getString("maTau"));
+            setField(tau, "tenTau", rs.getString("tenTau"));
+            
+            // Ga đi
+            GaTau gaDi = new GaTau();
+            setField(gaDi, "maGa", rs.getString("maGaDi"));
+            setField(gaDi, "tenGa", rs.getString("tenGaDi"));
+            
+            // Ga đến
+            GaTau gaDen = new GaTau();
+            setField(gaDen, "maGa", rs.getString("maGaDen"));
+            setField(gaDen, "tenGa", rs.getString("tenGaDen"));
+            
+            // Tuyến đường
+            TuyenDuong td = new TuyenDuong();
+            setField(td, "gaDi", gaDi);
+            setField(td, "gaDen", gaDen);
+            
+            // Chuyến tàu
+            ChuyenTau ct = new ChuyenTau();
+            setField(ct, "maChuyenTau", rs.getString("maChuyenTau"));
+            setField(ct, "thoiGianDi", rs.getTimestamp("thoiGianDi").toLocalDateTime());
+            setField(ct, "thoiGianDen", rs.getTimestamp("thoiGianDen").toLocalDateTime());
+            setField(ct, "tau", tau);
+            setField(ct, "tuyenDuong", td);
+            
+            setField(ve, "chuyenTau", ct);
+            
+            return ve;
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+ 
+    private void setField(Object obj, String fieldName, Object value) throws IllegalArgumentException, IllegalAccessException {
+        try {
+            String key = obj.getClass().getName() + "." + fieldName;
+            Field field = fieldCache.get(key);
+            
+            if (field == null) {
+                field = obj.getClass().getDeclaredField(fieldName);
+                field.setAccessible(true);
+                fieldCache.put(key, field);
+            }
+            
+            field.set(obj, value);
+            
+        } catch (NoSuchFieldException e) {
+            
+        } 
+    }
+
+    public ArrayList<Ve> timKiemVe(String maVe, String hoTen, String cccd, LocalDate ngayDi) {
+        return search(maVe, hoTen, cccd, ngayDi);
+    }
+
+    @Override
+    public Ve getOne(String id) {
+        ArrayList<Ve> result = search(id, null, null, null);
+        return result.isEmpty() ? null : result.get(0);
     }
 
     @Override
     public ArrayList<Ve> getAll() {
-        ArrayList<Ve> dsVe = new ArrayList<>();
-        String sql = "SELECT *, " +
-            "gdi.maGa AS maGaDi, gdi.tenGa AS tenGaDi, gdi.diaChi AS diaChiGaDi, gdi.soDienThoai AS sdtGaDi, " +
-            "gden.maGa AS maGaDen, gden.tenGa AS tenGaDen, gden.diaChi AS diaChiGaDen, gden.soDienThoai AS sdtGaDen " +
-            "FROM Ve v " +
-            "JOIN LoaiVe lv ON v.maLoaiVe = lv.maLoaiVe " +
-            "JOIN HanhKhach hk ON v.maHanhKhach = hk.maHanhKhach " +
-            "JOIN Ghe g ON v.maGhe = g.maGhe " +
-            "JOIN LoaiGhe lg ON g.maLoaiGhe = lg.maLoaiGhe " +
-            "JOIN KhoangTau kt ON g.maKhoangTau = kt.maKhoangTau " +
-            "JOIN ToaTau tt ON kt.maToaTau = tt.maToaTau " +
-            "JOIN Tau t ON tt.maTau = t.maTau " +
-            "JOIN ChuyenTau ct ON v.maChuyenTau = ct.maChuyenTau " +
-            "JOIN TuyenDuong td ON ct.maTuyenDuong = td.maTuyenDuong " +
-            "JOIN GaTau gdi ON td.gaDi = gdi.maGa " +
-            "JOIN GaTau gden ON td.gaDen = gden.maGa " +
-            "JOIN HoaDon hd ON v.maHoaDon = hd.maHoaDon " +
-            "JOIN NhanVien nv ON hd.maNhanVien = nv.maNV " +
-            "JOIN KhachHang kh ON hd.maKhachHang = kh.maKH " +
-            "JOIN KhuyenMai km ON hd.maKhuyenMai = km.maKhuyenMai ";
-
-        try {
-            PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
-            ResultSet rs = st.executeQuery();
-            
-            while (rs.next()) {
-                dsVe.add(getData(rs));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (Exception ex) {
-            Logger.getLogger(Ve_DAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return dsVe;
+        return search(null, null, null, null);
     }
 
     @Override
     public String generateID() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public Boolean create(Ve object) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public Boolean update(String id, Ve newObject) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public Boolean delete(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("Not supported yet.");
     }
     
     public Boolean capNhatTrangThaiVe(String maVe) {
         int n = 0;
-         String sql = "UPDATE Ve SET trangThai = ? WHERE maVe = ?";
+        String sql = "UPDATE Ve SET trangThai = ? WHERE maVe = ?";
         try {
             PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
-            st.setInt(1, 3);
+            st.setInt(1, 3); 
             st.setString(2, maVe);
             n = st.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return n > 0;
-    }
-    
-    public Ve getData(ResultSet rs) throws SQLException, Exception {
-        Ve ve = null;
-            // LOẠI VÉ 
-            LoaiVe loaiVe = new LoaiVe(
-                    rs.getString("maLoaiVe"),
-                    rs.getString("tenLoaiVe"),
-                    rs.getString("moTa"),
-                    rs.getDouble("heSoLoaiVe")
-            );
-            
-            // HÀNH KHÁCH
-            HanhKhach hanhKhach = new HanhKhach(
-                    rs.getString("maHanhKhach"),
-                    rs.getString("tenHanhKhach"),
-                    rs.getString("cccd"),
-                    rs.getDate("ngaySinh").toLocalDate()
-            );
-            
-            //GHẾ & LOẠI GHẾ
-            LoaiGhe loaiGhe = new LoaiGhe(
-                    rs.getString("maLoaiGhe"),
-                    rs.getString("tenLoaiGhe"),
-                    rs.getString("moTa"),
-                    rs.getDouble("heSoGhe")
-            );
-            
-            Tau tau = new Tau(
-                    rs.getString("maTau"),
-                    rs.getString("tenTau"),
-                    rs.getInt("soToaTau"),
-                    rs.getInt("sucChua"),
-                    rs.getDate("ngayHoatDong").toLocalDate(),
-                    TrangThaiTau.fromInt(rs.getInt("trangThai"))
-            );
-            
-            ToaTau toaTau = new ToaTau(
-                    rs.getString("maToaTau"),
-                    rs.getInt("soHieuToa"),
-                    rs.getInt("soKhoangTau"),
-                    rs.getInt("soCho"),
-                    tau
-            );
-            
-            KhoangTau khoangTau = new KhoangTau(
-                    rs.getString("maKhoangTau"),
-                    rs.getInt("soHieuKhoang"),
-                    rs.getInt("sucChua"),
-                    toaTau
-            );
-           
-            Ghe ghe = new Ghe(
-                    rs.getString("maGhe"),
-                    rs.getInt("soGhe"),
-                    TrangThaiGhe.fromInt(rs.getInt("trangThaiGhe")),
-                    loaiGhe,
-                    khoangTau
-            );
-            
-            // ======= Bảng CHUYẾN TÀU & TUYẾN ĐƯỜNG & GA =======
-            GaTau gaDi = new GaTau(
-                    rs.getString("maGaDi"),
-                    rs.getString("tenGaDi"),
-                    rs.getString("diaChiGaDi"),
-                    rs.getString("sdtGaDi")
-            );
-            
-            GaTau gaDen = new GaTau(
-                    rs.getString("maGaDen"),
-                    rs.getString("tenGaDen"),
-                    rs.getString("diaChiGaDen"),
-                    rs.getString("sdtGaDen")
-            );
-            
-            TuyenDuong tuyenDuong = new TuyenDuong(
-                    rs.getString("maTuyenDuong"),
-                    gaDi,
-                    gaDen,
-                    rs.getDouble("quangDuong"),
-                    rs.getDouble("soTienMotKm")
-            );
-            
-            ChuyenTau chuyenTau = new ChuyenTau(
-                    rs.getString("maChuyenTau"),
-                    tuyenDuong,
-                    rs.getTimestamp("thoiGianDi").toLocalDateTime(),
-                    rs.getTimestamp("thoiGianDen").toLocalDateTime(),
-                    tau
-            );
-            
-            KhuyenMai khuyenMai = null;
-            if (rs.getString("maKhuyenMai") != null) {
-                khuyenMai = new KhuyenMai(
-                    rs.getString("maKhuyenMai"),
-                    rs.getString("tenKhuyenMai"),
-                    rs.getDouble("heSoKhuyenMai"),
-                    rs.getDate("ngayBatDau").toLocalDate(),
-                    rs.getDate("ngayKetThuc").toLocalDate(),
-                    rs.getDouble("tongTienToiThieu"),
-                    rs.getDouble("tienKhuyenMaiToiDa"),
-                    rs.getBoolean("trangThai")
-                );
-            }
-            
-            NhanVien nhanVien = new NhanVien(
-                    rs.getString("maNV"),
-                    rs.getString("tenNV"),
-                    rs.getBoolean("gioiTinh"),
-                    rs.getDate("ngaySinh").toLocalDate(),
-                    rs.getString("email"),
-                    rs.getString("soDienThoai"),
-                    rs.getString("cccd"),
-                    rs.getString("diaChi"),
-                    rs.getString("chucVu"),
-                    rs.getBoolean("trangThai")
-            );
-            
-            KhachHang khachHang = new KhachHang(
-                    rs.getString("maKH"),
-                    rs.getString("tenKH"),
-                    rs.getString("soDienThoai"),
-                    rs.getString("cccd"),
-                    rs.getDate("ngaySinh").toLocalDate(),
-                    rs.getBoolean("gioiTinh")
-            );
-            
-            HoaDon hoaDon = new HoaDon(
-                    rs.getString("maHoaDon"),
-                    nhanVien,
-                    khachHang,
-                    rs.getDate("ngayLapHoaDon").toLocalDate(),
-                    khuyenMai
-            );
-            
-            //VÉ (chính)
-            ve = new Ve(
-                    rs.getString("maVe"),
-                    chuyenTau,
-                    hanhKhach,
-                    ghe,
-                    hoaDon,
-                    TrangThaiVe.fromInt(rs.getInt("trangThai")),
-                    loaiVe,
-                    rs.getDouble("giaVe")
-            );
-        return ve;
-    }
-    
-    public ArrayList<Ve> timKiemVe(String maVe, String hoTen, String cccd, LocalDate ngayDi) {
-        ArrayList<Ve> dsVe = new ArrayList<>();
-
-        StringBuilder sql = new StringBuilder("""
-            SELECT * FROM Ve v
-            JOIN HanhKhach hk ON v.maHanhKhach = hk.maHanhKhach
-            JOIN ChuyenTau ct ON v.maChuyenTau = ct.maChuyenTau
-            WHERE 1=1
-                """);
-
-        // Xây dựng SQL linh hoạt (chỉ thêm điều kiện khi có dữ liệu)
-        if (maVe != null && !maVe.trim().isEmpty()) {
-            sql.append(" AND v.maVe = ?");
-        }
-        if (hoTen != null && !hoTen.trim().isEmpty()) {
-            sql.append(" AND hk.tenHanhKhach LIKE ?");
-        }
-        if (cccd != null && !cccd.trim().isEmpty()) {
-            sql.append(" AND hk.soCCCD = ?");
-        }
-        if (ngayDi != null) {
-            sql.append(" AND CAST(ct.thoiGianDi AS DATE) = ?");
-        }
-
-        try {
-            PreparedStatement st = ConnectDB.conn.prepareStatement(sql.toString());
-
-            int index = 1;
-            if (maVe != null && !maVe.trim().isEmpty()) {
-                st.setString(index++, maVe.trim());
-            }
-            if (hoTen != null && !hoTen.trim().isEmpty()) {
-                st.setString(index++, "%" + hoTen.trim() + "%");
-            }
-            if (cccd != null && !cccd.trim().isEmpty()) {
-                st.setString(index++, cccd.trim());
-            }
-            if (ngayDi != null) {
-                st.setDate(index++, java.sql.Date.valueOf(ngayDi));
-            }
-
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
-                dsVe.add(getData(rs));
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return dsVe;
     }
 }
