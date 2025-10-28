@@ -229,10 +229,7 @@ public class TraCuuVe_GUI extends javax.swing.JPanel {
 
         tbl_thongTinVe.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null}
+
             },
             new String [] {
                 "Mã vé", "Tàu", "Ga đi", "Ga đến", "Ngày đi", "Ngày đến", "Hành khách", "Số ghế", "Trạng thái", "Giá vé"

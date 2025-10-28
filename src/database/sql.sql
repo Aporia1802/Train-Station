@@ -441,4 +441,3 @@ INSERT INTO HoaDon (maHoaDon, maNhanVien, maKhachHang, ngayLapHoaDon, VAT, maKhu
 INSERT INTO Ve (maVe, maLoaiVe, maChuyenTau, maHanhKhach, maGhe, maHoaDon, trangThai, giaVe) VALUES
 ('V001', 'LV-NL', 'CT-SE1-301025', 'HK001', 'G-SE1-01-1-01', 'HD001', 1, 1035000),
 ('V002', 'LV-NL', 'CT-SE1-301025', 'HK002', 'G-SE1-01-1-02', 'HD002', 1, 1035000);
-

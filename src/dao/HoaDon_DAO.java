@@ -58,26 +58,34 @@ public class HoaDon_DAO implements DAOBase<HoaDon>{
     public Boolean create(HoaDon object) {
         int n = 0;
         String sql = "INSERT INTO HoaDon (maHoaDon, maNhanVien, maKhachHang, ngayLapHoaDon, VAT, maKhuyenMai, tongTien, thanhTien) "
-               + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    
+            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
         try {
             PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
             st.setString(1, object.getMaHoaDon());
             st.setString(2, object.getNhanVien().getMaNV());
             st.setString(3, object.getKhachHang().getMaKH());
-            st.setTimestamp(4, java.sql.Timestamp.valueOf(object.getNgayLapHoaDon())); // LocalDateTime
+            st.setTimestamp(4, java.sql.Timestamp.valueOf(object.getNgayLapHoaDon()));
             st.setDouble(5, object.getVAT());
-            st.setString(6, object.getKhuyenMai().getMaKhuyenMai());
+        
+            if (object.getKhuyenMai() != null) {
+                st.setString(6, object.getKhuyenMai().getMaKhuyenMai());
+            } else {
+                st.setNull(6, java.sql.Types.VARCHAR); // Hoặc setString(6, null)
+            }
+        
             st.setDouble(7, object.getTongTien());
             st.setDouble(8, object.getThanhTien());
 
             n = st.executeUpdate();
+            st.close(); // ← Nên thêm
+        
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-    return n > 0;
-    }
+        return n > 0;
+}
 
     @Override
     public Boolean update(String id, HoaDon newObject) {

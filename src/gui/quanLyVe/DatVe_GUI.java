@@ -347,7 +347,7 @@ public class DatVe_GUI extends javax.swing.JPanel {
         txt_hoTen.setText("");
         txt_cccd.setText("");
         txt_sdt.setText("");
-        date_ngaySinh.setDate(null);
+        date_ngaySinh.setDate(new Date());
     
         // Reset danh sách vé
         pnl_thongTin.removeAll();
@@ -371,6 +371,7 @@ public class DatVe_GUI extends javax.swing.JPanel {
         // Ẩn các panel
         pnl_chonChoNgoi.setVisible(false);
         pnl_nhapThongTin.setVisible(false);
+        pnl_chonChuyenTau.setVisible(false);
     }
     
     private void handleTImKiem() {

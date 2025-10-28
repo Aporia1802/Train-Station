@@ -5,11 +5,9 @@
 package bus;
 
 import dao.Ve_DAO;
-import static database.ConnectDB.conn;
 import entity.Ve;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.sql.*;
 
 public class TraCuuVe_BUS {
     private Ve_DAO dao;

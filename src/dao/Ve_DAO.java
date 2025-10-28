@@ -5,7 +5,6 @@
 package dao;
 
 import database.ConnectDB;
-import static database.ConnectDB.conn;
 import entity.ChuyenTau;
 import entity.GaTau;
 import entity.Ghe;
@@ -118,7 +117,7 @@ public class Ve_DAO implements DAOBase<Ve>{
 
     @Override
     public String generateID() {
-         String prefix = "VE";
+         String prefix = "V";
     String sql = "SELECT MAX(maVe) FROM Ve";
     String newId = "";
 
@@ -127,13 +126,13 @@ public class Ve_DAO implements DAOBase<Ve>{
         ResultSet rs = st.executeQuery();
 
         if (rs.next()) {
-            String lastId = rs.getString(1); // VD: VE0023
+            String lastId = rs.getString(1); 
             if (lastId != null) {
                 int number = Integer.parseInt(lastId.substring(prefix.length()));
                 number++;
-                newId = prefix + String.format("%04d", number); // -> VE0024
+                newId = prefix + String.format("%03d", number);
             } else {
-                newId = prefix + "0001";
+                newId = prefix + "001";
             }
         }
     } catch (Exception e) {
@@ -249,7 +248,6 @@ public class Ve_DAO implements DAOBase<Ve>{
                     khoangTau
             );
             
-            // ======= Bảng CHUYẾN TÀU & TUYẾN ĐƯỜNG & GA =======
             GaTau gaDi = new GaTau(
                     rs.getString("maGaDi"),
                     rs.getString("tenGaDi"),

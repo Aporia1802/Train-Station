@@ -146,7 +146,7 @@ public class ThongTinVe extends javax.swing.JPanel {
         jLabel1.setPreferredSize(new java.awt.Dimension(60, 16));
         jPanel14.add(jLabel1);
 
-        cbo_loaiVe.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Người lớn ", "Trẻ em", "Sinh viên", "Người cao tuổi" }));
+        cbo_loaiVe.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Người lớn", "Trẻ em", "Sinh viên", "Người cao tuổi" }));
         cbo_loaiVe.setMaximumSize(txt_hoTenHK.getMaximumSize());
         cbo_loaiVe.setPreferredSize(txt_hoTenHK.getPreferredSize());
         cbo_loaiVe.addActionListener(new java.awt.event.ActionListener() {

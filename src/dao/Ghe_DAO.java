@@ -8,6 +8,8 @@ import database.ConnectDB;
 import entity.Ghe;
 import entity.KhoangTau;
 import entity.LoaiGhe;
+import entity.Tau;
+import entity.ToaTau;
 import enums.TrangThaiGhe;
 import java.sql.*;
 import java.util.ArrayList;
@@ -47,10 +49,16 @@ public class Ghe_DAO {
     
     public ArrayList<Ghe> getGheTheoKhoangTau(String maKhoangTau) {
     ArrayList<Ghe> dsGhe = new ArrayList<>();
+    
+    // ← SỬA: JOIN thêm ToaTau để lấy soHieuToa
     String sql = """
-        SELECT g.*, lg.tenLoaiGhe, lg.moTa, lg.heSoGhe
+        SELECT g.*, lg.tenLoaiGhe, lg.moTa, lg.heSoGhe,
+               kt.maKhoangTau, kt.soHieuKhoang, kt.soChua,
+               tt.maToaTau, tt.soHieuToa, tt.soKhoangTau, tt.soCho, tt.maTau
         FROM Ghe g
         JOIN LoaiGhe lg ON g.maLoaiGhe = lg.maLoaiGhe
+        JOIN KhoangTau kt ON g.maKhoangTau = kt.maKhoangTau
+        JOIN ToaTau tt ON kt.maToaTau = tt.maToaTau
         WHERE g.maKhoangTau = ?
         ORDER BY g.soGhe
     """;
@@ -85,19 +93,33 @@ public class Ghe_DAO {
         lg.setTenLoaiGhe(rs.getString("tenLoaiGhe"));
         lg.setMoTa(rs.getString("moTa"));
         lg.setHeSoLoaiGhe(rs.getDouble("heSoGhe"));
-
         g.setLoaiGhe(lg);
 
-        // Khoang tàu
+        // ← SỬA: Tạo ToaTau đầy đủ thông tin
+        ToaTau tt = new ToaTau();
+        tt.setMaToa(rs.getString("maToaTau"));
+        tt.setSoHieuToa(rs.getInt("soHieuToa"));
+        tt.setSoKhoangTau(rs.getInt("soKhoangTau"));
+        tt.setSoCho(rs.getInt("soCho"));
+        
+        // Tạo Tau (chỉ có maTau)
+        Tau tau = new Tau(rs.getString("maTau"));
+        tt.setTau(tau);
+
+        // Khoang tàu với ToaTau đầy đủ
         KhoangTau kt = new KhoangTau();
         kt.setMaKhoangTau(rs.getString("maKhoangTau"));
+        kt.setSoHieuKhoang(rs.getInt("soHieuKhoang"));
+        kt.setSucChua(rs.getInt("soChua"));
+        kt.setToaTau(tt); // ← Đã có đầy đủ thông tin
+        
         g.setKhoangTau(kt);
 
         return g;
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        return null;
     }
+}
 }
