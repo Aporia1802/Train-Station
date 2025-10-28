@@ -70,6 +70,7 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
                 cbo_tt.setSelectedIndex(i);
                 break;
             }
+        }
 
         // Gán ngày hoạt động vào JDateChooser
         if (ngayHoatDongStr != null && !ngayHoatDongStr.isEmpty()) {
@@ -86,8 +87,8 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         }
     }
 }
-
-    private void xoaTrang() {
+ 
+    private void handleXoaTrang() {
         // Xóa các ô nhập liệu văn bản
         txt_maTau.setText("");
         txt_tenTau.setText("");
@@ -124,6 +125,7 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
             txt_timKiem.setText("Nhập mã tàu cần tìm...");
             txt_timKiem.setForeground(Color.GRAY);
         }
+    
 
         
     
@@ -503,7 +505,7 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_themActionPerformed
 
     private void btn_xoaTrangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_xoaTrangActionPerformed
-        xoaTrang();
+        handleXoaTrang();
     }//GEN-LAST:event_btn_xoaTrangActionPerformed
 
     private void tbl_tauMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_tauMouseClicked

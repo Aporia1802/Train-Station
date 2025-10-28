@@ -31,4 +31,13 @@ public ArrayList<Tau> filter(String trangThai){
         ArrayList<Tau> dsTau = tauDao.getTauByMaTau(maTau);
         return dsTau;
     }
+    
+    public Boolean themNhanVien(Tau tau) throws Exception {
+      return tauDao.create(tau);
+        
+    }
+    
+    public Boolean capNhatNhanVien(Tau tau) {
+        return tauDao.update(tau.getMaTau(), tau);
+    }
 }
