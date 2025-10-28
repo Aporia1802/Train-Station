@@ -22,7 +22,7 @@ public class QuanLyTau_BUS {
     }
     
 public ArrayList<Tau> filter(String trangThai){
-        ArrayList<Tau> dsTau = tauDao.filterByComboBoxTrangThai(trangThai);
+        ArrayList<Tau> dsTau = tauDao.filterByTrangThai(trangThai);
         return dsTau;
         
     }
@@ -30,5 +30,34 @@ public ArrayList<Tau> filter(String trangThai){
     public ArrayList<Tau> getTauTheoMa(String maTau){
         ArrayList<Tau> dsTau = tauDao.getTauByMaTau(maTau);
         return dsTau;
+    }
+    
+    public Boolean themTau(Tau tau) throws Exception {
+      return tauDao.create(tau);
+        
+    }
+    
+    public String generateID() {
+//      Lấy mã lớn nhất
+        String maxID = tauDao.getMaxID();
+        
+        if(maxID.equals("")) {
+            return "SE1";
+        }
+        
+//      Tách phần số
+        int num = Integer.parseInt(maxID.substring(2));
+        
+//      Tăng lên một đơn vị
+        num++;
+        
+//      Tạo mã mới 
+        String newID = String.format("SE%01d", num);
+        
+        return newID;
+    }
+    
+    public Boolean capNhatTau(Tau tau) {
+        return tauDao.update(tau.getMaTau(), tau);
     }
 }
