@@ -25,6 +25,10 @@ public class ToaTau {
     public ToaTau() {
     }
 
+    public ToaTau(String maToa) {
+        this.maToa = maToa;
+    }
+
     public ToaTau(String maToa, int soHieuToa, int soKhoangTau, int soCho, Tau tau) throws Exception{
         setMaToa(maToa);
         setSoHieuToa(soHieuToa);

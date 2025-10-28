@@ -71,6 +71,4 @@ public class HanhKhach {
         }
         this.ngaySinh = ngaySinh;
     }
-    
-    
 }
