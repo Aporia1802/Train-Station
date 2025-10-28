@@ -128,27 +128,6 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
             txt_timKiem.setText("Nhập mã tàu cần tìm...");
             txt_timKiem.setForeground(Color.GRAY);
         }
-    
-   
-//     private Tau getCurrentValue() throws Exception {
-//        String maTau = txt_maTau.getText().trim();
-//        String tenTau = txt_tenTau.getText().trim();
-//        int soToaTau = Integer.parseInt(txt_soLuongToa.getText().trim());
-//        int sucChua = Integer.parseInt(txt_sucChua.getText().trim());
-//        LocalDate ngayHoatDong = txt_ngayHD.getDate()
-//                .toInstant()
-//                .atZone(java.time.ZoneId.systemDefault())
-//                .toLocalDate();
-//
-//        // Lấy trạng thái từ combobox
-//        String trangThaiStr = cbo_trangThai.getSelectedItem().toString();
-//        TrangThaiTau trangThai = TrangThaiTau.fromDisplay(trangThaiStr);
-//
-//        // Tạo đối tượng Tau
-//        Tau tau = new Tau(maTau, tenTau, soToaTau, sucChua, ngayHoatDong, trangThai);
-//
-//        return tau;
-//    }
      
     public Tau getFormData() throws Exception {
        // Lấy giá trị từ các ô nhập liệu
