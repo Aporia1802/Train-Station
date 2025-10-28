@@ -1,4 +1,11 @@
 /*
+    private ToaTau toaTau;
+    
+    public static final String TENKHOANG_EMPTY = "Tên khoang không được rỗng!";
+    public static final String SUCCHUA_INVALID = "Sức chứa phải lớn hơn 0!";
+    public static final String SOHIEU_INVALID = "Số hiệu khoang phải lớn hơn 0!";
+    public static final String TOATAU_NULL = "Toa tàu không được null!";
+
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
@@ -18,6 +25,10 @@ public class KhoangTau {
     public static final String SUCCHUA_INVALID = "Sức chứa phải lớn hơn 0!";
     public static final String SOHIEU_INVALID = "Số hiệu khoang phải lớn hơn 0!";
     public static final String TOATAU_NULL = "Toa tàu không được null!";
+
+    public KhoangTau() {
+    }
+    
     
     public KhoangTau(String maKhoangTau) {
         setMaKhoangTau(maKhoangTau);

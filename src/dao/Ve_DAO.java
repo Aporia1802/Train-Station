@@ -71,111 +71,55 @@ public class Ve_DAO implements DAOBase<Ve> {
         return dsVe;
     }
 
-    private boolean isEmpty(String s) {
-        return s == null || s.trim().isEmpty();
+    @Override
+    public String generateID() {
+         String prefix = "VE";
+    String sql = "SELECT MAX(maVe) FROM Ve";
+    String newId = "";
+
+    try {
+        PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
+        ResultSet rs = st.executeQuery();
+
+        if (rs.next()) {
+            String lastId = rs.getString(1); // VD: VE0023
+            if (lastId != null) {
+                int number = Integer.parseInt(lastId.substring(prefix.length()));
+                number++;
+                newId = prefix + String.format("%04d", number); // -> VE0024
+            } else {
+                newId = prefix + "0001";
+            }
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        newId = prefix + "0001";
     }
 
-    private Ve mapResultSetToVe(ResultSet rs) throws Exception {
-        // Parse Ga tàu
-        GaTau gaDi = new GaTau(
-            rs.getString("maGaDi"),
-            rs.getString("tenGaDi"),
-            "N/A",
-            "0000000000"
-        );
-        
-        GaTau gaDen = new GaTau(
-            rs.getString("maGaDen"),
-            rs.getString("tenGaDen"),
-            "N/A",
-            "0000000000"
-        );
-        
-        // Parse Tuyến đường
-        TuyenDuong tuyenDuong = new TuyenDuong(
-            rs.getString("maTuyenDuong"),
-            gaDi,
-            gaDen,
-            1.0,
-            1.0
-        );
-        
-        // Parse Tàu
-        Tau tau = new Tau(
-            rs.getString("maTau"),
-            rs.getString("tenTau"),
-            1, 1,
-            LocalDate.now(),
-            TrangThaiTau.HOAT_DONG
-        );
-        
-        // Parse Chuyến tàu
-        ChuyenTau chuyenTau = new ChuyenTau(
-            rs.getString("maChuyenTau"),
-            tuyenDuong,
-            rs.getTimestamp("thoiGianDi").toLocalDateTime(),
-            rs.getTimestamp("thoiGianDen").toLocalDateTime(),
-            tau
-        );
-        
-        // Parse Hành khách
-        HanhKhach hanhKhach = new HanhKhach(
-            rs.getString("maHanhKhach"),
-            rs.getString("tenHanhKhach"),
-            rs.getString("cccd"),
-            rs.getDate("ngaySinh").toLocalDate()
-        );
-        
-        // Parse Loại ghế
-        LoaiGhe loaiGhe = new LoaiGhe(
-            rs.getString("maLoaiGhe"),
-            rs.getString("tenLoaiGhe"),
-            "N/A",
-            rs.getDouble("heSoGhe")
-        );
-        
-        // Parse Toa tàu
-        ToaTau toaTau = new ToaTau(
-            "TT-TEMP",
-            rs.getInt("soHieuToa"),
-            1, 1, tau
-        );
-        
-        // Parse Khoang tàu
-        KhoangTau khoangTau = new KhoangTau(rs.getString("maKhoangTau"));
-        khoangTau.setToaTau(toaTau);
-        
-        // Parse Ghế
-        Ghe ghe = new Ghe(
-            rs.getString("maGhe"),
-            rs.getInt("soGhe"),
-            TrangThaiGhe.fromInt(rs.getInt("trangThaiGhe")),
-            loaiGhe,
-            khoangTau
-        );
-        
-        // Parse Loại vé
-        LoaiVe loaiVe = new LoaiVe(
-            "LV-NL",
-            "Người lớn",
-            "N/A",
-            1.0
-        );
-        
-        // Parse Hóa đơn (giả)
-        HoaDon hoaDon = new HoaDon("HD-TEMP");
-        
-        // Tạo vé
-        return new Ve(
-            rs.getString("maVe"),
-            chuyenTau,
-            hanhKhach,
-            ghe,
-            hoaDon,
-            TrangThaiVe.fromInt(rs.getInt("trangThai")),
-            loaiVe,
-            rs.getDouble("giaVe")
-        );
+    return newId;
+    }
+
+    @Override
+    public Boolean create(Ve object) {
+        int n = 0;
+        String sql = "INSERT INTO Ve (maVe, maLoaiVe, maChuyenTau, maHanhKhach, maGhe, maHoaDon, trangThai, giaVe)"
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    
+        try {
+            PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
+            st.setString(1, object.getMaVe());
+            st.setString(2, object.getLoaiVe().getMaLoaiVe());
+            st.setString(3, object.getChuyenTau().getMaChuyenTau());
+            st.setString(4, object.getHanhKhach().getMaHanhKhach());
+            st.setString(5, object.getGhe().getMaGhe());
+            st.setString(6, object.getHoaDon().getMaHoaDon());
+            st.setInt(7, object.getTrangThai().getValue());
+            st.setDouble(8, object.getGiaVe());
+            n = st.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return n > 0;
     }
 
     @Override
@@ -201,6 +145,156 @@ public class Ve_DAO implements DAOBase<Ve> {
             return false;
         }
     }
+    
+    public Ve getData(ResultSet rs) throws SQLException, Exception {
+        Ve ve = null;
+            // LOẠI VÉ 
+            LoaiVe loaiVe = new LoaiVe(
+                    rs.getString("maLoaiVe"),
+                    rs.getString("tenLoaiVe"),
+                    rs.getString("moTa"),
+                    rs.getDouble("heSoLoaiVe")
+            );
+            
+            // HÀNH KHÁCH
+            HanhKhach hanhKhach = new HanhKhach(
+                    rs.getString("maHanhKhach"),
+                    rs.getString("tenHanhKhach"),
+                    rs.getString("cccd"),
+                    rs.getDate("ngaySinh").toLocalDate()
+            );
+            
+            //GHẾ & LOẠI GHẾ
+            LoaiGhe loaiGhe = new LoaiGhe(
+                    rs.getString("maLoaiGhe"),
+                    rs.getString("tenLoaiGhe"),
+                    rs.getString("moTa"),
+                    rs.getDouble("heSoGhe")
+            );
+            
+            Tau tau = new Tau(
+                    rs.getString("maTau"),
+                    rs.getString("tenTau"),
+                    rs.getInt("soToaTau"),
+                    rs.getInt("sucChua"),
+                    rs.getDate("ngayHoatDong").toLocalDate(),
+                    TrangThaiTau.fromInt(rs.getInt("trangThai"))
+            );
+            
+            ToaTau toaTau = new ToaTau(
+                    rs.getString("maToaTau"),
+                    rs.getInt("soHieuToa"),
+                    rs.getInt("soKhoangTau"),
+                    rs.getInt("soCho"),
+                    tau
+            );
+            
+            KhoangTau khoangTau = new KhoangTau(
+                    rs.getString("maKhoangTau"),
+                    rs.getInt("soHieuKhoang"),
+                    rs.getInt("sucChua"),
+                    toaTau
+            );
+           
+            Ghe ghe = new Ghe(
+                    rs.getString("maGhe"),
+                    rs.getInt("soGhe"),
+                    TrangThaiGhe.fromInt(rs.getInt("trangThaiGhe")),
+                    loaiGhe,
+                    khoangTau
+            );
+            
+            // ======= Bảng CHUYẾN TÀU & TUYẾN ĐƯỜNG & GA =======
+            GaTau gaDi = new GaTau(
+                    rs.getString("maGaDi"),
+                    rs.getString("tenGaDi"),
+                    rs.getString("diaChiGaDi"),
+                    rs.getString("sdtGaDi")
+            );
+            
+            GaTau gaDen = new GaTau(
+                    rs.getString("maGaDen"),
+                    rs.getString("tenGaDen"),
+                    rs.getString("diaChiGaDen"),
+                    rs.getString("sdtGaDen")
+            );
+            
+            TuyenDuong tuyenDuong = new TuyenDuong(
+                    rs.getString("maTuyenDuong"),
+                    gaDi,
+                    gaDen,
+                    rs.getDouble("quangDuong"),
+                    rs.getDouble("soTienMotKm")
+            );
+            
+            ChuyenTau chuyenTau = new ChuyenTau(
+                    rs.getString("maChuyenTau"),
+                    tuyenDuong,
+                    rs.getTimestamp("thoiGianDi").toLocalDateTime(),
+                    rs.getTimestamp("thoiGianDen").toLocalDateTime(),
+                    tau
+            );
+            
+            KhuyenMai khuyenMai = null;
+            if (rs.getString("maKhuyenMai") != null) {
+                khuyenMai = new KhuyenMai(
+                    rs.getString("maKhuyenMai"),
+                    rs.getString("tenKhuyenMai"),
+                    rs.getDouble("heSoKhuyenMai"),
+                    rs.getDate("ngayBatDau").toLocalDate(),
+                    rs.getDate("ngayKetThuc").toLocalDate(),
+                    rs.getDouble("tongTienToiThieu"),
+                    rs.getDouble("tienKhuyenMaiToiDa"),
+                    rs.getBoolean("trangThai")
+                );
+            }
+            
+            NhanVien nhanVien = new NhanVien(
+                    rs.getString("maNV"),
+                    rs.getString("tenNV"),
+                    rs.getBoolean("gioiTinh"),
+                    rs.getDate("ngaySinh").toLocalDate(),
+                    rs.getString("email"),
+                    rs.getString("soDienThoai"),
+                    rs.getString("cccd"),
+                    rs.getString("diaChi"),
+                    rs.getString("chucVu"),
+                    rs.getBoolean("trangThai")
+            );
+            
+            KhachHang khachHang = new KhachHang(
+                    rs.getString("maKH"),
+                    rs.getString("tenKH"),
+                    rs.getString("soDienThoai"),
+                    rs.getString("cccd"),
+                    rs.getDate("ngaySinh").toLocalDate(),
+                    rs.getBoolean("gioiTinh")
+            );
+            
+            HoaDon hoaDon = new HoaDon(
+                    rs.getString("maHoaDon"),
+                    nhanVien,
+                    khachHang,
+                    rs.getTimestamp("ngayLapHoaDon").toLocalDateTime(),
+                    khuyenMai
+            );
+            
+            //VÉ (chính)
+            ve = new Ve(
+                    rs.getString("maVe"),
+                    chuyenTau,
+                    hanhKhach,
+                    ghe,
+                    hoaDon,
+                    TrangThaiVe.fromInt(rs.getInt("trangThai")),
+                    loaiVe,
+                    rs.getDouble("giaVe")
+            );
+        return ve;
+    }
+    
+    public ArrayList<Ve> timKiemVe(String maVe, String hoTen, String cccd, LocalDate ngayDi) {
+        ArrayList<Ve> dsVe = new ArrayList<>();
 
     @Override
     public String generateID() {

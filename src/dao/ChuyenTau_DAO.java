@@ -13,29 +13,26 @@ import java.time.LocalDate;
 
 public class ChuyenTau_DAO implements DAOBase {
 
-   @Override
-public ChuyenTau getOne(String id) {
-    
-    String sql = "SELECT *, " +
-                 "gdi.maGa AS maGaDi, gdi.tenGa AS tenGaDi, " +
-                 "gden.maGa AS maGaDen, gden.tenGa AS tenGaDen " +
-                 "FROM ChuyenTau ct " +
-                 "JOIN Tau t ON t.maTau = ct.maTau " +
-                 "JOIN TuyenDuong td ON td.maTuyenDuong = ct.maTuyenDuong " +
-                 "JOIN GaTau gdi ON gdi.maGa = td.gaDi " +
-                 "JOIN GaTau gden ON gden.maGa = td.gaDen " +
-                 "WHERE ct.maChuyenTau = ?";
-    
-    try {
-        PreparedStatement ps = ConnectDB.conn.prepareStatement(sql);
-        ps.setString(1, id);
-        ResultSet rs = ps.executeQuery();
+    @Override
+    public ChuyenTau getOne(String id) {
+        String sql = "Select *, gdi.maGa AS maGaDi, gdi.tenGa AS tenGaDi," 
+                      + "gden.maGa AS maGaDen, gden.tenGa AS tenGaDen from ChuyenTau ct"
+                      + " JOIN Tau t ON t.maTau = ct.maTau"
+                      + " JOIN TuyenDuong td ON td.maTuyenDuong = ct.maTuyenDuong"
+                      + " JOIN GaTau gdi ON gdi.maGa = td.gaDi"
+                      + " JOIN GaTau gden ON gden.maGa = td.gaDen where maChuyenTau = ?";
         
-        if (rs.next()) {
-            ChuyenTau ct = getData(rs);
-            rs.close();
-            ps.close();
-            return ct;
+        try {
+            PreparedStatement ps = ConnectDB.conn.prepareStatement(sql);
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                ChuyenTau ct = getData(rs);
+                return ct;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         
         rs.close();
@@ -178,7 +175,7 @@ public ChuyenTau getOne(String id) {
     @Override
     public Boolean create(Object object) {
         ChuyenTau ct = (ChuyenTau) object;
-        String sql = "INSERT INTO ChuyenTau (maChuyenTau, thoiGianDi, thoiGianDen, soGheDaDat, soGheConTrong, maTau, maTuyenDuong) "
+        String sql = "INSERT INTO ChuyenTau (maChuyenTau, thoiGianDi, thoiGianDen, soGheDaDat, soGheConTrong, maTau, maTuyenDuong)"
                    + "VALUES (?, ?, ?, ?, ?, ?, ?)";
         
         try {
@@ -265,9 +262,39 @@ public ChuyenTau getOne(String id) {
         return n > 0;
     }
     
-    public ChuyenTau timKiemChuyenTau(String gaDi, String gaDen, boolean motChieu, LocalDate ngayDi, LocalDate ngayVe) {
-        ChuyenTau ct = null;
-        return ct;
+    public ArrayList<ChuyenTau> timKiemChuyenTau(String gaDi, String gaDen, LocalDate ngayDi) throws Exception {
+        ArrayList<ChuyenTau> dsChuyenTau = new ArrayList<>();
+    
+        try {
+
+            String sql = """ 
+                            SELECT *, gdi.maGa AS maGaDi, gdi.tenGa AS tenGaDi, 
+                            gden.maGa AS maGaDen, gden.tenGa AS tenGaDen 
+                            FROM ChuyenTau ct
+                            JOIN Tau t ON ct.maTau = t.maTau
+                            JOIN TuyenDuong td ON ct.maTuyenDuong = td.maTuyenDuong
+                            JOIN GaTau gdi ON td.gaDi = gdi.maGa
+                            JOIN GaTau gden ON td.gaDen = gden.maGa
+                            WHERE (gdi.tenGa = ?)
+                            AND (gden.tenGa = ?)
+                            AND (CAST(ct.thoiGianDi AS DATE)) = ? 
+                                                                    """;
+                                                             
+            PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
+            st.setString(1, gaDi);
+            st.setString(2, gaDen);
+            st.setDate(3, java.sql.Date.valueOf(ngayDi));
+        
+            ResultSet rs = st.executeQuery();
+            // Lấy danh sách chuyến tàu chiều đi
+            while (rs.next()) {
+                dsChuyenTau.add(getData(rs));
+            }
+        
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } 
+        return dsChuyenTau;
     }
 
     private ChuyenTau getData(ResultSet rs) throws SQLException, Exception { 
