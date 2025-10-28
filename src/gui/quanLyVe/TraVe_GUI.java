@@ -41,6 +41,10 @@ public class TraVe_GUI extends javax.swing.JPanel {
     }
     
     private void handleTimKiem() {
+        pnl_thongTinVe.setVisible(false);
+        pnl_thongBao.setVisible(false);
+        pnl_chiTietHoanTien.setVisible(false);
+        
         String maVe = txt_timKiem.getText();
         
         if(maVe.equals("")) {
@@ -54,6 +58,7 @@ public class TraVe_GUI extends javax.swing.JPanel {
         if(ve == null) {
             pnl_thongBao.setVisible(true);
             lbl_thongBao.setText("Không tìm thấy vé");
+            lbl_chiTietThongBao.setText("");
             return;
         }
         
@@ -69,26 +74,28 @@ public class TraVe_GUI extends javax.swing.JPanel {
         pnl_thongTinVe.setVisible(true);
         
 //      Hiển thị thông báo nêú không đủ điều kiện
-        hienThiThongBao();
+        if(!hienThiThongBao()) {
+            return;
+        };
         
 //      Tạo hóa đơn trả và hiển thị chi tiết hoàn tiền nếu đáp ứng được điều kiện
         hdt = CreateHoaDonTra();
         hienThiChiTietHoanTien();
     }
     
-    private void hienThiThongBao() {
+    private Boolean hienThiThongBao() {
         if(ve.getTrangThai().compare(2)) {
             lbl_thongBao.setText("Không đủ điều kiện trả vé");
             lbl_chiTietThongBao.setText("Vé đã được sử dụng!");
             pnl_thongBao.setVisible(true);
-            return;
+            return false;
         }
         
         if(ve.getTrangThai().compare(3)) {
             lbl_thongBao.setText("Không đủ điều kiện trả vé");
             lbl_chiTietThongBao.setText("Vé đã bị hủy không thể đổi trả!");
             pnl_thongBao.setVisible(true);
-            return;
+            return false;
         }
         
         LocalDateTime gioTauChay = ve.getChuyenTau().getThoiGianDi();
@@ -102,7 +109,9 @@ public class TraVe_GUI extends javax.swing.JPanel {
             lbl_thongBao.setText("Không đủ điều kiện trả vé");
             lbl_chiTietThongBao.setText("Vé chỉ có thể trả trước 4 giờ tàu chạy (tàu chạy lúc " + FormatUtil.formatDateTime(gioTauChay) + ")");
             pnl_thongBao.setVisible(true);
+            return false;
         }
+        return true;
     }
     
     private HoaDonTra CreateHoaDonTra() {
@@ -173,8 +182,8 @@ public class TraVe_GUI extends javax.swing.JPanel {
         jLabel5 = new javax.swing.JLabel();
         txt_timKiem = new javax.swing.JTextField();
         btn_timKiem = new javax.swing.JButton();
-        jPanel4 = new javax.swing.JPanel();
-        jPanel14 = new javax.swing.JPanel();
+        pnl_content = new javax.swing.JPanel();
+        pnl_contain = new javax.swing.JPanel();
         pnl_thongTinVe = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
@@ -290,10 +299,10 @@ public class TraVe_GUI extends javax.swing.JPanel {
 
         add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        jPanel4.setLayout(new java.awt.BorderLayout());
+        pnl_content.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        pnl_content.setLayout(new java.awt.BorderLayout());
 
-        jPanel14.setLayout(new javax.swing.BoxLayout(jPanel14, javax.swing.BoxLayout.LINE_AXIS));
+        pnl_contain.setLayout(new javax.swing.BoxLayout(pnl_contain, javax.swing.BoxLayout.LINE_AXIS));
 
         pnl_thongTinVe.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 0, 10));
         pnl_thongTinVe.setLayout(new java.awt.BorderLayout());
@@ -387,7 +396,7 @@ public class TraVe_GUI extends javax.swing.JPanel {
 
         pnl_thongTinVe.add(pnl, java.awt.BorderLayout.CENTER);
 
-        jPanel14.add(pnl_thongTinVe);
+        pnl_contain.add(pnl_thongTinVe);
 
         pnl_chiTietHoanTien.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 0, 10));
         pnl_chiTietHoanTien.setPreferredSize(new java.awt.Dimension(250, 480));
@@ -464,7 +473,7 @@ public class TraVe_GUI extends javax.swing.JPanel {
 
         pnl_chiTietHoanTien.add(jPanel5, java.awt.BorderLayout.PAGE_START);
 
-        jPanel14.add(pnl_chiTietHoanTien);
+        pnl_contain.add(pnl_chiTietHoanTien);
 
         pnl_thongBao.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 0, 10));
         pnl_thongBao.setPreferredSize(new java.awt.Dimension(250, 480));
@@ -522,11 +531,11 @@ public class TraVe_GUI extends javax.swing.JPanel {
 
         pnl_thongBao.add(jPanel6, java.awt.BorderLayout.PAGE_START);
 
-        jPanel14.add(pnl_thongBao);
+        pnl_contain.add(pnl_thongBao);
 
-        jPanel4.add(jPanel14, java.awt.BorderLayout.CENTER);
+        pnl_content.add(pnl_contain, java.awt.BorderLayout.CENTER);
 
-        add(jPanel4, java.awt.BorderLayout.CENTER);
+        add(pnl_content, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_dongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_dongActionPerformed
@@ -577,12 +586,10 @@ public class TraVe_GUI extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
-    private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel9;
@@ -603,6 +610,8 @@ public class TraVe_GUI extends javax.swing.JPanel {
     private gui.custom.PanelShadow panelShadow2;
     private gui.custom.PanelShadow pnl;
     private javax.swing.JPanel pnl_chiTietHoanTien;
+    private javax.swing.JPanel pnl_contain;
+    private javax.swing.JPanel pnl_content;
     private gui.custom.PanelShadow pnl_quyDinh;
     private javax.swing.JPanel pnl_thongBao;
     private javax.swing.JPanel pnl_thongTinVe;

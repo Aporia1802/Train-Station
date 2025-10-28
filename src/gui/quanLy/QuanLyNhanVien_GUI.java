@@ -131,7 +131,7 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
         String sdt = txt_sdt.getText().trim();
         String cccd = txt_cccd.getText().trim();
         String diaChi = txt_diaChi.getText().trim();
-        String chucVu = cbo_ChucVu.getSelectedItem().toString();
+        String chucVu = cbo_cv.getSelectedItem().toString();
         
         // Giới tính
         boolean gioiTinh = rad_Nam.isSelected(); // true = Nam, false = Nữ
@@ -183,8 +183,8 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
             txt_ngaySinh.setDate(new Date());
         }
 
-        if (cbo_ChucVu.getItemCount() > 0) {
-            cbo_ChucVu.setSelectedIndex(0); // "Tất cả" hoặc "Nam"
+        if (cbo_cv.getItemCount() > 0) {
+            cbo_cv.setSelectedIndex(0); // "Tất cả" hoặc "Nam"
         }
 
         // Đặt trạng thái về mặc định (Đang làm)

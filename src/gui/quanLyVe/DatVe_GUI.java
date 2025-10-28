@@ -5,6 +5,8 @@
 package gui.quanLyVe;
 
 import bus.QuanLyDatVe_BUS;
+import entity.ChuyenTau;
+import java.util.ArrayList;
 /**
  *
  * @author CÔNG HOÀNG
@@ -21,6 +23,14 @@ public class DatVe_GUI extends javax.swing.JPanel {
     
     private void init() {
         bus = new QuanLyDatVe_BUS();
+    }
+    
+    private void renderDanhSachChuyenTau(ArrayList<ChuyenTau> dsChuyenTau) {
+        
+    }
+    
+    private void handleTImKiem() {
+        
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -58,8 +68,7 @@ public class DatVe_GUI extends javax.swing.JPanel {
         jPanel8 = new javax.swing.JPanel();
         btn_timKiem = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        pnl_chonChuyenTau = new javax.swing.JPanel();
+        pnl_dsChuyenTau = new javax.swing.JPanel();
         jPanel20 = new javax.swing.JPanel();
         jLabel31 = new javax.swing.JLabel();
         jPanel12 = new javax.swing.JPanel();
@@ -349,12 +358,9 @@ public class DatVe_GUI extends javax.swing.JPanel {
 
         jPanel9.setLayout(new java.awt.BorderLayout());
 
-        jScrollPane2.setBorder(null);
-        jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-
-        pnl_chonChuyenTau.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 10, 0, 10));
-        pnl_chonChuyenTau.setPreferredSize(new java.awt.Dimension(250, 400));
-        pnl_chonChuyenTau.setLayout(new java.awt.BorderLayout());
+        pnl_dsChuyenTau.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 10, 0, 10));
+        pnl_dsChuyenTau.setPreferredSize(new java.awt.Dimension(250, 400));
+        pnl_dsChuyenTau.setLayout(new java.awt.BorderLayout());
 
         jPanel20.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 4, 10, 0));
         jPanel20.setLayout(new java.awt.GridLayout(1, 0));
@@ -363,7 +369,7 @@ public class DatVe_GUI extends javax.swing.JPanel {
         jLabel31.setText("Chọn chuyến tàu");
         jPanel20.add(jLabel31);
 
-        pnl_chonChuyenTau.add(jPanel20, java.awt.BorderLayout.PAGE_START);
+        pnl_dsChuyenTau.add(jPanel20, java.awt.BorderLayout.PAGE_START);
 
         jPanel12.setBackground(new java.awt.Color(255, 255, 255));
         jPanel12.setLayout(new java.awt.BorderLayout());
@@ -463,11 +469,9 @@ public class DatVe_GUI extends javax.swing.JPanel {
 
         jPanel12.add(jScrollPane3, java.awt.BorderLayout.CENTER);
 
-        pnl_chonChuyenTau.add(jPanel12, java.awt.BorderLayout.CENTER);
+        pnl_dsChuyenTau.add(jPanel12, java.awt.BorderLayout.CENTER);
 
-        jScrollPane2.setViewportView(pnl_chonChuyenTau);
-
-        jPanel9.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+        jPanel9.add(pnl_dsChuyenTau, java.awt.BorderLayout.PAGE_START);
 
         jPanel1.add(jPanel9);
 
@@ -483,7 +487,7 @@ public class DatVe_GUI extends javax.swing.JPanel {
         jPanel24.setLayout(new java.awt.BorderLayout());
 
         jPanel25.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 4, 10, 0));
-        jPanel25.setLayout(new java.awt.GridLayout());
+        jPanel25.setLayout(new java.awt.GridLayout(1, 0));
 
         jLabel35.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel35.setText("Chọn chỗ ngồi");
@@ -1204,6 +1208,7 @@ public class DatVe_GUI extends javax.swing.JPanel {
 
     private void btn_timKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_timKiemActionPerformed
         // TODO add your handling code here:
+        handleTImKiem();
     }//GEN-LAST:event_btn_timKiemActionPerformed
 
 
@@ -1407,13 +1412,12 @@ public class DatVe_GUI extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel97;
     private javax.swing.JPanel jPanel98;
     private javax.swing.JPanel jPanel99;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private gui.custom.PanelShadow panelShadow1;
     private gui.custom.PanelShadow panelShadow3;
     private gui.custom.PanelShadow panelShadow6;
     private javax.swing.JPanel pnl_chonChoNgoi;
-    private javax.swing.JPanel pnl_chonChuyenTau;
+    private javax.swing.JPanel pnl_dsChuyenTau;
     private javax.swing.JRadioButton rad_khuHoi;
     private javax.swing.JRadioButton rad_motChieu;
     private javax.swing.JTextField txt_gaDen;
