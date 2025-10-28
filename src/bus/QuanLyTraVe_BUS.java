@@ -57,7 +57,7 @@ public class QuanLyTraVe_BUS {
         }
         
 //      Cập nhật trạng thái ghế
-        if (!gheDAO.capNhatTrangThaiGhe(hdt.getVe().getGhe().getMaGhe())) {
+        if (!gheDAO.capNhatTrangThaiGheTrong(hdt.getVe().getGhe().getMaGhe())) {
             throw new Exception("Không thể cập nhật trạng thái ghế!");
         }
         

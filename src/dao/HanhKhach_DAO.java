@@ -129,4 +129,43 @@ public class HanhKhach_DAO {
 
         return hk;
     }
+    
+    // Thêm vào HanhKhach_DAO.java
+
+public String generateID() {
+    String newID = "HK001";
+    String sql = "SELECT TOP 1 maHanhKhach FROM HanhKhach ORDER BY maHanhKhach DESC";
+    
+    try {
+        Statement st = ConnectDB.conn.createStatement();
+        ResultSet rs = st.executeQuery(sql);
+        
+        if (rs.next()) {
+            String lastID = rs.getString("maHanhKhach");
+            int num = Integer.parseInt(lastID.substring(2));
+            newID = String.format("HK%03d", num + 1);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return newID;
+}
+
+    public Boolean create(HanhKhach object) {
+    int n = 0;
+    String sql = "INSERT INTO HanhKhach (maHanhKhach, tenHanhKhach, cccd, ngaySinh) VALUES (?, ?, ?, ?)";
+    
+    try {
+        PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
+        st.setString(1, object.getMaHanhKhach());
+        st.setString(2, object.getTenHanhKhach());
+        st.setString(3, object.getCccd());
+        st.setDate(4, java.sql.Date.valueOf(object.getNgaySinh()));
+        
+        n = st.executeUpdate();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return n > 0;
+}
 }

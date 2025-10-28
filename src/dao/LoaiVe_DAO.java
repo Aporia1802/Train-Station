@@ -38,6 +38,25 @@ public class LoaiVe_DAO implements DAOBase<LoaiVe>{
         return loaiVe;
     }
     
+        public LoaiVe getLoaiVe(String tenLoai) {
+        LoaiVe loaiVe = null;
+        String sql = "SELECT * FROM LoaiVe WHERE tenLoaiVe = ?";
+
+        try {
+            PreparedStatement ps = ConnectDB.conn.prepareStatement(sql);
+            ps.setString(1, tenLoai);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                    loaiVe = getData(rs);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception ex) {
+            Logger.getLogger(LoaiVe_DAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return loaiVe;
+    }
+    
     private LoaiVe getData(ResultSet rs) throws SQLException, Exception {
         String maLoaiVe = rs.getString("maLoaiVe");
         String tenLoaiVe = rs.getString("tenLoaiVe");

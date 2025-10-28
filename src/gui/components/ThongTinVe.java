@@ -4,40 +4,47 @@
  */
 package gui.components;
 
+import dao.LoaiVe_DAO;
+import entity.ChuyenTau;
+import entity.Ghe;
+import entity.LoaiVe;
 import java.awt.Font;
 import java.util.Date;
 import javax.swing.BorderFactory;
+import utils.FormatUtil;
 
 /**
  *
  * @author CÔNG HOÀNG
  */
 public class ThongTinVe extends javax.swing.JPanel {
-    private String maGhe;
+    private Ghe ghe;
+    private ChuyenTau ct;
+    private LoaiVe_DAO dao;
     /**
      * Creates new form ThongTinVe
      */
     
     public class ThongTinHanhKhach {
-    private String maGhe;
-    private String hoTen;
-    private String CCCD;
-    private Date ngaySinh;
-    private String loaiVe;
-    public void setMaGhe(String maGhe) { this.maGhe = maGhe; }
-    public void setHoTen(String hoTen) { this.hoTen = hoTen; }
-    public void setCCCD(String CCCD) { this.CCCD = CCCD; }
-    public void setNgaySinh(Date ngaySinh) { this.ngaySinh = ngaySinh; }
-    public void setLoaiVe(String loaiVe) { this.loaiVe = loaiVe; }
+        private String maGhe;
+        private String hoTen;
+        private String CCCD;
+        private Date ngaySinh;
+        private String loaiVe;
+        public void setMaGhe(String maGhe) { this.maGhe = ghe.getMaGhe(); }
+        public void setHoTen(String hoTen) { this.hoTen = hoTen; }
+        public void setCCCD(String CCCD) { this.CCCD = CCCD; }
+        public void setNgaySinh(Date ngaySinh) { this.ngaySinh = ngaySinh; }
+        public void setLoaiVe(String loaiVe) { this.loaiVe = loaiVe; }
 
-    public String getMaGhe() { return maGhe; }
-    public String getHoTen() { return hoTen; }
-    public String getCCCD() { return CCCD; }
-    public Date getNgaySinh() { return ngaySinh; }
-    public String getLoaiVe() { return loaiVe; }
+        public String getMaGhe() { return maGhe; }
+        public String getHoTen() { return hoTen; }
+        public String getCCCD() { return CCCD; }
+        public Date getNgaySinh() { return ngaySinh; }
+        public String getLoaiVe() { return loaiVe; }
     }
 
-    public ThongTinVe(String thongTin, String maGhe) {
+    public ThongTinVe(String thongTin, Ghe ghe, ChuyenTau ct) {
         initComponents();
         pnl_thongTinHK.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createTitledBorder(
@@ -49,19 +56,22 @@ public class ThongTinVe extends javax.swing.JPanel {
             ),
             BorderFactory.createEmptyBorder(10, 10, 10, 10)
         ));
-        this.maGhe = maGhe;
+        this.ghe = ghe;
+        this.ct = ct;
+        dao = new LoaiVe_DAO();
+        lbl_giaVe.setText("Giá vé: " + FormatUtil.formatCurrency(ct.getTuyenDuong().tinhGiaVeCoBan() * ghe.getLoaiGhe().getHeSoLoaiGhe()));
     }
     
-    public String getMaGhe() {
-        return maGhe;
+    public Ghe getGhe() {
+        return this.ghe;
     }
     
     public ThongTinHanhKhach getThongTin() {
         ThongTinHanhKhach info = new ThongTinHanhKhach();
-        info.setMaGhe(maGhe);
-        info.setHoTen(txt_hoTen.getText());
-        info.setCCCD(txt_cccd.getText());
-        info.setNgaySinh(date_ngaySinh.getDate());
+        info.setMaGhe(ghe.getMaGhe());
+        info.setHoTen(txt_hoTenHK.getText());
+        info.setCCCD(txt_cccdHK.getText());
+        info.setNgaySinh(date_ngaySinhHK.getDate());
         info.setLoaiVe((String) cbo_loaiVe.getSelectedItem());
         return info;
 }
@@ -79,20 +89,20 @@ public class ThongTinVe extends javax.swing.JPanel {
         pnl_thongTinHK = new javax.swing.JPanel();
         jPanel13 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        txt_hoTen = new javax.swing.JTextField();
+        txt_hoTenHK = new javax.swing.JTextField();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         jLabel6 = new javax.swing.JLabel();
-        txt_cccd = new javax.swing.JTextField();
+        txt_cccdHK = new javax.swing.JTextField();
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         jPanel14 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
-        date_ngaySinh = new com.toedter.calendar.JDateChooser();
+        date_ngaySinhHK = new com.toedter.calendar.JDateChooser();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         jLabel1 = new javax.swing.JLabel();
         cbo_loaiVe = new javax.swing.JComboBox<>();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
+        lbl_giaVe = new javax.swing.JLabel();
 
         setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.LINE_AXIS));
 
@@ -107,13 +117,13 @@ public class ThongTinVe extends javax.swing.JPanel {
         jLabel4.setText("Họ tên:");
         jLabel4.setPreferredSize(new java.awt.Dimension(60, 16));
         jPanel13.add(jLabel4);
-        jPanel13.add(txt_hoTen);
+        jPanel13.add(txt_hoTenHK);
         jPanel13.add(filler2);
 
         jLabel6.setText("CCCD:");
         jLabel6.setPreferredSize(new java.awt.Dimension(60, 16));
         jPanel13.add(jLabel6);
-        jPanel13.add(txt_cccd);
+        jPanel13.add(txt_cccdHK);
 
         pnl_thongTinHK.add(jPanel13);
         pnl_thongTinHK.add(filler4);
@@ -127,9 +137,9 @@ public class ThongTinVe extends javax.swing.JPanel {
         jLabel8.setPreferredSize(new java.awt.Dimension(60, 16));
         jPanel14.add(jLabel8);
 
-        date_ngaySinh.setMaximumSize(txt_hoTen.getMaximumSize());
-        date_ngaySinh.setPreferredSize(txt_hoTen.getPreferredSize());
-        jPanel14.add(date_ngaySinh);
+        date_ngaySinhHK.setMaximumSize(txt_hoTenHK.getMaximumSize());
+        date_ngaySinhHK.setPreferredSize(txt_hoTenHK.getPreferredSize());
+        jPanel14.add(date_ngaySinhHK);
         jPanel14.add(filler1);
 
         jLabel1.setText("Loại vé:");
@@ -137,8 +147,13 @@ public class ThongTinVe extends javax.swing.JPanel {
         jPanel14.add(jLabel1);
 
         cbo_loaiVe.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Người lớn ", "Trẻ em", "Sinh viên", "Người cao tuổi" }));
-        cbo_loaiVe.setMaximumSize(txt_hoTen.getMaximumSize());
-        cbo_loaiVe.setPreferredSize(txt_hoTen.getPreferredSize());
+        cbo_loaiVe.setMaximumSize(txt_hoTenHK.getMaximumSize());
+        cbo_loaiVe.setPreferredSize(txt_hoTenHK.getPreferredSize());
+        cbo_loaiVe.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbo_loaiVeActionPerformed(evt);
+            }
+        });
         jPanel14.add(cbo_loaiVe);
 
         pnl_thongTinHK.add(jPanel14);
@@ -148,33 +163,40 @@ public class ThongTinVe extends javax.swing.JPanel {
         jPanel1.setPreferredSize(new java.awt.Dimension(100, 50));
         jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.LINE_AXIS));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel2.setText("Giá vé: ");
-        jPanel1.add(jLabel2);
+        lbl_giaVe.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lbl_giaVe.setForeground(new java.awt.Color(255, 51, 0));
+        lbl_giaVe.setText("Giá vé: ");
+        jPanel1.add(lbl_giaVe);
 
         pnl_thongTinHK.add(jPanel1);
 
         add(pnl_thongTinHK);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void cbo_loaiVeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbo_loaiVeActionPerformed
+        // TODO add your handling code here:
+        LoaiVe loaiVe = dao.getLoaiVe(cbo_loaiVe.getSelectedItem().toString());
+        lbl_giaVe.setText("Giá vé: " + FormatUtil.formatCurrency(ct.getTuyenDuong().tinhGiaVeCoBan() * ghe.getLoaiGhe().getHeSoLoaiGhe() * loaiVe.getHeSoLoaiVe()));
+    }//GEN-LAST:event_cbo_loaiVeActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> cbo_loaiVe;
-    private com.toedter.calendar.JDateChooser date_ngaySinh;
+    private com.toedter.calendar.JDateChooser date_ngaySinhHK;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel14;
+    private javax.swing.JLabel lbl_giaVe;
     private javax.swing.JPanel pnl_thongTinHK;
-    private javax.swing.JTextField txt_cccd;
-    private javax.swing.JTextField txt_hoTen;
+    private javax.swing.JTextField txt_cccdHK;
+    private javax.swing.JTextField txt_hoTenHK;
     // End of variables declaration//GEN-END:variables
 }

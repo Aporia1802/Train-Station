@@ -11,17 +11,23 @@ import entity.HanhKhach;
 import entity.HoaDon;
 import entity.KhachHang;
 import entity.KhoangTau;
+import entity.KhuyenMai;
+import entity.LoaiVe;
 import entity.NhanVien;
 import entity.ToaTau;
 import entity.Ve;
+import enums.TrangThaiVe;
 import gui.components.ChonChoNgoi;
 import gui.components.ChonChuyenTau;
 import gui.components.ThongTinVe;
+import gui.custom.XacNhanThanhToan;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.GridLayout;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,6 +37,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import main.Application;
 import raven.toast.Notifications;
 /**
@@ -120,7 +127,7 @@ public class DatVe_GUI extends javax.swing.JPanel {
 
                         // thêm thông tin vé
                         pnl_thongTin.add(new ThongTinVe(
-                            "Toa " + toaTau.getSoHieuToa() + " ghế " + ghe.getSoGhe(), ghe.getMaGhe()
+                            "Toa " + toaTau.getSoHieuToa() + " ghế " + ghe.getSoGhe(), ghe, this.chuyenTau
                         ));
                         pnl_thongTin.revalidate();
                         pnl_thongTin.repaint();
@@ -133,7 +140,7 @@ public class DatVe_GUI extends javax.swing.JPanel {
                         for (Component comp : pnl_thongTin.getComponents()) {
                             if (comp instanceof ThongTinVe) {
                                 ThongTinVe ve = (ThongTinVe) comp;
-                                if (ve.getMaGhe().equals(ghe.getMaGhe())) {
+                                if (ve.getGhe().getMaGhe().equals(ghe.getMaGhe())) {
                                     pnl_thongTin.remove(comp);
                                     break;
                                 }
@@ -183,7 +190,187 @@ public class DatVe_GUI extends javax.swing.JPanel {
     }
     
     private void handleDatVe() {
+        try {
+        // 1. Validate thông tin khách hàng
+        String hoTenKH = txt_hoTen.getText().trim();
+        String cccdKH = txt_cccd.getText().trim();
+        String sdtKH = txt_sdt.getText().trim();
+        Date ngaySinhDate = date_ngaySinh.getDate();
         
+        if (hoTenKH.isEmpty() || cccdKH.isEmpty() || sdtKH.isEmpty() || ngaySinhDate == null) {
+            Notifications.getInstance().show(Notifications.Type.WARNING, 
+                "Vui lòng nhập đầy đủ thông tin khách hàng!");
+            return;
+        }
+        
+        // 2. Kiểm tra đã chọn chuyến tàu chưa
+        if (chuyenTau == null) {
+            Notifications.getInstance().show(Notifications.Type.WARNING, 
+                "Vui lòng chọn chuyến tàu!");
+            return;
+        }
+        
+        // 3. Lấy danh sách thông tin vé từ form
+        ArrayList<ThongTinVe.ThongTinHanhKhach> dsThongTinVe = new ArrayList<>();
+        for (Component comp : pnl_thongTin.getComponents()) {
+            if (comp instanceof ThongTinVe) {
+                ThongTinVe vePanel = (ThongTinVe) comp;
+                dsThongTinVe.add(vePanel.getThongTin());
+            }
+        }
+        
+        if (dsThongTinVe.isEmpty()) {
+            Notifications.getInstance().show(Notifications.Type.WARNING, 
+                "Vui lòng chọn ít nhất một ghế!");
+            return;
+        }
+        
+        // 4. Validate thông tin hành khách
+        for (ThongTinVe.ThongTinHanhKhach info : dsThongTinVe) {
+            if (info.getHoTen().trim().isEmpty() || 
+                info.getCCCD().trim().isEmpty() || 
+                info.getNgaySinh() == null || 
+                info.getLoaiVe() == null) {
+                Notifications.getInstance().show(Notifications.Type.WARNING, 
+                    "Vui lòng nhập đầy đủ thông tin cho tất cả hành khách!");
+                return;
+            }
+        }
+        
+        // 5. Tạo hoặc lấy khách hàng
+        LocalDate ngaySinhKH = ngaySinhDate.toInstant()
+                .atZone(ZoneId.systemDefault()).toLocalDate();
+        
+        khachHang = bus.taoHoacLayKhachHang(hoTenKH, cccdKH, sdtKH, ngaySinhKH, true);
+        
+        // 6. Tạo danh sách vé
+        dsVe.clear();
+        dsHanhKhach.clear();
+        dsGhe.clear();
+        
+        for (ThongTinVe.ThongTinHanhKhach info : dsThongTinVe) {
+            // Tạo hành khách
+            LocalDate ngaySinhHK = info.getNgaySinh().toInstant()
+                    .atZone(ZoneId.systemDefault()).toLocalDate();
+            HanhKhach hk = bus.taoHanhKhach(info.getHoTen(), info.getCCCD(), ngaySinhHK);
+            dsHanhKhach.add(hk);
+            
+            // Lấy thông tin ghế
+            Ghe ghe = null;
+            for (ToaTau toa : bus.getToaTau(chuyenTau.getTau().getMaTau())) {
+                for (KhoangTau khoang : bus.getKhoangTau(toa.getMaToa())) {
+                    for (Ghe g : bus.getGhe(khoang.getMaKhoangTau())) {
+                        if (g.getMaGhe().equals(info.getMaGhe())) {
+                            ghe = g;
+                            break;
+                        }
+                    }
+                    if (ghe != null) break;
+                }
+                if (ghe != null) break;
+            }
+            
+            if (ghe == null) {
+                throw new Exception("Không tìm thấy ghế!");
+            }
+            dsGhe.add(ghe);
+            
+            // Lấy loại vé
+            LoaiVe loaiVe = bus.getLoaiVeByTen(info.getLoaiVe());
+            
+            // Tính giá vé
+            double giaVe = bus.tinhGiaVe(chuyenTau, ghe, loaiVe);
+            
+            // Tạo hóa đơn tạm (chưa lưu DB)
+            HoaDon hoaDonTemp = new HoaDon("HDTemp");
+            
+            // Tạo vé
+            String maVe = bus.generateMaVe();
+            Ve ve = new Ve(maVe, chuyenTau, hk, ghe, hoaDonTemp, 
+                          TrangThaiVe.CHUA_SU_DUNG, loaiVe, giaVe);
+            dsVe.add(ve);
+        }
+        
+        // 7. Tạo hóa đơn thật
+        String maHD = bus.generateMaHoaDon();
+        KhuyenMai khuyenMai = null; // Có thể thêm chọn khuyến mãi
+        
+        hoaDon = new HoaDon(maHD, nhanVien, khachHang, 
+                           LocalDateTime.now(), khuyenMai);
+        
+        // Cập nhật hóa đơn cho các vé
+        for (Ve ve : dsVe) {
+            ve.setHoaDon(hoaDon);
+        }
+        
+        // 8. Tính tiền
+        double[] tienHoaDon = bus.tinhTienHoaDon(dsVe, khuyenMai);
+        double tongTien = tienHoaDon[0];
+        double thanhTien = tienHoaDon[1];
+        
+        hoaDon.setTongTien(tongTien);
+        hoaDon.setThanhTien(thanhTien);
+        
+        // 9. Hiển thị dialog xác nhận thanh toán
+        XacNhanThanhToan dialog = new XacNhanThanhToan(
+            (Frame) SwingUtilities.getWindowAncestor(this),
+            chuyenTau, dsVe, khachHang, tongTien, thanhTien
+        );
+        dialog.setVisible(true);
+        
+        // 10. Nếu đã thanh toán, lưu vào database
+        if (dialog.isDaThanhToan()) {
+            if (bus.datVe(hoaDon, dsVe)) {
+                Notifications.getInstance().show(Notifications.Type.SUCCESS, 
+                    "Đặt vé thành công!");
+                
+                // In hóa đơn (tùy chọn)
+                // inHoaDon(hoaDon, dsVe);
+                
+                // Reset form
+                resetForm();
+            } else {
+                Notifications.getInstance().show(Notifications.Type.ERROR, 
+                    "Đặt vé thất bại!");
+            }
+        }
+        
+    } catch (Exception e) {
+        e.printStackTrace();
+        Notifications.getInstance().show(Notifications.Type.ERROR, 
+            "Lỗi: " + e.getMessage());
+    }
+}
+
+    private void resetForm() {
+        // Reset thông tin khách hàng
+        txt_hoTen.setText("");
+        txt_cccd.setText("");
+        txt_sdt.setText("");
+        date_ngaySinh.setDate(null);
+    
+        // Reset danh sách vé
+        pnl_thongTin.removeAll();
+        pnl_thongTin.add(pnl_thongTinKhachHang);
+        pnl_thongTin.revalidate();
+        pnl_thongTin.repaint();
+    
+        // Reset chỗ ngồi
+        pnl_choNgoi.removeAll();
+        pnl_choNgoi.revalidate();
+        pnl_choNgoi.repaint();
+    
+        // Reset biến
+        chuyenTau = null;
+        dsVe.clear();
+        dsHanhKhach.clear();
+        dsGhe.clear();
+        khachHang = null;
+        hoaDon = null;
+    
+        // Ẩn các panel
+        pnl_chonChoNgoi.setVisible(false);
+        pnl_nhapThongTin.setVisible(false);
     }
     
     private void handleTImKiem() {
@@ -523,6 +710,7 @@ public class DatVe_GUI extends javax.swing.JPanel {
 
     private void btn_datVeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_datVeActionPerformed
         // TODO add your handling code here:
+        handleDatVe();
     }//GEN-LAST:event_btn_datVeActionPerformed
 
 

@@ -328,4 +328,26 @@ public class ChuyenTau_DAO implements DAOBase {
         
         return ct;
     }
+    
+    public boolean capNhatSoGheKhiDat(String maChuyenTau, int soGheDat) {
+    int n = 0;
+    String sql = """
+                UPDATE ChuyenTau
+                SET soGheDaDat = soGheDaDat + ?,
+                soGheConTrong = soGheConTrong - ?
+                WHERE maChuyenTau = ?
+                AND soGheConTrong >= ?
+                """;
+    try {
+        PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
+        st.setInt(1, soGheDat);
+        st.setInt(2, soGheDat);
+        st.setString(3, maChuyenTau);
+        st.setInt(4, soGheDat);
+        n = st.executeUpdate();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return n > 0;
+}
 }
