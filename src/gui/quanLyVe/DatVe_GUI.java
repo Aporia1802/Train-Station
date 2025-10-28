@@ -57,7 +57,7 @@ public class DatVe_GUI extends javax.swing.JPanel {
     
     private void init() {
         bus = new QuanLyDatVe_BUS();
-        pnl_dsChuyenTau.setVisible(false);
+        pnl_chonChuyenTau.setVisible(false);
         pnl_chonChoNgoi.setVisible(false);
         pnl_nhapThongTin.setVisible(false);
         this.nhanVien = Application.nhanVien;
@@ -177,7 +177,7 @@ public class DatVe_GUI extends javax.swing.JPanel {
             pnl_contain.add(item);
             pnl_contain.add(Box.createVerticalStrut(10)); // cách giữa các panel
         }
-        pnl_dsChuyenTau.setVisible(true);
+        pnl_chonChuyenTau.setVisible(true);
         pnl_contain.revalidate();
         pnl_contain.repaint();
     }
@@ -239,7 +239,6 @@ public class DatVe_GUI extends javax.swing.JPanel {
         jPanel8 = new javax.swing.JPanel();
         btn_timKiem = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
         pnl_chonChuyenTau = new javax.swing.JPanel();
         jPanel20 = new javax.swing.JPanel();
         jLabel31 = new javax.swing.JLabel();
@@ -375,9 +374,6 @@ public class DatVe_GUI extends javax.swing.JPanel {
 
         jPanel9.setLayout(new java.awt.BorderLayout());
 
-        jScrollPane2.setBorder(null);
-        jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-
         pnl_chonChuyenTau.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 10, 0, 10));
         pnl_chonChuyenTau.setPreferredSize(new java.awt.Dimension(250, 400));
         pnl_chonChuyenTau.setLayout(new java.awt.BorderLayout());
@@ -393,7 +389,7 @@ public class DatVe_GUI extends javax.swing.JPanel {
 
         jPanel12.setBackground(new java.awt.Color(255, 255, 255));
         jPanel12.setLayout(new java.awt.BorderLayout());
-        pnl_dsChuyenTau.add(jPanel12, java.awt.BorderLayout.CENTER);
+        pnl_chonChuyenTau.add(jPanel12, java.awt.BorderLayout.CENTER);
 
         jScrollPane3.setBorder(null);
         jScrollPane3.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -402,9 +398,9 @@ public class DatVe_GUI extends javax.swing.JPanel {
         pnl_contain.setLayout(new javax.swing.BoxLayout(pnl_contain, javax.swing.BoxLayout.Y_AXIS));
         jScrollPane3.setViewportView(pnl_contain);
 
-        pnl_dsChuyenTau.add(jScrollPane3, java.awt.BorderLayout.CENTER);
+        pnl_chonChuyenTau.add(jScrollPane3, java.awt.BorderLayout.CENTER);
 
-        jPanel9.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+        jPanel9.add(pnl_chonChuyenTau, java.awt.BorderLayout.PAGE_START);
 
         jPanel1.add(jPanel9);
 
@@ -522,6 +518,7 @@ public class DatVe_GUI extends javax.swing.JPanel {
 
     private void btn_timKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_timKiemActionPerformed
         // TODO add your handling code here:
+        handleTImKiem();
     }//GEN-LAST:event_btn_timKiemActionPerformed
 
     private void btn_datVeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_datVeActionPerformed
@@ -577,8 +574,8 @@ public class DatVe_GUI extends javax.swing.JPanel {
     private gui.custom.PanelShadow panelShadow1;
     private javax.swing.JPanel pnl_choNgoi;
     private javax.swing.JPanel pnl_chonChoNgoi;
+    private javax.swing.JPanel pnl_chonChuyenTau;
     private javax.swing.JPanel pnl_contain;
-    private javax.swing.JPanel pnl_dsChuyenTau;
     private javax.swing.JPanel pnl_nhapThongTin;
     private javax.swing.JPanel pnl_thongTin;
     private javax.swing.JPanel pnl_thongTinKhachHang;
