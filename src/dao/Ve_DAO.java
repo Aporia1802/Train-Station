@@ -76,44 +76,44 @@ public class Ve_DAO implements DAOBase<Ve>{
         return ve;
     }
 
-    @Override
-    public ArrayList<Ve> getAll() {
-        ArrayList<Ve> dsVe = new ArrayList<>();
-        String sql = "SELECT *, " +
-            "gdi.maGa AS maGaDi, gdi.tenGa AS tenGaDi, gdi.diaChi AS diaChiGaDi, gdi.soDienThoai AS sdtGaDi, " +
-            "gden.maGa AS maGaDen, gden.tenGa AS tenGaDen, gden.diaChi AS diaChiGaDen, gden.soDienThoai AS sdtGaDen " +
-            "FROM Ve v " +
-            "JOIN LoaiVe lv ON v.maLoaiVe = lv.maLoaiVe " +
-            "JOIN HanhKhach hk ON v.maHanhKhach = hk.maHanhKhach " +
-            "JOIN Ghe g ON v.maGhe = g.maGhe " +
-            "JOIN LoaiGhe lg ON g.maLoaiGhe = lg.maLoaiGhe " +
-            "JOIN KhoangTau kt ON g.maKhoangTau = kt.maKhoangTau " +
-            "JOIN ToaTau tt ON kt.maToaTau = tt.maToaTau " +
-            "JOIN Tau t ON tt.maTau = t.maTau " +
-            "JOIN ChuyenTau ct ON v.maChuyenTau = ct.maChuyenTau " +
-            "JOIN TuyenDuong td ON ct.maTuyenDuong = td.maTuyenDuong " +
-            "JOIN GaTau gdi ON td.gaDi = gdi.maGa " +
-            "JOIN GaTau gden ON td.gaDen = gden.maGa " +
-            "JOIN HoaDon hd ON v.maHoaDon = hd.maHoaDon " +
-            "JOIN NhanVien nv ON hd.maNhanVien = nv.maNV " +
-            "JOIN KhachHang kh ON hd.maKhachHang = kh.maKH " +
-            "JOIN KhuyenMai km ON hd.maKhuyenMai = km.maKhuyenMai ";
+   @Override
+public ArrayList<Ve> getAll() {
+    ArrayList<Ve> dsVe = new ArrayList<>();
+    String sql = "SELECT *, " +
+        "gdi.maGa AS maGaDi, gdi.tenGa AS tenGaDi, gdi.diaChi AS diaChiGaDi, gdi.soDienThoai AS sdtGaDi, " +
+        "gden.maGa AS maGaDen, gden.tenGa AS tenGaDen, gden.diaChi AS diaChiGaDen, gden.soDienThoai AS sdtGaDen " +
+        "FROM Ve v " +
+        "JOIN LoaiVe lv ON v.maLoaiVe = lv.maLoaiVe " +
+        "JOIN HanhKhach hk ON v.maHanhKhach = hk.maHanhKhach " +
+        "JOIN Ghe g ON v.maGhe = g.maGhe " +
+        "JOIN LoaiGhe lg ON g.maLoaiGhe = lg.maLoaiGhe " +
+        "JOIN KhoangTau kt ON g.maKhoangTau = kt.maKhoangTau " +
+        "JOIN ToaTau tt ON kt.maToaTau = tt.maToaTau " +
+        "JOIN Tau t ON tt.maTau = t.maTau " +
+        "JOIN ChuyenTau ct ON v.maChuyenTau = ct.maChuyenTau " +
+        "JOIN TuyenDuong td ON ct.maTuyenDuong = td.maTuyenDuong " +
+        "JOIN GaTau gdi ON td.gaDi = gdi.maGa " +
+        "JOIN GaTau gden ON td.gaDen = gden.maGa " +
+        "JOIN HoaDon hd ON v.maHoaDon = hd.maHoaDon " +
+        "JOIN NhanVien nv ON hd.maNhanVien = nv.maNV " +
+        "JOIN KhachHang kh ON hd.maKhachHang = kh.maKH " +
+        "LEFT JOIN KhuyenMai km ON hd.maKhuyenMai = km.maKhuyenMai"; // ✅ SỬA: LEFT JOIN
 
-        try {
-            PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
-            ResultSet rs = st.executeQuery();
-            
-            while (rs.next()) {
-                dsVe.add(getData(rs));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (Exception ex) {
-            Logger.getLogger(Ve_DAO.class.getName()).log(Level.SEVERE, null, ex);
+    try {
+        PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
+        ResultSet rs = st.executeQuery();
+        
+        while (rs.next()) {
+            dsVe.add(getData(rs));
         }
-
-        return dsVe;
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } catch (Exception ex) {
+        Logger.getLogger(Ve_DAO.class.getName()).log(Level.SEVERE, null, ex);
     }
+
+    return dsVe;
+}
 
     @Override
     public String generateID() {
@@ -336,55 +336,69 @@ public class Ve_DAO implements DAOBase<Ve>{
         return ve;
     }
     
-    public ArrayList<Ve> timKiemVe(String maVe, String hoTen, String cccd, LocalDate ngayDi) {
-        ArrayList<Ve> dsVe = new ArrayList<>();
+   public ArrayList<Ve> timKiemVe(String maVe, String hoTen, String cccd, LocalDate ngayDi) {
+    ArrayList<Ve> dsVe = new ArrayList<>();
 
-        StringBuilder sql = new StringBuilder("""
-            SELECT * FROM Ve v
-            JOIN HanhKhach hk ON v.maHanhKhach = hk.maHanhKhach
-            JOIN ChuyenTau ct ON v.maChuyenTau = ct.maChuyenTau
-            WHERE 1=1
-                """);
+    StringBuilder sql = new StringBuilder(
+        "SELECT *, " +
+        "gdi.maGa AS maGaDi, gdi.tenGa AS tenGaDi, gdi.diaChi AS diaChiGaDi, gdi.soDienThoai AS sdtGaDi, " +
+        "gden.maGa AS maGaDen, gden.tenGa AS tenGaDen, gden.diaChi AS diaChiGaDen, gden.soDienThoai AS sdtGaDen " +
+        "FROM Ve v " +
+        "JOIN LoaiVe lv ON v.maLoaiVe = lv.maLoaiVe " +
+        "JOIN HanhKhach hk ON v.maHanhKhach = hk.maHanhKhach " +
+        "JOIN Ghe g ON v.maGhe = g.maGhe " +
+        "JOIN LoaiGhe lg ON g.maLoaiGhe = lg.maLoaiGhe " +
+        "JOIN KhoangTau kt ON g.maKhoangTau = kt.maKhoangTau " +
+        "JOIN ToaTau tt ON kt.maToaTau = tt.maToaTau " +
+        "JOIN Tau t ON tt.maTau = t.maTau " +
+        "JOIN ChuyenTau ct ON v.maChuyenTau = ct.maChuyenTau " +
+        "JOIN TuyenDuong td ON ct.maTuyenDuong = td.maTuyenDuong " +
+        "JOIN GaTau gdi ON td.gaDi = gdi.maGa " +
+        "JOIN GaTau gden ON td.gaDen = gden.maGa " +
+        "JOIN HoaDon hd ON v.maHoaDon = hd.maHoaDon " +
+        "JOIN NhanVien nv ON hd.maNhanVien = nv.maNV " +
+        "JOIN KhachHang kh ON hd.maKhachHang = kh.maKH " +
+        "LEFT JOIN KhuyenMai km ON hd.maKhuyenMai = km.maKhuyenMai " +
+        "WHERE 1=1"
+    );
 
-        // Xây dựng SQL linh hoạt (chỉ thêm điều kiện khi có dữ liệu)
+    if (maVe != null && !maVe.trim().isEmpty()) {
+        sql.append(" AND v.maVe LIKE ?");
+    }
+    if (hoTen != null && !hoTen.trim().isEmpty()) {
+        sql.append(" AND hk.tenHanhKhach LIKE ?");
+    }
+    if (cccd != null && !cccd.trim().isEmpty()) {
+        sql.append(" AND hk.cccd LIKE ?");
+    }
+    if (ngayDi != null) {
+        sql.append(" AND CAST(ct.thoiGianDi AS DATE) = ?");
+    }
+
+    try {
+        PreparedStatement st = ConnectDB.conn.prepareStatement(sql.toString());
+
+        int index = 1;
         if (maVe != null && !maVe.trim().isEmpty()) {
-            sql.append(" AND v.maVe = ?");
+            st.setString(index++, "%" + maVe.trim() + "%");
         }
         if (hoTen != null && !hoTen.trim().isEmpty()) {
-            sql.append(" AND hk.tenHanhKhach LIKE ?");
+            st.setString(index++, "%" + hoTen.trim() + "%");
         }
         if (cccd != null && !cccd.trim().isEmpty()) {
-            sql.append(" AND hk.soCCCD = ?");
+            st.setString(index++, "%" + cccd.trim() + "%");
         }
         if (ngayDi != null) {
-            sql.append(" AND CAST(ct.thoiGianDi AS DATE) = ?");
+            st.setDate(index++, java.sql.Date.valueOf(ngayDi));
         }
 
-        try {
-            PreparedStatement st = ConnectDB.conn.prepareStatement(sql.toString());
-
-            int index = 1;
-            if (maVe != null && !maVe.trim().isEmpty()) {
-                st.setString(index++, maVe.trim());
-            }
-            if (hoTen != null && !hoTen.trim().isEmpty()) {
-                st.setString(index++, "%" + hoTen.trim() + "%");
-            }
-            if (cccd != null && !cccd.trim().isEmpty()) {
-                st.setString(index++, cccd.trim());
-            }
-            if (ngayDi != null) {
-                st.setDate(index++, java.sql.Date.valueOf(ngayDi));
-            }
-
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
-                dsVe.add(getData(rs));
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        ResultSet rs = st.executeQuery();
+        while (rs.next()) {
+            dsVe.add(getData(rs));
         }
-        return dsVe;
+
+    } catch (Exception e) {
+        e.printStackTrace();
     }
-}
+    return dsVe;
+}}
