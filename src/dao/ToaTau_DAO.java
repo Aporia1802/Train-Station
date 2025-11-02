@@ -43,7 +43,6 @@ public class ToaTau_DAO implements DAOBase<ToaTau>{
             toa.setMaToa(rs.getString("maToaTau"));
             toa.setSoKhoangTau(rs.getInt("soKhoangTau"));
             toa.setSoHieuToa(rs.getInt("soHieuToa"));
-            toa.setSoCho(rs.getInt("soCho"));
             toa.setTau(new Tau(rs.getString("maTau")));
             return toa;
         } catch (Exception e) {

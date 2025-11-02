@@ -11,6 +11,8 @@
  */
 package entity;
 
+import java.util.Objects;
+
 /**
  *
  * @author CÔNG HOÀNG
@@ -21,10 +23,9 @@ public class KhoangTau {
     private int sucChua;
     private ToaTau toaTau;
     
-    public static final String TENKHOANG_EMPTY = "Tên khoang không được rỗng!";
     public static final String SUCCHUA_INVALID = "Sức chứa phải lớn hơn 0!";
     public static final String SOHIEU_INVALID = "Số hiệu khoang phải lớn hơn 0!";
-    public static final String TOATAU_NULL = "Toa tàu không được null!";
+    public static final String TOATAU_NULL = "Toa tàu không được rỗng!";
 
     public KhoangTau() {
     }
@@ -82,4 +83,28 @@ public class KhoangTau {
         }
         this.toaTau = toaTau;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.maKhoangTau);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final KhoangTau other = (KhoangTau) obj;
+        return Objects.equals(this.maKhoangTau, other.maKhoangTau);
+    }
+    
+    
 }

@@ -6,6 +6,7 @@ package entity;
 
 import enums.TrangThaiTau;
 import java.time.LocalDate;
+import java.util.Objects;
 
 /**
  *
@@ -15,7 +16,6 @@ public class Tau {
     private String maTau;
     private String tenTau;
     private int soToaTau;
-    private int sucChua;
     private LocalDate ngayHoatDong;
     private TrangThaiTau trangThai;
     
@@ -29,12 +29,11 @@ public class Tau {
         setMaTau(maTau);
     }
     
-    public Tau(String maTau, String tenTau, int soToaTau, int sucChua, LocalDate ngayHoatDong, 
+    public Tau(String maTau, String tenTau, int soToaTau, LocalDate ngayHoatDong, 
               TrangThaiTau trangThai) throws Exception {
         setMaTau(maTau);
         setTenTau(tenTau);
         setSoToaTau(soToaTau);
-        setSucChua(sucChua);
         setNgayHoatDong(ngayHoatDong);
         setTrangThai(trangThai);
     }
@@ -65,14 +64,6 @@ public class Tau {
         }
         this.soToaTau = soToaTau;
     }
-    
-    public int getSucChua() {
-        return sucChua;
-    }
-    
-    public void setSucChua(int sucChua) {
-        this.sucChua = sucChua;
-    }
 
     public LocalDate getNgayHoatDong() {
         return ngayHoatDong;
@@ -88,5 +79,27 @@ public class Tau {
 
     public void setTrangThai(TrangThaiTau trangThai) {
         this.trangThai = trangThai;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 31 * hash + Objects.hashCode(this.maTau);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Tau other = (Tau) obj;
+        return Objects.equals(this.maTau, other.maTau);
     }
 }

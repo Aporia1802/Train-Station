@@ -4,6 +4,8 @@
  */
 package entity;
 
+import java.util.Objects;
+
 /**
  *
  * @author CÔNG HOÀNG
@@ -71,13 +73,36 @@ public class GaTau {
     
     public void setSoDienThoai(String soDienThoai) throws Exception {
         soDienThoai = soDienThoai.trim();
-        if (soDienThoai.isEmpty()) {
-            throw new Exception(SDT_EMPTY);
+        if (soDienThoai == null || soDienThoai.trim().isEmpty()) {
+            throw new Exception("Số điện thoại không được rỗng!");
         }
+
 //        if (!soDienThoai.matches("^(02|03|05|07|08|09)\\d{8}$")) {
 //            throw new Exception(SDT_INVALID);
 //        }
+        
         this.soDienThoai = soDienThoai;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 73 * hash + Objects.hashCode(this.maGa);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final GaTau other = (GaTau) obj;
+        return Objects.equals(this.maGa, other.maGa);
+    }
 }

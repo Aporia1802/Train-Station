@@ -8,6 +8,7 @@ import dao.NhanVien_DAO;
 import dao.TaiKhoan_DAO;
 import entity.NhanVien;
 import entity.TaiKhoan;
+import jakarta.mail.MessagingException;
 import static utils.HashPassword.comparePasswords;
 import static utils.HashPassword.hashPassword;
 import static utils.RandomPassword.RandomPassword;
@@ -21,6 +22,7 @@ public class Login_BUS {
     private final TaiKhoan_DAO taiKhoanDAO = new TaiKhoan_DAO();
     private final NhanVien_DAO nhanVienDAO = new NhanVien_DAO();
     
+//  Chức năng đăng nhập
     public NhanVien login(String tenDangNhap, String matKhau) throws Exception {
         TaiKhoan taiKhoan = taiKhoanDAO.getOne(tenDangNhap);
         
@@ -75,7 +77,7 @@ public class Login_BUS {
         sendEmail(email, "Reset mật khẩu",
                 "Mật khẩu mới của bạn là: " + matKhauMoi + 
                 ". Vui lòng đổi mật khẩu ngay sau khi đăng nhập.");
-        } catch (Exception e) {
+        } catch (MessagingException e) {
             // Rollback về mật khẩu cũ nếu email thất bại
             taiKhoanDAO.updatePassword(tenDangNhap, matKhauCu);
             throw new Exception("Gửi email thất bại, mật khẩu không thay đổi!");

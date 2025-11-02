@@ -4,9 +4,6 @@
  */
 package gui.components;
 
-import entity.ChuyenTau;
-import utils.FormatUtil;
-
 /**
  *
  * @author CÔNG HOÀNG
@@ -19,29 +16,6 @@ public class ChonChuyenTau extends javax.swing.JPanel {
     public ChonChuyenTau() {
         initComponents();
     }
-    
-    private String maChuyenTau; // để lưu tạm id chuyến tàu
-
-    public void setData(ChuyenTau ct) {
-        this.maChuyenTau = ct.getMaChuyenTau();
-        lbl_maTau.setText(ct.getTau().getMaTau());
-        lbl_thoiGianDi.setText("Thời gian đi: " + FormatUtil.formatDateTime(ct.getThoiGianDi()));
-        lbl_thoiGianDen.setText("Thời gian đến: " + FormatUtil.formatDateTime(ct.getThoiGianDen()));
-        lbl_gaDi.setText(ct.getTuyenDuong().getGaDi().getTenGa());
-        lbl_gaDen.setText(ct.getTuyenDuong().getGaDen().getTenGa());
-        lbl_soGheDaDat.setText(String.valueOf(ct.getSoGheDaDat()));
-        lbl_soGheConTrong.setText(String.valueOf(ct.getSoGheConTrong()));
-
-        // Gán sự kiện cho nút chọn
-        btn_chon.addActionListener(e -> {
-            firePropertyChange("chonChuyenTau", false, true); // phát sự kiện ra ngoài
-        });
-    }
-
-    public String getMaChuyenTau() {
-        return maChuyenTau;
-    }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -52,137 +26,161 @@ public class ChonChuyenTau extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        panelShadow6 = new gui.custom.PanelShadow();
-        lbl_maTau = new javax.swing.JLabel();
-        filler14 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
-        jPanel14 = new javax.swing.JPanel();
-        lbl_thoiGianDi = new javax.swing.JLabel();
-        lbl_gaDi = new javax.swing.JLabel();
-        filler15 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
-        jPanel18 = new javax.swing.JPanel();
-        lbl_thoiGianDen = new javax.swing.JLabel();
-        lbl_gaDen = new javax.swing.JLabel();
-        filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
-        jPanel19 = new javax.swing.JPanel();
-        jLabel23 = new javax.swing.JLabel();
-        lbl_soGheDaDat = new javax.swing.JLabel();
-        filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
-        jPanel21 = new javax.swing.JPanel();
-        jLabel25 = new javax.swing.JLabel();
-        lbl_soGheConTrong = new javax.swing.JLabel();
-        filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
-        btn_chon = new javax.swing.JButton();
+        panelShadow1 = new gui.custom.PanelShadow();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel14 = new javax.swing.JLabel();
+        roundedTextField1 = new gui.custom.RoundedTextField();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
 
-        setPreferredSize(new java.awt.Dimension(400, 90));
-        setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.LINE_AXIS));
+        setBackground(new java.awt.Color(255, 255, 255));
+        setPreferredSize(new java.awt.Dimension(400, 250));
+        setLayout(new java.awt.BorderLayout());
 
-        panelShadow6.setBackground(new java.awt.Color(255, 255, 255));
-        panelShadow6.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 30, 0, 30));
-        panelShadow6.setMaximumSize(new java.awt.Dimension(32767, 90));
-        panelShadow6.setMinimumSize(new java.awt.Dimension(881, 90));
-        panelShadow6.setPreferredSize(new java.awt.Dimension(780, 90));
-        panelShadow6.setShadowOpacity(0.2F);
-        panelShadow6.setShadowSize(4);
-        panelShadow6.setLayout(new javax.swing.BoxLayout(panelShadow6, javax.swing.BoxLayout.LINE_AXIS));
+        panelShadow1.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        panelShadow1.setMaximumSize(new java.awt.Dimension(390, 250));
+        panelShadow1.setMinimumSize(new java.awt.Dimension(390, 250));
+        panelShadow1.setPreferredSize(new java.awt.Dimension(390, 250));
+        panelShadow1.setLayout(new java.awt.BorderLayout());
 
-        lbl_maTau.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        lbl_maTau.setText("SE1");
-        panelShadow6.add(lbl_maTau);
-        panelShadow6.add(filler14);
+        jPanel1.setPreferredSize(new java.awt.Dimension(100, 60));
+        jPanel1.setLayout(new java.awt.GridLayout(2, 2));
 
-        jPanel14.setMaximumSize(new java.awt.Dimension(32767, 50));
-        jPanel14.setLayout(new java.awt.GridLayout(2, 1));
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel1.setText("Số hiệu tàu");
+        jPanel1.add(jLabel1);
 
-        lbl_thoiGianDi.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        lbl_thoiGianDi.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbl_thoiGianDi.setText("Thời gian đi: 20/10/2025 07:00");
-        jPanel14.add(lbl_thoiGianDi);
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel2.setText("Số lượng chỗ trống");
+        jPanel1.add(jLabel2);
 
-        lbl_gaDi.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        lbl_gaDi.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbl_gaDi.setText("Sài Gòn");
-        jPanel14.add(lbl_gaDi);
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(123, 17, 19));
+        jLabel3.setText("SE1");
+        jPanel1.add(jLabel3);
 
-        panelShadow6.add(jPanel14);
-        panelShadow6.add(filler15);
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(123, 17, 19));
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel4.setText("100");
+        jPanel1.add(jLabel4);
 
-        jPanel18.setMaximumSize(new java.awt.Dimension(32767, 50));
-        jPanel18.setLayout(new java.awt.GridLayout(2, 1));
+        panelShadow1.add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
-        lbl_thoiGianDen.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        lbl_thoiGianDen.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbl_thoiGianDen.setText("Thời gian đến: 21/10/2025 07:00");
-        jPanel18.add(lbl_thoiGianDen);
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setLayout(new java.awt.BorderLayout());
 
-        lbl_gaDen.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        lbl_gaDen.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbl_gaDen.setText("Hà Nội");
-        jPanel18.add(lbl_gaDen);
+        jPanel4.setPreferredSize(new java.awt.Dimension(10, 30));
+        jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.LINE_AXIS));
 
-        panelShadow6.add(jPanel18);
-        panelShadow6.add(filler9);
+        jLabel8.setText("--------------------------------------------------------------------------------------------------------------------------------------------------");
+        jPanel4.add(jLabel8);
 
-        jPanel19.setMaximumSize(new java.awt.Dimension(32767, 50));
-        jPanel19.setLayout(new java.awt.GridLayout(2, 1));
+        jPanel2.add(jPanel4, java.awt.BorderLayout.PAGE_START);
 
-        jLabel23.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        jLabel23.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel23.setText("Số ghế đã đặt");
-        jPanel19.add(jLabel23);
+        jPanel5.setLayout(new java.awt.GridLayout(1, 3));
 
-        lbl_soGheDaDat.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        lbl_soGheDaDat.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbl_soGheDaDat.setText("0");
-        jPanel19.add(lbl_soGheDaDat);
+        jPanel3.setLayout(new java.awt.GridLayout(3, 1));
 
-        panelShadow6.add(jPanel19);
-        panelShadow6.add(filler10);
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel5.setText("Thời gian đi");
+        jPanel3.add(jLabel5);
 
-        jPanel21.setMaximumSize(new java.awt.Dimension(32767, 50));
-        jPanel21.setLayout(new java.awt.GridLayout(2, 1));
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(123, 17, 19));
+        jLabel6.setText("06:00");
+        jPanel3.add(jLabel6);
 
-        jLabel25.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        jLabel25.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel25.setText("Số ghế còn trống");
-        jPanel21.add(jLabel25);
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel7.setText("T7 01/11/2025");
+        jPanel3.add(jLabel7);
 
-        lbl_soGheConTrong.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        lbl_soGheConTrong.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbl_soGheConTrong.setText("236");
-        jPanel21.add(lbl_soGheConTrong);
+        jPanel5.add(jPanel3);
 
-        panelShadow6.add(jPanel21);
-        panelShadow6.add(filler11);
+        jPanel7.setBorder(javax.swing.BorderFactory.createEmptyBorder(30, 0, 0, 0));
 
-        btn_chon.setText("Chọn");
-        btn_chon.setMaximumSize(new java.awt.Dimension(72, 40));
-        btn_chon.setPreferredSize(new java.awt.Dimension(100, 40));
-        panelShadow6.add(btn_chon);
+        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/train.png"))); // NOI18N
+        jLabel14.setPreferredSize(new java.awt.Dimension(200, 40));
+        jPanel7.add(jLabel14);
 
-        add(panelShadow6);
+        roundedTextField1.setEditable(false);
+        roundedTextField1.setBackground(new java.awt.Color(76, 175, 80));
+        roundedTextField1.setForeground(new java.awt.Color(255, 255, 255));
+        roundedTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        roundedTextField1.setText("34 tiếng 10 phút");
+        roundedTextField1.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        roundedTextField1.setEnabled(false);
+        roundedTextField1.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        roundedTextField1.setRound(20);
+        jPanel7.add(roundedTextField1);
+
+        jPanel5.add(jPanel7);
+
+        jPanel6.setLayout(new java.awt.GridLayout(3, 1));
+
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel9.setText("Thời gian đến");
+        jPanel6.add(jLabel9);
+
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(123, 17, 19));
+        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel10.setText("06:00");
+        jPanel6.add(jLabel10);
+
+        jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel11.setText("T7 01/11/2025");
+        jPanel6.add(jLabel11);
+
+        jPanel5.add(jPanel6);
+
+        jPanel2.add(jPanel5, java.awt.BorderLayout.CENTER);
+
+        panelShadow1.add(jPanel2, java.awt.BorderLayout.CENTER);
+
+        add(panelShadow1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btn_chon;
-    private javax.swing.Box.Filler filler10;
-    private javax.swing.Box.Filler filler11;
-    private javax.swing.Box.Filler filler14;
-    private javax.swing.Box.Filler filler15;
-    private javax.swing.Box.Filler filler9;
-    private javax.swing.JLabel jLabel23;
-    private javax.swing.JLabel jLabel25;
-    private javax.swing.JPanel jPanel14;
-    private javax.swing.JPanel jPanel18;
-    private javax.swing.JPanel jPanel19;
-    private javax.swing.JPanel jPanel21;
-    private javax.swing.JLabel lbl_gaDen;
-    private javax.swing.JLabel lbl_gaDi;
-    private javax.swing.JLabel lbl_maTau;
-    private javax.swing.JLabel lbl_soGheConTrong;
-    private javax.swing.JLabel lbl_soGheDaDat;
-    private javax.swing.JLabel lbl_thoiGianDen;
-    private javax.swing.JLabel lbl_thoiGianDi;
-    private gui.custom.PanelShadow panelShadow6;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private gui.custom.PanelShadow panelShadow1;
+    private gui.custom.RoundedTextField roundedTextField1;
     // End of variables declaration//GEN-END:variables
 }

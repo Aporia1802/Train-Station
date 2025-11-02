@@ -17,7 +17,6 @@ private String maKH;
     private String soDienThoai;
     private String cccd;
     private LocalDate ngaySinh;
-    private boolean gioiTinh;
     
     // Thông báo lỗi
     public static final String TENKH_EMPTY = "Tên khách hàng không được rỗng!";
@@ -30,14 +29,17 @@ private String maKH;
     public KhachHang() {
     }
     
+    public KhachHang(String maKH) {
+        setMaKH(maKH);
+    }
+    
     public KhachHang(String maKH, String tenKH, String soDienThoai, String cccd, 
-                     LocalDate ngaySinh, boolean gioiTinh) throws Exception {
+                     LocalDate ngaySinh) throws Exception {
         setMaKH(maKH);
         setTenKH(tenKH);
         setSoDienThoai(soDienThoai);
         setCccd(cccd);
         setNgaySinh(ngaySinh);
-        setGioiTinh(gioiTinh);
     }
     
     public String getMaKH() {
@@ -99,14 +101,6 @@ private String maKH;
     
     public void setNgaySinh(LocalDate ngaySinh) {
         this.ngaySinh = ngaySinh;
-    }
-    
-    public boolean isGioiTinh() {
-        return gioiTinh;
-    }
-    
-    public void setGioiTinh(boolean gioiTinh) {
-        this.gioiTinh = gioiTinh;
     }
 
     @Override

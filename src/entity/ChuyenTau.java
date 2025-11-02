@@ -5,6 +5,7 @@
 package entity;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  *
@@ -21,20 +22,17 @@ public class ChuyenTau {
     
     // Các hằng số thông báo lỗi
     public static final String TUYENDUONG_EMPTY = "Tuyến đường không được rỗng!";
-    public static final String THOIGIANDI_INVALID = "Thời gian đi phải lớn hơn thời gian hiện tại!";
-    public static final String THOIGIANDEN_INVALID = "Thời gian đến phải lớn hơn thời gian đi!";
+    public static final String THOIGIANDEN_INVALID = "Thời gian đến phải sau thời gian đi!";
     public static final String TAU_EMPTY = "Tàu không được rỗng!";
     public static final String SOGHEDADAT_INVALID = "Số ghế đã đặt không hợp lệ!";
 
     public ChuyenTau() {
     }
     
-    // Constructor với mã chuyến tàu
     public ChuyenTau(String maChuyenTau) {
         this.maChuyenTau = maChuyenTau;
     }
     
-    // Constructor đầy đủ
     public ChuyenTau(String maChuyenTau, TuyenDuong tuyenDuong, LocalDateTime thoiGianDi, 
                      LocalDateTime thoiGianDen, Tau tau) throws Exception {
         setMaChuyenTau(maChuyenTau);
@@ -69,28 +67,17 @@ public class ChuyenTau {
     }
     
     public void setThoiGianDi(LocalDateTime thoiGianDi) throws Exception {
-//        if (thoiGianDi == null || thoiGianDi.isBefore(LocalDateTime.now())) {
-//            throw new Exception(THOIGIANDI_INVALID);
-//        }
         this.thoiGianDi = thoiGianDi;
     }
-    public void setThoiGianDi(LocalDateTime thoiGianDi, boolean validate) throws Exception {
-        if (validate) {
-            
-            setThoiGianDi(thoiGianDi);
-        } else {
-           
-            this.thoiGianDi = thoiGianDi;
-        }
-    }
+    
     public LocalDateTime getThoiGianDen() {
         return thoiGianDen;
     }
     
     public void setThoiGianDen(LocalDateTime thoiGianDen) throws Exception {
-//        if (thoiGianDen == null || (this.thoiGianDi != null && thoiGianDen.isBefore(this.thoiGianDi))) {
-//            throw new Exception(THOIGIANDEN_INVALID);
-//        }
+        if (thoiGianDen == null || (this.thoiGianDi != null && thoiGianDen.isBefore(this.thoiGianDi))) {
+            throw new Exception(THOIGIANDEN_INVALID);
+        }
         this.thoiGianDen = thoiGianDen;
     }
     
@@ -109,10 +96,7 @@ public class ChuyenTau {
         return soGheDaDat;
     }
     
-    public void setSoGheDaDat(int soGheDaDat) throws Exception {
-//        if (soGheDaDat < 0 || (this.tau != null && soGheDaDat > this.tau.getSucChua())) {
-//            throw new Exception(SOGHEDADAT_INVALID);
-//        }
+    public void setSoGheDaDat(int soGheDaDat) {
         this.soGheDaDat = soGheDaDat;
     }
     
@@ -123,19 +107,28 @@ public class ChuyenTau {
     public void setSoGheConTrong(int soGheControng) {
         this.soGheConTrong = soGheControng;
     }
-    
-    /**
-     * Tự động cập nhật số ghế còn trống
-     */
 
-    public void tangSoGheDaDat(int soGhe) throws Exception {
-        setSoGheDaDat(this.soGheDaDat + soGhe);
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 37 * hash + Objects.hashCode(this.maChuyenTau);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ChuyenTau other = (ChuyenTau) obj;
+        return Objects.equals(this.maChuyenTau, other.maChuyenTau);
     }
     
-    /**
-     * Giảm số ghế đã đặt khi hủy vé
-     */
-    public void giamSoGheDaDat(int soGhe) throws Exception {
-        setSoGheDaDat(this.soGheDaDat - soGhe);
-    }  
+    
 }

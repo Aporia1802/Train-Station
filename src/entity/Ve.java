@@ -5,13 +5,14 @@
 package entity;
 
 import enums.TrangThaiVe;
+import java.util.Objects;
 
 /**
  *
  * @author CÔNG HOÀNG
  */
 public class Ve {
-      private String maVe;
+    private String maVe;
     private ChuyenTau chuyenTau;
     private HanhKhach hanhKhach;
     private Ghe ghe;
@@ -20,13 +21,12 @@ public class Ve {
     private double giaVe;
     private LoaiVe loaiVe;
     
-    public static final String CHUYENDI_NULL = "Chuyến đi không được null!";
-    public static final String HANHKHACH_NULL = "Hành khách không được null!";
-    public static final String GHE_NULL = "Ghế không được null!";
-    public static final String HOADON_NULL = "Hóa đơn không được null!";
-    public static final String TRANGTHAI_INVALID = "Trạng thái vé không hợp lệ!";
+    public static final String CHUYENDI_NULL = "Chuyến đi không được rỗng!";
+    public static final String HANHKHACH_NULL = "Hành khách không được rỗng!";
+    public static final String GHE_NULL = "Ghế không được rỗng!";
+    public static final String HOADON_NULL = "Hóa đơn không được rỗng!";
     public static final String GIAVE_INVALID = "Giá vé phải lớn hơn 0!";
-    public static final String LOAIVE_NULL = "Loại vé không được null!";
+    public static final String LOAIVE_NULL = "Loại vé không được rỗng!";
     
     public Ve() {
     }
@@ -124,5 +124,27 @@ public class Ve {
             throw new Exception(LOAIVE_NULL);
         }
         this.loaiVe = loaiVe;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 97 * hash + Objects.hashCode(this.maVe);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Ve other = (Ve) obj;
+        return Objects.equals(this.maVe, other.maVe);
     }
 }

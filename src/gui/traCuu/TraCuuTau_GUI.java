@@ -41,7 +41,7 @@ public class TraCuuTau_GUI extends javax.swing.JPanel {
     private void loadDataToTable(ArrayList<Tau> dsTau) {
         tblModel_thongTinTau.setRowCount(0);
         for(Tau tau : dsTau) {
-            String[] newRow = {tau.getMaTau(), tau.getTenTau(), String.valueOf(tau.getSoToaTau()), String.valueOf(tau.getSucChua()), tau.getTrangThai().getDisplayName()};
+            String[] newRow = {tau.getMaTau(), tau.getTenTau(), String.valueOf(tau.getSoToaTau()), tau.getTrangThai().getDisplayName()};
             tblModel_thongTinTau.addRow(newRow);
         }
     }

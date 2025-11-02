@@ -27,7 +27,7 @@ public ArrayList<Tau> filter(String trangThai){
         
     }
     
-    public ArrayList<Tau> getTauTheoMa(String maTau){
+    public ArrayList<Tau> getTauTheoMa(String maTau) throws Exception{
         ArrayList<Tau> dsTau = tauDao.getTauByMaTau(maTau);
         return dsTau;
     }

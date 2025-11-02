@@ -120,8 +120,7 @@ public class QuanLyChuyenTau_GUI extends javax.swing.JPanel {
 
             for (Tau tau : dsTau) {
                 String display = tau.getMaTau() + " - " +
-                        tau.getTenTau() + " (" +
-                        tau.getSucChua() + " chỗ)";
+                        tau.getTenTau();
                 model.addElement(display);
             }
 
@@ -148,15 +147,7 @@ public class QuanLyChuyenTau_GUI extends javax.swing.JPanel {
         }
         comboBox.setSelectedIndex(0);
     }
-         private int getSucChuaTau(String maTau) {
-        try {
-            Tau_DAO tauDAO = new Tau_DAO();
-            Tau tau = tauDAO.getOne(maTau);
-            return tau != null ? tau.getSucChua() : 600;
-        } catch (Exception e) {
-            return 600;
-        }
-    }
+         
 private void loadComboBoxData() {
     ArrayList<ChuyenTau> dsChuyenTau = bus.getAllChuyenTau();
     ArrayList<String> dsGaDi = new ArrayList<>();
@@ -304,7 +295,6 @@ private void loadComboBoxData() {
 
             ChuyenTau chuyenTau = new ChuyenTau(maChuyenTau, new TuyenDuong(maTuyenDuong), thoiGianDi, thoiGianDen, new Tau(maTau));
             chuyenTau.setSoGheDaDat(0);
-            chuyenTau.setSoGheConTrong(getSucChuaTau(maTau)); 
 
             int confirm = JOptionPane.showConfirmDialog(this,
                 "Thêm chuyến tàu mới?\n" +

@@ -39,7 +39,7 @@ public class KhoangTau_DAO {
             KhoangTau kt = new KhoangTau();
             kt.setMaKhoangTau(rs.getString("maKhoangTau"));
             kt.setSoHieuKhoang(rs.getInt("soHieuKhoang"));
-            kt.setSucChua(rs.getInt("soChua"));
+            kt.setSucChua(rs.getInt("soGhe"));
             kt.setToaTau(new ToaTau(rs.getString("maToaTau")));
             return kt;
         } catch (Exception e) {

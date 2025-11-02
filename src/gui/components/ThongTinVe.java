@@ -87,64 +87,71 @@ public class ThongTinVe extends javax.swing.JPanel {
     private void initComponents() {
 
         pnl_thongTinHK = new javax.swing.JPanel();
-        jPanel13 = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
+        jPanel16 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
         txt_hoTenHK = new javax.swing.JTextField();
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
-        jLabel6 = new javax.swing.JLabel();
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        jLabel9 = new javax.swing.JLabel();
         txt_cccdHK = new javax.swing.JTextField();
-        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
-        jPanel14 = new javax.swing.JPanel();
-        jLabel8 = new javax.swing.JLabel();
+        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
+        jPanel17 = new javax.swing.JPanel();
+        jLabel10 = new javax.swing.JLabel();
         date_ngaySinhHK = new com.toedter.calendar.JDateChooser();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         jLabel1 = new javax.swing.JLabel();
         cbo_loaiVe = new javax.swing.JComboBox<>();
-        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
-        jPanel1 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
         lbl_giaVe = new javax.swing.JLabel();
 
-        setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.LINE_AXIS));
+        setLayout(new java.awt.BorderLayout());
 
         pnl_thongTinHK.setBackground(new java.awt.Color(255, 255, 255));
-        pnl_thongTinHK.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder(null, "Thông tin khách hàng", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 14)), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10))); // NOI18N
+        pnl_thongTinHK.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder(null, "Thông tin hành hách", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 14)), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10))); // NOI18N
         pnl_thongTinHK.setMaximumSize(new java.awt.Dimension(32767, 200));
+        pnl_thongTinHK.setMinimumSize(new java.awt.Dimension(401, 200));
+        pnl_thongTinHK.setPreferredSize(new java.awt.Dimension(411, 200));
         pnl_thongTinHK.setLayout(new javax.swing.BoxLayout(pnl_thongTinHK, javax.swing.BoxLayout.Y_AXIS));
 
-        jPanel13.setMaximumSize(new java.awt.Dimension(32767, 50));
-        jPanel13.setLayout(new javax.swing.BoxLayout(jPanel13, javax.swing.BoxLayout.LINE_AXIS));
+        jPanel16.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel16.setMaximumSize(new java.awt.Dimension(32767, 50));
+        jPanel16.setLayout(new javax.swing.BoxLayout(jPanel16, javax.swing.BoxLayout.LINE_AXIS));
 
-        jLabel4.setText("Họ tên:");
-        jLabel4.setPreferredSize(new java.awt.Dimension(60, 16));
-        jPanel13.add(jLabel4);
-        jPanel13.add(txt_hoTenHK);
-        jPanel13.add(filler2);
+        jLabel5.setText("Họ tên:");
+        jLabel5.setPreferredSize(new java.awt.Dimension(60, 16));
+        jPanel16.add(jLabel5);
 
-        jLabel6.setText("CCCD:");
-        jLabel6.setPreferredSize(new java.awt.Dimension(60, 16));
-        jPanel13.add(jLabel6);
-        jPanel13.add(txt_cccdHK);
+        txt_hoTenHK.setMaximumSize(new java.awt.Dimension(2147483647, 40));
+        jPanel16.add(txt_hoTenHK);
+        jPanel16.add(filler3);
 
-        pnl_thongTinHK.add(jPanel13);
-        pnl_thongTinHK.add(filler4);
+        jLabel9.setText("CCCD:");
+        jLabel9.setPreferredSize(new java.awt.Dimension(50, 16));
+        jPanel16.add(jLabel9);
 
-        jPanel14.setMaximumSize(new java.awt.Dimension(32767, 50));
-        jPanel14.setLayout(new javax.swing.BoxLayout(jPanel14, javax.swing.BoxLayout.LINE_AXIS));
+        txt_cccdHK.setMaximumSize(new java.awt.Dimension(2147483647, 40));
+        jPanel16.add(txt_cccdHK);
 
-        jLabel8.setText("NS:");
-        jLabel8.setMaximumSize(new java.awt.Dimension(60, 16));
-        jLabel8.setMinimumSize(new java.awt.Dimension(60, 16));
-        jLabel8.setPreferredSize(new java.awt.Dimension(60, 16));
-        jPanel14.add(jLabel8);
+        pnl_thongTinHK.add(jPanel16);
+        pnl_thongTinHK.add(filler5);
+
+        jPanel17.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel17.setMaximumSize(new java.awt.Dimension(32767, 50));
+        jPanel17.setLayout(new javax.swing.BoxLayout(jPanel17, javax.swing.BoxLayout.LINE_AXIS));
+
+        jLabel10.setText("Năm sinh:");
+        jLabel10.setMaximumSize(new java.awt.Dimension(60, 16));
+        jLabel10.setMinimumSize(new java.awt.Dimension(60, 16));
+        jLabel10.setPreferredSize(new java.awt.Dimension(60, 16));
+        jPanel17.add(jLabel10);
 
         date_ngaySinhHK.setMaximumSize(txt_hoTenHK.getMaximumSize());
         date_ngaySinhHK.setPreferredSize(txt_hoTenHK.getPreferredSize());
-        jPanel14.add(date_ngaySinhHK);
-        jPanel14.add(filler1);
+        jPanel17.add(date_ngaySinhHK);
+        jPanel17.add(filler1);
 
         jLabel1.setText("Loại vé:");
-        jLabel1.setPreferredSize(new java.awt.Dimension(60, 16));
-        jPanel14.add(jLabel1);
+        jLabel1.setPreferredSize(new java.awt.Dimension(50, 16));
+        jPanel17.add(jLabel1);
 
         cbo_loaiVe.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Người lớn", "Trẻ em", "Sinh viên", "Người cao tuổi" }));
         cbo_loaiVe.setMaximumSize(txt_hoTenHK.getMaximumSize());
@@ -154,29 +161,27 @@ public class ThongTinVe extends javax.swing.JPanel {
                 cbo_loaiVeActionPerformed(evt);
             }
         });
-        jPanel14.add(cbo_loaiVe);
+        jPanel17.add(cbo_loaiVe);
 
-        pnl_thongTinHK.add(jPanel14);
-        pnl_thongTinHK.add(filler3);
+        pnl_thongTinHK.add(jPanel17);
 
-        jPanel1.setMaximumSize(new java.awt.Dimension(32767, 50));
-        jPanel1.setPreferredSize(new java.awt.Dimension(100, 50));
-        jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.LINE_AXIS));
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel4.setMaximumSize(new java.awt.Dimension(32767, 50));
+        jPanel4.setPreferredSize(new java.awt.Dimension(100, 50));
+        jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.LINE_AXIS));
 
         lbl_giaVe.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lbl_giaVe.setForeground(new java.awt.Color(255, 51, 0));
         lbl_giaVe.setText("Giá vé: ");
-        jPanel1.add(lbl_giaVe);
+        jPanel4.add(lbl_giaVe);
 
-        pnl_thongTinHK.add(jPanel1);
+        pnl_thongTinHK.add(jPanel4);
 
-        add(pnl_thongTinHK);
+        add(pnl_thongTinHK, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
     private void cbo_loaiVeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbo_loaiVeActionPerformed
         // TODO add your handling code here:
-        LoaiVe loaiVe = dao.getLoaiVe(cbo_loaiVe.getSelectedItem().toString());
-        lbl_giaVe.setText("Giá vé: " + FormatUtil.formatCurrency(ct.getTuyenDuong().tinhGiaVeCoBan() * ghe.getLoaiGhe().getHeSoLoaiGhe() * loaiVe.getHeSoLoaiVe()));
     }//GEN-LAST:event_cbo_loaiVeActionPerformed
 
 
@@ -184,16 +189,15 @@ public class ThongTinVe extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> cbo_loaiVe;
     private com.toedter.calendar.JDateChooser date_ngaySinhHK;
     private javax.swing.Box.Filler filler1;
-    private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
-    private javax.swing.Box.Filler filler4;
+    private javax.swing.Box.Filler filler5;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel13;
-    private javax.swing.JPanel jPanel14;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel16;
+    private javax.swing.JPanel jPanel17;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JLabel lbl_giaVe;
     private javax.swing.JPanel pnl_thongTinHK;
     private javax.swing.JTextField txt_cccdHK;

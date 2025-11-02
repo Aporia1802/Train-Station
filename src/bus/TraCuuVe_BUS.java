@@ -10,11 +10,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class TraCuuVe_BUS {
-    private Ve_DAO dao;
-
-    public TraCuuVe_BUS() {
-        this.dao = new Ve_DAO();
-    }
+    private final Ve_DAO dao = new Ve_DAO();
     
     public ArrayList<Ve> getAllVe() {
         return dao.getAll();

@@ -12,16 +12,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  *
  * @author CÔNG HOÀNG
  */
 public class TaiKhoan_DAO implements DAOBase<TaiKhoan> {
     
-//   Lấy tài khoản dựa vào tên đăng nhập là số điện thoại
+//   Lấy tài khoản dựa vào tên đăng nhập
     @Override
     public TaiKhoan getOne(String id) {
         TaiKhoan res = null;
@@ -35,10 +32,8 @@ public class TaiKhoan_DAO implements DAOBase<TaiKhoan> {
                 res = new TaiKhoan(matKhau, new NhanVien(maNV));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (Exception ex) {
-            Logger.getLogger(TaiKhoan_DAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            throw new RuntimeException(e.getMessage());
+        } 
         return res;
     }
 
@@ -65,7 +60,7 @@ public class TaiKhoan_DAO implements DAOBase<TaiKhoan> {
         
             n = st.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
         return n > 0;
     }
@@ -89,8 +84,8 @@ public class TaiKhoan_DAO implements DAOBase<TaiKhoan> {
             st.setString(2, taiKhoan);
 
             n = st.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
         }
         return n > 0;
     }

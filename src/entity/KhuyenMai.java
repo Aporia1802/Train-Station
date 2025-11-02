@@ -5,6 +5,7 @@
 package entity;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 /**
  *
@@ -27,6 +28,10 @@ public class KhuyenMai {
     public static final String TONGTIEN_INVALID = "Tổng tiền tối thiểu phải lớn hơn 0!";
     
     public KhuyenMai() {
+    }
+    
+    public KhuyenMai(String khuyenMai) {
+        setMaKhuyenMai(maKhuyenMai);
     }
     
     public KhuyenMai(String maKhuyenMai, String tenKhuyenMai, double heSoKhuyenMai,
@@ -121,4 +126,28 @@ public class KhuyenMai {
     public void setTrangThai(Boolean trangThai) {
         this.trangThai = trangThai;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 29 * hash + Objects.hashCode(this.maKhuyenMai);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final KhuyenMai other = (KhuyenMai) obj;
+        return Objects.equals(this.maKhuyenMai, other.maKhuyenMai);
+    }
+    
+    
 }

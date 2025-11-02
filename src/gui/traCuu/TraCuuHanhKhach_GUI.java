@@ -59,6 +59,7 @@ public class TraCuuHanhKhach_GUI extends javax.swing.JPanel {
         txt_maHK.setText("");
         txt_tenHK.setText("");
         txt_cccd.setText("");
+        getTableData(bus.getAllHanhKhach());
     }
 
     private void handleTimKiem(java.awt.event.ActionEvent evt) {

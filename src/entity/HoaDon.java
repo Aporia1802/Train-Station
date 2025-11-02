@@ -20,9 +20,8 @@ public class HoaDon {
     private double tongTien;
     private double thanhTien;
     
-    public static final String NHANVIEN_NULL = "Nhân viên không được null!";
-    public static final String KHACHHANG_NULL = "Khách hàng không được null!";
-    public static final String NGAYLAP_INVALID = "Ngày lập hóa đơn phải là ngày hiện tại!";
+    public static final String NHANVIEN_NULL = "Nhân viên không được rỗng!";
+    public static final String KHACHHANG_NULL = "Khách hàng không được rỗng!";
     
     public HoaDon(String hdtemp) {
     }
@@ -71,9 +70,6 @@ public class HoaDon {
     }
     
     public void setNgayLapHoaDon(LocalDateTime ngayLapHoaDon) throws Exception {
-//        if (!ngayLapHoaDon.equals(LocalDate.now())) {
-//            throw new Exception(NGAYLAP_INVALID);
-//        }
         this.ngayLapHoaDon = ngayLapHoaDon;
     }
 

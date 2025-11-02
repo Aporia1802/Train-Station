@@ -8,6 +8,8 @@ import interfaces.DAOBase;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Tau_DAO implements DAOBase<Tau>{
 
@@ -23,12 +25,12 @@ public class Tau_DAO implements DAOBase<Tau>{
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 Tau tau = getData(rs);
-                rs.close();
-                ps.close();
                 return tau;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        } catch (Exception ex) {
+            Logger.getLogger(Tau_DAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
@@ -48,18 +50,15 @@ public class Tau_DAO implements DAOBase<Tau>{
                     dsTau.add(tau);
                 }
             }
-            
-            rs.close();
-            st.close();
-            
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        } catch (Exception ex) {
+            Logger.getLogger(Tau_DAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
         return dsTau;
     }
     
-     public ArrayList<Tau> getTauByMaTau(String maTau) {
+     public ArrayList<Tau> getTauByMaTau(String maTau) throws Exception {
         ArrayList<Tau> dsTau = new ArrayList<>();
         String sql = "SELECT * FROM Tau WHERE maTau LIKE ?";
         try {
@@ -69,71 +68,59 @@ public class Tau_DAO implements DAOBase<Tau>{
             while (rs.next()) {
                 dsTau.add(getData(rs)); // getData là hàm chuyển ResultSet → đối tượng Tau
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
         }
         return dsTau;
 }
      
-   public ArrayList<Tau> filterByTrangThai(String trangThaiStr) {
-    ArrayList<Tau> dsTau = new ArrayList<>();
-    StringBuilder sql = new StringBuilder("SELECT * FROM Tau WHERE 1=1");
+    public ArrayList<Tau> filterByTrangThai(String trangThaiStr) {
+        ArrayList<Tau> dsTau = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("SELECT * FROM Tau WHERE 1=1");
 
-    // Nếu người dùng chọn thật sự (không phải "Trạng thái" hoặc "Tất cả")
-    if (trangThaiStr != null && !trangThaiStr.equalsIgnoreCase("Trạng thái") && !trangThaiStr.equalsIgnoreCase("Tất cả")) {
-        sql.append(" AND trangThai = ?");
-    }
-
-    try (PreparedStatement ps = conn.prepareStatement(sql.toString())) {
-        int index = 1;
-
-        // Gán giá trị trạng thái nếu người dùng chọn
+        // Nếu người dùng chọn thật sự (không phải "Trạng thái" hoặc "Tất cả")
         if (trangThaiStr != null && !trangThaiStr.equalsIgnoreCase("Trạng thái") && !trangThaiStr.equalsIgnoreCase("Tất cả")) {
-            TrangThaiTau tt = TrangThaiTau.fromDisplay(trangThaiStr);
-            if (tt != null) {
-                ps.setInt(index++, tt.getValue()); // lưu trong DB là số: 1 / 2 / 3
+            sql.append(" AND trangThai = ?");
+        }
+
+        try (PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+            int index = 1;
+
+            // Gán giá trị trạng thái nếu người dùng chọn
+            if (trangThaiStr != null && !trangThaiStr.equalsIgnoreCase("Trạng thái") && !trangThaiStr.equalsIgnoreCase("Tất cả")) {
+                TrangThaiTau tt = TrangThaiTau.fromDisplay(trangThaiStr);
+                if (tt != null) {
+                    ps.setInt(index++, tt.getValue()); // lưu trong DB là số: 1 / 2 / 3
+                }
             }
-        }
 
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            dsTau.add(getData(rs));
-        }
-
-    } catch (Exception e) {
-        e.printStackTrace();
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                dsTau.add(getData(rs));
+            }
+        } catch (Exception e) {
+        throw new RuntimeException(e.getMessage());
     }
-
     return dsTau;
 }
 
 
 
 
-    public Tau getData(ResultSet rs) {
-        try {
-            String maTau = rs.getString("maTau");
-            String tenTau = rs.getString("tenTau");
-            int soToaTau = rs.getInt("soToaTau");
-            int sucChua = rs.getInt("sucChua");
-            java.sql.Date ngayHoatDongSQL = rs.getDate("ngayHoatDong");
-            LocalDate ngayHoatDong = ngayHoatDongSQL != null ? 
-                ngayHoatDongSQL.toLocalDate() : null;
-            
-            Tau tau = new Tau(maTau);
-            tau.setTenTau(tenTau);
-            tau.setSoToaTau(soToaTau);
-            tau.setSucChua(sucChua);
-            tau.setNgayHoatDong(ngayHoatDong);
-            TrangThaiTau trangThai = TrangThaiTau.fromInt(rs.getInt("trangThai"));
-            tau.setTrangThai(trangThai);
-
-            return tau;
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+    public Tau getData(ResultSet rs) throws SQLException, Exception {
+        String maTau = rs.getString("maTau");
+        String tenTau = rs.getString("tenTau");
+        int soToaTau = rs.getInt("soToaTau");
+        java.sql.Date ngayHoatDongSQL = rs.getDate("ngayHoatDong");
+        LocalDate ngayHoatDong = ngayHoatDongSQL != null ? 
+        ngayHoatDongSQL.toLocalDate() : null;   
+        Tau tau = new Tau(maTau);
+        tau.setTenTau(tenTau);
+        tau.setSoToaTau(soToaTau);
+        tau.setNgayHoatDong(ngayHoatDong);
+        TrangThaiTau trangThai = TrangThaiTau.fromInt(rs.getInt("trangThai"));
+        tau.setTrangThai(trangThai);
+        return tau;
     }
     
     public ArrayList<Tau> search(String maTau, String tenTau, int trangThai) {
@@ -169,44 +156,42 @@ public class Tau_DAO implements DAOBase<Tau>{
                 dsTau.add(getData(rs));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
         return dsTau;
     }
 
+    @Override
     public Boolean create(Tau object) {
         int n = 0;
-        String sql = "INSERT INTO Tau (maTau, tenTau, soToaTau, sucChua, ngayHoatDong, trangThai) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Tau (maTau, tenTau, soToaTau, ngayHoatDong, trangThai) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement st = ConnectDB.conn.prepareStatement(sql)) {
             st.setString(1, object.getMaTau());
             st.setString(2, object.getTenTau());
             st.setInt(3, object.getSoToaTau());
-            st.setInt(4, object.getSucChua());
-            st.setDate(5, Date.valueOf(object.getNgayHoatDong()));
-            st.setInt(6, object.getTrangThai().getValue());
+            st.setDate(4, Date.valueOf(object.getNgayHoatDong()));
+            st.setInt(5, object.getTrangThai().getValue());
             n = st.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
         return n > 0;
     }
 
-   
-
+  
     @Override
     public Boolean update(String id, Tau newObject) {
         int n = 0;
-        String sql = "UPDATE Tau SET tenTau=?, soToaTau=?, sucChua=?, ngayHoatDong=?, trangThai=? WHERE maTau=?";
+        String sql = "UPDATE Tau SET tenTau=?, soToaTau=?, ngayHoatDong=?, trangThai=? WHERE maTau=?";
         try (PreparedStatement st = ConnectDB.conn.prepareStatement(sql)) {
             st.setString(1, newObject.getTenTau());
             st.setInt(2, newObject.getSoToaTau());
-            st.setInt(3, newObject.getSucChua());
-            st.setDate(4, Date.valueOf(newObject.getNgayHoatDong()));
-            st.setInt(5, newObject.getTrangThai().getValue());
-            st.setString(6, id);
+            st.setDate(3, Date.valueOf(newObject.getNgayHoatDong()));
+            st.setInt(4, newObject.getTrangThai().getValue());
+            st.setString(5, id);
             n = st.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
         return n > 0;
     }
@@ -215,20 +200,18 @@ public class Tau_DAO implements DAOBase<Tau>{
 
     @Override
     public Boolean delete(String id) {
+        int n = 0;
         String sql = "DELETE FROM Tau WHERE maTau = ?";
         
         try {
             PreparedStatement ps = ConnectDB.conn.prepareStatement(sql);
             ps.setString(1, id);
             
-            int result = ps.executeUpdate();
-            ps.close();
-            
-            return result > 0;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+            n = ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
         }
+        return n > 0;
     }
     
      public String getMaxID() {
@@ -242,8 +225,8 @@ public class Tau_DAO implements DAOBase<Tau>{
             if (rs.next()) {
                 maxID = rs.getString("maTau");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
         }
         return maxID;
     }
@@ -268,14 +251,9 @@ public class Tau_DAO implements DAOBase<Tau>{
                     newID = "SE" + System.currentTimeMillis();
                 }
             }
-            
-            rs.close();
-            st.close();
-            
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
         }
-        
         return newID;
     }
 }

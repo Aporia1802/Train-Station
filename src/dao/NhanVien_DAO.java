@@ -46,7 +46,7 @@ public class NhanVien_DAO implements DAOBase<NhanVien> {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
         return nhanVien;
     }
@@ -64,7 +64,7 @@ public class NhanVien_DAO implements DAOBase<NhanVien> {
                 dsNV.add(getData(rs));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
         return dsNV;
     }
@@ -119,7 +119,7 @@ public class NhanVien_DAO implements DAOBase<NhanVien> {
            }
 
        } catch (Exception e) {
-           e.printStackTrace();
+           throw new RuntimeException(e.getMessage());
        }
 
        return dsNV;
@@ -138,7 +138,7 @@ public class NhanVien_DAO implements DAOBase<NhanVien> {
                 dsNhanVien.add(getData(rs)); // getData là hàm chuyển ResultSet → đối tượng NhanVien
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
         return dsNhanVien;
 }
@@ -194,7 +194,7 @@ public class NhanVien_DAO implements DAOBase<NhanVien> {
         }
         rs.close();
     } catch (Exception e) {
-        e.printStackTrace();
+        throw new RuntimeException(e.getMessage());
     }
 
     return dsNhanVien;
@@ -228,7 +228,7 @@ public class NhanVien_DAO implements DAOBase<NhanVien> {
         
             n = st.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
         return n > 0;
     }
@@ -245,8 +245,8 @@ public class NhanVien_DAO implements DAOBase<NhanVien> {
             st.setString(4, newObject.getDiaChi());
             st.setString(5, id);
             n = st.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
         }
         return n > 0;
     }
@@ -262,8 +262,8 @@ public class NhanVien_DAO implements DAOBase<NhanVien> {
             if (rs.next()) {
                 maxID = rs.getString("maNV");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
         }
         return maxID;
     }
@@ -272,5 +272,4 @@ public class NhanVien_DAO implements DAOBase<NhanVien> {
     public Boolean delete(String id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
 }

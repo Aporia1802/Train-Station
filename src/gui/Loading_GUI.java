@@ -38,6 +38,7 @@ public class Loading_GUI extends javax.swing.JFrame {
             lbl_loading.setText("Đang kết nối" + dotsString);
         }).start();
 
+//      Close loading screen after 2.5s
         Timer timer = new Timer(2500, (ActionEvent evt) -> {
             this.dispose();
         });
@@ -51,8 +52,6 @@ public class Loading_GUI extends javax.swing.JFrame {
                 progressbar_status.setValue(value);
             }
         }).start();
-        
-        
     }
 
     /**

@@ -20,6 +20,10 @@ public class HoaDonTra {
 
     public HoaDonTra() {
     }
+    
+    public HoaDonTra(String HoaDonTra) {
+        setMaHoaDonTra(maHoaDonTra);
+    }
 
     public HoaDonTra(String maHoaDonTra, LocalDateTime ngayTra, NhanVien nhanVien, Ve ve) {
         setMaHoaDonTra(maHoaDonTra);

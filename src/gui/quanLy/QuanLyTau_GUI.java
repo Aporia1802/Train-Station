@@ -12,6 +12,9 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 import raven.toast.Notifications;
 import static utils.FormatUtil.formatDate;
@@ -32,9 +35,16 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
     
      private void init(){
        bus = new QuanLyTau_BUS();
-       tblModel_thongtinTau = new DefaultTableModel(new String[]{"Mã tàu","Tên tàu","Số lượng toa","Sức chứa","Ngày hoạt động","Trạng thái"},0);
-       tbl_tau.setModel(tblModel_thongtinTau);
-         getTableData(bus.getAllTau());
+       String[] columns = {"Mã tàu","Tên tàu","Số lượng toa","Ngày hoạt động","Trạng thái"};
+       tblModel_thongtinTau = new DefaultTableModel(columns, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+       
+        tbl_tau.setModel(tblModel_thongtinTau);
+        getTableData(bus.getAllTau());
    }
      
     private void getTableData(ArrayList<Tau> dsTau) {
@@ -43,7 +53,7 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
     
     for(Tau tau : dsTau){
         String[]newRow = {tau.getMaTau(),tau.getTenTau(), String.valueOf(tau.getSoToaTau()), 
-                            String.valueOf(tau.getSucChua()), formatDate(tau.getNgayHoatDong()), tau.getTrangThai().getDisplayName()};
+                            formatDate(tau.getNgayHoatDong()), tau.getTrangThai().getDisplayName()};
         tblModel_thongtinTau.addRow(newRow);
     }
 }
@@ -55,15 +65,13 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         String maTau = tbl_tau.getValueAt(row, 0).toString();
         String tenTau = tbl_tau.getValueAt(row, 1).toString();
         int soToaTau = Integer.parseInt(tbl_tau.getValueAt(row, 2).toString());
-        int sucChua = Integer.parseInt(tbl_tau.getValueAt(row, 3).toString());
-        String ngayHoatDongStr = tbl_tau.getValueAt(row, 4).toString();
-        String trangThaiStr = tbl_tau.getValueAt(row, 5).toString();
+        String ngayHoatDongStr = tbl_tau.getValueAt(row, 3).toString();
+        String trangThaiStr = tbl_tau.getValueAt(row, 4).toString();
 
         // Gán dữ liệu lên textfield
         txt_maTau.setText(maTau);
         txt_tenTau.setText(tenTau);
         txt_soLuongToa.setText(String.valueOf(soToaTau));
-        txt_sucChua.setText(String.valueOf(sucChua));
 
         // Gán trạng thái vào combobox
         for (int i = 0; i < cbo_tt.getItemCount(); i++) {
@@ -82,12 +90,12 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
                 java.util.Date ngayHoatDong = java.sql.Date.valueOf(localDate);
                 txt_ngayHD.setDate(ngayHoatDong);
             } catch (Exception e) { 
+                    txt_ngayHD.setDate(null);
+                }
+            } else {
                 txt_ngayHD.setDate(null);
             }
-        } else {
-            txt_ngayHD.setDate(null);
         }
-    }
     }
 
  
@@ -96,22 +104,20 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         txt_maTau.setText("");
         txt_tenTau.setText("");
         txt_soLuongToa.setText("");
-        txt_sucChua.setText("");
-        txt_timKiem.setText("");
 
          // Xóa ngày sinh
         if (txt_ngayHD.getDate() != null) {
-        txt_ngayHD.setDate(null);
+            txt_ngayHD.setDate(new Date());
         }
   
-         if (cbo_tt.getItemCount() > 0) {
+        if (cbo_tt.getItemCount() > 0) {
          cbo_tt.setSelectedIndex(0); 
-      }
+        }
         // Bỏ chọn hàng đang được chọn trong bảng (nếu có)
         tbl_tau.clearSelection();
     }
     
-    private void handleActionTimKiem() {
+    private void handleActionTimKiem() throws Exception {
         String ma = txt_timKiem.getText().trim();
         getTableData(bus.getTauTheoMa(ma));
     }
@@ -121,14 +127,16 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         String trangThai = (String) cbo_trangThai.getSelectedItem();
         getTableData(bus.filter(trangThai));
     }
+    
     private void handleActionLamMoi() {
-            tbl_tau.clearSelection();
-            getTableData(bus.getAllTau());
-            txt_timKiem.setText("Nhập mã tàu cần tìm...");
-            txt_timKiem.setForeground(Color.GRAY);
-        }
+        tbl_tau.clearSelection();
+        getTableData(bus.getAllTau());
+        txt_timKiem.setForeground(Color.GRAY);
+        cbo_trangThai.setSelectedIndex(0);
+        txt_timKiem.setText("Nhập mã tàu cần tìm...");
+    }
      
-    public Tau getFormData() throws Exception {
+    public Tau getFormData() {
        // Lấy giá trị từ các ô nhập liệu
        String maTau = txt_maTau.getText().trim();
        String tenTau = txt_tenTau.getText().trim();
@@ -137,35 +145,24 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
        if (tenTau.isEmpty()) {
            Notifications.getInstance().show(Notifications.Type.WARNING, "Tên tàu không được để trống!");
            txt_tenTau.requestFocus();
-           throw new Exception("Tên tàu trống");
+           return null;
        }
 
        // Số toa tàu
-       int soToaTau;
+       int soToaTau = 0;
        try {
            soToaTau = Integer.parseInt(txt_soLuongToa.getText().trim());
            if (soToaTau <= 0) throw new NumberFormatException();
        } catch (NumberFormatException e) {
            Notifications.getInstance().show(Notifications.Type.WARNING, "Số toa tàu phải là số nguyên dương!");
            txt_soLuongToa.requestFocus();
-           throw new Exception("Số toa tàu không hợp lệ");
-       }
-
-       // Sức chứa
-       int sucChua;
-       try {
-           sucChua = Integer.parseInt(txt_sucChua.getText().trim());
-           if (sucChua <= 0) throw new NumberFormatException();
-       } catch (NumberFormatException e) {
-           Notifications.getInstance().show(Notifications.Type.WARNING, "Sức chứa phải là số nguyên dương!");
-           txt_sucChua.requestFocus();
-           throw new Exception("Sức chứa không hợp lệ");
+           return null;
        }
 
        // Ngày hoạt động
        if (txt_ngayHD.getDate() == null) {
            Notifications.getInstance().show(Notifications.Type.WARNING, "Vui lòng chọn ngày hoạt động!");
-           throw new Exception("Ngày hoạt động trống");
+           return null;
        }
 
        LocalDate ngayHoatDong = txt_ngayHD.getDate()
@@ -173,40 +170,36 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
                .atZone(ZoneId.systemDefault())
                .toLocalDate();
 
-       // ✅ Kiểm tra ngày hoạt động không vượt quá ngày hiện tại
+       // Kiểm tra ngày hoạt động không vượt quá ngày hiện tại
        if (ngayHoatDong.isAfter(LocalDate.now())) {
            Notifications.getInstance().show(Notifications.Type.WARNING, "Ngày hoạt động không được lớn hơn ngày hiện tại!");
            txt_ngayHD.requestFocus();
-           throw new Exception("Ngày hoạt động sai");
+           return null;
        }
 
        // Trạng thái tàu (lấy từ ComboBox)
        String trangThaiStr = cbo_tt.getSelectedItem().toString();
        TrangThaiTau trangThai = TrangThaiTau.fromDisplay(trangThaiStr);
 
-       // Kiểm tra trạng thái hợp lệ
-       if (trangThai == null) {
-           Notifications.getInstance().show(Notifications.Type.WARNING, "Trạng thái tàu không hợp lệ!");
-           cbo_tt.requestFocus();
-           throw new Exception("Trạng thái null");
-       }
 
-       // ✅ Tạo đối tượng Tau
+       // Tạo đối tượng Tau
        Tau tau = new Tau();
-       tau.setMaTau(maTau);
-       tau.setTenTau(tenTau);
-       tau.setSoToaTau(soToaTau);
-       tau.setSucChua(sucChua);
-       tau.setNgayHoatDong(ngayHoatDong);
-       tau.setTrangThai(trangThai);
+       try {
+           
+           tau.setMaTau(maTau);
+           tau.setTenTau(tenTau);
+           tau.setSoToaTau(soToaTau);
+           tau.setNgayHoatDong(ngayHoatDong);
+           tau.setTrangThai(trangThai);
+       } catch (Exception e) {
+           Notifications.getInstance().show(Notifications.Type.WARNING, e.getMessage());
+           return null;
+       }
 
        return tau;
    }
 
-     
-   
-    
-   private void handleCapNhat() {
+    private void handleCapNhat() {
         try {
             if(tbl_tau.getSelectedRow() == -1) {
                 Notifications.getInstance().show(Notifications.Type.ERROR, "Chưa chọn tàu cần thay đổi thông tin!");
@@ -214,6 +207,11 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
             }
             
             Tau tau = getFormData();
+            
+            if(tau == null) {
+                return;
+            }
+            
             if(bus.capNhatTau(tau)) {
                 Notifications.getInstance().show(Notifications.Type.SUCCESS, "Cập nhật thành công!");
                 getTableData(bus.getAllTau());
@@ -226,9 +224,12 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
    
     private void handleThemTau() {
         try {
-           String maTau  = bus.generateID();
+            String maTau  = bus.generateID();
             
             Tau tau = getFormData();
+            if(tau == null) {
+                return;
+            }
             tau.setMaTau(maTau);
             if(bus.themTau(tau)) {
                 Notifications.getInstance().show(Notifications.Type.SUCCESS, "Thêm mới thành công!");
@@ -275,9 +276,6 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         pnl_slToa = new javax.swing.JPanel();
         lbl_soLuongToa = new javax.swing.JLabel();
         txt_soLuongToa = new javax.swing.JTextField();
-        pnl_sucChua = new javax.swing.JPanel();
-        lbl_sucChua = new javax.swing.JLabel();
-        txt_sucChua = new javax.swing.JTextField();
         pnl_ngayHD = new javax.swing.JPanel();
         lbl_NgayHD = new javax.swing.JLabel();
         txt_ngayHD = new com.toedter.calendar.JDateChooser();
@@ -314,10 +312,20 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
 
         pnl_timKiem.setLayout(new javax.swing.BoxLayout(pnl_timKiem, javax.swing.BoxLayout.LINE_AXIS));
 
+        txt_timKiem.setForeground(new java.awt.Color(204, 204, 204));
+        txt_timKiem.setText("Nhập mã tàu cần tìm...");
         txt_timKiem.setPreferredSize(new java.awt.Dimension(700, 30));
-        txt_timKiem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_timKiemActionPerformed(evt);
+        txt_timKiem.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txt_timKiemFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txt_timKiemFocusLost(evt);
+            }
+        });
+        txt_timKiem.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txt_timKiemKeyPressed(evt);
             }
         });
         pnl_timKiem.add(txt_timKiem);
@@ -385,11 +393,11 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Mã tàu", "Tên tàu", "Số lượng toa", "Sức chứa", "Ngày hoạt động", "Trạng thái"
+                "Mã tàu", "Tên tàu", "Số lượng toa", "Ngày hoạt động", "Trạng thái"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -431,11 +439,6 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         txt_maTau.setEnabled(false);
         txt_maTau.setMaximumSize(new java.awt.Dimension(2147483647, 40));
         txt_maTau.setPreferredSize(new java.awt.Dimension(64, 40));
-        txt_maTau.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_maTauActionPerformed(evt);
-            }
-        });
         pnl_maTau.add(txt_maTau);
 
         pnl_thongTinNhanVien.add(pnl_maTau);
@@ -468,47 +471,22 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
 
         txt_soLuongToa.setMaximumSize(txt_maTau.getMaximumSize());
         txt_soLuongToa.setPreferredSize(txt_maTau.getPreferredSize());
-        txt_soLuongToa.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_soLuongToaActionPerformed(evt);
-            }
-        });
         pnl_slToa.add(txt_soLuongToa);
 
         pnl_thongTinNhanVien.add(pnl_slToa);
-
-        pnl_sucChua.setMaximumSize(pnl_maTau.getMaximumSize());
-        pnl_sucChua.setMinimumSize(new java.awt.Dimension(118, 6));
-        pnl_sucChua.setPreferredSize(pnl_maTau.getPreferredSize());
-        pnl_sucChua.setLayout(new javax.swing.BoxLayout(pnl_sucChua, javax.swing.BoxLayout.LINE_AXIS));
-
-        lbl_sucChua.setText("Sức chứa:");
-        lbl_sucChua.setMaximumSize(new java.awt.Dimension(45, 16));
-        lbl_sucChua.setMinimumSize(new java.awt.Dimension(45, 16));
-        lbl_sucChua.setPreferredSize(new java.awt.Dimension(100, 16));
-        pnl_sucChua.add(lbl_sucChua);
-
-        txt_sucChua.setMaximumSize(txt_maTau.getMaximumSize());
-        txt_sucChua.setMinimumSize(new java.awt.Dimension(64, 30));
-        txt_sucChua.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_sucChuaActionPerformed(evt);
-            }
-        });
-        pnl_sucChua.add(txt_sucChua);
-
-        pnl_thongTinNhanVien.add(pnl_sucChua);
 
         pnl_ngayHD.setMaximumSize(pnl_maTau.getMaximumSize());
         pnl_ngayHD.setMinimumSize(new java.awt.Dimension(118, 6));
         pnl_ngayHD.setPreferredSize(pnl_maTau.getPreferredSize());
         pnl_ngayHD.setLayout(new javax.swing.BoxLayout(pnl_ngayHD, javax.swing.BoxLayout.LINE_AXIS));
 
-        lbl_NgayHD.setText("Ngày hoạt động:");
+        lbl_NgayHD.setText("Ngày HĐ:");
         lbl_NgayHD.setMaximumSize(new java.awt.Dimension(45, 16));
         lbl_NgayHD.setMinimumSize(new java.awt.Dimension(45, 16));
         lbl_NgayHD.setPreferredSize(new java.awt.Dimension(100, 16));
         pnl_ngayHD.add(lbl_NgayHD);
+
+        txt_ngayHD.setMaximumSize(new java.awt.Dimension(2147483647, 40));
         pnl_ngayHD.add(txt_ngayHD);
 
         pnl_thongTinNhanVien.add(pnl_ngayHD);
@@ -521,7 +499,7 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         lbl_trangThai.setPreferredSize(new java.awt.Dimension(100, 16));
         pnl_trangThai.add(lbl_trangThai);
 
-        cbo_tt.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Bảo trì", "Hoạt động", "Ngừng hoạt động" }));
+        cbo_tt.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Hoạt động", "Bảo trì", "Ngừng hoạt động" }));
         cbo_tt.setMaximumSize(new java.awt.Dimension(32767, 40));
         cbo_tt.setPreferredSize(new java.awt.Dimension(230, 40));
         pnl_trangThai.add(cbo_tt);
@@ -584,29 +562,13 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         add(pnl_center, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txt_timKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_timKiemActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_timKiemActionPerformed
-
     private void cbo_trangThaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbo_trangThaiActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cbo_trangThaiActionPerformed
 
-    private void txt_maTauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_maTauActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_maTauActionPerformed
-
-    private void txt_sucChuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_sucChuaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_sucChuaActionPerformed
-
     private void btn_capNhatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_capNhatActionPerformed
         handleCapNhat();
     }//GEN-LAST:event_btn_capNhatActionPerformed
-
-    private void txt_soLuongToaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_soLuongToaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_soLuongToaActionPerformed
 
     private void btn_themActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_themActionPerformed
         handleThemTau();
@@ -621,7 +583,11 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
     }//GEN-LAST:event_tbl_tauMouseClicked
 
     private void btn_timKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_timKiemActionPerformed
-        handleActionTimKiem();
+        try {
+            handleActionTimKiem();
+        } catch (Exception ex) {
+            Logger.getLogger(QuanLyTau_GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btn_timKiemActionPerformed
 
     private void btn_LocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_LocActionPerformed
@@ -631,6 +597,33 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
     private void btn_ResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ResetActionPerformed
         handleActionLamMoi();
     }//GEN-LAST:event_btn_ResetActionPerformed
+
+    private void txt_timKiemFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_timKiemFocusGained
+        // TODO add your handling code here:
+        if(txt_timKiem.getText().equals("Nhập mã tàu cần tìm...")) {
+            txt_timKiem.setText("");
+            txt_timKiem.setForeground(Color.BLACK);
+        }
+    }//GEN-LAST:event_txt_timKiemFocusGained
+
+    private void txt_timKiemFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_timKiemFocusLost
+        // TODO add your handling code here:
+        if(txt_timKiem.getText().equals("")) {
+            txt_timKiem.setText("Nhập mã tàu cần tìm...");
+            txt_timKiem.setForeground(Color.GRAY);
+        }
+    }//GEN-LAST:event_txt_timKiemFocusLost
+
+    private void txt_timKiemKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_timKiemKeyPressed
+        // TODO add your handling code here:
+       if (evt.getKeyCode() == 10) {
+           try {
+               handleActionTimKiem();
+           } catch (Exception ex) {
+               Logger.getLogger(QuanLyTau_GUI.class.getName()).log(Level.SEVERE, null, ex);
+           }
+        }
+    }//GEN-LAST:event_txt_timKiemKeyPressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -648,7 +641,6 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
     private javax.swing.JLabel lbl_NgayHD;
     private javax.swing.JLabel lbl_maTau;
     private javax.swing.JLabel lbl_soLuongToa;
-    private javax.swing.JLabel lbl_sucChua;
     private javax.swing.JLabel lbl_tenTau;
     private javax.swing.JLabel lbl_trangThai;
     private javax.swing.JPanel pnl_btnGroup;
@@ -659,7 +651,6 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
     private javax.swing.JPanel pnl_maTau;
     private javax.swing.JPanel pnl_ngayHD;
     private javax.swing.JPanel pnl_slToa;
-    private javax.swing.JPanel pnl_sucChua;
     private javax.swing.JPanel pnl_tenTau;
     private javax.swing.JPanel pnl_thongTinNhanVien;
     private javax.swing.JPanel pnl_timKiem;
@@ -671,7 +662,6 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
     private javax.swing.JTextField txt_maTau;
     private com.toedter.calendar.JDateChooser txt_ngayHD;
     private javax.swing.JTextField txt_soLuongToa;
-    private javax.swing.JTextField txt_sucChua;
     private javax.swing.JTextField txt_tenTau;
     private javax.swing.JTextField txt_timKiem;
     // End of variables declaration//GEN-END:variables

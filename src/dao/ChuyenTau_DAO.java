@@ -298,7 +298,6 @@ public class ChuyenTau_DAO implements DAOBase {
         tau.setMaTau(rs.getString("maTau"));
         tau.setTenTau(rs.getString("tenTau"));
         tau.setSoToaTau(rs.getInt("soToaTau"));
-        tau.setSucChua(rs.getInt("sucChua"));
         tau.setNgayHoatDong(rs.getDate("ngayHoatDong").toLocalDate());
         tau.setTrangThai(TrangThaiTau.fromInt(rs.getInt("trangThai")));
         

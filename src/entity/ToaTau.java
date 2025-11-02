@@ -4,6 +4,8 @@
  */
 package entity;
 
+import java.util.Objects;
+
 /**
  *
  * @author CÔNG HOÀNG
@@ -12,13 +14,11 @@ public class ToaTau {
     private String maToa;
     private int soHieuToa;
     private int soKhoangTau;
-    private int soCho;
     private Tau tau;
     
     public static final String TENTOA_EMPTY = "Tên toa không được rỗng!";
     public static final String SOHIEU_INVALID = "Số hiêu toa tàu phải lớn hơn 0!";
     public static final String SOKHOANG_INVALID = "Số khoang tàu phải lớn hơn 0!";
-    public static final String SOCHO_INVALID = "Số chỗ trong toa phải lơn hơn 0!";
     public static final String TAU_NULL = "Tàu không được null!";
 
     
@@ -29,14 +29,12 @@ public class ToaTau {
         this.maToa = maToa;
     }
 
-    public ToaTau(String maToa, int soHieuToa, int soKhoangTau, int soCho, Tau tau) throws Exception{
+    public ToaTau(String maToa, int soHieuToa, int soKhoangTau, Tau tau) throws Exception{
         setMaToa(maToa);
         setSoHieuToa(soHieuToa);
         setSoKhoangTau(soKhoangTau);
         setTau(tau);
     }
-    
-    
     
     public String getMaToa() {
         return maToa;
@@ -67,17 +65,6 @@ public class ToaTau {
         }
         this.soHieuToa = soHieuToa;
     }
-
-    public int getSoCho() {
-        return soCho;
-    }
-
-    public void setSoCho(int soCho) throws Exception{
-        if(soCho < 0) {
-            throw new Exception(SOCHO_INVALID);
-        }
-        this.soCho = soCho;
-    }
     
     public Tau getTau() {
         return tau;
@@ -89,4 +76,28 @@ public class ToaTau {
         }
         this.tau = tau;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 53 * hash + Objects.hashCode(this.maToa);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ToaTau other = (ToaTau) obj;
+        return Objects.equals(this.maToa, other.maToa);
+    }
+    
+    
 }

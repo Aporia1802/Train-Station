@@ -5,6 +5,7 @@
 package entity;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.Objects;
 
 /**
@@ -89,7 +90,7 @@ public class NhanVien {
     }
 
     public void setNgaySinh(LocalDate ngaySinh) throws Exception {
-        if(LocalDate.now().getYear() - ngaySinh.getYear() < 18)
+        if(Period.between(ngaySinh, LocalDate.now()).getYears() < 18)
             throw new Exception("Nhân viên phải đủ 18 tuổi trở lên");
         this.ngaySinh = ngaySinh;
     }
@@ -112,7 +113,7 @@ public class NhanVien {
 
     public void setSoDienThoai(String soDienThoai) throws Exception{
         soDienThoai = soDienThoai.trim();
-        if(soDienThoai.isEmpty()) {
+        if(soDienThoai == null || soDienThoai.isEmpty()) {
             throw new Exception(SDT_EMPTY);
         }
         if(!soDienThoai.matches("^(02|03|05|07|08|09)\\d{8}$")) {

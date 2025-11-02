@@ -52,10 +52,10 @@ public class TraCuuVe_GUI extends javax.swing.JPanel {
         tbl_thongTinVe.getColumnModel().getColumn(6).setPreferredWidth(150);
         tbl_thongTinVe.getColumnModel().getColumn(7).setPreferredWidth(80);
 
-        loadTableData(bus.getAllVe());
+        loadDataToTable(bus.getAllVe());
     }
     
-    private void loadTableData(ArrayList<Ve> dsVe) {
+    private void loadDataToTable(ArrayList<Ve> dsVe) {
         tblModel.setRowCount(0);
         
         for (Ve ve : dsVe) {
@@ -81,19 +81,21 @@ public class TraCuuVe_GUI extends javax.swing.JPanel {
         String cccd = txt_cccd.getText();
         LocalDate ngayDi = null;
         if(date_ngayDi.getDate() != null) {
-            ngayDi  = date_ngayDi.getDate().toInstant()    
-                                                .atZone(ZoneId.systemDefault())
-                                                .toLocalDate();
+            ngayDi  = date_ngayDi.getDate()
+                                 .toInstant()    
+                                 .atZone(ZoneId.systemDefault())
+                                 .toLocalDate();
         }
        
-        loadTableData(bus.timKiemVe(maVe, hoTen, cccd, ngayDi));
+        loadDataToTable(bus.timKiemVe(maVe, hoTen, cccd, ngayDi));
     }
+    
     private void handleXoaTrang() {
         txt_maVe.setText("");
         txt_hoTen.setText("");
         txt_cccd.setText("");
         date_ngayDi.setDate(new Date());
-        loadTableData(bus.getAllVe());
+        loadDataToTable(bus.getAllVe());
         txt_maVe.requestFocus();
     }
     /**
@@ -122,7 +124,8 @@ public class TraCuuVe_GUI extends javax.swing.JPanel {
         pnl_timKiem1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         btnTimKiem = new javax.swing.JButton();
-        btn_xoaTrang = new javax.swing.JButton();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
+        btn_lamMoi = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbl_thongTinVe = new javax.swing.JTable();
@@ -194,7 +197,7 @@ public class TraCuuVe_GUI extends javax.swing.JPanel {
         pnl_timKiem1.setMaximumSize(new java.awt.Dimension(32767, 60));
         pnl_timKiem1.setLayout(new java.awt.BorderLayout());
 
-        jPanel3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+        jPanel3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 0, 5));
 
         btnTimKiem.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnTimKiem.setText("Tìm kiếm");
@@ -205,16 +208,17 @@ public class TraCuuVe_GUI extends javax.swing.JPanel {
             }
         });
         jPanel3.add(btnTimKiem);
+        jPanel3.add(filler1);
 
-        btn_xoaTrang.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btn_xoaTrang.setText("Xóa trắng");
-        btn_xoaTrang.setPreferredSize(new java.awt.Dimension(100, 40));
-        btn_xoaTrang.addActionListener(new java.awt.event.ActionListener() {
+        btn_lamMoi.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btn_lamMoi.setText("Xóa trắng");
+        btn_lamMoi.setPreferredSize(new java.awt.Dimension(100, 40));
+        btn_lamMoi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_xoaTrangActionPerformed(evt);
+                btn_lamMoiActionPerformed(evt);
             }
         });
-        jPanel3.add(btn_xoaTrang);
+        jPanel3.add(btn_lamMoi);
 
         pnl_timKiem1.add(jPanel3, java.awt.BorderLayout.CENTER);
 
@@ -243,10 +247,10 @@ public class TraCuuVe_GUI extends javax.swing.JPanel {
         add(jPanel1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btn_xoaTrangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_xoaTrangActionPerformed
+    private void btn_lamMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_lamMoiActionPerformed
         // TODO add your handling code here:
         handleXoaTrang();
-    }//GEN-LAST:event_btn_xoaTrangActionPerformed
+    }//GEN-LAST:event_btn_lamMoiActionPerformed
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
         // TODO add your handling code here:
@@ -256,8 +260,9 @@ public class TraCuuVe_GUI extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnTimKiem;
-    private javax.swing.JButton btn_xoaTrang;
+    private javax.swing.JButton btn_lamMoi;
     private com.toedter.calendar.JDateChooser date_ngayDi;
+    private javax.swing.Box.Filler filler1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;

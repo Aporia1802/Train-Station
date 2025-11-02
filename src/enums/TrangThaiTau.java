@@ -3,7 +3,7 @@ package enums;
 public enum TrangThaiTau {
     HOAT_DONG(1, "Hoạt động"),
     BAO_TRI(2, "Bảo trì"),
-    NGUNG_HOAT_DONG(3, "Ngưng hoạt động");
+    NGUNG_HOAT_DONG(3, "Ngừng hoạt động");
     
     private final int value;
     private final String displayName;
@@ -20,15 +20,15 @@ public enum TrangThaiTau {
     public String getDisplayName() {
         return displayName;
     }
+    
     public static TrangThaiTau fromDisplay(String display) {
-    for (TrangThaiTau t : TrangThaiTau.values()) {
-        if (t.getDisplayName().equalsIgnoreCase(display.trim())) {
-            return t;
+        for (TrangThaiTau t : TrangThaiTau.values()) {
+            if (t.getDisplayName().equalsIgnoreCase(display.trim())) {
+                return t;
+            }
         }
+        return null;
     }
-    return null;
-}
-
 
     public boolean compare(int value) {
         return this.value == value;

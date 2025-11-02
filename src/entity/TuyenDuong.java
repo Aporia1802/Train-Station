@@ -4,6 +4,8 @@
  */
 package entity;
 
+import java.util.Objects;
+
 /**
  *
  * @author CÔNG HOÀNG
@@ -24,12 +26,10 @@ public class TuyenDuong {
     public TuyenDuong() {
     }
     
-    // Constructor với mã tuyến đường
     public TuyenDuong(String maTuyenDuong) {
         this.maTuyenDuong = maTuyenDuong;
     }
     
-    // Constructor đầy đủ
     public TuyenDuong(String maTuyenDuong, GaTau gaDi, GaTau gaDen, double quangDuong, double soTienMotKm) throws Exception {
         setMaTuyenDuong(maTuyenDuong);
         setGaDi(gaDi);
@@ -98,5 +98,27 @@ public class TuyenDuong {
      */
     public double tinhGiaVeCoBan() {
         return quangDuong * soTienMotKm;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 71 * hash + Objects.hashCode(this.maTuyenDuong);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final TuyenDuong other = (TuyenDuong) obj;
+        return Objects.equals(this.maTuyenDuong, other.maTuyenDuong);
     }
 }

@@ -87,7 +87,7 @@ public class KhachHang_DAO implements DAOBase<KhachHang> {
     @Override
     public Boolean create(KhachHang object) {
         int n = 0;
-        String sql = "INSERT INTO KhachHang (maKH, tenKH, soDienThoai, cccd, ngaySinh, gioiTinh) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO KhachHang (maKH, tenKH, soDienThoai, cccd, ngaySinh) VALUES (?, ?, ?, ?, ?, ?)";
         
         try {
             PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
@@ -96,10 +96,9 @@ public class KhachHang_DAO implements DAOBase<KhachHang> {
             st.setString(3, object.getSoDienThoai());
             st.setString(4, object.getCccd());
             st.setDate(5, Date.valueOf(object.getNgaySinh()));
-            st.setBoolean(6, object.isGioiTinh());
             
             n = st.executeUpdate();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return n > 0;
@@ -116,11 +115,10 @@ public class KhachHang_DAO implements DAOBase<KhachHang> {
             st.setString(2, newObject.getSoDienThoai());
             st.setString(3, newObject.getCccd());
             st.setDate(4, Date.valueOf(newObject.getNgaySinh()));
-            st.setBoolean(5, newObject.isGioiTinh());
             st.setString(6, id);
             
             n = st.executeUpdate();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return n > 0;
@@ -135,7 +133,7 @@ public class KhachHang_DAO implements DAOBase<KhachHang> {
             PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
             st.setString(1, id);
             n = st.executeUpdate();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return n > 0;
@@ -147,8 +145,7 @@ public class KhachHang_DAO implements DAOBase<KhachHang> {
         String soDienThoai = rs.getString("soDienThoai");
         String cccd = rs.getString("cccd");
         LocalDate ngaySinh = rs.getDate("ngaySinh").toLocalDate();
-        boolean gioiTinh = rs.getBoolean("gioiTinh");
-        
-        return new KhachHang(maKH, tenKH, soDienThoai, cccd, ngaySinh, gioiTinh);
+      
+        return new KhachHang(maKH, tenKH, soDienThoai, cccd, ngaySinh);
     }
 }

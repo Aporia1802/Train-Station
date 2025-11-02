@@ -10,7 +10,6 @@ import entity.KhoangTau;
 import entity.LoaiGhe;
 import entity.Tau;
 import entity.ToaTau;
-import enums.TrangThaiGhe;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -49,12 +48,11 @@ public class Ghe_DAO {
     
     public ArrayList<Ghe> getGheTheoKhoangTau(String maKhoangTau) {
     ArrayList<Ghe> dsGhe = new ArrayList<>();
-    
-    // ← SỬA: JOIN thêm ToaTau để lấy soHieuToa
+   
     String sql = """
-        SELECT g.*, lg.tenLoaiGhe, lg.moTa, lg.heSoGhe,
-               kt.maKhoangTau, kt.soHieuKhoang, kt.soChua,
-               tt.maToaTau, tt.soHieuToa, tt.soKhoangTau, tt.soCho, tt.maTau
+        SELECT g.*, lg.tenLoaiGhe, lg.moTa, lg.heSoLoaiGhe,
+               kt.maKhoangTau, kt.soHieuKhoang, kt.soGhe,
+               tt.maToaTau, tt.soHieuToa, tt.soKhoangTau, tt.maTau
         FROM Ghe g
         JOIN LoaiGhe lg ON g.maLoaiGhe = lg.maLoaiGhe
         JOIN KhoangTau kt ON g.maKhoangTau = kt.maKhoangTau
@@ -85,14 +83,13 @@ public class Ghe_DAO {
         Ghe g = new Ghe();
         g.setMaGhe(rs.getString("maGhe"));
         g.setSoGhe(rs.getInt("soGhe"));
-        g.setTrangThaiGhe(TrangThaiGhe.fromInt(rs.getInt("trangThaiGhe")));
 
         // Loại ghế đầy đủ thông tin
         LoaiGhe lg = new LoaiGhe();
         lg.setMaLoaiGhe(rs.getString("maLoaiGhe"));
         lg.setTenLoaiGhe(rs.getString("tenLoaiGhe"));
         lg.setMoTa(rs.getString("moTa"));
-        lg.setHeSoLoaiGhe(rs.getDouble("heSoGhe"));
+        lg.setHeSoLoaiGhe(rs.getDouble("heSoLoaiGhe"));
         g.setLoaiGhe(lg);
 
         // ← SỬA: Tạo ToaTau đầy đủ thông tin
@@ -100,7 +97,6 @@ public class Ghe_DAO {
         tt.setMaToa(rs.getString("maToaTau"));
         tt.setSoHieuToa(rs.getInt("soHieuToa"));
         tt.setSoKhoangTau(rs.getInt("soKhoangTau"));
-        tt.setSoCho(rs.getInt("soCho"));
         
         // Tạo Tau (chỉ có maTau)
         Tau tau = new Tau(rs.getString("maTau"));
@@ -110,8 +106,8 @@ public class Ghe_DAO {
         KhoangTau kt = new KhoangTau();
         kt.setMaKhoangTau(rs.getString("maKhoangTau"));
         kt.setSoHieuKhoang(rs.getInt("soHieuKhoang"));
-        kt.setSucChua(rs.getInt("soChua"));
-        kt.setToaTau(tt); // ← Đã có đầy đủ thông tin
+        kt.setSucChua(rs.getInt("soGhe"));
+        kt.setToaTau(tt); // 
         
         g.setKhoangTau(kt);
 

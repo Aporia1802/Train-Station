@@ -4,7 +4,7 @@
  */
 package entity;
 
-import enums.TrangThaiGhe;
+import java.util.Objects;
 
 /**
  *
@@ -13,21 +13,22 @@ import enums.TrangThaiGhe;
 public class Ghe {
     private String maGhe;
     private int soGhe;
-    private TrangThaiGhe trangThaiGhe;
     private LoaiGhe loaiGhe;
     private KhoangTau khoangTau;
     
-    public static final String LOAIGHE_NULL = "Loại ghế không được null!";
-    public static final String KHOANGTAU_NULL = "Khoang tàu không được null!";
+    public static final String LOAIGHE_NULL = "Loại ghế không được rỗng!";
+    public static final String KHOANGTAU_NULL = "Khoang tàu không được rỗng!";
     
     public Ghe() {
     }
     
-    public Ghe(String maGhe, int soGhe, TrangThaiGhe trangThaiGhe, 
-               LoaiGhe loaiGhe, KhoangTau khoangTau) throws Exception {
+    public Ghe(String maGhe) {
+        setMaGhe(maGhe);
+    }
+    
+    public Ghe(String maGhe, int soGhe, LoaiGhe loaiGhe, KhoangTau khoangTau) throws Exception {
         setMaGhe(maGhe);
         setSoGhe(soGhe);
-        setTrangThaiGhe(trangThaiGhe);
         setLoaiGhe(loaiGhe);
         setKhoangTau(khoangTau);
     }
@@ -47,15 +48,6 @@ public class Ghe {
     public void setSoGhe(int soGhe) {
         this.soGhe = soGhe;
     }
-    
-    public TrangThaiGhe getTrangThaiGhe() {
-        return trangThaiGhe;
-    }
-
-    public void setTrangThaiGhe(TrangThaiGhe trangThaiGhe) {
-        this.trangThaiGhe = trangThaiGhe;
-    }
-    
     
     public LoaiGhe getLoaiGhe() {
         return loaiGhe;
@@ -78,4 +70,28 @@ public class Ghe {
         }
         this.khoangTau = khoangTau;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 23 * hash + Objects.hashCode(this.maGhe);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Ghe other = (Ghe) obj;
+        return Objects.equals(this.maGhe, other.maGhe);
+    }
+    
+    
 }

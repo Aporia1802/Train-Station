@@ -6,8 +6,8 @@ package gui;
 
 import bus.Login_BUS;
 import com.formdev.flatlaf.FlatClientProperties;
-import dao.NhanVien_DAO;
 import entity.NhanVien;
+import java.util.concurrent.ExecutionException;
 import javax.swing.SwingWorker;
 import main.Application;
 import raven.toast.Notifications;
@@ -17,8 +17,7 @@ import raven.toast.Notifications;
  * @author CÔNG HOÀNG
  */
 public class Login_GUI extends javax.swing.JPanel {
-    private final Login_BUS log_BUS = new Login_BUS();
-    private final NhanVien_DAO nhanVienDAO = new NhanVien_DAO();
+    private final Login_BUS bus = new Login_BUS();
     /**
      * Creates new form Login
      */
@@ -329,8 +328,8 @@ public class Login_GUI extends javax.swing.JPanel {
         SwingWorker<Void, Void> worker = new SwingWorker<>() {
             @Override
             protected Void doInBackground() throws Exception {
-            // Code nặng (reset password, gửi email)
-                log_BUS.resetPassword(taiKhoan, email);
+                // reset password, gửi email
+                bus.resetPassword(taiKhoan, email);
                 return null;
             }
 
@@ -340,7 +339,7 @@ public class Login_GUI extends javax.swing.JPanel {
                     get(); // bắt exception nếu có trong doInBackground
                     Notifications.getInstance().show(Notifications.Type.SUCCESS, 
                     "Mật khẩu đã được cập nhật. Vui lòng đăng nhập lại!");
-                } catch (Exception ex) {
+                } catch (InterruptedException | ExecutionException ex) {
                     Notifications.getInstance().show(Notifications.Type.ERROR, ex.getMessage());
                 }
             }
@@ -369,7 +368,7 @@ public class Login_GUI extends javax.swing.JPanel {
         String matKhau = String.copyValueOf(txt_matKhau.getPassword());
 
         try {
-            NhanVien nhanVien = log_BUS.login(taiKhoan, matKhau);
+            NhanVien nhanVien = bus.login(taiKhoan, matKhau);
             if (nhanVien != null && nhanVien.isTrangThai()) {
                 Application.login(nhanVien);
             }
