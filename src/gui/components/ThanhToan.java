@@ -4,17 +4,26 @@
  */
 package gui.components;
 
+import bus.QuanLyDatVe_BUS;
+import javax.swing.JButton;
+
 /**
  *
  * @author CÔNG HOÀNG
  */
 public class ThanhToan extends javax.swing.JPanel {
-
+    private final QuanLyDatVe_BUS bus;
     /**
      * Creates new form ThanhToan
+     * @param bus
      */
-    public ThanhToan() {
+    public ThanhToan(QuanLyDatVe_BUS bus) {
         initComponents();
+        this.bus = bus;
+    }
+    
+    public JButton previous() {
+        return btn_previous;
     }
 
     /**
@@ -37,7 +46,7 @@ public class ThanhToan extends javax.swing.JPanel {
         rSMaterialButtonCircle4 = new rojerusan.RSMaterialButtonCircle();
         roundedButton3 = new gui.custom.RoundedButton();
         jPanel15 = new javax.swing.JPanel();
-        btn_timKiem1 = new javax.swing.JButton();
+        btn_previous = new javax.swing.JButton();
         btn_timKiem2 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
@@ -170,15 +179,15 @@ public class ThanhToan extends javax.swing.JPanel {
         jPanel15.setPreferredSize(new java.awt.Dimension(100, 60));
         jPanel15.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 10, 5));
 
-        btn_timKiem1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btn_timKiem1.setText("Quay lại");
-        btn_timKiem1.setPreferredSize(new java.awt.Dimension(140, 50));
-        btn_timKiem1.addActionListener(new java.awt.event.ActionListener() {
+        btn_previous.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btn_previous.setText("Quay lại");
+        btn_previous.setPreferredSize(new java.awt.Dimension(140, 50));
+        btn_previous.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_timKiem1ActionPerformed(evt);
+                btn_previousActionPerformed(evt);
             }
         });
-        jPanel15.add(btn_timKiem1);
+        jPanel15.add(btn_previous);
 
         btn_timKiem2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btn_timKiem2.setText("Xác nhận và in vé");
@@ -371,9 +380,9 @@ public class ThanhToan extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_rSMaterialButtonCircle4ActionPerformed
 
-    private void btn_timKiem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_timKiem1ActionPerformed
+    private void btn_previousActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_previousActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btn_timKiem1ActionPerformed
+    }//GEN-LAST:event_btn_previousActionPerformed
 
     private void btn_timKiem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_timKiem2ActionPerformed
         // TODO add your handling code here:
@@ -389,7 +398,7 @@ public class ThanhToan extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btn_timKiem1;
+    private javax.swing.JButton btn_previous;
     private javax.swing.JButton btn_timKiem2;
     private javax.swing.JButton btn_timKiem3;
     private javax.swing.Box.Filler filler1;

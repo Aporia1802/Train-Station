@@ -5,7 +5,10 @@
 package bus;
 
 import dao.ChuyenTau_DAO;
+import dao.GaTau_DAO;
 import dao.Ve_DAO;
+import entity.GaTau;
+import java.util.ArrayList;
 
 /**
  *
@@ -14,4 +17,9 @@ import dao.Ve_DAO;
 public class QuanLyDatVe_BUS {
     private final Ve_DAO veDAO = new Ve_DAO();
     private final ChuyenTau_DAO ctDAO = new ChuyenTau_DAO();
+    private final GaTau_DAO gaTauDAO = new GaTau_DAO();
+    
+    public ArrayList<GaTau> getAllGaTau() {
+        return gaTauDAO.getAll();
+    }
 }

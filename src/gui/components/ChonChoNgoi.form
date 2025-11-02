@@ -752,7 +752,7 @@
         <Property name="horizontalGap" type="int" value="10"/>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JButton" name="btn_timKiem1">
+        <Component class="javax.swing.JButton" name="btn_previous">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="18" style="1"/>
@@ -763,10 +763,10 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_timKiem1ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_previousActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="btn_timKiem2">
+        <Component class="javax.swing.JButton" name="btn_next">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="18" style="1"/>
@@ -777,7 +777,7 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_timKiem2ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_nextActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>
