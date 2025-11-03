@@ -35,6 +35,8 @@ public class ChonChuyenTau extends javax.swing.JPanel {
     private final QuanLyDatVe_BUS bus;
     private ChuyenTau chuyenDiDaChon = null;
     private ChuyenTau chuyenVeDaChon = null;
+    private ThongTinChuyenTau panelChuyenDiDangChon = null;
+    private ThongTinChuyenTau panelChuyenVeDangChon = null;
     /**
      * Creates new form DatVe_GUI
      * @param bus
@@ -160,39 +162,103 @@ public class ChonChuyenTau extends javax.swing.JPanel {
                                        String loaiChuyen) {
         if (dsChuyen.isEmpty()) {
             JOptionPane.showMessageDialog(null, 
-            "Không tìm thấy tàu cho chuyến " + loaiChuyen + " của bạn",
-            "Thông báo",
-            JOptionPane.INFORMATION_MESSAGE);
+                "Không tìm thấy tàu cho chuyến " + loaiChuyen + " của bạn",
+                "Thông báo",
+                JOptionPane.INFORMATION_MESSAGE);
             return false;
         }
     
-        // Cập nhật tiêu đề
         String tieuDe = String.format("Chiều %s: ngày %s từ %s đến %s", 
                                   loaiChuyen, 
                                   FormatUtil.formatDate(ngay), 
                                   gaDi, 
                                   gaDen);
         lblTieuDe.setText(tieuDe);
-    
-        // Hiển thị panel và làm mới danh sách
+        
         pnlChuyen.setVisible(true);
-        capNhatDanhSachChuyen(pnlDsChuyen, dsChuyen);
+        
+        // Truyền thêm tham số để biết là chuyến đi hay về
+        boolean isChuyenDi = loaiChuyen.equals("đi");
+        capNhatDanhSachChuyen(pnlDsChuyen, dsChuyen, isChuyenDi);
     
         return true;
     }
-
-/**
- * Cập nhật danh sách chuyến tàu vào panel
- */
-    private void capNhatDanhSachChuyen(JPanel panel, ArrayList<ChuyenTau> dsChuyen) {
+    
+    /**
+     * Cập nhật danh sách chuyến tàu vào panel với khả năng chọn
+     */
+    private void capNhatDanhSachChuyen(JPanel panel, ArrayList<ChuyenTau> dsChuyen, boolean isChuyenDi) {
         panel.removeAll();
     
         for (ChuyenTau chuyenTau : dsChuyen) {
-            panel.add(new ThongTinChuyenTau(chuyenTau));
+            ThongTinChuyenTau thongTinPanel = new ThongTinChuyenTau(chuyenTau);
+            
+            // Thêm listener để xử lý khi chọn
+            thongTinPanel.setSelectionListener(e -> {
+                handleChonChuyenTau(thongTinPanel, isChuyenDi);
+            });
+            
+            panel.add(thongTinPanel);
         }
     
         panel.revalidate();
         panel.repaint();
+    }
+    
+    /**
+     * Xử lý khi chọn một chuyến tàu
+     */
+
+    private void handleChonChuyenTau(ThongTinChuyenTau selectedPanel, boolean isChuyenDi) {
+        if (isChuyenDi) {
+            // Nếu click vào panel đang được chọn -> Bỏ chọn
+            if (panelChuyenDiDangChon == selectedPanel) {
+                selectedPanel.setSelected(false);
+                panelChuyenDiDangChon = null;
+                chuyenDiDaChon = null;
+            } else {
+            //  Bỏ chọn panel cũ nếu có
+                if (panelChuyenDiDangChon != null) {
+                    panelChuyenDiDangChon.setSelected(false);
+                }
+            
+            // Chọn panel mới
+                selectedPanel.setSelected(true);
+                panelChuyenDiDangChon = selectedPanel;
+                chuyenDiDaChon = selectedPanel.getChuyenTau();
+            }
+        } else {
+            
+        // Xử lý cho chuyến về
+        // Nếu click vào panel đang được chọn -> Bỏ chọn
+            if (panelChuyenVeDangChon == selectedPanel) {
+                selectedPanel.setSelected(false);
+                panelChuyenVeDangChon = null;
+                chuyenVeDaChon = null;
+            } else {
+            //  Bỏ chọn panel cũ nếu có
+                if (panelChuyenVeDangChon != null) {
+                    panelChuyenVeDangChon.setSelected(false);
+                }
+            
+            //  Chọn panel mới
+                selectedPanel.setSelected(true);
+                panelChuyenVeDangChon = selectedPanel;
+                chuyenVeDaChon = selectedPanel.getChuyenTau();
+            }
+        }
+    }
+    // Getter methods để lấy thông tin chuyến tàu đã chọn
+    public ChuyenTau getChuyenDiDaChon() {
+        return chuyenDiDaChon;
+    }
+    
+    public ChuyenTau getChuyenVeDaChon() {
+        return chuyenVeDaChon;
+    }
+    
+    public boolean isKhuHoi() {
+        return rad_khuHoi.isSelected();
     }
     
     public JButton next() {
@@ -577,6 +643,22 @@ public class ChonChuyenTau extends javax.swing.JPanel {
 
     private void btn_nextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_nextActionPerformed
         // TODO add your handling code here:
+        if (chuyenDiDaChon == null) {
+            JOptionPane.showMessageDialog(this, 
+                "Vui lòng chọn chuyến tàu đi!",
+                "Thông báo",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        // Nếu là khứ hồi, kiểm tra đã chọn chuyến về chưa
+        if (rad_khuHoi.isSelected() && chuyenVeDaChon == null) {
+            JOptionPane.showMessageDialog(this, 
+                "Vui lòng chọn chuyến tàu về!",
+                "Thông báo",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
     }//GEN-LAST:event_btn_nextActionPerformed
 
     private void cbo_gaDiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbo_gaDiActionPerformed
