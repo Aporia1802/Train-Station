@@ -37,6 +37,41 @@ public class ToaTau_DAO implements DAOBase<ToaTau>{
     return dsToaTau;
     }
     
+     /**
+     * Lấy danh sách toa tàu theo mã tàu
+     * @param maTau
+     * @return 
+     * @throws java.lang.Exception 
+     */
+    public ArrayList<ToaTau> getByTau(String maTau) throws Exception {
+        ArrayList<ToaTau> dsToa = new ArrayList<>();
+        String sql = "SELECT tt.*, " +
+                    "FROM ToaTau tt " +
+                    "WHERE tt.maTau = ? " +
+                    "ORDER BY tt.soHieuToa";
+        
+        try {
+            PreparedStatement ps = ConnectDB.conn.prepareStatement(sql);
+            ps.setString(1, maTau);
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                // Tạo ToaTau
+                ToaTau toa = new ToaTau();
+                toa.setMaToa(rs.getString("maToa"));
+                toa.setSoKhoangTau(rs.getInt("soKhoangTau"));
+                toa.setSoHieuToa(rs.getInt("soHieuToa"));
+                toa.setLoaiToa(rs.getString("loaiToa"));
+                
+                dsToa.add(toa);
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        
+        return dsToa;
+    }
+    
     public ToaTau getData(ResultSet rs) {
         try {
             ToaTau toa = new ToaTau();

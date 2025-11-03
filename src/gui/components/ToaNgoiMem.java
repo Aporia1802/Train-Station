@@ -222,6 +222,7 @@ public class ToaNgoiMem extends javax.swing.JPanel {
 
         jPanel52.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
+        roundedButton59.setBackground(new java.awt.Color(235, 250, 240));
         roundedButton59.setText("1");
         roundedButton59.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         roundedButton59.setMaximumSize(new java.awt.Dimension(40, 50));

@@ -11,6 +11,7 @@ import gui.components.ThanhToan;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import org.jdesktop.animation.timing.Animator;
@@ -80,11 +81,39 @@ public class DatVe_GUI extends javax.swing.JPanel {
 }
 
     private void initNavigation() {
-        chonChuyenTau.next().addActionListener(e -> next());
+        // Xử lý nút Next ở màn hình chọn chuyến tàu
+        chonChuyenTau.next().addActionListener(e -> {
+            if (validateChonChuyenTau()) {
+                // Truyền dữ liệu sang màn hình chọn chỗ ngồi
+                try {
+            chonChoNgoi.loadDanhSachGhe(
+                chonChuyenTau.getChuyenDiDaChon(),
+                chonChuyenTau.getChuyenVeDaChon(),
+                chonChuyenTau.isKhuHoi()
+            );
+            next();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Lỗi: " + ex.getMessage());
+            }
+            }
+        });
         chonChoNgoi.next().addActionListener(e -> next());
         chonChoNgoi.previous().addActionListener(e -> previous());
         thanhToan.previous().addActionListener(e -> previous());
     }
+    
+    private boolean validateChonChuyenTau() {
+    //  Kiểm tra đã chọn chuyến đi chưa
+        if (chonChuyenTau.getChuyenDiDaChon() == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, 
+            "Vui lòng chọn chuyến tàu đi!",
+            "Thông báo",
+            javax.swing.JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+
 
     private void next() {
         if (!animator.isRunning() && currentIndex < panels.length - 1) {

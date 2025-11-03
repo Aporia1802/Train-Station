@@ -60,7 +60,12 @@ public class ChonChuyenTau extends javax.swing.JPanel {
         pnl_chieuVe.setVisible(false);
         Calendar cal = Calendar.getInstance();
         date_ngayDi.getJCalendar().setMinSelectableDate(cal.getTime());
-        date_ngayVe.getJCalendar().setMinSelectableDate(cal.getTime()); 
+        date_ngayDi.addPropertyChangeListener("date", evt -> {
+            if (date_ngayDi.getDate() != null) {
+                date_ngayVe.setDate(date_ngayDi.getDate());
+                date_ngayVe.getJCalendar().setMinSelectableDate(date_ngayDi.getDate());
+            }
+        });
     }
     
 //  Load danh sách ga tàu
@@ -129,6 +134,8 @@ public class ChonChuyenTau extends javax.swing.JPanel {
                 ArrayList<ChuyenTau> dsChuyenVe = dsChuyenVe(gaDi, gaDen, ngayVe);
                 hienThiDanhSachChuyen(dsChuyenVe, pnl_chieuVe, pnl_dsChuyenVe, 
                                    lbl_tieuDeChuyenVe, ngayVe, gaDen, gaDi, "về");
+            } else {
+                resetPanelChieuVe();
             }
         } catch (Exception ex) {
             Logger.getLogger(ChonChuyenTau.class.getName()).log(Level.SEVERE, null, ex);
@@ -259,6 +266,26 @@ public class ChonChuyenTau extends javax.swing.JPanel {
     
     public boolean isKhuHoi() {
         return rad_khuHoi.isSelected();
+    }
+    
+    /**
+        * Reset panel chiều về về trạng thái ban đầu
+    */
+    private void resetPanelChieuVe() {
+        // Ẩn panel chiều về
+        pnl_chieuVe.setVisible(false);
+    
+        // Xóa danh sách chuyến về
+        pnl_dsChuyenVe.removeAll();
+        pnl_dsChuyenVe.revalidate();
+        pnl_dsChuyenVe.repaint();
+    
+        // Reset các biến liên quan đến chuyến về
+        chuyenVeDaChon = null;
+        panelChuyenVeDangChon = null;
+    
+        // Reset tiêu đề (tùy chọn)
+        lbl_tieuDeChuyenVe.setText("");
     }
     
     public JButton next() {
@@ -643,22 +670,6 @@ public class ChonChuyenTau extends javax.swing.JPanel {
 
     private void btn_nextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_nextActionPerformed
         // TODO add your handling code here:
-        if (chuyenDiDaChon == null) {
-            JOptionPane.showMessageDialog(this, 
-                "Vui lòng chọn chuyến tàu đi!",
-                "Thông báo",
-                JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        // Nếu là khứ hồi, kiểm tra đã chọn chuyến về chưa
-        if (rad_khuHoi.isSelected() && chuyenVeDaChon == null) {
-            JOptionPane.showMessageDialog(this, 
-                "Vui lòng chọn chuyến tàu về!",
-                "Thông báo",
-                JOptionPane.WARNING_MESSAGE);
-            return;
-        }
     }//GEN-LAST:event_btn_nextActionPerformed
 
     private void cbo_gaDiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbo_gaDiActionPerformed

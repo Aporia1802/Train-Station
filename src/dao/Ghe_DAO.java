@@ -77,6 +77,31 @@ public class Ghe_DAO {
     return dsGhe;
 }
 
+//    public ArrayList<Ghe> getByToa(String maToa) throws Exception {
+//        ArrayList<Ghe> dsGhe = new ArrayList<>();
+//        String sql = "SELECT * FROM Ghe " +
+//                    "WHERE maToa = ? " +
+//                    "ORDER BY soGhe";
+//        
+//        try {
+//            PreparedStatement ps = ConnectDB.conn.prepareStatement(sql);
+//            ps.setString(1, maToa);
+//            ResultSet rs = ps.executeQuery();
+//            
+//            while (rs.next()) {
+//                Ghe ghe = new Ghe();
+//                ghe.setMaGhe(rs.getString("maGhe"));
+//                ghe.setSoGhe(rs.getInt("soGhe"));
+//                ghe.se(rs.getString("maToa"));
+//                
+//                dsGhe.add(ghe);
+//            }
+//        } catch(Exception e) {
+//            e.printStackTrace();
+//        }
+//        
+//        return dsGhe;
+//    }
     
     public Ghe getData(ResultSet rs) {
     try {
@@ -92,7 +117,7 @@ public class Ghe_DAO {
         lg.setHeSoLoaiGhe(rs.getDouble("heSoLoaiGhe"));
         g.setLoaiGhe(lg);
 
-        // ← SỬA: Tạo ToaTau đầy đủ thông tin
+        // Tạo ToaTau đầy đủ thông tin
         ToaTau tt = new ToaTau();
         tt.setMaToa(rs.getString("maToaTau"));
         tt.setSoHieuToa(rs.getInt("soHieuToa"));
@@ -107,7 +132,7 @@ public class Ghe_DAO {
         kt.setMaKhoangTau(rs.getString("maKhoangTau"));
         kt.setSoHieuKhoang(rs.getInt("soHieuKhoang"));
         kt.setSucChua(rs.getInt("soGhe"));
-        kt.setToaTau(tt); // 
+        kt.setToaTau(tt);
         
         g.setKhoangTau(kt);
 
