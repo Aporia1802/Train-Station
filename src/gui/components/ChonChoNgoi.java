@@ -713,6 +713,22 @@ private void syncCheckboxChonTatCa(JPanel panelToa, ToaTau toa, ChuyenTau chuyen
     public JButton previous() {
         return btn_previous;
     }
+    
+    public String getHoTenKhachChinh() {
+    return txt_hoTen.getText().trim();
+}
+
+public String getSoDienThoai() {
+    return txt_sdt.getText().trim();
+}
+
+public String getCCCD() {
+    return txt_cccd.getText().trim();
+}
+
+public javax.swing.JPanel getPanelThongTin() {
+    return pnl_thongTin;
+}
 
     /**
      * This method is called from within the constructor to initialize the form.

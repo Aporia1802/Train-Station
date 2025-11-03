@@ -5,7 +5,10 @@
 package gui.components;
 
 import bus.QuanLyDatVe_BUS;
+import java.time.LocalDateTime;
 import javax.swing.JButton;
+import javax.swing.JPanel;
+import utils.FormatUtil;
 
 /**
  *
@@ -25,6 +28,85 @@ public class ThanhToan extends javax.swing.JPanel {
     public JButton previous() {
         return btn_previous;
     }
+    
+    public void hienThiDuLieu(String hoTen, String sdt, String cccd,
+                          java.util.List<ThongTinVe.ThongTinHanhKhach> dsHK,
+                          entity.ChuyenTau chuyenDi, entity.ChuyenTau chuyenVe, boolean khuHoi) {
+
+    jLabel6.setText(hoTen);
+    jLabel8.setText(sdt);
+    jPanel13.removeAll();
+
+    for (ThongTinVe.ThongTinHanhKhach hk : dsHK) {
+        entity.ChuyenTau ct = (chuyenVe != null && hk.getMaGhe().contains(chuyenVe.getTau().getMaTau())) ? chuyenVe : chuyenDi;
+        String tag = ct == chuyenVe ? "VỀ" : "ĐI";
+
+        // LẤY THÔNG TIN TỪ CHUYẾN
+        String tenTau = ct.getTau().getTenTau(); // Ví dụ: SE8
+        String tuyen = ct.getTuyenDuong().getGaDi().getTenGa() + ct.getTuyenDuong().getGaDen().getTenGa(); // Sài Gòn - Hà Nội
+        String ngay = FormatUtil.formatDateTime(ct.getThoiGianDi());
+        String toa = hk.getMaGhe().split("-")[2]; // Toa 1
+        String cho = hk.getMaGhe().split("-")[3]; // chỗ 14
+        String loaiCho = hk.getMaGhe().startsWith("G") ? "Ngồi mềm" : "Nằm";
+
+        // TẠO VÉ ĐÚNG ẢNH
+        JPanel p = new JPanel();
+        p.setBackground(new java.awt.Color(255, 255, 255));
+        p.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+            javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(200, 200, 200)),
+            javax.swing.BorderFactory.createEmptyBorder(15, 20, 15, 20)
+        ));
+        p.setLayout(new javax.swing.BoxLayout(p, javax.swing.BoxLayout.Y_AXIS));
+
+        p.add(label("Họ tên: " + hk.getHoTen(), 16, true));
+        p.add(label("Đối tượng: " + hk.getLoaiVe(), 15, false));
+        p.add(label("Số giấy tờ: " + (hk.getCCCD().isEmpty() ? sdt : hk.getCCCD()), 15, false));
+        p.add(label("Hành trình: " + tenTau + " " + tuyen + " " +  ngay +  
+                   " Toa " + toa + " chỗ " + cho + " " + loaiCho, 15, true));
+
+        jPanel13.add(p);
+        jPanel13.add(javax.swing.Box.createVerticalStrut(15));
+    }
+
+    // TỔNG TIỀN
+    double tong = dsHK.stream().mapToDouble(hk -> {
+        entity.ChuyenTau ct = (chuyenVe != null && hk.getMaGhe().contains(chuyenVe.getTau().getMaTau())) ? chuyenVe : chuyenDi;
+        double giaGoc = ct.getTuyenDuong().tinhGiaVeCoBan();
+        double heSo = hk.getMaGhe().startsWith("G") ? 1.0 : 1.2;
+        double giam = switch (hk.getLoaiVe()) { case "Trẻ em" -> 0.5; case "Sinh viên" -> 0.2; case "Người cao tuổi" -> 0.3; default -> 0.0; };
+        return giaGoc * heSo * (1 - giam);
+    }).sum();
+
+    jLabel2.setText(utils.FormatUtil.formatCurrency(tong));
+    jLabel13.setText(utils.FormatUtil.formatCurrency(tong));
+    jLabel9.setText("Tổng tiền: " + utils.FormatUtil.formatCurrency(tong));
+
+    // TIỀN THỐI
+    final double TONG_TIEN = tong;
+    jTextField1.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+        public void insertUpdate(javax.swing.event.DocumentEvent e) { tinh(); }
+        public void removeUpdate(javax.swing.event.DocumentEvent e) { tinh(); }
+        public void changedUpdate(javax.swing.event.DocumentEvent e) { tinh(); }
+        void tinh() {
+            try {
+                String text = jTextField1.getText().replaceAll("[^0-9]", "");
+                double khachDua = text.isEmpty() ? 0 : Double.parseDouble(text);
+                double thoi = khachDua - TONG_TIEN;
+                jTextField2.setText(thoi >= 0 ? utils.FormatUtil.formatCurrency(thoi) : "0");
+            } catch (Exception ex) { jTextField2.setText("0"); }
+        }
+    });
+
+    jPanel13.revalidate();
+    jPanel13.repaint();
+}
+
+private javax.swing.JLabel label(String text, int size, boolean bold) {
+    javax.swing.JLabel l = new javax.swing.JLabel(text);
+    l.setFont(new java.awt.Font("Segoe UI", bold ? java.awt.Font.BOLD : java.awt.Font.PLAIN, size));
+    return l;
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.

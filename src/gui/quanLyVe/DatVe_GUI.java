@@ -8,6 +8,7 @@ import bus.QuanLyDatVe_BUS;
 import gui.components.ChonChoNgoi;
 import gui.components.ChonChuyenTau;
 import gui.components.ThanhToan;
+import gui.components.ThongTinVe;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.util.logging.Level;
@@ -99,7 +100,47 @@ public class DatVe_GUI extends javax.swing.JPanel {
         next();
     }
 });
-        chonChoNgoi.next().addActionListener(e -> next());
+        chonChoNgoi.next().addActionListener(e -> {
+    // 1. LẤY THÔNG TIN TỪ CHỌN GHẾ
+    String hoTen = chonChoNgoi.getHoTenKhachChinh();
+    String sdt = chonChoNgoi.getSoDienThoai();
+    String cccd = chonChoNgoi.getCCCD();
+
+    if (hoTen.isEmpty() || sdt.isEmpty() || cccd.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Vui lòng nhập thông tin khách hàng chính!");
+        return;
+    }
+
+    java.util.ArrayList<ThongTinVe.ThongTinHanhKhach> dsHK = new java.util.ArrayList<>();
+    for (java.awt.Component c : chonChoNgoi.getPanelThongTin().getComponents()) {
+        if (c instanceof ThongTinVe) {
+            ThongTinVe p = (ThongTinVe) c;
+            ThongTinVe.ThongTinHanhKhach hk = p.getThongTin();
+            if (hk.getHoTen() == null || hk.getHoTen().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Nhập họ tên cho ghế: " + hk.getMaGhe());
+                return;
+            }
+            dsHK.add(hk);
+        }
+    }
+
+    if (dsHK.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Chưa chọn ghế nào!");
+        return;
+    }
+
+    // 2. ĐẨY DỮ LIỆU VÀO THANH TOÁN
+    thanhToan.hienThiDuLieu(
+        hoTen, sdt, cccd,
+        dsHK,
+        chonChuyenTau.getChuyenDiDaChon(),
+        chonChuyenTau.getChuyenVeDaChon(),
+        chonChuyenTau.isKhuHoi()
+    );
+
+    // 3. CHUYỂN SANG BƯỚC 3
+    next();
+});
         chonChoNgoi.previous().addActionListener(e -> previous());
         thanhToan.previous().addActionListener(e -> previous());
     }

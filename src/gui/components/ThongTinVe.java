@@ -187,14 +187,34 @@ public class ThongTinVe extends javax.swing.JPanel {
 
     private void cbo_loaiVeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbo_loaiVeActionPerformed
         // TODO add your handling code here:
-        String loaiVe = cbo_loaiVe.getSelectedItem().toString();
-        if(loaiVe.equals("Trẻ em")) {
-            date_ngaySinhHK.setEnabled(true);
-            txt_cccdHK.setEnabled(false);
-        } else {
-            date_ngaySinhHK.setEnabled(false);
-            txt_cccdHK.setEnabled(true);
-        }
+        String loaiVe = (String) cbo_loaiVe.getSelectedItem();
+
+    // 1. BẬT/TẮT Ô NHẬP
+    if ("Trẻ em".equals(loaiVe)) {
+        date_ngaySinhHK.setEnabled(true);
+        txt_cccdHK.setEnabled(false);
+        txt_cccdHK.setText("");
+    } else {
+        date_ngaySinhHK.setEnabled(false);
+        txt_cccdHK.setEnabled(true);
+    }
+
+    // 2. TÍNH GIÁ VÉ THEO LOẠI
+    double giaGoc = ct.getTuyenDuong().tinhGiaVeCoBan() * ghe.getLoaiGhe().getHeSoLoaiGhe();
+    double giam = 0;
+
+    switch (loaiVe) {
+        case "Trẻ em" -> giam = 0.5;        // 50%
+        case "Sinh viên" -> giam = 0.2;     // 20%
+        case "Người cao tuổi" -> giam = 0.3; // 30%
+        default -> giam = 0;                // Người lớn
+    }
+
+    double giaThuc = giaGoc * (1 - giam);
+
+    // 3. HIỂN THỊ GIÁ + GIẢM
+    String text = "Giá vé: " + FormatUtil.formatCurrency(giaThuc);
+    lbl_giaVe.setText(text);
     }//GEN-LAST:event_cbo_loaiVeActionPerformed
 
 
