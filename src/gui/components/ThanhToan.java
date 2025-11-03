@@ -37,63 +37,61 @@ public class ThanhToan extends javax.swing.JPanel {
     jLabel8.setText(sdt);
     jPanel13.removeAll();
 
+    double tongTien = 0;
+
     for (ThongTinVe.ThongTinHanhKhach hk : dsHK) {
-        entity.ChuyenTau ct = (chuyenVe != null && hk.getMaGhe().contains(chuyenVe.getTau().getMaTau())) ? chuyenVe : chuyenDi;
-        String tag = ct == chuyenVe ? "VỀ" : "ĐI";
+        // XÁC ĐỊNH CHUYẾN DỰA VÀO MÃ GHẾ
+        // Ví dụ: maGhe = "G-TAU01-01-014" 
+        String maTauTrongGhe = hk.getMaGhe().split("-")[1];
+        entity.ChuyenTau ct = chuyenDi;
+        String tag = "[ĐI]";
+        
+        // Nếu có chuyến về và mã tàu khớp với chuyến về
+        if (chuyenVe != null && maTauTrongGhe.equals(chuyenVe.getTau().getMaTau())) {
+            ct = chuyenVe;
+            tag = "[VỀ]";
+        }
 
-        // LẤY THÔNG TIN TỪ CHUYẾN
-        String tenTau = ct.getTau().getTenTau(); // Ví dụ: SE8
-        String tuyen = ct.getTuyenDuong().getGaDi().getTenGa() + ct.getTuyenDuong().getGaDen().getTenGa(); // Sài Gòn - Hà Nội
-        String ngay = FormatUtil.formatDateTime(ct.getThoiGianDi());
-        String toa = hk.getMaGhe().split("-")[2]; // Toa 1
-        String cho = hk.getMaGhe().split("-")[3]; // chỗ 14
-        String loaiCho = hk.getMaGhe().startsWith("G") ? "Ngồi mềm" : "Nằm";
+        // LẤY THÔNG TIN GHẾ TỪ BUS
+        entity.Ghe ghe = bus.timGheTheoMa(hk.getMaGhe());
+        if (ghe == null) continue;
 
-        // TẠO VÉ ĐÚNG ẢNH
-        JPanel p = new JPanel();
-        p.setBackground(new java.awt.Color(255, 255, 255));
-        p.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-            javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(200, 200, 200)),
-            javax.swing.BorderFactory.createEmptyBorder(15, 20, 15, 20)
-        ));
-        p.setLayout(new javax.swing.BoxLayout(p, javax.swing.BoxLayout.Y_AXIS));
+        // TÍNH GIÁ VÉ
+        double giaGoc = ct.getTuyenDuong().tinhGiaVeCoBan();
+        double heSoGhe = ghe.getLoaiGhe().getHeSoLoaiGhe();
+        double heSoLoaiVe = layHeSoLoaiVe(hk.getLoaiVe());
+        double giaVe = giaGoc * heSoGhe * heSoLoaiVe;
+        tongTien += giaVe;
 
-        p.add(label("Họ tên: " + hk.getHoTen(), 16, true));
-        p.add(label("Đối tượng: " + hk.getLoaiVe(), 15, false));
-        p.add(label("Số giấy tờ: " + (hk.getCCCD().isEmpty() ? sdt : hk.getCCCD()), 15, false));
-        p.add(label("Hành trình: " + tenTau + " " + tuyen + " " +  ngay +  
-                   " Toa " + toa + " chỗ " + cho + " " + loaiCho, 15, true));
-
-        jPanel13.add(p);
-        jPanel13.add(javax.swing.Box.createVerticalStrut(15));
+        // TẠO PANEL VÉ
+        JPanel pnlVe = taoThongTinVe(hk, ghe, ct, giaVe, tag);
+        jPanel13.add(pnlVe);
+        jPanel13.add(javax.swing.Box.createVerticalStrut(10));
     }
 
-    // TỔNG TIỀN
-    double tong = dsHK.stream().mapToDouble(hk -> {
-        entity.ChuyenTau ct = (chuyenVe != null && hk.getMaGhe().contains(chuyenVe.getTau().getMaTau())) ? chuyenVe : chuyenDi;
-        double giaGoc = ct.getTuyenDuong().tinhGiaVeCoBan();
-        double heSo = hk.getMaGhe().startsWith("G") ? 1.0 : 1.2;
-        double giam = switch (hk.getLoaiVe()) { case "Trẻ em" -> 0.5; case "Sinh viên" -> 0.2; case "Người cao tuổi" -> 0.3; default -> 0.0; };
-        return giaGoc * heSo * (1 - giam);
-    }).sum();
+    // HIỂN THỊ TỔNG TIỀN
+    jLabel2.setText(utils.FormatUtil.formatCurrency(tongTien));
+    jLabel13.setText(utils.FormatUtil.formatCurrency(tongTien));
+    jLabel9.setText("Tổng tiền: " + utils.FormatUtil.formatCurrency(tongTien));
 
-    jLabel2.setText(utils.FormatUtil.formatCurrency(tong));
-    jLabel13.setText(utils.FormatUtil.formatCurrency(tong));
-    jLabel9.setText("Tổng tiền: " + utils.FormatUtil.formatCurrency(tong));
-
-    // TIỀN THỐI
-    final double TONG_TIEN = tong;
+    // TÍNH TIỀN THỐI
+    final double TONG_TIEN = tongTien;
+    
+    
     jTextField1.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
-        public void insertUpdate(javax.swing.event.DocumentEvent e) { tinh(); }
-        public void removeUpdate(javax.swing.event.DocumentEvent e) { tinh(); }
-        public void changedUpdate(javax.swing.event.DocumentEvent e) { tinh(); }
-        void tinh() {
+        public void insertUpdate(javax.swing.event.DocumentEvent e) { tinhTienThoi(); }
+        public void removeUpdate(javax.swing.event.DocumentEvent e) { tinhTienThoi(); }
+        public void changedUpdate(javax.swing.event.DocumentEvent e) { tinhTienThoi(); }
+        
+        void tinhTienThoi() {
             try {
                 String text = jTextField1.getText().replaceAll("[^0-9]", "");
                 double khachDua = text.isEmpty() ? 0 : Double.parseDouble(text);
                 double thoi = khachDua - TONG_TIEN;
                 jTextField2.setText(thoi >= 0 ? utils.FormatUtil.formatCurrency(thoi) : "0");
-            } catch (Exception ex) { jTextField2.setText("0"); }
+            } catch (Exception ex) { 
+                jTextField2.setText("0"); 
+            }
         }
     });
 
@@ -101,11 +99,59 @@ public class ThanhToan extends javax.swing.JPanel {
     jPanel13.repaint();
 }
 
-private javax.swing.JLabel label(String text, int size, boolean bold) {
+// Helper: Tạo panel thông tin vé
+private JPanel taoThongTinVe(ThongTinVe.ThongTinHanhKhach hk, entity.Ghe ghe, 
+                             entity.ChuyenTau ct, double giaVe, String tag) {
+    JPanel p = new JPanel();
+    p.setBackground(new java.awt.Color(255, 255, 255));
+    p.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+        javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(200, 200, 200)),
+        javax.swing.BorderFactory.createEmptyBorder(15, 20, 15, 20)
+    ));
+    p.setLayout(new javax.swing.BoxLayout(p, javax.swing.BoxLayout.Y_AXIS));
+
+    // Thông tin chi tiết
+    String tenTau = ct.getTau().getTenTau();
+    String tuyen = ct.getTuyenDuong().getGaDi().getTenGa() + " → " + 
+                   ct.getTuyenDuong().getGaDen().getTenGa();
+    String ngay = utils.FormatUtil.formatDateTime(ct.getThoiGianDi());
+    String toa = String.valueOf(ghe.getKhoangTau().getToaTau().getSoHieuToa());
+    String cho = String.valueOf(ghe.getSoGhe());
+    String loaiCho = ghe.getLoaiGhe().getTenLoaiGhe();
+
+    p.add(taoLabel(tag + " Họ tên: " + hk.getHoTen(), 16, true));
+    p.add(taoLabel("Đối tượng: " + hk.getLoaiVe(), 15, false));
+    p.add(taoLabel("Số giấy tờ: " + (hk.getCCCD() == null || hk.getCCCD().isEmpty() 
+                   ? "Trẻ em" : hk.getCCCD()), 15, false));
+    p.add(taoLabel("Hành trình: " + tenTau + " " + tuyen + " " + ngay, 15, true));
+    p.add(taoLabel("Toa " + toa + " - Ghế " + cho + " - " + loaiCho, 15, false));
+    p.add(javax.swing.Box.createVerticalStrut(5));
+    
+    javax.swing.JLabel lblGia = taoLabel("Giá vé: " + utils.FormatUtil.formatCurrency(giaVe), 
+                                         16, true);
+    lblGia.setForeground(new java.awt.Color(255, 51, 0));
+    p.add(lblGia);
+
+    return p;
+}
+
+// Helper: Tạo label
+private javax.swing.JLabel taoLabel(String text, int size, boolean bold) {
     javax.swing.JLabel l = new javax.swing.JLabel(text);
     l.setFont(new java.awt.Font("Segoe UI", bold ? java.awt.Font.BOLD : java.awt.Font.PLAIN, size));
     return l;
 }
+
+// Helper: Lấy hệ số loại vé
+private double layHeSoLoaiVe(String loaiVe) {
+    switch(loaiVe) {
+        case "Trẻ em": return 0.5;
+        case "Sinh viên": return 0.8;
+        case "Người cao tuổi": return 0.7;
+        default: return 1.0;
+    }
+}
+
 
 
     /**

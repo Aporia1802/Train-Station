@@ -159,4 +159,14 @@ public class QuanLyDatVe_BUS {
         return ctDAO.timKiemChuyenTau(gaDi, gaDen, ngay);
     }
     
+    public Ghe timGheTheoMa(String maGhe) {
+    // Tìm trong danh sách ghế đã chọn
+     for (Ghe ghe : getDanhSachGheDaChon()) {
+            if (ghe.getMaGhe().equals(maGhe)) {
+                return ghe;
+            }
+        }
+        return null;
+    }
+    
 }
