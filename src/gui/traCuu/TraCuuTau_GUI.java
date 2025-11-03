@@ -26,7 +26,7 @@ public class TraCuuTau_GUI extends javax.swing.JPanel {
     
     private void init() {
         bus = new TraCuuTau_BUS();
-        String[] columns = {"Mã tàu", "Tên tàu", "Số lượng toa", "Sức chứa", "Trạng thái"};
+        String[] columns = {"Mã tàu", "Tên tàu", "Số lượng toa", "Trạng thái"};
         tblModel_thongTinTau = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -175,11 +175,11 @@ public class TraCuuTau_GUI extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Mã tàu", "Tên tàu", "Số lượng toa", "Sức chứa", "Trạng thái"
+                "Mã tàu", "Tên tàu", "Số lượng toa", "Trạng thái"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, true
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {

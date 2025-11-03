@@ -4,7 +4,6 @@
  */
 package entity;
 
-import java.time.LocalDate;
 import java.util.Objects;
 
 /**
@@ -16,7 +15,6 @@ private String maKH;
     private String tenKH;
     private String soDienThoai;
     private String cccd;
-    private LocalDate ngaySinh;
     
     // Thông báo lỗi
     public static final String TENKH_EMPTY = "Tên khách hàng không được rỗng!";
@@ -33,13 +31,12 @@ private String maKH;
         setMaKH(maKH);
     }
     
-    public KhachHang(String maKH, String tenKH, String soDienThoai, String cccd, 
-                     LocalDate ngaySinh) throws Exception {
+    public KhachHang(String maKH, String tenKH, String soDienThoai, String cccd
+                     ) throws Exception {
         setMaKH(maKH);
         setTenKH(tenKH);
         setSoDienThoai(soDienThoai);
         setCccd(cccd);
-        setNgaySinh(ngaySinh);
     }
     
     public String getMaKH() {
@@ -93,14 +90,6 @@ private String maKH;
             throw new Exception(CCCD_INVALID);
         }
         this.cccd = cccd;
-    }
-    
-    public LocalDate getNgaySinh() {
-        return ngaySinh;
-    }
-    
-    public void setNgaySinh(LocalDate ngaySinh) {
-        this.ngaySinh = ngaySinh;
     }
 
     @Override

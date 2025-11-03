@@ -4,7 +4,6 @@ import database.ConnectDB;
 import entity.KhachHang;
 import interfaces.DAOBase;
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class KhachHang_DAO implements DAOBase<KhachHang> {
@@ -87,7 +86,7 @@ public class KhachHang_DAO implements DAOBase<KhachHang> {
     @Override
     public Boolean create(KhachHang object) {
         int n = 0;
-        String sql = "INSERT INTO KhachHang (maKH, tenKH, soDienThoai, cccd, ngaySinh) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO KhachHang (maKH, tenKH, soDienThoai, cccd) VALUES (?, ?, ?, ?, ?)";
         
         try {
             PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
@@ -95,7 +94,6 @@ public class KhachHang_DAO implements DAOBase<KhachHang> {
             st.setString(2, object.getTenKH());
             st.setString(3, object.getSoDienThoai());
             st.setString(4, object.getCccd());
-            st.setDate(5, Date.valueOf(object.getNgaySinh()));
             
             n = st.executeUpdate();
         } catch (SQLException e) {
@@ -107,15 +105,14 @@ public class KhachHang_DAO implements DAOBase<KhachHang> {
     @Override
     public Boolean update(String id, KhachHang newObject) {
         int n = 0;
-        String sql = "UPDATE KhachHang SET tenKH = ?, soDienThoai = ?, cccd = ?, ngaySinh = ?, gioiTinh = ? WHERE maKH = ?";
+        String sql = "UPDATE KhachHang SET tenKH = ?, soDienThoai = ?, cccd = ? WHERE maKH = ?";
         
         try {
             PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
             st.setString(1, newObject.getTenKH());
             st.setString(2, newObject.getSoDienThoai());
             st.setString(3, newObject.getCccd());
-            st.setDate(4, Date.valueOf(newObject.getNgaySinh()));
-            st.setString(6, id);
+            st.setString(4, id);
             
             n = st.executeUpdate();
         } catch (SQLException e) {
@@ -144,8 +141,7 @@ public class KhachHang_DAO implements DAOBase<KhachHang> {
         String tenKH = rs.getString("tenKH");
         String soDienThoai = rs.getString("soDienThoai");
         String cccd = rs.getString("cccd");
-        LocalDate ngaySinh = rs.getDate("ngaySinh").toLocalDate();
       
-        return new KhachHang(maKH, tenKH, soDienThoai, cccd, ngaySinh);
+        return new KhachHang(maKH, tenKH, soDienThoai, cccd);
     }
 }

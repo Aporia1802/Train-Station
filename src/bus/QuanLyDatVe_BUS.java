@@ -7,7 +7,9 @@ package bus;
 import dao.ChuyenTau_DAO;
 import dao.GaTau_DAO;
 import dao.Ve_DAO;
+import entity.ChuyenTau;
 import entity.GaTau;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
@@ -21,5 +23,9 @@ public class QuanLyDatVe_BUS {
     
     public ArrayList<GaTau> getAllGaTau() {
         return gaTauDAO.getAll();
+    }
+    
+    public ArrayList<ChuyenTau> timKiemChuyenTau(String gaDi, String gaDen, LocalDate ngay) throws Exception {
+        return ctDAO.timKiemChuyenTau(gaDi, gaDen, ngay);
     }
 }

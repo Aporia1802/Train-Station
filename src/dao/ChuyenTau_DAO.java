@@ -311,6 +311,7 @@ public class ChuyenTau_DAO implements DAOBase {
 
         // Lấy thông tin Tuyến đường
         td.setMaTuyenDuong(rs.getString("maTuyenDuong"));
+        td.setThoiGianDiChuyen(rs.getInt("thoiGianDiChuyen"));
         td.setQuangDuong(rs.getFloat("quangDuong"));
         td.setSoTienMotKm(rs.getFloat("soTienMotKm"));
         td.setGaDi(gaDi);

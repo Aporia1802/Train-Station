@@ -48,7 +48,7 @@ public class Ve_DAO implements DAOBase<Ve>{
                     "gden.maGa AS maGaDen, gden.tenGa AS tenGaDen, gden.diaChi AS diaChiGaDen, gden.soDienThoai AS sdtGaDen, " +
                     "hd.*, " +
                     "nv.maNV, nv.tenNV, nv.gioiTinh AS gioiTinhNV, nv.ngaySinh AS ngaySinhNV, nv.email, nv.soDienThoai AS sdtNV, nv.cccd AS cccdNV, nv.diaChi AS diaChiNV, nv.chucVu, nv.trangThai AS trangThaiNV, " +
-                    "kh.maKH, kh.tenKH, kh.soDienThoai AS sdtKH, kh.cccd AS cccdKH, kh.ngaySinh AS ngaySinhKH, " +
+                    "kh.maKH, kh.tenKH, kh.soDienThoai AS sdtKH, kh.cccd AS cccdKH, " +
                     "km.* " +
                     "FROM Ve v " +
                     "JOIN LoaiVe lv ON v.maLoaiVe = lv.maLoaiVe " +
@@ -92,7 +92,7 @@ public class Ve_DAO implements DAOBase<Ve>{
                     "gden.maGa AS maGaDen, gden.tenGa AS tenGaDen, gden.diaChi AS diaChiGaDen, gden.soDienThoai AS sdtGaDen, " +
                     "hd.*, " +
                     "nv.maNV, nv.tenNV, nv.gioiTinh AS gioiTinhNV, nv.ngaySinh AS ngaySinhNV, nv.email, nv.soDienThoai AS sdtNV, nv.cccd AS cccdNV, nv.diaChi AS diaChiNV, nv.chucVu, nv.trangThai AS trangThaiNV, " +
-                    "kh.maKH, kh.tenKH, kh.soDienThoai AS sdtKH, kh.cccd AS cccdKH, kh.ngaySinh AS ngaySinhKH, " +
+                    "kh.maKH, kh.tenKH, kh.soDienThoai AS sdtKH, kh.cccd AS cccdKH, " +
                     "km.* " +
                     "FROM Ve v " +
                     "JOIN LoaiVe lv ON v.maLoaiVe = lv.maLoaiVe " +
@@ -237,6 +237,7 @@ public class Ve_DAO implements DAOBase<Ve>{
                     rs.getString("maToaTau"),
                     rs.getInt("soHieuToa"),
                     rs.getInt("soKhoangTau"),
+                    rs.getString("loaiToa"),
                     tau
             );
             
@@ -272,6 +273,7 @@ public class Ve_DAO implements DAOBase<Ve>{
                     rs.getString("maTuyenDuong"),
                     gaDi,
                     gaDen,
+                    rs.getInt("thoiGianDiChuyen"),
                     rs.getDouble("quangDuong"),
                     rs.getDouble("soTienMotKm")
             );
@@ -317,8 +319,7 @@ public class Ve_DAO implements DAOBase<Ve>{
                 rs.getString("maKH"),
                 rs.getString("tenKH"),
                 rs.getString("sdtKH"),
-                rs.getString("cccdKH"),
-                rs.getDate("ngaySinhKH").toLocalDate()
+                rs.getString("cccdKH")
             );
             
             HoaDon hoaDon = new HoaDon(

@@ -14,6 +14,7 @@ public class ToaTau {
     private String maToa;
     private int soHieuToa;
     private int soKhoangTau;
+    private String loaiToa;
     private Tau tau;
     
     public static final String TENTOA_EMPTY = "Tên toa không được rỗng!";
@@ -29,10 +30,11 @@ public class ToaTau {
         this.maToa = maToa;
     }
 
-    public ToaTau(String maToa, int soHieuToa, int soKhoangTau, Tau tau) throws Exception{
+    public ToaTau(String maToa, int soHieuToa, int soKhoangTau, String loaiToa, Tau tau) throws Exception{
         setMaToa(maToa);
         setSoHieuToa(soHieuToa);
         setSoKhoangTau(soKhoangTau);
+        setLoaiToa(loaiToa);
         setTau(tau);
     }
     
@@ -77,6 +79,14 @@ public class ToaTau {
         this.tau = tau;
     }
 
+    public String getLoaiToa() {
+        return loaiToa;
+    }
+
+    public void setLoaiToa(String loaiToa) {
+        this.loaiToa = loaiToa;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 5;

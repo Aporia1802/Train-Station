@@ -14,6 +14,7 @@ public class TuyenDuong {
     private String maTuyenDuong;
     private GaTau gaDi;
     private GaTau gaDen;
+    private int thoiGianDiChuyen;
     private double quangDuong;
     private double soTienMotKm;
     
@@ -30,10 +31,11 @@ public class TuyenDuong {
         this.maTuyenDuong = maTuyenDuong;
     }
     
-    public TuyenDuong(String maTuyenDuong, GaTau gaDi, GaTau gaDen, double quangDuong, double soTienMotKm) throws Exception {
+    public TuyenDuong(String maTuyenDuong, GaTau gaDi, GaTau gaDen, int thoiGianDiChuyen, double quangDuong, double soTienMotKm) throws Exception {
         setMaTuyenDuong(maTuyenDuong);
         setGaDi(gaDi);
         setGaDen(gaDen);
+        setThoiGianDiChuyen(thoiGianDiChuyen);
         setQuangDuong(quangDuong);
         setSoTienMotKm(soTienMotKm);
     }
@@ -91,6 +93,16 @@ public class TuyenDuong {
         }
         this.soTienMotKm = soTienMotKm;
     }
+
+    public int getThoiGianDiChuyen() {
+        return thoiGianDiChuyen;
+    }
+
+    public void setThoiGianDiChuyen(int thoiGianDiChuyen) {
+        this.thoiGianDiChuyen = thoiGianDiChuyen;
+    }
+    
+    
     
     /**
      * Tính giá vé cơ bản = quãng đường * số tiền một km

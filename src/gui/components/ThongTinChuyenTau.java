@@ -4,17 +4,33 @@
  */
 package gui.components;
 
+import entity.ChuyenTau;
+
 /**
  *
  * @author CÔNG HOÀNG
  */
 public class ThongTinChuyenTau extends javax.swing.JPanel {
-
+    private final ChuyenTau chuyenTau;
     /**
      * Creates new form ChonChuyenTau
+     * @param chuyenTau
      */
-    public ThongTinChuyenTau() {
+    public ThongTinChuyenTau(ChuyenTau chuyenTau) {
         initComponents();
+        this.chuyenTau = chuyenTau;
+        init();
+    }
+    
+    private void init() {
+        String tenTau = chuyenTau.getTau().getTenTau();
+        lbl_soHieuTau.setText(tenTau.substring(tenTau.lastIndexOf(" ") + 1));
+        lbl_soChoTrong.setText(String.valueOf(chuyenTau.getSoGheConTrong()));
+        lbl_thoiGianDi.setText(chuyenTau.getThoiGianDi().toLocalTime().toString());
+        lbl_thoiGianDen.setText(chuyenTau.getThoiGianDen().toLocalTime().toString());
+        lbl_ngayDi.setText(chuyenTau.getThoiGianDi().toLocalDate().toString());
+        lbl_ngayDen.setText(chuyenTau.getThoiGianDen().toLocalDate().toString());
+        lbl_thoiGianDiChuyen.setText(String.valueOf(chuyenTau.getTuyenDuong().getThoiGianDiChuyen()) + " tiếng");
     }
 
     /**
@@ -30,32 +46,34 @@ public class ThongTinChuyenTau extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        lbl_soHieuTau = new javax.swing.JLabel();
+        lbl_soChoTrong = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        lbl_thoiGianDi = new javax.swing.JLabel();
+        lbl_ngayDi = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
-        roundedTextField1 = new gui.custom.RoundedTextField();
+        lbl_thoiGianDiChuyen = new gui.custom.RoundedTextField();
         jPanel6 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
+        lbl_thoiGianDen = new javax.swing.JLabel();
+        lbl_ngayDen = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
-        setPreferredSize(new java.awt.Dimension(400, 250));
+        setMaximumSize(new java.awt.Dimension(320, 200));
+        setMinimumSize(new java.awt.Dimension(320, 200));
+        setPreferredSize(new java.awt.Dimension(320, 200));
         setLayout(new java.awt.BorderLayout());
 
         panelShadow1.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        panelShadow1.setMaximumSize(new java.awt.Dimension(390, 250));
-        panelShadow1.setMinimumSize(new java.awt.Dimension(390, 250));
-        panelShadow1.setPreferredSize(new java.awt.Dimension(390, 250));
+        panelShadow1.setMaximumSize(new java.awt.Dimension(320, 200));
+        panelShadow1.setMinimumSize(new java.awt.Dimension(320, 200));
+        panelShadow1.setPreferredSize(new java.awt.Dimension(320, 200));
         panelShadow1.setLayout(new java.awt.BorderLayout());
 
         jPanel1.setPreferredSize(new java.awt.Dimension(100, 60));
@@ -65,27 +83,27 @@ public class ThongTinChuyenTau extends javax.swing.JPanel {
         jLabel1.setText("Số hiệu tàu");
         jPanel1.add(jLabel1);
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel2.setText("Số lượng chỗ trống");
         jPanel1.add(jLabel2);
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(123, 17, 19));
-        jLabel3.setText("SE1");
-        jPanel1.add(jLabel3);
+        lbl_soHieuTau.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        lbl_soHieuTau.setForeground(new java.awt.Color(123, 17, 19));
+        lbl_soHieuTau.setText("SE1");
+        jPanel1.add(lbl_soHieuTau);
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(123, 17, 19));
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel4.setText("100");
-        jPanel1.add(jLabel4);
+        lbl_soChoTrong.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        lbl_soChoTrong.setForeground(new java.awt.Color(123, 17, 19));
+        lbl_soChoTrong.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lbl_soChoTrong.setText("100");
+        jPanel1.add(lbl_soChoTrong);
 
         panelShadow1.add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setLayout(new java.awt.BorderLayout());
 
-        jPanel4.setPreferredSize(new java.awt.Dimension(10, 30));
         jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.LINE_AXIS));
 
         jLabel8.setText("--------------------------------------------------------------------------------------------------------------------------------------------------");
@@ -101,34 +119,33 @@ public class ThongTinChuyenTau extends javax.swing.JPanel {
         jLabel5.setText("Thời gian đi");
         jPanel3.add(jLabel5);
 
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(123, 17, 19));
-        jLabel6.setText("06:00");
-        jPanel3.add(jLabel6);
+        lbl_thoiGianDi.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lbl_thoiGianDi.setForeground(new java.awt.Color(123, 17, 19));
+        lbl_thoiGianDi.setText("06:00");
+        jPanel3.add(lbl_thoiGianDi);
 
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel7.setText("T7 01/11/2025");
-        jPanel3.add(jLabel7);
+        lbl_ngayDi.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lbl_ngayDi.setText("01/11/2025");
+        jPanel3.add(lbl_ngayDi);
 
         jPanel5.add(jPanel3);
-
-        jPanel7.setBorder(javax.swing.BorderFactory.createEmptyBorder(30, 0, 0, 0));
 
         jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/train.png"))); // NOI18N
         jLabel14.setPreferredSize(new java.awt.Dimension(200, 40));
         jPanel7.add(jLabel14);
 
-        roundedTextField1.setEditable(false);
-        roundedTextField1.setBackground(new java.awt.Color(76, 175, 80));
-        roundedTextField1.setForeground(new java.awt.Color(255, 255, 255));
-        roundedTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        roundedTextField1.setText("34 tiếng 10 phút");
-        roundedTextField1.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        roundedTextField1.setEnabled(false);
-        roundedTextField1.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        roundedTextField1.setRound(20);
-        jPanel7.add(roundedTextField1);
+        lbl_thoiGianDiChuyen.setEditable(false);
+        lbl_thoiGianDiChuyen.setBackground(new java.awt.Color(76, 175, 80));
+        lbl_thoiGianDiChuyen.setForeground(new java.awt.Color(255, 255, 255));
+        lbl_thoiGianDiChuyen.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        lbl_thoiGianDiChuyen.setText("30 tiếng");
+        lbl_thoiGianDiChuyen.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        lbl_thoiGianDiChuyen.setEnabled(false);
+        lbl_thoiGianDiChuyen.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lbl_thoiGianDiChuyen.setPreferredSize(new java.awt.Dimension(90, 42));
+        lbl_thoiGianDiChuyen.setRound(15);
+        jPanel7.add(lbl_thoiGianDiChuyen);
 
         jPanel5.add(jPanel7);
 
@@ -139,16 +156,16 @@ public class ThongTinChuyenTau extends javax.swing.JPanel {
         jLabel9.setText("Thời gian đến");
         jPanel6.add(jLabel9);
 
-        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(123, 17, 19));
-        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel10.setText("06:00");
-        jPanel6.add(jLabel10);
+        lbl_thoiGianDen.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lbl_thoiGianDen.setForeground(new java.awt.Color(123, 17, 19));
+        lbl_thoiGianDen.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lbl_thoiGianDen.setText("06:00");
+        jPanel6.add(lbl_thoiGianDen);
 
-        jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel11.setText("T7 01/11/2025");
-        jPanel6.add(jLabel11);
+        lbl_ngayDen.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lbl_ngayDen.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lbl_ngayDen.setText("01/11/2025");
+        jPanel6.add(lbl_ngayDen);
 
         jPanel5.add(jPanel6);
 
@@ -162,15 +179,9 @@ public class ThongTinChuyenTau extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -180,7 +191,13 @@ public class ThongTinChuyenTau extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JLabel lbl_ngayDen;
+    private javax.swing.JLabel lbl_ngayDi;
+    private javax.swing.JLabel lbl_soChoTrong;
+    private javax.swing.JLabel lbl_soHieuTau;
+    private javax.swing.JLabel lbl_thoiGianDen;
+    private javax.swing.JLabel lbl_thoiGianDi;
+    private gui.custom.RoundedTextField lbl_thoiGianDiChuyen;
     private gui.custom.PanelShadow panelShadow1;
-    private gui.custom.RoundedTextField roundedTextField1;
     // End of variables declaration//GEN-END:variables
 }

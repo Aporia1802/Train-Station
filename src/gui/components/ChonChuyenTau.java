@@ -10,19 +10,31 @@ import ca.odell.glazedlists.EventList;
 import ca.odell.glazedlists.TextFilterator;
 import ca.odell.glazedlists.matchers.TextMatcherEditor;
 import ca.odell.glazedlists.swing.AutoCompleteSupport;
+import entity.ChuyenTau;
 import entity.GaTau;
 import java.text.Normalizer;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import utils.FormatUtil;
 /**
  *
  * @author CÔNG HOÀNG
  */
 public class ChonChuyenTau extends javax.swing.JPanel {
     private final QuanLyDatVe_BUS bus;
+    private ChuyenTau chuyenDiDaChon = null;
+    private ChuyenTau chuyenVeDaChon = null;
     /**
      * Creates new form DatVe_GUI
      * @param bus
@@ -40,8 +52,13 @@ public class ChonChuyenTau extends javax.swing.JPanel {
         date_ngayVe.setEnabled(false);
         date_ngayDi.setDate(new Date());
         date_ngayVe.setDate(new Date());
+        cbo_gaDi.setSelectedItem("Sài Gòn");
+        cbo_gaDen.setSelectedItem("Hà Nội");
+        pnl_chieuDi.setVisible(false);
         pnl_chieuVe.setVisible(false);
-        
+        Calendar cal = Calendar.getInstance();
+        date_ngayDi.getJCalendar().setMinSelectableDate(cal.getTime());
+        date_ngayVe.getJCalendar().setMinSelectableDate(cal.getTime()); 
     }
     
 //  Load danh sách ga tàu
@@ -82,8 +99,100 @@ public class ChonChuyenTau extends javax.swing.JPanel {
         return temp.replaceAll("\\p{M}", "").replaceAll("Đ", "D").replaceAll("đ", "d");
     }
     
+    
+    private ArrayList<ChuyenTau> dsChuyenDi(String gaDi, String gaDen, LocalDate ngayDi) throws Exception {
+        return bus.timKiemChuyenTau(gaDi, gaDen, ngayDi);
+    }
+
+    private ArrayList<ChuyenTau> dsChuyenVe(String gaDi, String gaDen, LocalDate ngayVe) throws Exception {
+        return bus.timKiemChuyenTau(gaDen, gaDi, ngayVe);
+    }
+
     private void handleTimKiem() {
+        try {
+            String gaDi = cbo_gaDi.getSelectedItem().toString();
+            String gaDen = cbo_gaDen.getSelectedItem().toString();
+            LocalDate ngayDi = convertDateToLocalDate(date_ngayDi.getDate());
         
+        // Tìm và hiển thị chuyến đi
+            ArrayList<ChuyenTau> dsChuyenDi = dsChuyenDi(gaDi, gaDen, ngayDi);
+            if (!hienThiDanhSachChuyen(dsChuyenDi, pnl_chieuDi, pnl_dsChuyenDi, 
+                                     lbl_tieuDeChuyenDi, ngayDi, gaDi, gaDen, "đi")) {
+                return;
+            }
+        
+        //  Xử lý chuyến về nếu là khứ hồi
+            if (rad_khuHoi.isSelected()) {
+                LocalDate ngayVe = convertDateToLocalDate(date_ngayVe.getDate());
+                ArrayList<ChuyenTau> dsChuyenVe = dsChuyenVe(gaDi, gaDen, ngayVe);
+                hienThiDanhSachChuyen(dsChuyenVe, pnl_chieuVe, pnl_dsChuyenVe, 
+                                   lbl_tieuDeChuyenVe, ngayVe, gaDen, gaDi, "về");
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ChonChuyenTau.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, 
+                "Có lỗi xảy ra khi tìm kiếm chuyến tàu. Vui lòng thử lại!",
+                "Lỗi", 
+            JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+/**
+ * Chuyển đổi Date sang LocalDate
+ */
+    private LocalDate convertDateToLocalDate(Date date) {
+        return date.toInstant()
+               .atZone(ZoneId.systemDefault())
+               .toLocalDate();
+    }
+
+/**
+ * Hiển thị danh sách chuyến tàu lên giao diện
+ * @return true nếu có chuyến tàu, false nếu không tìm thấy
+ */
+    private boolean hienThiDanhSachChuyen(ArrayList<ChuyenTau> dsChuyen, 
+                                       JPanel pnlChuyen, 
+                                       JPanel pnlDsChuyen,
+                                       JLabel lblTieuDe,
+                                       LocalDate ngay,
+                                       String gaDi, 
+                                       String gaDen,
+                                       String loaiChuyen) {
+        if (dsChuyen.isEmpty()) {
+            JOptionPane.showMessageDialog(null, 
+            "Không tìm thấy tàu cho chuyến " + loaiChuyen + " của bạn",
+            "Thông báo",
+            JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+    
+        // Cập nhật tiêu đề
+        String tieuDe = String.format("Chiều %s: ngày %s từ %s đến %s", 
+                                  loaiChuyen, 
+                                  FormatUtil.formatDate(ngay), 
+                                  gaDi, 
+                                  gaDen);
+        lblTieuDe.setText(tieuDe);
+    
+        // Hiển thị panel và làm mới danh sách
+        pnlChuyen.setVisible(true);
+        capNhatDanhSachChuyen(pnlDsChuyen, dsChuyen);
+    
+        return true;
+    }
+
+/**
+ * Cập nhật danh sách chuyến tàu vào panel
+ */
+    private void capNhatDanhSachChuyen(JPanel panel, ArrayList<ChuyenTau> dsChuyen) {
+        panel.removeAll();
+    
+        for (ChuyenTau chuyenTau : dsChuyen) {
+            panel.add(new ThongTinChuyenTau(chuyenTau));
+        }
+    
+        panel.revalidate();
+        panel.repaint();
     }
     
     public JButton next() {
@@ -113,12 +222,14 @@ public class ChonChuyenTau extends javax.swing.JPanel {
         pnl_chonChuyenTau = new javax.swing.JPanel();
         pnl_chieuDi = new javax.swing.JPanel();
         jPanel20 = new javax.swing.JPanel();
-        jLabel31 = new javax.swing.JLabel();
+        lbl_tieuDeChuyenDi = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        pnl_chuyenTau = new javax.swing.JPanel();
+        pnl_dsChuyenDi = new javax.swing.JPanel();
         pnl_chieuVe = new javax.swing.JPanel();
         jPanel21 = new javax.swing.JPanel();
-        jLabel32 = new javax.swing.JLabel();
+        lbl_tieuDeChuyenVe = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        pnl_dsChuyenVe = new javax.swing.JPanel();
         jPanel16 = new javax.swing.JPanel();
         jPanel15 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
@@ -242,27 +353,27 @@ public class ChonChuyenTau extends javax.swing.JPanel {
 
         pnl_chonChuyenTau.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 10, 0, 10));
         pnl_chonChuyenTau.setPreferredSize(new java.awt.Dimension(250, 400));
-        pnl_chonChuyenTau.setLayout(new java.awt.GridLayout(2, 1));
+        pnl_chonChuyenTau.setLayout(new java.awt.GridLayout(2, 0));
 
         pnl_chieuDi.setBackground(new java.awt.Color(255, 255, 255));
+        pnl_chieuDi.setMaximumSize(new java.awt.Dimension(980, 2147483647));
+        pnl_chieuDi.setPreferredSize(new java.awt.Dimension(980, 245));
         pnl_chieuDi.setLayout(new java.awt.BorderLayout());
 
         jPanel20.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 4, 10, 0));
         jPanel20.setLayout(new java.awt.GridLayout(1, 0));
 
-        jLabel31.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel31.setText("Chiều đi: ngày 02/11/2025 từ Sài Gòn đến Hà Nội");
-        jPanel20.add(jLabel31);
+        lbl_tieuDeChuyenDi.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lbl_tieuDeChuyenDi.setText("Chiều đi: ngày 02/11/2025 từ Sài Gòn đến Hà Nội");
+        jPanel20.add(lbl_tieuDeChuyenDi);
 
         pnl_chieuDi.add(jPanel20, java.awt.BorderLayout.PAGE_START);
 
         jScrollPane1.setBorder(null);
-        jScrollPane1.setViewportView(pnl_chuyenTau);
+        jScrollPane1.setViewportView(pnl_dsChuyenDi);
 
-        java.awt.FlowLayout flowLayout1 = new java.awt.FlowLayout(java.awt.FlowLayout.LEFT);
-        flowLayout1.setAlignOnBaseline(true);
-        pnl_chuyenTau.setLayout(flowLayout1);
-        jScrollPane1.setViewportView(pnl_chuyenTau);
+        pnl_dsChuyenDi.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+        jScrollPane1.setViewportView(pnl_dsChuyenDi);
 
         pnl_chieuDi.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
@@ -274,11 +385,18 @@ public class ChonChuyenTau extends javax.swing.JPanel {
         jPanel21.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 4, 10, 0));
         jPanel21.setLayout(new java.awt.GridLayout(1, 0));
 
-        jLabel32.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel32.setText("Chiều về: ngày 05/11/2025 từ Hà Nội đến Sài Gòn");
-        jPanel21.add(jLabel32);
+        lbl_tieuDeChuyenVe.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lbl_tieuDeChuyenVe.setText("Chiều về: ngày 05/11/2025 từ Hà Nội đến Sài Gòn");
+        jPanel21.add(lbl_tieuDeChuyenVe);
 
         pnl_chieuVe.add(jPanel21, java.awt.BorderLayout.PAGE_START);
+
+        jScrollPane2.setBorder(null);
+
+        pnl_dsChuyenVe.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+        jScrollPane2.setViewportView(pnl_dsChuyenVe);
+
+        pnl_chieuVe.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
         pnl_chonChuyenTau.add(pnl_chieuVe);
 
@@ -497,8 +615,6 @@ public class ChonChuyenTau extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel31;
-    private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
@@ -519,10 +635,14 @@ public class ChonChuyenTau extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lbl_tieuDeChuyenDi;
+    private javax.swing.JLabel lbl_tieuDeChuyenVe;
     private javax.swing.JPanel pnl_chieuDi;
     private javax.swing.JPanel pnl_chieuVe;
     private javax.swing.JPanel pnl_chonChuyenTau;
-    private javax.swing.JPanel pnl_chuyenTau;
+    private javax.swing.JPanel pnl_dsChuyenDi;
+    private javax.swing.JPanel pnl_dsChuyenVe;
     private rojerusan.RSMaterialButtonCircle rSMaterialButtonCircle1;
     private rojerusan.RSMaterialButtonCircle rSMaterialButtonCircle2;
     private rojerusan.RSMaterialButtonCircle rSMaterialButtonCircle4;

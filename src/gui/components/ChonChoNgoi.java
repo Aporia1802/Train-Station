@@ -58,15 +58,13 @@ public class ChonChoNgoi extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         txt_hoTen = new javax.swing.JTextField();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
-        jLabel6 = new javax.swing.JLabel();
-        txt_cccd = new javax.swing.JTextField();
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         jPanel14 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         txt_sdt = new javax.swing.JTextField();
         filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
-        jLabel8 = new javax.swing.JLabel();
-        date_ngaySinh = new com.toedter.calendar.JDateChooser();
+        jLabel6 = new javax.swing.JLabel();
+        txt_cccd = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -207,13 +205,6 @@ public class ChonChoNgoi extends javax.swing.JPanel {
         jPanel13.add(txt_hoTen);
         jPanel13.add(filler2);
 
-        jLabel6.setText("CCCD:");
-        jLabel6.setPreferredSize(new java.awt.Dimension(60, 16));
-        jPanel13.add(jLabel6);
-
-        txt_cccd.setMaximumSize(new java.awt.Dimension(2147483647, 40));
-        jPanel13.add(txt_cccd);
-
         pnl_thongTinKhachHang.add(jPanel13);
         pnl_thongTinKhachHang.add(filler4);
 
@@ -230,15 +221,12 @@ public class ChonChoNgoi extends javax.swing.JPanel {
         jPanel14.add(txt_sdt);
         jPanel14.add(filler6);
 
-        jLabel8.setText("Năm sinh:");
-        jLabel8.setMaximumSize(new java.awt.Dimension(60, 16));
-        jLabel8.setMinimumSize(new java.awt.Dimension(60, 16));
-        jLabel8.setPreferredSize(new java.awt.Dimension(60, 16));
-        jPanel14.add(jLabel8);
+        jLabel6.setText("CCCD:");
+        jLabel6.setPreferredSize(new java.awt.Dimension(60, 16));
+        jPanel14.add(jLabel6);
 
-        date_ngaySinh.setMaximumSize(new java.awt.Dimension(2147483647, 40));
-        date_ngaySinh.setPreferredSize(txt_hoTen.getPreferredSize());
-        jPanel14.add(date_ngaySinh);
+        txt_cccd.setMaximumSize(new java.awt.Dimension(2147483647, 40));
+        jPanel14.add(txt_cccd);
 
         pnl_thongTinKhachHang.add(jPanel14);
 
@@ -379,7 +367,6 @@ public class ChonChoNgoi extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_next;
     private javax.swing.JButton btn_previous;
-    private com.toedter.calendar.JDateChooser date_ngaySinh;
     private javax.swing.Box.Filler filler10;
     private javax.swing.Box.Filler filler11;
     private javax.swing.Box.Filler filler2;
@@ -395,7 +382,6 @@ public class ChonChoNgoi extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel13;
