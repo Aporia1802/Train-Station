@@ -7,7 +7,6 @@ package gui.components;
 import dao.LoaiVe_DAO;
 import entity.ChuyenTau;
 import entity.Ghe;
-import entity.LoaiVe;
 import java.awt.Font;
 import java.util.Date;
 import javax.swing.BorderFactory;
@@ -103,6 +102,7 @@ public class ThongTinVe extends javax.swing.JPanel {
         jPanel4 = new javax.swing.JPanel();
         lbl_giaVe = new javax.swing.JLabel();
 
+        setMaximumSize(new java.awt.Dimension(2147483647, 200));
         setLayout(new java.awt.BorderLayout());
 
         pnl_thongTinHK.setBackground(new java.awt.Color(255, 255, 255));
@@ -117,7 +117,7 @@ public class ThongTinVe extends javax.swing.JPanel {
         jPanel16.setLayout(new javax.swing.BoxLayout(jPanel16, javax.swing.BoxLayout.LINE_AXIS));
 
         jLabel5.setText("Họ tên:");
-        jLabel5.setPreferredSize(new java.awt.Dimension(60, 16));
+        jLabel5.setPreferredSize(new java.awt.Dimension(70, 16));
         jPanel16.add(jLabel5);
 
         txt_hoTenHK.setMaximumSize(new java.awt.Dimension(2147483647, 40));
@@ -125,7 +125,7 @@ public class ThongTinVe extends javax.swing.JPanel {
         jPanel16.add(filler3);
 
         jLabel9.setText("CCCD:");
-        jLabel9.setPreferredSize(new java.awt.Dimension(50, 16));
+        jLabel9.setPreferredSize(new java.awt.Dimension(70, 16));
         jPanel16.add(jLabel9);
 
         txt_cccdHK.setMaximumSize(new java.awt.Dimension(2147483647, 40));
@@ -138,19 +138,20 @@ public class ThongTinVe extends javax.swing.JPanel {
         jPanel17.setMaximumSize(new java.awt.Dimension(32767, 50));
         jPanel17.setLayout(new javax.swing.BoxLayout(jPanel17, javax.swing.BoxLayout.LINE_AXIS));
 
-        jLabel10.setText("Năm sinh:");
+        jLabel10.setText("Ngày sinh:");
         jLabel10.setMaximumSize(new java.awt.Dimension(60, 16));
         jLabel10.setMinimumSize(new java.awt.Dimension(60, 16));
-        jLabel10.setPreferredSize(new java.awt.Dimension(60, 16));
+        jLabel10.setPreferredSize(new java.awt.Dimension(70, 16));
         jPanel17.add(jLabel10);
 
+        date_ngaySinhHK.setEnabled(false);
         date_ngaySinhHK.setMaximumSize(txt_hoTenHK.getMaximumSize());
         date_ngaySinhHK.setPreferredSize(txt_hoTenHK.getPreferredSize());
         jPanel17.add(date_ngaySinhHK);
         jPanel17.add(filler1);
 
         jLabel1.setText("Loại vé:");
-        jLabel1.setPreferredSize(new java.awt.Dimension(50, 16));
+        jLabel1.setPreferredSize(new java.awt.Dimension(70, 16));
         jPanel17.add(jLabel1);
 
         cbo_loaiVe.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Người lớn", "Trẻ em", "Sinh viên", "Người cao tuổi" }));
@@ -182,6 +183,14 @@ public class ThongTinVe extends javax.swing.JPanel {
 
     private void cbo_loaiVeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbo_loaiVeActionPerformed
         // TODO add your handling code here:
+        String loaiVe = cbo_loaiVe.getSelectedItem().toString();
+        if(loaiVe.equals("Trẻ em")) {
+            date_ngaySinhHK.setEnabled(true);
+            txt_cccdHK.setEnabled(false);
+        } else {
+            date_ngaySinhHK.setEnabled(false);
+            txt_cccdHK.setEnabled(true);
+        }
     }//GEN-LAST:event_cbo_loaiVeActionPerformed
 
 
