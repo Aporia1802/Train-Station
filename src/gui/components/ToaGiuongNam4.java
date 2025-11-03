@@ -98,9 +98,9 @@ public class ToaGiuongNam4 extends javax.swing.JPanel {
         roundedButton27 = new gui.custom.RoundedButton();
         roundedButton28 = new gui.custom.RoundedButton();
 
-        setMaximumSize(new java.awt.Dimension(770, 190));
-        setMinimumSize(new java.awt.Dimension(770, 190));
-        setPreferredSize(new java.awt.Dimension(770, 190));
+        setMaximumSize(new java.awt.Dimension(2147483647, 190));
+        setMinimumSize(new java.awt.Dimension(745, 190));
+        setPreferredSize(new java.awt.Dimension(759, 190));
         setLayout(new java.awt.BorderLayout());
 
         jPanel48.setBackground(new java.awt.Color(255, 255, 255));
@@ -131,11 +131,12 @@ public class ToaGiuongNam4 extends javax.swing.JPanel {
         add(jPanel48, java.awt.BorderLayout.PAGE_START);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        jPanel1.setBorder(javax.swing.BorderFactory.createCompoundBorder(null, javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5))));
         jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.LINE_AXIS));
 
         jPanel23.setBackground(new java.awt.Color(255, 255, 255));
         jPanel23.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 0, 0, 0));
+        jPanel23.setMaximumSize(new java.awt.Dimension(25, 32767));
         jPanel23.setLayout(new java.awt.GridLayout(2, 1));
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N

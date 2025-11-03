@@ -82,8 +82,6 @@ public class ThanhToan extends javax.swing.JPanel {
         jLabel14 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jPanel16 = new javax.swing.JPanel();
-        btn_timKiem3 = new javax.swing.JButton();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -190,7 +188,7 @@ public class ThanhToan extends javax.swing.JPanel {
         jPanel15.add(btn_previous);
 
         btn_timKiem2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btn_timKiem2.setText("Xác nhận và in vé");
+        btn_timKiem2.setText("In hóa đơn và vé");
         btn_timKiem2.setPreferredSize(new java.awt.Dimension(180, 50));
         btn_timKiem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -264,7 +262,7 @@ public class ThanhToan extends javax.swing.JPanel {
         jPanel3.add(jPanel4, java.awt.BorderLayout.LINE_END);
 
         jPanel10.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel10.setLayout(new javax.swing.BoxLayout(jPanel10, javax.swing.BoxLayout.Y_AXIS));
+        jPanel10.setLayout(new java.awt.BorderLayout());
 
         jPanel12.setBackground(new java.awt.Color(255, 255, 255));
         jPanel12.setMaximumSize(new java.awt.Dimension(32767, 250));
@@ -279,12 +277,12 @@ public class ThanhToan extends javax.swing.JPanel {
 
         jPanel12.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        jPanel10.add(jPanel12);
-        jPanel10.add(filler5);
+        jPanel10.add(jPanel12, java.awt.BorderLayout.CENTER);
+        jPanel10.add(filler5, java.awt.BorderLayout.PAGE_START);
 
         jPanel14.setBackground(new java.awt.Color(255, 255, 255));
         jPanel14.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder(null, "Thông tin hóa đơn", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 18), new java.awt.Color(123, 17, 19)), javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5))); // NOI18N
-        jPanel14.setMaximumSize(new java.awt.Dimension(32767, 280));
+        jPanel14.setPreferredSize(new java.awt.Dimension(374, 300));
         jPanel14.setLayout(new java.awt.BorderLayout());
 
         jPanel17.setBackground(new java.awt.Color(255, 255, 255));
@@ -344,24 +342,7 @@ public class ThanhToan extends javax.swing.JPanel {
 
         jPanel14.add(jPanel17, java.awt.BorderLayout.CENTER);
 
-        jPanel10.add(jPanel14);
-
-        jPanel16.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel16.setMaximumSize(new java.awt.Dimension(32767, 50));
-        jPanel16.setLayout(new javax.swing.BoxLayout(jPanel16, javax.swing.BoxLayout.LINE_AXIS));
-
-        btn_timKiem3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btn_timKiem3.setText("In hóa đơn");
-        btn_timKiem3.setMaximumSize(new java.awt.Dimension(140, 40));
-        btn_timKiem3.setPreferredSize(new java.awt.Dimension(140, 50));
-        btn_timKiem3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_timKiem3ActionPerformed(evt);
-            }
-        });
-        jPanel16.add(btn_timKiem3);
-
-        jPanel10.add(jPanel16);
+        jPanel10.add(jPanel14, java.awt.BorderLayout.PAGE_END);
 
         jPanel3.add(jPanel10, java.awt.BorderLayout.CENTER);
 
@@ -392,15 +373,10 @@ public class ThanhToan extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_roundedButton3ActionPerformed
 
-    private void btn_timKiem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_timKiem3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btn_timKiem3ActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_previous;
     private javax.swing.JButton btn_timKiem2;
-    private javax.swing.JButton btn_timKiem3;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
@@ -428,7 +404,6 @@ public class ThanhToan extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
-    private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

@@ -13,6 +13,8 @@ import gui.custom.RoundedButton;
 import java.awt.Component;
 import java.awt.Container;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -73,20 +75,32 @@ public class ChonChoNgoi extends javax.swing.JPanel {
      * Render danh sách toa tàu
      */
     private void renderDanhSachToa(ChuyenTau chuyen) throws Exception {
-        jPanel8.removeAll();
-    
-        // Lấy danh sách toa theo tàu của chuyến tàu
-        ArrayList<ToaTau> dsToa = bus.getDanhSachToaTau(chuyen.getTau());
-    
-        for (ToaTau toa : dsToa) {
-            // Tạo panel toa tương ứng với loại toa
-            JPanel panelToa = createPanelTheoLoaiToa(toa, chuyen);
-            jPanel8.add(panelToa);
+    jPanel8.removeAll();
+
+    // Lấy danh sách toa theo tàu của chuyến tàu
+    ArrayList<ToaTau> dsToa = bus.getDanhSachToaTau(chuyen.getTau());
+
+    for (int i = 0; i < dsToa.size(); i++) {
+        ToaTau toa = dsToa.get(i);
+        
+        // Tạo panel toa tương ứng với loại toa
+        JPanel panelToa = createPanelTheoLoaiToa(toa, chuyen);
+        jPanel8.add(panelToa);
+        
+        // Thêm khoảng cách giữa các toa (trừ toa cuối cùng)
+        if (i < dsToa.size() - 1) {
+            javax.swing.Box.Filler filler = new javax.swing.Box.Filler(
+                new java.awt.Dimension(0, 20), 
+                new java.awt.Dimension(0, 20), 
+                new java.awt.Dimension(32767, 20)
+            );
+            jPanel8.add(filler);
         }
-    
-        jPanel8.revalidate();
-        jPanel8.repaint();
     }
+
+    jPanel8.revalidate();
+    jPanel8.repaint();
+}
 
     /**
      * Tạo panel theo loại toa
@@ -190,71 +204,93 @@ public class ChonChoNgoi extends javax.swing.JPanel {
      * Setup ghế cho toa ngồi mềm
      */
     private void setupGheChoToaNgoiMem(ToaNgoiMem panel, ToaTau toa, ChuyenTau chuyen) 
-            throws Exception {
-        // Lấy danh sách ghế từ toa tàu qua BUS
-        ArrayList<Ghe> dsGhe = bus.getDanhSachGheTheoToa(toa);
+        throws Exception {
+    // Lấy danh sách ghế từ toa tàu qua BUS
+    ArrayList<Ghe> dsGhe = bus.getDanhSachGheTheoToa(toa);
+
+    // Lấy tất cả RoundedButton trong panel
+    ArrayList<RoundedButton> buttons = getAllButtons(panel);
+
+    // Map ghế với button
+    int gheIndex = 0;
+    int buttonIndex = 0;
     
-        // Lấy tất cả RoundedButton trong panel
-        ArrayList<RoundedButton> buttons = getAllButtons(panel);
-    
-        // Map ghế với button
-        int gheIndex = 0;
-        for (RoundedButton btn : buttons) {
-            if (gheIndex >= dsGhe.size()) {
-                // Ẩn button nếu không có ghế tương ứng
-                btn.setVisible(false);
-                continue;
-            }
-            
-            Ghe ghe = dsGhe.get(gheIndex);
-            
-            // Set text là số ghế
-            btn.setText(String.valueOf(ghe.getSoGhe()));
-            
-            // Kiểm tra trạng thái ghế
-            if (bus.isGheDaDat(ghe, chuyen)) {
-                // Ghế đã đặt - màu xám, disabled
-                btn.setBackground(new java.awt.Color(146, 146, 146));
-                btn.setEnabled(false);
-            } else if (bus.isDaChonGhe(ghe)) {
-                // Ghế đang chọn - màu đỏ
-                btn.setBackground(new java.awt.Color(252, 90, 90));
-                btn.addActionListener(e -> handleChonGhe(btn, ghe));
-            } else {
-                // Ghế trống - màu trắng
-                btn.setBackground(java.awt.Color.WHITE);
-                btn.addActionListener(e -> handleChonGhe(btn, ghe));
-            }
-            
-            gheIndex++;
+    for (RoundedButton btn : buttons) {
+        // Kiểm tra nếu là button vách ngăn (button thứ 32 và 33)
+        // Đây là 2 button màu xám làm vách ngăn giữa toa
+        if (buttonIndex == 32 || buttonIndex == 33) {
+            // Giữ nguyên button vách ngăn - đã được set màu xám và disabled trong design
+            btn.setBackground(new java.awt.Color(146, 146, 146));
+            btn.setEnabled(false);
+            btn.setVisible(true);
+            btn.setText(""); // Không có text cho vách ngăn
+            buttonIndex++;
+            continue;
         }
+        
+        if (gheIndex >= dsGhe.size()) {
+            // Ẩn button nếu không có ghế tương ứng
+            btn.setVisible(false);
+            continue;
+        }
+        
+        Ghe ghe = dsGhe.get(gheIndex);
+        
+        // Set text là số ghế
+        btn.setText(String.valueOf(ghe.getSoGhe()));
+        btn.setVisible(true);
+        
+        // Kiểm tra trạng thái ghế
+        if (bus.isGheDaDat(ghe, chuyen)) {
+            // Ghế đã đặt - màu xám, disabled
+            btn.setBackground(new java.awt.Color(146, 146, 146));
+            btn.setEnabled(false);
+        } else if (bus.isDaChonGhe(ghe)) {
+            // Ghế đang chọn - màu đỏ
+            btn.setBackground(new java.awt.Color(252, 90, 90));
+            btn.addActionListener(e -> handleChonGhe(btn, ghe));
+        } else {
+            // Ghế trống - màu trắng
+            btn.setBackground(java.awt.Color.WHITE);
+            btn.addActionListener(e -> handleChonGhe(btn, ghe));
+        }
+        
+        gheIndex++;
+        buttonIndex++;
     }
+}
 
     /**
      * Setup ghế cho toa giường nằm 4
      */
     private void setupGheChoToaGiuongNam4(ToaGiuongNam4 panel, ToaTau toa, ChuyenTau chuyen) 
-            throws Exception {
-        // Lấy danh sách khoang của toa
-        ArrayList<KhoangTau> dsKhoang = bus.getDanhSachKhoangTheoToa(toa);
-        
-        // Lấy tất cả button
-        ArrayList<RoundedButton> buttons = getAllButtons(panel);
-        
-        int buttonIndex = 0;
-        
-        // Duyệt qua từng khoang
-        for (KhoangTau khoang : dsKhoang) {
-            // Lấy danh sách ghế của khoang
-            ArrayList<Ghe> dsGhe = bus.getDanhSachGheTheoKhoang(khoang);
-            
-            // Map ghế với button
-            for (Ghe ghe : dsGhe) {
+        throws Exception {
+    ArrayList<KhoangTau> dsKhoang = bus.getDanhSachKhoangTheoToa(toa);
+    ArrayList<RoundedButton> buttons = getAllButtons(panel);
+    int buttonIndex = 0;
+
+    for (KhoangTau khoang : dsKhoang) {
+        ArrayList<Ghe> dsGhe = bus.getDanhSachGheTheoKhoang(khoang);
+
+        // Sắp xếp tăng dần theo số ghế
+        dsGhe.sort(Comparator.comparingInt(Ghe::getSoGhe));
+
+        // 2 ghế / tầng
+        int gheMoiTang = 2;
+        int soTang = 2; // chỉ có 2 tầng cho toa giường 4
+
+        // Duyệt tầng từ trên xuống dưới (T2 -> T1)
+        for (int tang = soTang - 1; tang >= 0; tang--) {
+            int start = tang * gheMoiTang;
+            int end = Math.min(start + gheMoiTang, dsGhe.size());
+            List<Ghe> gheTang = dsGhe.subList(start, end);
+
+            for (Ghe ghe : gheTang) {
                 if (buttonIndex >= buttons.size()) break;
-                
+
                 RoundedButton btn = buttons.get(buttonIndex);
                 btn.setText(String.valueOf(ghe.getSoGhe()));
-                
+
                 if (bus.isGheDaDat(ghe, chuyen)) {
                     btn.setBackground(new java.awt.Color(146, 146, 146));
                     btn.setEnabled(false);
@@ -265,43 +301,51 @@ public class ChonChoNgoi extends javax.swing.JPanel {
                     btn.setBackground(java.awt.Color.WHITE);
                     btn.addActionListener(e -> handleChonGhe(btn, ghe));
                 }
-                
+
                 buttonIndex++;
             }
         }
-        
-        // Ẩn các button thừa
-        while (buttonIndex < buttons.size()) {
-            buttons.get(buttonIndex).setVisible(false);
-            buttonIndex++;
-        }
     }
+
+    // Ẩn các nút thừa
+    while (buttonIndex < buttons.size()) {
+        buttons.get(buttonIndex).setVisible(false);
+        buttonIndex++;
+    }
+}
+
 
 /**
      * Setup ghế cho toa giường nằm 6
      */
     private void setupGheChoToaGiuongNam6(ToaGiuongNam6 panel, ToaTau toa, ChuyenTau chuyen) 
-            throws Exception {
-        // Lấy danh sách khoang của toa
-        ArrayList<KhoangTau> dsKhoang = bus.getDanhSachKhoangTheoToa(toa);
-        
-        // Lấy tất cả button
-        ArrayList<RoundedButton> buttons = getAllButtons(panel);
-        
-        int buttonIndex = 0;
-        
-        // Duyệt qua từng khoang
-        for (KhoangTau khoang : dsKhoang) {
-            // Lấy danh sách ghế của khoang
-            ArrayList<Ghe> dsGhe = bus.getDanhSachGheTheoKhoang(khoang);
-            
-            // Map ghế với button
-            for (Ghe ghe : dsGhe) {
+        throws Exception {
+    ArrayList<KhoangTau> dsKhoang = bus.getDanhSachKhoangTheoToa(toa);
+    ArrayList<RoundedButton> buttons = getAllButtons(panel);
+    int buttonIndex = 0;
+
+    for (KhoangTau khoang : dsKhoang) {
+        ArrayList<Ghe> dsGhe = bus.getDanhSachGheTheoKhoang(khoang);
+
+        // Sắp xếp tăng dần theo số ghế để đảm bảo đúng thứ tự
+        dsGhe.sort(Comparator.comparingInt(Ghe::getSoGhe));
+
+        // Tự động chia tầng: 2 ghế / tầng
+        int gheMoiTang = 2;
+        int soTang = (int) Math.ceil(dsGhe.size() / (double) gheMoiTang);
+
+        // Duyệt tầng từ trên xuống dưới (T3 -> T1)
+        for (int tang = soTang - 1; tang >= 0; tang--) {
+            int start = tang * gheMoiTang;
+            int end = Math.min(start + gheMoiTang, dsGhe.size());
+            List<Ghe> gheTang = dsGhe.subList(start, end);
+
+            for (Ghe ghe : gheTang) {
                 if (buttonIndex >= buttons.size()) break;
-                
+
                 RoundedButton btn = buttons.get(buttonIndex);
                 btn.setText(String.valueOf(ghe.getSoGhe()));
-                
+
                 if (bus.isGheDaDat(ghe, chuyen)) {
                     btn.setBackground(new java.awt.Color(146, 146, 146));
                     btn.setEnabled(false);
@@ -312,17 +356,19 @@ public class ChonChoNgoi extends javax.swing.JPanel {
                     btn.setBackground(java.awt.Color.WHITE);
                     btn.addActionListener(e -> handleChonGhe(btn, ghe));
                 }
-                
+
                 buttonIndex++;
             }
         }
-        
-        // Ẩn các button thừa
-        while (buttonIndex < buttons.size()) {
-            buttons.get(buttonIndex).setVisible(false);
-            buttonIndex++;
-        }
     }
+
+    // Ẩn các nút thừa
+    while (buttonIndex < buttons.size()) {
+        buttons.get(buttonIndex).setVisible(false);
+        buttonIndex++;
+    }
+}
+
 
     /**
      * Lấy tất cả button trong panel
@@ -418,11 +464,6 @@ public class ChonChoNgoi extends javax.swing.JPanel {
         jPanel7 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel8 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
-        jPanel48 = new javax.swing.JPanel();
-        jPanel49 = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
-        jCheckBox3 = new javax.swing.JCheckBox();
         jPanel15 = new javax.swing.JPanel();
         btn_previous = new javax.swing.JButton();
         btn_next = new javax.swing.JButton();
@@ -512,12 +553,11 @@ public class ChonChoNgoi extends javax.swing.JPanel {
 
         add(jPanel11, java.awt.BorderLayout.PAGE_START);
 
-        pnl_chonChoNgoi.setPreferredSize(new java.awt.Dimension(600, 200));
+        pnl_chonChoNgoi.setPreferredSize(new java.awt.Dimension(500, 200));
         pnl_chonChoNgoi.setLayout(new java.awt.GridLayout(1, 0, 10, 0));
 
         pnl_nhapThongTin.setBackground(new java.awt.Color(255, 255, 255));
         pnl_nhapThongTin.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Nhập thông tin", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 18), new java.awt.Color(123, 17, 19))); // NOI18N
-        pnl_nhapThongTin.setPreferredSize(new java.awt.Dimension(280, 153));
         pnl_nhapThongTin.setLayout(new java.awt.BorderLayout());
 
         jScrollPane2.setBorder(null);
@@ -537,7 +577,7 @@ public class ChonChoNgoi extends javax.swing.JPanel {
         jPanel13.setMaximumSize(new java.awt.Dimension(32767, 50));
         jPanel13.setLayout(new javax.swing.BoxLayout(jPanel13, javax.swing.BoxLayout.LINE_AXIS));
 
-        jLabel4.setText("Họ tên:");
+        jLabel4.setText("Tên:");
         jLabel4.setPreferredSize(new java.awt.Dimension(50, 16));
         jPanel13.add(jLabel4);
 
@@ -647,38 +687,6 @@ public class ChonChoNgoi extends javax.swing.JPanel {
         jPanel7.setLayout(new java.awt.BorderLayout());
 
         jPanel8.setLayout(new javax.swing.BoxLayout(jPanel8, javax.swing.BoxLayout.Y_AXIS));
-
-        jPanel4.setLayout(new java.awt.BorderLayout());
-
-        jPanel48.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel48.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 10, 0, 0));
-        jPanel48.setPreferredSize(new java.awt.Dimension(681, 50));
-        jPanel48.setLayout(new javax.swing.BoxLayout(jPanel48, javax.swing.BoxLayout.LINE_AXIS));
-
-        jPanel49.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel49.setLayout(new java.awt.BorderLayout());
-
-        jLabel5.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("TOA SỐ 2: GIƯỜNG NẰM KHOANG 6 ĐIỀU HÒA");
-        jPanel49.add(jLabel5, java.awt.BorderLayout.CENTER);
-
-        jCheckBox3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jCheckBox3.setText("  Chọn tất cả");
-        jCheckBox3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox3ActionPerformed(evt);
-            }
-        });
-        jPanel49.add(jCheckBox3, java.awt.BorderLayout.LINE_START);
-
-        jPanel48.add(jPanel49);
-
-        jPanel4.add(jPanel48, java.awt.BorderLayout.PAGE_START);
-
-        jPanel8.add(jPanel4);
-
         jScrollPane1.setViewportView(jPanel8);
 
         jPanel7.add(jScrollPane1, java.awt.BorderLayout.CENTER);
@@ -734,10 +742,6 @@ public class ChonChoNgoi extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_btn_nextActionPerformed
 
-    private void jCheckBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox3ActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_next;
@@ -749,13 +753,11 @@ public class ChonChoNgoi extends javax.swing.JPanel {
     private javax.swing.Box.Filler filler7;
     private javax.swing.Box.Filler filler8;
     private javax.swing.Box.Filler filler9;
-    private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
@@ -765,9 +767,6 @@ public class ChonChoNgoi extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel48;
-    private javax.swing.JPanel jPanel49;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;

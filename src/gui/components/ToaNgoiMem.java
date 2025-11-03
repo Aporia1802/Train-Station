@@ -181,7 +181,7 @@ public class ToaNgoiMem extends javax.swing.JPanel {
         roundedButton120 = new gui.custom.RoundedButton();
 
         setMaximumSize(new java.awt.Dimension(2147483647, 300));
-        setMinimumSize(new java.awt.Dimension(580, 300));
+        setMinimumSize(new java.awt.Dimension(10, 300));
         setLayout(new java.awt.BorderLayout());
 
         jPanel48.setBackground(new java.awt.Color(255, 255, 255));
@@ -212,7 +212,7 @@ public class ToaNgoiMem extends javax.swing.JPanel {
         add(jPanel48, java.awt.BorderLayout.PAGE_START);
 
         jPanel50.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel50.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        jPanel50.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5)));
         jPanel50.setLayout(new javax.swing.BoxLayout(jPanel50, javax.swing.BoxLayout.LINE_AXIS));
 
         jPanel51.setMaximumSize(new java.awt.Dimension(40, 32767));
@@ -283,7 +283,7 @@ public class ToaNgoiMem extends javax.swing.JPanel {
 
         jPanel55.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
-        roundedButton63.setText("1");
+        roundedButton63.setText("8");
         roundedButton63.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         roundedButton63.setMaximumSize(new java.awt.Dimension(40, 50));
         roundedButton63.setPreferredSize(new java.awt.Dimension(40, 50));
@@ -294,7 +294,7 @@ public class ToaNgoiMem extends javax.swing.JPanel {
         });
         jPanel55.add(roundedButton63);
 
-        roundedButton64.setText("2");
+        roundedButton64.setText("7");
         roundedButton64.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         roundedButton64.setMaximumSize(new java.awt.Dimension(40, 50));
         roundedButton64.setPreferredSize(new java.awt.Dimension(40, 50));
@@ -310,7 +310,7 @@ public class ToaNgoiMem extends javax.swing.JPanel {
 
         jPanel56.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.TRAILING, 0, 0));
 
-        roundedButton65.setText("3");
+        roundedButton65.setText("6");
         roundedButton65.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         roundedButton65.setMaximumSize(new java.awt.Dimension(40, 50));
         roundedButton65.setPreferredSize(new java.awt.Dimension(40, 50));
@@ -321,7 +321,7 @@ public class ToaNgoiMem extends javax.swing.JPanel {
         });
         jPanel56.add(roundedButton65);
 
-        roundedButton66.setText("4");
+        roundedButton66.setText("5");
         roundedButton66.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         roundedButton66.setMaximumSize(new java.awt.Dimension(40, 50));
         roundedButton66.setPreferredSize(new java.awt.Dimension(40, 50));
@@ -707,12 +707,14 @@ public class ToaNgoiMem extends javax.swing.JPanel {
         jPanel72.setLayout(new javax.swing.BoxLayout(jPanel72, javax.swing.BoxLayout.Y_AXIS));
 
         roundedButton87.setBackground(new java.awt.Color(146, 146, 146));
+        roundedButton87.setEnabled(false);
         roundedButton87.setMaximumSize(new java.awt.Dimension(111, 100));
         jPanel72.add(roundedButton87);
         jPanel72.add(filler44);
 
         roundedButton88.setBackground(new java.awt.Color(146, 146, 146));
         roundedButton88.setBorder(null);
+        roundedButton88.setEnabled(false);
         roundedButton88.setMaximumSize(new java.awt.Dimension(111, 100));
         jPanel72.add(roundedButton88);
 

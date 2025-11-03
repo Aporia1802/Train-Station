@@ -60,6 +60,7 @@ public class ChonChuyenTau extends javax.swing.JPanel {
         pnl_chieuVe.setVisible(false);
         Calendar cal = Calendar.getInstance();
         date_ngayDi.getJCalendar().setMinSelectableDate(cal.getTime());
+        date_ngayVe.getJCalendar().setMinSelectableDate(cal.getTime());
         date_ngayDi.addPropertyChangeListener("date", evt -> {
             if (date_ngayDi.getDate() != null) {
                 date_ngayVe.setDate(date_ngayDi.getDate());
