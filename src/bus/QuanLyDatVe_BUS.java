@@ -158,4 +158,5 @@ public class QuanLyDatVe_BUS {
     public ArrayList<ChuyenTau> timKiemChuyenTau(String gaDi, String gaDen, LocalDate ngay) throws Exception {
         return ctDAO.timKiemChuyenTau(gaDi, gaDen, ngay);
     }
+    
 }

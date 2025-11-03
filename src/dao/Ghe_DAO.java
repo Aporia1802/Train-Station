@@ -50,90 +50,117 @@ public class Ghe_DAO {
      * Lấy danh sách ghế theo mã khoang
      */
     public ArrayList<Ghe> getGheTheoMaKhoang(String maKhoangTau) throws Exception {
-        ArrayList<Ghe> dsGhe = new ArrayList<>();
-        String sql = "SELECT g.*, lg.tenLoaiGhe, lg.moTa, lg.heSoLoaiGhe " +
-                     "FROM Ghe g " +
-                     "INNER JOIN LoaiGhe lg ON g.maLoaiGhe = lg.maLoaiGhe " +
-                     "WHERE g.maKhoangTau = ? " +
-                     "ORDER BY g.soGhe";
+    ArrayList<Ghe> dsGhe = new ArrayList<>();
+    String sql = "SELECT g.*, lg.tenLoaiGhe, lg.moTa, lg.heSoLoaiGhe, " +
+                 "kt.maKhoangTau, kt.soHieuKhoang, kt.soGhe as soGheKhoang, " +
+                 "tt.maToaTau, tt.soHieuToa, tt.soKhoangTau, tt.loaiToa " +
+                 "FROM Ghe g " +
+                 "INNER JOIN LoaiGhe lg ON g.maLoaiGhe = lg.maLoaiGhe " +
+                 "INNER JOIN KhoangTau kt ON g.maKhoangTau = kt.maKhoangTau " +
+                 "INNER JOIN ToaTau tt ON kt.maToaTau = tt.maToaTau " +
+                 "WHERE g.maKhoangTau = ? " +
+                 "ORDER BY g.soGhe";
+    
+    try {
+        PreparedStatement pstmt = ConnectDB.conn.prepareStatement(sql);
+        pstmt.setString(1, maKhoangTau);
+        ResultSet rs = pstmt.executeQuery();
         
-        try {
-            PreparedStatement pstmt = ConnectDB.conn.prepareStatement(sql);
-            pstmt.setString(1, maKhoangTau);
-            ResultSet rs = pstmt.executeQuery();
+        while (rs.next()) {
+            LoaiGhe loaiGhe = new LoaiGhe();
+            loaiGhe.setMaLoaiGhe(rs.getString("maLoaiGhe"));
+            loaiGhe.setTenLoaiGhe(rs.getString("tenLoaiGhe"));
+            loaiGhe.setMoTa(rs.getString("moTa"));
+            loaiGhe.setHeSoLoaiGhe(rs.getFloat("heSoLoaiGhe"));
             
-            while (rs.next()) {
-                // Tạo đối tượng LoaiGhe
-                LoaiGhe loaiGhe = new LoaiGhe();
-                loaiGhe.setMaLoaiGhe(rs.getString("maLoaiGhe"));
-                loaiGhe.setTenLoaiGhe(rs.getString("tenLoaiGhe"));
-                loaiGhe.setMoTa(rs.getString("moTa"));
-                loaiGhe.setHeSoLoaiGhe(rs.getFloat("heSoLoaiGhe"));
-                
-                // Tạo đối tượng Ghe
-                Ghe ghe = new Ghe();
-                ghe.setMaGhe(rs.getString("maGhe"));
-                ghe.setSoGhe(rs.getInt("soGhe"));
-                ghe.setLoaiGhe(loaiGhe);
-                
-                // Lấy thông tin khoang
-                KhoangTau khoang = new KhoangTau();
-                khoang.setMaKhoangTau(rs.getString("maKhoangTau"));
-                ghe.setKhoangTau(khoang);
-                
-                dsGhe.add(ghe);
-            }
-        } catch(Exception e) {
-            e.printStackTrace();
+            ToaTau toaTau = new ToaTau();
+            toaTau.setMaToa(rs.getString("maToaTau"));
+            toaTau.setSoHieuToa(rs.getInt("soHieuToa"));
+            toaTau.setSoKhoangTau(rs.getInt("soKhoangTau"));
+            toaTau.setLoaiToa(rs.getString("loaiToa"));
+            
+            KhoangTau khoang = new KhoangTau();
+            khoang.setMaKhoangTau(rs.getString("maKhoangTau"));
+            khoang.setSoHieuKhoang(rs.getInt("soHieuKhoang"));
+            khoang.setSucChua(rs.getInt("soGheKhoang"));
+            khoang.setToaTau(toaTau);
+            
+            Ghe ghe = new Ghe();
+            ghe.setMaGhe(rs.getString("maGhe"));
+            ghe.setSoGhe(rs.getInt("soGhe"));
+            ghe.setLoaiGhe(loaiGhe);
+            ghe.setKhoangTau(khoang);
+            
+            dsGhe.add(ghe);
         }
-        
-        return dsGhe;
+    } catch(Exception e) {
+        e.printStackTrace();
+        throw e;
     }
+    
+    return dsGhe;
+}
     
     /**
      * Lấy danh sách tất cả ghế của toa (qua các khoang)
      */
-    public ArrayList<Ghe> getGheTheoMaToa(String maToaTau) throws Exception {
-        ArrayList<Ghe> dsGhe = new ArrayList<>();
-        String sql = "SELECT g.*, lg.tenLoaiGhe, lg.moTa, lg.heSoLoaiGhe, kt.maKhoangTau " +
-                     "FROM Ghe g " +
-                     "INNER JOIN LoaiGhe lg ON g.maLoaiGhe = lg.maLoaiGhe " +
-                     "INNER JOIN KhoangTau kt ON g.maKhoangTau = kt.maKhoangTau " +
-                     "WHERE kt.maToaTau = ? " +
-                     "ORDER BY kt.soHieuKhoang, g.soGhe";
+    // File: Ghe_DAO.java - Sửa method getGheTheoMaToa
+
+public ArrayList<Ghe> getGheTheoMaToa(String maToaTau) throws Exception {
+    ArrayList<Ghe> dsGhe = new ArrayList<>();
+    String sql = "SELECT g.*, lg.tenLoaiGhe, lg.moTa, lg.heSoLoaiGhe, " +
+                 "kt.maKhoangTau, kt.soHieuKhoang, kt.soGhe as soGheKhoang, " +
+                 "tt.maToaTau, tt.soHieuToa, tt.soKhoangTau, tt.loaiToa " +
+                 "FROM Ghe g " +
+                 "INNER JOIN LoaiGhe lg ON g.maLoaiGhe = lg.maLoaiGhe " +
+                 "INNER JOIN KhoangTau kt ON g.maKhoangTau = kt.maKhoangTau " +
+                 "INNER JOIN ToaTau tt ON kt.maToaTau = tt.maToaTau " +
+                 "WHERE kt.maToaTau = ? " +
+                 "ORDER BY kt.soHieuKhoang, g.soGhe";
+    
+    try {
+        PreparedStatement pstmt = ConnectDB.conn.prepareStatement(sql);
+        pstmt.setString(1, maToaTau);
+        ResultSet rs = pstmt.executeQuery();
         
-        try {
-            PreparedStatement pstmt = ConnectDB.conn.prepareStatement(sql);
-            pstmt.setString(1, maToaTau);
-            ResultSet rs = pstmt.executeQuery();
+        while (rs.next()) {
+            // Tạo đối tượng LoaiGhe
+            LoaiGhe loaiGhe = new LoaiGhe();
+            loaiGhe.setMaLoaiGhe(rs.getString("maLoaiGhe"));
+            loaiGhe.setTenLoaiGhe(rs.getString("tenLoaiGhe"));
+            loaiGhe.setMoTa(rs.getString("moTa"));
+            loaiGhe.setHeSoLoaiGhe(rs.getFloat("heSoLoaiGhe"));
             
-            while (rs.next()) {
-                // Tạo đối tượng LoaiGhe
-                LoaiGhe loaiGhe = new LoaiGhe();
-                loaiGhe.setMaLoaiGhe(rs.getString("maLoaiGhe"));
-                loaiGhe.setTenLoaiGhe(rs.getString("tenLoaiGhe"));
-                loaiGhe.setMoTa(rs.getString("moTa"));
-                loaiGhe.setHeSoLoaiGhe(rs.getFloat("heSoLoaiGhe"));
-                
-                // Tạo đối tượng Ghe
-                Ghe ghe = new Ghe();
-                ghe.setMaGhe(rs.getString("maGhe"));
-                ghe.setSoGhe(rs.getInt("soGhe"));
-                ghe.setLoaiGhe(loaiGhe);
-                
-                // Lấy thông tin khoang
-                KhoangTau khoang = new KhoangTau();
-                khoang.setMaKhoangTau(rs.getString("maKhoangTau"));
-                ghe.setKhoangTau(khoang);
-                
-                dsGhe.add(ghe);
-            }
-        } catch(Exception e) {
-            e.printStackTrace();
+            // Tạo đối tượng ToaTau ĐẦY ĐỦ
+            ToaTau toaTau = new ToaTau();
+            toaTau.setMaToa(rs.getString("maToaTau"));
+            toaTau.setSoHieuToa(rs.getInt("soHieuToa"));
+            toaTau.setSoKhoangTau(rs.getInt("soKhoangTau"));
+            toaTau.setLoaiToa(rs.getString("loaiToa"));
+            
+            // Tạo đối tượng KhoangTau với ToaTau đầy đủ
+            KhoangTau khoang = new KhoangTau();
+            khoang.setMaKhoangTau(rs.getString("maKhoangTau"));
+            khoang.setSoHieuKhoang(rs.getInt("soHieuKhoang"));
+            khoang.setSucChua(rs.getInt("soGheKhoang"));
+            khoang.setToaTau(toaTau); // ← SET ToaTau vào KhoangTau
+            
+            // Tạo đối tượng Ghe
+            Ghe ghe = new Ghe();
+            ghe.setMaGhe(rs.getString("maGhe"));
+            ghe.setSoGhe(rs.getInt("soGhe"));
+            ghe.setLoaiGhe(loaiGhe);
+            ghe.setKhoangTau(khoang);
+            
+            dsGhe.add(ghe);
         }
-        
-        return dsGhe;
+    } catch(Exception e) {
+        e.printStackTrace();
+        throw e;
     }
+    
+    return dsGhe;
+}
     public Ghe getData(ResultSet rs) {
     try {
         Ghe g = new Ghe();

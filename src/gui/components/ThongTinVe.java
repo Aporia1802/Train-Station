@@ -65,6 +65,10 @@ public class ThongTinVe extends javax.swing.JPanel {
         return this.ghe;
     }
     
+    public ChuyenTau getChuyenTau() {
+        return ct; // "chuyen" là biến trong constructor của mày
+    }
+    
     public ThongTinHanhKhach getThongTin() {
         ThongTinHanhKhach info = new ThongTinHanhKhach();
         info.setMaGhe(ghe.getMaGhe());

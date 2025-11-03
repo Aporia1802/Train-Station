@@ -1207,6 +1207,8 @@ GO
 
 -- 7. KHOANG TÀU 
 INSERT INTO KhoangTau (maKhoangTau, soHieuKhoang, soGhe, maToaTau) VALUES
+('KT-001-01-00', 0, 64, 'TT-001-01'),
+('KT-001-02-00', 0, 64, 'TT-001-02'),
 -- TAU-001 (Toa 03-08: Giường nằm)
 ('KT-001-03-01', 1, 6, 'TT-001-03'),
 ('KT-001-03-02', 2, 6, 'TT-001-03'),
@@ -1251,6 +1253,9 @@ INSERT INTO KhoangTau (maKhoangTau, soHieuKhoang, soGhe, maToaTau) VALUES
 ('KT-001-08-06', 6, 4, 'TT-001-08'),
 ('KT-001-08-07', 7, 4, 'TT-001-08'),
 
+
+('KT-002-01-00', 0, 64, 'TT-002-01'),
+('KT-002-02-00', 0, 64, 'TT-002-02'),
 -- TAU-002 (Toa 03-09: Giường nằm)
 ('KT-002-03-01', 1, 6, 'TT-002-03'),
 ('KT-002-03-02', 2, 6, 'TT-002-03'),
@@ -1302,6 +1307,9 @@ INSERT INTO KhoangTau (maKhoangTau, soHieuKhoang, soGhe, maToaTau) VALUES
 ('KT-002-09-06', 6, 4, 'TT-002-09'),
 ('KT-002-09-07', 7, 4, 'TT-002-09'),
 
+
+('KT-003-01-00', 0, 64, 'TT-003-01'),
+('KT-003-02-00', 0, 64, 'TT-003-02'),
 -- TAU-003 (Toa 03-08: Giường nằm)
 ('KT-003-03-01', 1, 6, 'TT-003-03'),
 ('KT-003-03-02', 2, 6, 'TT-003-03'),
@@ -1346,6 +1354,8 @@ INSERT INTO KhoangTau (maKhoangTau, soHieuKhoang, soGhe, maToaTau) VALUES
 ('KT-003-08-06', 6, 4, 'TT-003-08'),
 ('KT-003-08-07', 7, 4, 'TT-003-08'),
 
+('KT-004-01-00', 0, 64, 'TT-004-01'),
+('KT-004-02-00', 0, 64, 'TT-004-02'),
 -- TAU-004 (Toa 03-09: Giường nằm)
 ('KT-004-03-01', 1, 6, 'TT-004-03'),
 ('KT-004-03-02', 2, 6, 'TT-004-03'),
@@ -1397,6 +1407,8 @@ INSERT INTO KhoangTau (maKhoangTau, soHieuKhoang, soGhe, maToaTau) VALUES
 ('KT-004-09-06', 6, 4, 'TT-004-09'),
 ('KT-004-09-07', 7, 4, 'TT-004-09'),
 
+('KT-005-01-00', 0, 64, 'TT-005-01'),
+('KT-005-02-00', 0, 64, 'TT-005-02'),
 -- TAU-005 (Toa 03-08: Giường nằm)
 ('KT-005-03-01', 1, 6, 'TT-005-03'),
 ('KT-005-03-02', 2, 6, 'TT-005-03'),
@@ -1441,6 +1453,8 @@ INSERT INTO KhoangTau (maKhoangTau, soHieuKhoang, soGhe, maToaTau) VALUES
 ('KT-005-08-06', 6, 4, 'TT-005-08'),
 ('KT-005-08-07', 7, 4, 'TT-005-08'),
 
+('KT-006-01-00', 0, 64, 'TT-006-01'),
+('KT-006-02-00', 0, 64, 'TT-006-02'),
 -- TAU-006 (Toa 03-09: Giường nằm)
 ('KT-006-03-01', 1, 6, 'TT-006-03'),
 ('KT-006-03-02', 2, 6, 'TT-006-03'),
@@ -1492,6 +1506,8 @@ INSERT INTO KhoangTau (maKhoangTau, soHieuKhoang, soGhe, maToaTau) VALUES
 ('KT-006-09-06', 6, 4, 'TT-006-09'),
 ('KT-006-09-07', 7, 4, 'TT-006-09'),
 
+('KT-007-01-00', 0, 64, 'TT-007-01'),
+('KT-007-02-00', 0, 64, 'TT-007-02'),
 -- TAU-007 (Toa 03-08: Giường nằm)
 ('KT-007-03-01', 1, 6, 'TT-007-03'),
 ('KT-007-03-02', 2, 6, 'TT-007-03'),
@@ -1536,6 +1552,8 @@ INSERT INTO KhoangTau (maKhoangTau, soHieuKhoang, soGhe, maToaTau) VALUES
 ('KT-007-08-06', 6, 4, 'TT-007-08'),
 ('KT-007-08-07', 7, 4, 'TT-007-08'),
 
+('KT-008-01-00', 0, 64, 'TT-008-01'),
+('KT-008-02-00', 0, 64, 'TT-008-02'),
 -- TAU-008 (Toa 03-09: Giường nằm)
 ('KT-008-03-01', 1, 6, 'TT-008-03'),
 ('KT-008-03-02', 2, 6, 'TT-008-03'),
@@ -1587,6 +1605,8 @@ INSERT INTO KhoangTau (maKhoangTau, soHieuKhoang, soGhe, maToaTau) VALUES
 ('KT-008-09-06', 6, 4, 'TT-008-09'),
 ('KT-008-09-07', 7, 4, 'TT-008-09'),
 
+('KT-009-01-00', 0, 64, 'TT-009-01'),
+('KT-009-02-00', 0, 64, 'TT-009-02'),
 -- TAU-009 (Toa 03-08: Giường nằm)
 ('KT-009-03-01', 1, 6, 'TT-009-03'),
 ('KT-009-03-02', 2, 6, 'TT-009-03'),
@@ -1631,6 +1651,8 @@ INSERT INTO KhoangTau (maKhoangTau, soHieuKhoang, soGhe, maToaTau) VALUES
 ('KT-009-08-06', 6, 4, 'TT-009-08'),
 ('KT-009-08-07', 7, 4, 'TT-009-08'),
 
+('KT-010-01-00', 0, 64, 'TT-010-01'),
+('KT-010-02-00', 0, 64, 'TT-010-02'),
 -- TAU-010 (Toa 03-09: Giường nằm)
 ('KT-010-03-01', 1, 6, 'TT-010-03'),
 ('KT-010-03-02', 2, 6, 'TT-010-03'),
@@ -1682,6 +1704,8 @@ INSERT INTO KhoangTau (maKhoangTau, soHieuKhoang, soGhe, maToaTau) VALUES
 ('KT-010-09-06', 6, 4, 'TT-010-09'),
 ('KT-010-09-07', 7, 4, 'TT-010-09'),
 
+('KT-011-01-00', 0, 64, 'TT-011-01'),
+('KT-011-02-00', 0, 64, 'TT-011-02'),
 -- TAU-011 (Toa 03-09: Giường nằm)
 ('KT-011-03-01', 1, 6, 'TT-011-03'),
 ('KT-011-03-02', 2, 6, 'TT-011-03'),
@@ -1733,6 +1757,8 @@ INSERT INTO KhoangTau (maKhoangTau, soHieuKhoang, soGhe, maToaTau) VALUES
 ('KT-011-09-06', 6, 4, 'TT-011-09'),
 ('KT-011-09-07', 7, 4, 'TT-011-09'),
 
+('KT-012-01-00', 0, 64, 'TT-012-01'),
+('KT-012-02-00', 0, 64, 'TT-012-02'),
 -- TAU-012 (Toa 03-09: Giường nằm)
 ('KT-012-03-01', 1, 6, 'TT-012-03'),
 ('KT-012-03-02', 2, 6, 'TT-012-03'),
@@ -1784,6 +1810,8 @@ INSERT INTO KhoangTau (maKhoangTau, soHieuKhoang, soGhe, maToaTau) VALUES
 ('KT-012-09-06', 6, 4, 'TT-012-09'),
 ('KT-012-09-07', 7, 4, 'TT-012-09'),
 
+('KT-013-01-00', 0, 64, 'TT-013-01'),
+('KT-013-02-00', 0, 64, 'TT-013-02'),
 -- TAU-013 (Toa 03-09: Giường nằm)
 ('KT-013-03-01', 1, 6, 'TT-013-03'),
 ('KT-013-03-02', 2, 6, 'TT-013-03'),
@@ -1835,6 +1863,8 @@ INSERT INTO KhoangTau (maKhoangTau, soHieuKhoang, soGhe, maToaTau) VALUES
 ('KT-013-09-06', 6, 4, 'TT-013-09'),
 ('KT-013-09-07', 7, 4, 'TT-013-09'),
 
+('KT-014-01-00', 0, 64, 'TT-014-01'),
+('KT-014-02-00', 0, 64, 'TT-014-02'),
 -- TAU-014 (Toa 03-09: Giường nằm)
 ('KT-014-03-01', 1, 6, 'TT-014-03'),
 ('KT-014-03-02', 2, 6, 'TT-014-03'),
@@ -1886,6 +1916,8 @@ INSERT INTO KhoangTau (maKhoangTau, soHieuKhoang, soGhe, maToaTau) VALUES
 ('KT-014-09-06', 6, 4, 'TT-014-09'),
 ('KT-014-09-07', 7, 4, 'TT-014-09'),
 
+('KT-015-01-00', 0, 64, 'TT-015-01'),
+('KT-015-02-00', 0, 64, 'TT-015-02'),
 -- TAU-015 (Toa 03-09: Giường nằm)
 ('KT-015-03-01', 1, 6, 'TT-015-03'),
 ('KT-015-03-02', 2, 6, 'TT-015-03'),
@@ -1937,6 +1969,8 @@ INSERT INTO KhoangTau (maKhoangTau, soHieuKhoang, soGhe, maToaTau) VALUES
 ('KT-015-09-06', 6, 4, 'TT-015-09'),
 ('KT-015-09-07', 7, 4, 'TT-015-09'),
 
+('KT-016-01-00', 0, 64, 'TT-016-01'),
+('KT-016-02-00', 0, 64, 'TT-016-02'),
 -- TAU-016 (Toa 03-09: Giường nằm)
 ('KT-016-03-01', 1, 6, 'TT-016-03'),
 ('KT-016-03-02', 2, 6, 'TT-016-03'),
@@ -1988,6 +2022,8 @@ INSERT INTO KhoangTau (maKhoangTau, soHieuKhoang, soGhe, maToaTau) VALUES
 ('KT-016-09-06', 6, 4, 'TT-016-09'),
 ('KT-016-09-07', 7, 4, 'TT-016-09'),
 
+('KT-017-01-00', 0, 64, 'TT-017-01'),
+('KT-017-02-00', 0, 64, 'TT-017-02'),
 -- TAU-017 (Toa 03-09: Giường nằm)
 ('KT-017-03-01', 1, 6, 'TT-017-03'),
 ('KT-017-03-02', 2, 6, 'TT-017-03'),
@@ -2039,6 +2075,8 @@ INSERT INTO KhoangTau (maKhoangTau, soHieuKhoang, soGhe, maToaTau) VALUES
 ('KT-017-09-06', 6, 4, 'TT-017-09'),
 ('KT-017-09-07', 7, 4, 'TT-017-09'),
 
+('KT-018-01-00', 0, 64, 'TT-018-01'),
+('KT-018-02-00', 0, 64, 'TT-018-02'),
 -- TAU-018 (Toa 03-09: Giường nằm)
 ('KT-018-03-01', 1, 6, 'TT-018-03'),
 ('KT-018-03-02', 2, 6, 'TT-018-03'),
@@ -2090,6 +2128,8 @@ INSERT INTO KhoangTau (maKhoangTau, soHieuKhoang, soGhe, maToaTau) VALUES
 ('KT-018-09-06', 6, 4, 'TT-018-09'),
 ('KT-018-09-07', 7, 4, 'TT-018-09'),
 
+('KT-019-01-00', 0, 64, 'TT-019-01'),
+('KT-019-02-00', 0, 64, 'TT-019-02'),
 -- TAU-019 (Toa 03-09: Giường nằm)
 ('KT-019-03-01', 1, 6, 'TT-019-03'),
 ('KT-019-03-02', 2, 6, 'TT-019-03'),
@@ -2141,6 +2181,8 @@ INSERT INTO KhoangTau (maKhoangTau, soHieuKhoang, soGhe, maToaTau) VALUES
 ('KT-019-09-06', 6, 4, 'TT-019-09'),
 ('KT-019-09-07', 7, 4, 'TT-019-09'),
 
+('KT-020-01-00', 0, 64, 'TT-020-01'),
+('KT-020-02-00', 0, 64, 'TT-020-02'),
 -- TAU-020 (Toa 03-09: Giường nằm)
 ('KT-020-03-01', 1, 6, 'TT-020-03'),
 ('KT-020-03-02', 2, 6, 'TT-020-03'),
@@ -2465,124 +2507,98 @@ IF OBJECT_ID('sp_TaoGhe', 'P') IS NOT NULL
     DROP PROCEDURE sp_TaoGhe;
 GO
 
-CREATE PROCEDURE sp_TaoGhe
+CREATE OR ALTER PROCEDURE sp_TaoGhe
 AS
 BEGIN
     SET NOCOUNT ON;
     
-    DECLARE @maKhoangTau VARCHAR(20);
-    DECLARE @maToaTau VARCHAR(20);
-    DECLARE @soGhe INT;
-    DECLARE @maLoaiGhe VARCHAR(20);
-    DECLARE @loaiToa VARCHAR(100);
-    DECLARE @soGheCounter INT;
-    DECLARE @maGhe VARCHAR(50);
-    DECLARE @tongSoGhe INT;
-    DECLARE @khoangAo VARCHAR(20);
-    
-    -- Cursor để duyệt qua từng khoang tàu
-    DECLARE khoang_cursor CURSOR FOR
-    SELECT maKhoangTau, soGhe, maToaTau
-    FROM KhoangTau;
-    
-    -- Cursor để duyệt qua từng toa tàu (loại ngồi mềm)
-    DECLARE toa_cursor CURSOR FOR
-    SELECT maToaTau, loaiToa
-    FROM ToaTau
-    WHERE loaiToa = 'NGOI_MEM';
+    DECLARE @maToaTau VARCHAR(20),
+            @maKhoangTau VARCHAR(20),
+            @soGhe INT,
+            @maLoaiGhe VARCHAR(20),
+            @loaiToa VARCHAR(100),
+            @soGheCounter INT,
+            @maGhe VARCHAR(50),
+            @tongSoGhe INT,
+            @khoangAo VARCHAR(20);
     
     BEGIN TRY
         BEGIN TRANSACTION;
-        
-        -- Xóa dữ liệu ghế cũ nếu có
         DELETE FROM Ghe;
-        
-        -- Xóa các khoang ảo cũ (nếu có)
         DELETE FROM KhoangTau WHERE maKhoangTau LIKE 'KT-%-00';
         
-        PRINT N'Bắt đầu tạo dữ liệu ghế...';
-        PRINT N'';
+        PRINT N'=== Tạo ghế cho toa giường nằm ===';
         
-        -- XỬ LÝ GHẾ CHO CÁC KHOANG TÀU (GIƯỜNG NẰM)
-        PRINT N'=== Tạo ghế cho các khoang tàu (Giường nằm) ===';
-        
-        OPEN khoang_cursor;
-        FETCH NEXT FROM khoang_cursor INTO @maKhoangTau, @soGhe, @maToaTau;
-        
-        WHILE @@FETCH_STATUS = 0
-        BEGIN
-            -- Xác định loại ghế dựa vào số ghế trong khoang
-            IF @soGhe = 6
-                SET @maLoaiGhe = 'LG-GN6';
-            ELSE IF @soGhe = 4
-                SET @maLoaiGhe = 'LG-GN4';
-            ELSE
-                SET @maLoaiGhe = 'LG-GN6'; -- Mặc định
-            
-            -- Tạo ghế cho từng khoang
-            SET @soGheCounter = 1;
-            WHILE @soGheCounter <= @soGhe
-            BEGIN
-                -- Tạo mã ghế với số ghế có 3 chữ số: G-001-03-01-001
-                -- Format: G-[mã tàu]-[mã toa]-[mã khoang]-[số ghế 3 chữ số]
-                SET @maGhe = 'G-' + 
-                            SUBSTRING(@maKhoangTau, CHARINDEX('-', @maKhoangTau) + 1, 
-                                     LEN(@maKhoangTau) - CHARINDEX('-', @maKhoangTau)) + 
-                            '-' + RIGHT('000' + CAST(@soGheCounter AS VARCHAR(3)), 3);
-                
-                INSERT INTO Ghe (maGhe, soGhe, maLoaiGhe, maKhoangTau)
-                VALUES (@maGhe, @soGheCounter, @maLoaiGhe, @maKhoangTau);
-                
-                SET @soGheCounter = @soGheCounter + 1;
-            END
-            
-            FETCH NEXT FROM khoang_cursor INTO @maKhoangTau, @soGhe, @maToaTau;
-        END
-        
-        CLOSE khoang_cursor;
-        DEALLOCATE khoang_cursor;
-        
-        -- Đếm số ghế giường nằm đã tạo
-        SELECT @tongSoGhe = COUNT(*) FROM Ghe WHERE maLoaiGhe IN ('LG-GN4', 'LG-GN6');
-        PRINT N'Đã tạo ' + CAST(@tongSoGhe AS NVARCHAR(10)) + N' ghế giường nằm';
-        PRINT N'';
-        
-        -- XỬ LÝ GHẾ CHO CÁC TOA NGỒI MỀM (TẠO KHOANG ẢO)
-        PRINT N'=== Tạo ghế cho các toa ngồi mềm ===';
+        DECLARE toa_cursor CURSOR FOR
+        SELECT maToaTau, loaiToa FROM ToaTau;
         
         OPEN toa_cursor;
         FETCH NEXT FROM toa_cursor INTO @maToaTau, @loaiToa;
         
         WHILE @@FETCH_STATUS = 0
         BEGIN
-            -- Tạo khoang ảo cho toa ngồi mềm
-            -- VD: TT-001-01 -> KT-001-01-00
-            SET @khoangAo = 'K' + SUBSTRING(@maToaTau, 2, LEN(@maToaTau) - 1) + '-00';
-            
-            -- Thêm khoang ảo vào bảng KhoangTau
-            IF NOT EXISTS (SELECT 1 FROM KhoangTau WHERE maKhoangTau = @khoangAo)
-            BEGIN
-                INSERT INTO KhoangTau (maKhoangTau, soHieuKhoang, soGhe, maToaTau)
-                VALUES (@khoangAo, 0, 64, @maToaTau);
-            END
-            
-            SET @maLoaiGhe = 'LG-NM';
-            
-            -- Mỗi toa ngồi mềm có 64 ghế
             SET @soGheCounter = 1;
-            WHILE @soGheCounter <= 64
+
+            IF @loaiToa = 'NGOI_MEM'
             BEGIN
-                -- Tạo mã ghế với số ghế có 3 chữ số: G-001-01-00-001
-                SET @maGhe = 'G-' + 
-                            SUBSTRING(@maToaTau, CHARINDEX('-', @maToaTau) + 1, 
-                                     LEN(@maToaTau) - CHARINDEX('-', @maToaTau)) + 
-                            '-00-' + RIGHT('000' + CAST(@soGheCounter AS VARCHAR(3)), 3);
+                SET @khoangAo = 'K' + SUBSTRING(@maToaTau, 2, LEN(@maToaTau) - 1) + '-00';
                 
-                -- Sử dụng khoang ảo
-                INSERT INTO Ghe (maGhe, soGhe, maLoaiGhe, maKhoangTau)
-                VALUES (@maGhe, @soGheCounter, @maLoaiGhe, @khoangAo);
+                IF NOT EXISTS (SELECT 1 FROM KhoangTau WHERE maKhoangTau = @khoangAo)
+                    INSERT INTO KhoangTau (maKhoangTau, soHieuKhoang, soGhe, maToaTau)
+                    VALUES (@khoangAo, 0, 64, @maToaTau);
                 
-                SET @soGheCounter = @soGheCounter + 1;
+                SET @maLoaiGhe = 'LG-NM';
+                
+                WHILE @soGheCounter <= 64
+                BEGIN
+                    SET @maGhe = 'G-' +
+                                 SUBSTRING(@maToaTau, CHARINDEX('-', @maToaTau) + 1,
+                                           LEN(@maToaTau) - CHARINDEX('-', @maToaTau)) +
+                                 '-00-' + RIGHT('000' + CAST(@soGheCounter AS VARCHAR(3)), 3);
+                    
+                    INSERT INTO Ghe (maGhe, soGhe, maLoaiGhe, maKhoangTau)
+                    VALUES (@maGhe, @soGheCounter, @maLoaiGhe, @khoangAo);
+                    
+                    SET @soGheCounter += 1;
+                END
+            END
+            ELSE
+            BEGIN
+                DECLARE khoang_cursor CURSOR FOR
+                SELECT maKhoangTau, soGhe FROM KhoangTau WHERE maToaTau = @maToaTau;
+                
+                OPEN khoang_cursor;
+                FETCH NEXT FROM khoang_cursor INTO @maKhoangTau, @soGhe;
+                
+                WHILE @@FETCH_STATUS = 0
+                BEGIN
+                    IF @soGhe = 6
+                        SET @maLoaiGhe = 'LG-GN6';
+                    ELSE IF @soGhe = 4
+                        SET @maLoaiGhe = 'LG-GN4';
+                    ELSE
+                        SET @maLoaiGhe = 'LG-GN6';
+                    
+                    DECLARE @i INT = 1;
+                    WHILE @i <= @soGhe
+                    BEGIN
+                        SET @maGhe = 'G-' +
+                                     SUBSTRING(@maKhoangTau, CHARINDEX('-', @maKhoangTau) + 1,
+                                               LEN(@maKhoangTau) - CHARINDEX('-', @maKhoangTau)) +
+                                     '-' + RIGHT('000' + CAST(@soGheCounter AS VARCHAR(3)), 3);
+                        
+                        INSERT INTO Ghe (maGhe, soGhe, maLoaiGhe, maKhoangTau)
+                        VALUES (@maGhe, @soGheCounter, @maLoaiGhe, @maKhoangTau);
+                        
+                        SET @soGheCounter += 1;
+                        SET @i += 1;
+                    END
+                    
+                    FETCH NEXT FROM khoang_cursor INTO @maKhoangTau, @soGhe;
+                END
+                
+                CLOSE khoang_cursor;
+                DEALLOCATE khoang_cursor;
             END
             
             FETCH NEXT FROM toa_cursor INTO @maToaTau, @loaiToa;
@@ -2591,48 +2607,18 @@ BEGIN
         CLOSE toa_cursor;
         DEALLOCATE toa_cursor;
         
-        -- Đếm số ghế ngồi mềm đã tạo
-        SELECT @tongSoGhe = COUNT(*) FROM Ghe WHERE maLoaiGhe = 'LG-NM';
-        PRINT N'Đã tạo ' + CAST(@tongSoGhe AS NVARCHAR(10)) + N' ghế ngồi mềm';
-        PRINT N'';
-        
         COMMIT TRANSACTION;
         
-        -- Tổng kết
         SELECT @tongSoGhe = COUNT(*) FROM Ghe;
-        PRINT N'=======================================';
-        PRINT N'TẠO DỮ LIỆU GHẾ THÀNH CÔNG!';
-        PRINT N'Tổng số ghế đã tạo: ' + CAST(@tongSoGhe AS NVARCHAR(10));
-        PRINT N'=======================================';
-        
+        PRINT N'TẠO GHẾ HOÀN TẤT: ' + CAST(@tongSoGhe AS NVARCHAR(10));
     END TRY
     BEGIN CATCH
-        IF CURSOR_STATUS('global', 'khoang_cursor') >= 0
-        BEGIN
-            CLOSE khoang_cursor;
-            DEALLOCATE khoang_cursor;
-        END
-            
-        IF CURSOR_STATUS('global', 'toa_cursor') >= 0
-        BEGIN
-            CLOSE toa_cursor;
-            DEALLOCATE toa_cursor;
-        END
-            
-        IF @@TRANCOUNT > 0
-            ROLLBACK TRANSACTION;
-            
-        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
-        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
-        DECLARE @ErrorState INT = ERROR_STATE();
-        
-        PRINT N'LỖI: ' + @ErrorMessage;
-        RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
+        IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;
+        PRINT N'LỖI: ' + ERROR_MESSAGE();
     END CATCH
-END
+END;
 GO
 
--- Thực thi stored procedure
 EXEC sp_TaoGhe;
 GO
 
@@ -2645,13 +2631,13 @@ GO
 IF NOT EXISTS (SELECT 1 FROM TuyenDuong WHERE maTuyenDuong = 'TD-GA-127-GA-053')
 BEGIN
     INSERT INTO TuyenDuong (maTuyenDuong, thoiGianDiChuyen, quangDuong, soTienMotKm, gaDi, gaDen) 
-    VALUES ('TD-GA-127-GA-053', 1800, 1726, 600, 'GA-127', 'GA-053'); -- Sài Gòn -> Hà Nội (30 giờ)
+    VALUES ('TD-GA-127-GA-053', 30, 1726, 600, 'GA-127', 'GA-053'); -- Sài Gòn -> Hà Nội (30 giờ)
 END
 
 IF NOT EXISTS (SELECT 1 FROM TuyenDuong WHERE maTuyenDuong = 'TD-GA-053-GA-127')
 BEGIN
     INSERT INTO TuyenDuong (maTuyenDuong, thoiGianDiChuyen, quangDuong, soTienMotKm, gaDi, gaDen) 
-    VALUES ('TD-GA-053-GA-127', 1800, 1726, 600, 'GA-053', 'GA-127'); -- Hà Nội -> Sài Gòn (30 giờ)
+    VALUES ('TD-GA-053-GA-127', 30, 1726, 600, 'GA-053', 'GA-127'); -- Hà Nội -> Sài Gòn (30 giờ)
 END
 
 -- 2. CHUYẾN TÀU SÀI GÒN - HÀ NỘI
@@ -2673,16 +2659,16 @@ DELETE FROM ChuyenTau WHERE maTuyenDuong IN ('TD-GA-127-GA-053', 'TD-GA-053-GA-1
 
 -- Chuyến Sài Gòn -> Hà Nội (3 chuyến)
 INSERT INTO ChuyenTau (maChuyenTau, thoiGianDi, thoiGianDen, soGheDaDat, soGheConTrong, maTau, maTuyenDuong) VALUES
-('CT-00102', '2024-11-04 06:00:00', '2024-11-05 12:00:00', 3, 335, 'TAU-001', 'TD-GA-127-GA-053'),
-('CT-00103', '2024-11-04 19:00:00', '2024-11-06 01:00:00', 4, 376, 'TAU-002', 'TD-GA-127-GA-053'),
-('CT-00104', '2024-11-05 06:00:00', '2024-11-06 12:00:00', 3, 335, 'TAU-003', 'TD-GA-127-GA-053');
+('CT-00102', '2025-11-03 06:00:00', '2025-11-04 12:00:00', 3, 335, 'TAU-001', 'TD-GA-127-GA-053'),
+('CT-00103', '2025-11-03 19:00:00', '2025-11-04 01:00:00', 4, 376, 'TAU-002', 'TD-GA-127-GA-053'),
+('CT-00104', '2025-11-04 06:00:00', '2025-11-05 12:00:00', 3, 335, 'TAU-003', 'TD-GA-127-GA-053');
 
 
 -- Chuyến Hà Nội -> Sài Gòn (3 chuyến)
 INSERT INTO ChuyenTau (maChuyenTau, thoiGianDi, thoiGianDen, soGheDaDat, soGheConTrong, maTau, maTuyenDuong) VALUES
-('CT-00105', '2025-11-04 06:00:00', '2025-11-05 12:00:00', 3, 377, 'TAU-011', 'TD-GA-053-GA-127'),
-('CT-00106', '2025-11-04 19:00:00', '2025-11-06 01:00:00', 4, 376, 'TAU-012', 'TD-GA-053-GA-127'),
-('CT-00107', '2025-11-05 06:00:00', '2025-11-06 12:00:00', 3, 377, 'TAU-013', 'TD-GA-053-GA-127');
+('CT-00105', '2025-11-06 06:00:00', '2025-11-06 12:00:00', 3, 377, 'TAU-011', 'TD-GA-053-GA-127'),
+('CT-00106', '2025-11-06 19:00:00', '2025-11-07 01:00:00', 4, 376, 'TAU-012', 'TD-GA-053-GA-127'),
+('CT-00107', '2025-11-07 06:00:00', '2025-11-08 12:00:00', 3, 377, 'TAU-013', 'TD-GA-053-GA-127');
 
 
 -- 3. HÀNH KHÁCH

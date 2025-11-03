@@ -85,20 +85,20 @@ public class DatVe_GUI extends javax.swing.JPanel {
     private void initNavigation() {
         // Xử lý nút Next ở màn hình chọn chuyến tàu
         chonChuyenTau.next().addActionListener(e -> {
-            if (validateChonChuyenTau()) {
-                // Truyền dữ liệu sang màn hình chọn chỗ ngồi
-                // Clear danh sách ghế đã chọn trước đó (nếu có)
-                bus.clearDanhSachGheDaChon();
-                
-                try {
-                    // Load danh sách ghế cho panel chọn chỗ ngồi
-                    chonChoNgoi.loadDanhSachGhe(chonChuyenTau.getChuyenDiDaChon(), chonChuyenTau.getChuyenVeDaChon(), chonChuyenTau.isKhuHoi());
-                } catch (Exception ex) {
-                    Logger.getLogger(DatVe_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                next();
-            }
-        });
+    if (validateChonChuyenTau()) {
+        try {
+            // KHÔNG XÓA ghế cũ → giữ lại khi quay lại
+            chonChoNgoi.loadDanhSachGhe(
+                chonChuyenTau.getChuyenDiDaChon(), 
+                chonChuyenTau.getChuyenVeDaChon(), 
+                chonChuyenTau.isKhuHoi()
+            );
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        next();
+    }
+});
         chonChoNgoi.next().addActionListener(e -> next());
         chonChoNgoi.previous().addActionListener(e -> previous());
         thanhToan.previous().addActionListener(e -> previous());
