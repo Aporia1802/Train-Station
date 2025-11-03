@@ -14,7 +14,7 @@ import java.sql.*;
  * @author CÔNG HOÀNG
  */
 public class KhoangTau_DAO {
-    public ArrayList<KhoangTau> getKhoangTauTheoToa(String maToaTau) {
+    public ArrayList<KhoangTau> getKhoangTauTheoMaToa(String maToaTau) {
         ArrayList<KhoangTau> dsKhoangTau = new ArrayList<>();
         String sql = "SELECT * FROM KhoangTau WHERE maToaTau = ? ORDER BY soHieuKhoang";
 

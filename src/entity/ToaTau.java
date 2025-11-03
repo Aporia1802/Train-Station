@@ -51,9 +51,6 @@ public class ToaTau {
     }
     
     public void setSoKhoangTau(int soKhoangTau) throws Exception {
-        if (soKhoangTau <= 0) {
-            throw new Exception(SOKHOANG_INVALID);
-        }
         this.soKhoangTau = soKhoangTau;
     }
     

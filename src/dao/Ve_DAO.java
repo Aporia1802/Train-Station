@@ -401,27 +401,65 @@ public class Ve_DAO implements DAOBase<Ve>{
         return dsVe;
     }
     
-    /**
-     * Kiểm tra ghế đã được đặt trong chuyến tàu chưa
+     /**
+     * Lấy danh sách vé theo mã chuyến tàu
      */
-    public boolean isGheDaDat(String maGhe, String maChuyenTau) {
-        String sql = "SELECT COUNT(*) FROM ChiTietVe ct " +
-                    "JOIN Ve v ON ct.maVe = v.maVe " +
-                    "WHERE ct.maGhe = ? AND v.maChuyenTau = ?";
+    public ArrayList<Ve> getVeTheoMaChuyenTau(String maChuyenTau) throws Exception {
+        ArrayList<Ve> dsVe = new ArrayList<>();
+        String sql = "SELECT v.*, g.maGhe, g.soGhe " +
+                     "FROM Ve v " +
+                     "INNER JOIN Ghe g ON v.maGhe = g.maGhe " +
+                     "WHERE v.maChuyenTau = ?";
         
-        try {
-            PreparedStatement ps = ConnectDB.conn.prepareStatement(sql);
-            ps.setString(1, maGhe);
-            ps.setString(2, maChuyenTau);
-            ResultSet rs = ps.executeQuery();
+        try  {
+            PreparedStatement pstmt = ConnectDB.conn.prepareStatement(sql);
+            pstmt.setString(1, maChuyenTau);
+            ResultSet rs = pstmt.executeQuery();
             
-            if (rs.next()) {
-                return rs.getInt(1) > 0;
+            while (rs.next()) {
+                Ve ve = new Ve();
+                ve.setMaVe(rs.getString("maVe"));
+                ve.setTrangThai(TrangThaiVe.fromInt(rs.getInt("trangThai")));
+                ve.setGiaVe(rs.getDouble("giaVe"));
+                
+                // Tạo đối tượng Ghe
+                Ghe ghe = new Ghe();
+                ghe.setMaGhe(rs.getString("maGhe"));
+                ghe.setSoGhe(rs.getInt("soGhe"));
+                ve.setGhe(ghe);
+                
+                dsVe.add(ve);
             }
-        } catch (Exception e) {
+        } catch(Exception e) {
             e.printStackTrace();
         }
         
+        return dsVe;
+    }
+    
+    /**
+     * Kiểm tra ghế đã được đặt trong chuyến tàu chưa
+     */
+    public boolean kiemTraGheDaDat(String maGhe, String maChuyenTau) throws Exception {
+        String sql = "SELECT COUNT(*) as dem " +
+                     "FROM Ve " +
+                     "WHERE maGhe = ? AND maChuyenTau = ? " +
+                     "AND trangThai IN (0, 1)"; // 0: Đã đặt, 1: Đã thanh toán
+        
+        try  {
+            PreparedStatement pstmt = ConnectDB.conn.prepareStatement(sql);
+            pstmt.setString(1, maGhe);
+            pstmt.setString(2, maChuyenTau);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                return rs.getInt("dem") > 0;
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
         return false;
     }
+    
+    
 }

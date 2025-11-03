@@ -17,56 +17,51 @@ import java.sql.*;
  */
 public class ToaTau_DAO implements DAOBase<ToaTau>{
     
-    public ArrayList<ToaTau> getToaTauTheoTau(String maTau) {
-        ArrayList<ToaTau> dsToaTau = new ArrayList<>();
-        String sql = "SELECT * FROM ToaTau WHERE maTau = ? ORDER BY soHieuToa";
-
-        try {
-            PreparedStatement ps = ConnectDB.conn.prepareStatement(sql);
-            ps.setString(1, maTau);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                ToaTau toa = getData(rs);
-                if (toa != null) dsToaTau.add(toa);
-            }
-        } catch (Exception e) {
-        e.printStackTrace();
-    }
-
-    return dsToaTau;
-    }
-    
-     /**
+    /**
      * Lấy danh sách toa tàu theo mã tàu
-     * @param maTau
-     * @return 
-     * @throws java.lang.Exception 
      */
-    public ArrayList<ToaTau> getByTau(String maTau) throws Exception {
+    public ArrayList<ToaTau> getToaTauTheoMaTau(String maTau) throws Exception {
         ArrayList<ToaTau> dsToa = new ArrayList<>();
-        String sql = "SELECT tt.*, " +
-                    "FROM ToaTau tt " +
-                    "WHERE tt.maTau = ? " +
-                    "ORDER BY tt.soHieuToa";
+        String sql = "SELECT * FROM ToaTau WHERE maTau = ? ORDER BY soHieuToa";
         
-        try {
-            PreparedStatement ps = ConnectDB.conn.prepareStatement(sql);
-            ps.setString(1, maTau);
-            ResultSet rs = ps.executeQuery();
+        try  {
+            PreparedStatement pstmt = ConnectDB.conn.prepareStatement(sql);
+            pstmt.setString(1, maTau);
+            ResultSet rs = pstmt.executeQuery();
             
             while (rs.next()) {
-                // Tạo ToaTau
                 ToaTau toa = new ToaTau();
-                toa.setMaToa(rs.getString("maToa"));
+                toa.setMaToa(rs.getString("maToaTau"));
                 toa.setSoKhoangTau(rs.getInt("soKhoangTau"));
                 toa.setSoHieuToa(rs.getInt("soHieuToa"));
-                toa.setLoaiToa(rs.getString("loaiToa"));
+                
+                // Lấy loaiToa và kiểm tra null
+                String loaiToa = rs.getString("loaiToa");
+                if (loaiToa == null) {
+                    System.err.println("WARNING: loaiToa is NULL for maToaTau: " + toa.getMaToa());
+                    loaiToa = "NGOI_MEM"; // Giá trị mặc định
+                }
+                toa.setLoaiToa(loaiToa);
+                
+                // Lấy thông tin tàu
+                Tau tau = new Tau();
+                tau.setMaTau(rs.getString("maTau"));
+                toa.setTau(tau);
                 
                 dsToa.add(toa);
+                
+                // Debug log
+                System.out.println("Loaded ToaTau: " + toa.getMaToa() + 
+                                 ", soHieuToa: " + toa.getSoHieuToa() + 
+                                 ", loaiToa: " + toa.getLoaiToa());
             }
-        } catch(Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            System.err.println("Error in getToaTauTheoMaTau: " + e.getMessage());
+            throw e;
+        }
+        
+        if (dsToa.isEmpty()) {
+            System.err.println("WARNING: No ToaTau found for maTau: " + maTau);
         }
         
         return dsToa;

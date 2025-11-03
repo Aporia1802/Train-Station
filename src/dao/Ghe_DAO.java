@@ -46,63 +46,94 @@ public class Ghe_DAO {
         return n > 0;
     }
     
-    public ArrayList<Ghe> getGheTheoKhoangTau(String maKhoangTau) {
-    ArrayList<Ghe> dsGhe = new ArrayList<>();
-   
-    String sql = """
-        SELECT g.*, lg.tenLoaiGhe, lg.moTa, lg.heSoLoaiGhe,
-               kt.maKhoangTau, kt.soHieuKhoang, kt.soGhe,
-               tt.maToaTau, tt.soHieuToa, tt.soKhoangTau, tt.maTau
-        FROM Ghe g
-        JOIN LoaiGhe lg ON g.maLoaiGhe = lg.maLoaiGhe
-        JOIN KhoangTau kt ON g.maKhoangTau = kt.maKhoangTau
-        JOIN ToaTau tt ON kt.maToaTau = tt.maToaTau
-        WHERE g.maKhoangTau = ?
-        ORDER BY g.soGhe
-    """;
-
-    try (PreparedStatement st = ConnectDB.conn.prepareStatement(sql)) {
-        st.setString(1, maKhoangTau);
-        ResultSet rs = st.executeQuery();
-
-        while (rs.next()) {
-            Ghe g = getData(rs);
-            if (g != null) dsGhe.add(g);
+    /**
+     * Lấy danh sách ghế theo mã khoang
+     */
+    public ArrayList<Ghe> getGheTheoMaKhoang(String maKhoangTau) throws Exception {
+        ArrayList<Ghe> dsGhe = new ArrayList<>();
+        String sql = "SELECT g.*, lg.tenLoaiGhe, lg.moTa, lg.heSoLoaiGhe " +
+                     "FROM Ghe g " +
+                     "INNER JOIN LoaiGhe lg ON g.maLoaiGhe = lg.maLoaiGhe " +
+                     "WHERE g.maKhoangTau = ? " +
+                     "ORDER BY g.soGhe";
+        
+        try {
+            PreparedStatement pstmt = ConnectDB.conn.prepareStatement(sql);
+            pstmt.setString(1, maKhoangTau);
+            ResultSet rs = pstmt.executeQuery();
+            
+            while (rs.next()) {
+                // Tạo đối tượng LoaiGhe
+                LoaiGhe loaiGhe = new LoaiGhe();
+                loaiGhe.setMaLoaiGhe(rs.getString("maLoaiGhe"));
+                loaiGhe.setTenLoaiGhe(rs.getString("tenLoaiGhe"));
+                loaiGhe.setMoTa(rs.getString("moTa"));
+                loaiGhe.setHeSoLoaiGhe(rs.getFloat("heSoLoaiGhe"));
+                
+                // Tạo đối tượng Ghe
+                Ghe ghe = new Ghe();
+                ghe.setMaGhe(rs.getString("maGhe"));
+                ghe.setSoGhe(rs.getInt("soGhe"));
+                ghe.setLoaiGhe(loaiGhe);
+                
+                // Lấy thông tin khoang
+                KhoangTau khoang = new KhoangTau();
+                khoang.setMaKhoangTau(rs.getString("maKhoangTau"));
+                ghe.setKhoangTau(khoang);
+                
+                dsGhe.add(ghe);
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
         }
-
-    } catch (Exception e) {
-        e.printStackTrace();
+        
+        return dsGhe;
     }
-
-    return dsGhe;
-}
-
-//    public ArrayList<Ghe> getByToa(String maToa) throws Exception {
-//        ArrayList<Ghe> dsGhe = new ArrayList<>();
-//        String sql = "SELECT * FROM Ghe " +
-//                    "WHERE maToa = ? " +
-//                    "ORDER BY soGhe";
-//        
-//        try {
-//            PreparedStatement ps = ConnectDB.conn.prepareStatement(sql);
-//            ps.setString(1, maToa);
-//            ResultSet rs = ps.executeQuery();
-//            
-//            while (rs.next()) {
-//                Ghe ghe = new Ghe();
-//                ghe.setMaGhe(rs.getString("maGhe"));
-//                ghe.setSoGhe(rs.getInt("soGhe"));
-//                ghe.se(rs.getString("maToa"));
-//                
-//                dsGhe.add(ghe);
-//            }
-//        } catch(Exception e) {
-//            e.printStackTrace();
-//        }
-//        
-//        return dsGhe;
-//    }
     
+    /**
+     * Lấy danh sách tất cả ghế của toa (qua các khoang)
+     */
+    public ArrayList<Ghe> getGheTheoMaToa(String maToaTau) throws Exception {
+        ArrayList<Ghe> dsGhe = new ArrayList<>();
+        String sql = "SELECT g.*, lg.tenLoaiGhe, lg.moTa, lg.heSoLoaiGhe, kt.maKhoangTau " +
+                     "FROM Ghe g " +
+                     "INNER JOIN LoaiGhe lg ON g.maLoaiGhe = lg.maLoaiGhe " +
+                     "INNER JOIN KhoangTau kt ON g.maKhoangTau = kt.maKhoangTau " +
+                     "WHERE kt.maToaTau = ? " +
+                     "ORDER BY kt.soHieuKhoang, g.soGhe";
+        
+        try {
+            PreparedStatement pstmt = ConnectDB.conn.prepareStatement(sql);
+            pstmt.setString(1, maToaTau);
+            ResultSet rs = pstmt.executeQuery();
+            
+            while (rs.next()) {
+                // Tạo đối tượng LoaiGhe
+                LoaiGhe loaiGhe = new LoaiGhe();
+                loaiGhe.setMaLoaiGhe(rs.getString("maLoaiGhe"));
+                loaiGhe.setTenLoaiGhe(rs.getString("tenLoaiGhe"));
+                loaiGhe.setMoTa(rs.getString("moTa"));
+                loaiGhe.setHeSoLoaiGhe(rs.getFloat("heSoLoaiGhe"));
+                
+                // Tạo đối tượng Ghe
+                Ghe ghe = new Ghe();
+                ghe.setMaGhe(rs.getString("maGhe"));
+                ghe.setSoGhe(rs.getInt("soGhe"));
+                ghe.setLoaiGhe(loaiGhe);
+                
+                // Lấy thông tin khoang
+                KhoangTau khoang = new KhoangTau();
+                khoang.setMaKhoangTau(rs.getString("maKhoangTau"));
+                ghe.setKhoangTau(khoang);
+                
+                dsGhe.add(ghe);
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        
+        return dsGhe;
+    }
     public Ghe getData(ResultSet rs) {
     try {
         Ghe g = new Ghe();

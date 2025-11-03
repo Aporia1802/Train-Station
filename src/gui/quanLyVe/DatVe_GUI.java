@@ -10,6 +10,8 @@ import gui.components.ChonChuyenTau;
 import gui.components.ThanhToan;
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -53,17 +55,17 @@ public class DatVe_GUI extends javax.swing.JPanel {
         slidePane.setDoubleBuffered(true); // ✅ giúp vẽ mượt hơn
         add(slidePane, BorderLayout.CENTER);
 
-    // Gắn panel đầu tiên
-    JPanel first = panels[0];
-    first.setBounds(0, 0, getWidth(), getHeight());
-    slidePane.add(first, Integer.valueOf(0));
+        // Gắn panel đầu tiên
+        JPanel first = panels[0];
+        first.setBounds(0, 0, getWidth(), getHeight());
+        slidePane.add(first, Integer.valueOf(0));
 
-    // Animator mượt hơn
-    animator = new Animator(600);
-    animator.setResolution(5);
-    animator.setAcceleration(0.2f);
-    animator.setDeceleration(0.2f);
-    animator.addTarget(new TimingTargetAdapter() {
+        // Animator mượt hơn
+        animator = new Animator(600);
+        animator.setResolution(5);
+        animator.setAcceleration(0.2f);
+        animator.setDeceleration(0.2f);
+        animator.addTarget(new TimingTargetAdapter() {
         @Override
         public void timingEvent(float f) {
             // easing mượt kiểu "ease in-out"
@@ -85,16 +87,16 @@ public class DatVe_GUI extends javax.swing.JPanel {
         chonChuyenTau.next().addActionListener(e -> {
             if (validateChonChuyenTau()) {
                 // Truyền dữ liệu sang màn hình chọn chỗ ngồi
+                // Clear danh sách ghế đã chọn trước đó (nếu có)
+                bus.clearDanhSachGheDaChon();
+                
                 try {
-            chonChoNgoi.loadDanhSachGhe(
-                chonChuyenTau.getChuyenDiDaChon(),
-                chonChuyenTau.getChuyenVeDaChon(),
-                chonChuyenTau.isKhuHoi()
-            );
-            next();
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Lỗi: " + ex.getMessage());
-            }
+                    // Load danh sách ghế cho panel chọn chỗ ngồi
+                    chonChoNgoi.loadDanhSachGhe(chonChuyenTau.getChuyenDiDaChon(), chonChuyenTau.getChuyenVeDaChon(), chonChuyenTau.isKhuHoi());
+                } catch (Exception ex) {
+                    Logger.getLogger(DatVe_GUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                next();
             }
         });
         chonChoNgoi.next().addActionListener(e -> next());

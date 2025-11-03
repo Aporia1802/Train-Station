@@ -113,6 +113,9 @@ public class ToaGiuongNam6 extends javax.swing.JPanel {
         roundedButton65 = new gui.custom.RoundedButton();
         roundedButton66 = new gui.custom.RoundedButton();
 
+        setMaximumSize(new java.awt.Dimension(770, 250));
+        setMinimumSize(new java.awt.Dimension(770, 250));
+        setPreferredSize(new java.awt.Dimension(770, 250));
         setLayout(new java.awt.BorderLayout());
 
         jPanel48.setBackground(new java.awt.Color(255, 255, 255));
