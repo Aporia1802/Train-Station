@@ -15,12 +15,15 @@ import java.awt.Component;
 import java.awt.Container;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import utils.FormatUtil;
 
 /**
  *
@@ -35,6 +38,7 @@ public class ChonChoNgoi extends javax.swing.JPanel {
     private boolean dangXemChieuVe = false; // theo dõi đang xem chiều nào
     private javax.swing.JLabel lbl_headerChieuDi;
     private javax.swing.JLabel lbl_headerChieuVe;
+    private final Map<String, ChuyenTau> gheToChuyenMap = new HashMap<>();
     
     /**
      * Creates new form ChonGhe
@@ -46,30 +50,63 @@ public class ChonChoNgoi extends javax.swing.JPanel {
         initEvent();
     }
     
+    /**
+    * Ghi nhận ghế thuộc chuyến nào khi thêm vào
+    */
+    private void themGheDaChon(Ghe ghe, ChuyenTau chuyen) {
+        bus.themGheDaChon(ghe);
+        gheToChuyenMap.put(ghe.getMaGhe(), chuyen);
+    }
+
+    /**
+     * Xóa ghế và thông tin mapping
+     */
+    private void xoaGheDaChon(Ghe ghe) {
+        bus.xoaGheDaChon(ghe);
+        gheToChuyenMap.remove(ghe.getMaGhe());
+    }
+
+    /**
+     * Xác định ghế thuộc chuyến nào - DỰA VÀO MAP
+     */
+    private boolean isGheThuocChuyenVe(Ghe ghe) {
+        ChuyenTau chuyenCuaGhe = gheToChuyenMap.get(ghe.getMaGhe());
+        if (chuyenCuaGhe == null || chuyenVe == null) {
+            return false;
+        }
+        return chuyenCuaGhe.getMaChuyenTau().equals(chuyenVe.getMaChuyenTau());
+    }
+    
     private void initThongTinPanels() {
-        // Tạo LABEL cho chiều đi
-        lbl_headerChieuDi = new javax.swing.JLabel();
-        lbl_headerChieuDi.setText("Chiều đi");
+        // CHIỀU ĐI
+        lbl_headerChieuDi = new JLabel("Chiều đi");
         lbl_headerChieuDi.setFont(new java.awt.Font("Segoe UI", 1, 16));
         lbl_headerChieuDi.setForeground(new java.awt.Color(123, 17, 19));
-        lbl_headerChieuDi.setBackground(new java.awt.Color(255, 255, 255));
+        lbl_headerChieuDi.setBackground(Color.WHITE);
+        lbl_headerChieuDi.setOpaque(true);
+
+        lbl_headerChieuDi.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lbl_headerChieuDi.setBorder(javax.swing.BorderFactory.createCompoundBorder(
             javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(123, 17, 19)),
-            javax.swing.BorderFactory.createEmptyBorder(5, 0, 5, 0)
+            javax.swing.BorderFactory.createEmptyBorder(10, 0, 10, 15)
         ));
-        lbl_headerChieuDi.setMaximumSize(new java.awt.Dimension(32767, 40));
+        lbl_headerChieuDi.setMaximumSize(new java.awt.Dimension(Integer.MAX_VALUE, 40));
+        lbl_headerChieuDi.setAlignmentX(Integer.MAX_VALUE);
 
-        // Tạo LABEL cho chiều về
-        lbl_headerChieuVe = new javax.swing.JLabel();
-        lbl_headerChieuVe.setText("Chiều về");
+        // CHIỀU VỀ
+        lbl_headerChieuVe = new JLabel("Chiều về");
         lbl_headerChieuVe.setFont(new java.awt.Font("Segoe UI", 1, 16));
         lbl_headerChieuVe.setForeground(new java.awt.Color(123, 17, 19));
-        lbl_headerChieuVe.setBackground(new java.awt.Color(255, 255, 255));
+        lbl_headerChieuVe.setBackground(Color.WHITE);
+        lbl_headerChieuVe.setOpaque(true);
+
+        lbl_headerChieuVe.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lbl_headerChieuVe.setBorder(javax.swing.BorderFactory.createCompoundBorder(
             javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(123, 17, 19)),
-            javax.swing.BorderFactory.createEmptyBorder(5, 0, 5, 0)
+            javax.swing.BorderFactory.createEmptyBorder(10, 0, 10, 15)
         ));
-        lbl_headerChieuVe.setMaximumSize(new java.awt.Dimension(32767, 40));
+        lbl_headerChieuVe.setMaximumSize(new java.awt.Dimension(Integer.MAX_VALUE, 40));
+        lbl_headerChieuVe.setAlignmentX(Integer.MAX_VALUE); 
     }
     
     private void initEvent() {
@@ -128,22 +165,6 @@ public class ChonChoNgoi extends javax.swing.JPanel {
     }
     
     /**
-    * Xác định ghế thuộc chuyến đi hay chuyến về
-    */
-   private boolean isGheThuocChuyenVe(Ghe ghe) {
-       if (chuyenVe == null) {
-           return false;
-       }
-
-       // So sánh mã tàu thay vì object Tau
-       String maTauCuaGhe = ghe.getKhoangTau().getToaTau().getTau().getMaTau();
-       String maTauChuyenVe = chuyenVe.getTau().getMaTau();
-
-       return maTauCuaGhe.equals(maTauChuyenVe);
-   }
-    
-    
-    /**
      * Load và render danh sách ghế
      */
     public void loadDanhSachGhe(ChuyenTau chuyenDi, ChuyenTau chuyenVe, boolean isKhuHoi) throws Exception {
@@ -156,6 +177,7 @@ public class ChonChoNgoi extends javax.swing.JPanel {
         // CHỈ XÓA KHI ĐỔI CHUYẾN
         if (!maChuyenMoi.equals(maChuyenHienTai)) {
             bus.clearDanhSachGheDaChon();
+            gheToChuyenMap.clear(); // Clear map
             maChuyenHienTai = maChuyenMoi;
 
             // XÓA VÀ KHỞI TẠO LẠI
@@ -163,7 +185,6 @@ public class ChonChoNgoi extends javax.swing.JPanel {
             pnl_thongTin.add(pnl_thongTinKhachHang);
             pnl_thongTin.add(javax.swing.Box.createVerticalStrut(10));
 
-            // Khởi tạo lại headers
             initThongTinPanels();
 
             pnl_thongTin.revalidate();
@@ -175,81 +196,6 @@ public class ChonChoNgoi extends javax.swing.JPanel {
         btn_chuyenVe.setText("Chọn chuyến về");
         btn_chuyenVe.setVisible(isKhuHoi && chuyenVe != null);
         renderDanhSachToa(chuyenDi);
-    }
-    
-    private void dongBoThongTinVe() {
-        // XÓA TẤT CẢ THÔNG TIN VÉ VÀ HEADER
-        Component[] comps = pnl_thongTin.getComponents();
-        for (int i = comps.length - 1; i >= 0; i--) {
-            Component c = comps[i];
-            if (c instanceof ThongTinVe || c == lbl_headerChieuDi || c == lbl_headerChieuVe) {
-                pnl_thongTin.remove(i);
-            }
-        }
-
-        // Xóa các Filler thừa (CHỈ GIỮ 1 SAU pnl_thongTinKhachHang)
-        comps = pnl_thongTin.getComponents();
-        boolean foundFirstFiller = false;
-        for (int i = comps.length - 1; i >= 0; i--) {
-            if (comps[i] instanceof javax.swing.Box.Filler) {
-                if (foundFirstFiller) {
-                    pnl_thongTin.remove(i);
-                } else {
-                    foundFirstFiller = true;
-                }
-            }
-        }
-
-        // PHÂN LOẠI GHẾ THEO CHUYẾN
-        ArrayList<ThongTinVe> dsPanelDi = new ArrayList<>();
-        ArrayList<ThongTinVe> dsPanelVe = new ArrayList<>();
-
-        for (Ghe ghe : bus.getDanhSachGheDaChon()) {
-            // SỬ DỤNG PHƯƠNG THỨC HELPER ĐỂ XÁC ĐỊNH
-            boolean thuocChuyenVe = isGheThuocChuyenVe(ghe);
-            ChuyenTau ch = thuocChuyenVe ? chuyenVe : chuyenDi;
-
-            String tieuDe = String.format("Toa %d - Ghế %d", 
-                            ghe.getKhoangTau().getToaTau().getSoHieuToa(), 
-                            ghe.getSoGhe());
-
-            ThongTinVe p = new ThongTinVe(tieuDe, ghe, ch);
-            p.setName("THONGTIN_" + ghe.getMaGhe());
-
-            if (thuocChuyenVe) {
-                dsPanelVe.add(p);
-            } else {
-                dsPanelDi.add(p);
-            }
-        }
-
-        // THÊM CHIỀU ĐI
-        if (!dsPanelDi.isEmpty()) {
-            pnl_thongTin.add(javax.swing.Box.createVerticalStrut(15));
-            pnl_thongTin.add(lbl_headerChieuDi);
-            pnl_thongTin.add(javax.swing.Box.createVerticalStrut(10));
-
-            for (ThongTinVe p : dsPanelDi) {
-                pnl_thongTin.add(p);
-                pnl_thongTin.add(Box.createVerticalStrut(10));
-            }
-        }
-
-        // THÊM CHIỀU VỀ
-        if (!dsPanelVe.isEmpty()) {
-            pnl_thongTin.add(javax.swing.Box.createVerticalStrut(15));
-            pnl_thongTin.add(lbl_headerChieuVe);
-            pnl_thongTin.add(javax.swing.Box.createVerticalStrut(10));
-
-            for (ThongTinVe p : dsPanelVe) {
-                pnl_thongTin.add(p);
-                pnl_thongTin.add(Box.createVerticalStrut(10));
-            }
-        }
-
-        // CẬP NHẬT GIAO DIỆN
-        pnl_thongTin.revalidate();
-        pnl_thongTin.repaint();
     }
     
     /**
@@ -599,25 +545,22 @@ public class ChonChoNgoi extends javax.swing.JPanel {
     */
     
     private void handleChonGhe(RoundedButton btn, Ghe ghe) {
-    
         if (bus.isDaChonGhe(ghe)) {
             // Bỏ chọn
             btn.setBackground(java.awt.Color.WHITE);
-            bus.xoaGheDaChon(ghe);
+            xoaGheDaChon(ghe); // Dùng method mới
             xoaPanelThongTinVe(ghe);
-
         } else {
-            // Chọn ghế - XÁC ĐỊNH ĐÚNG CHUYẾN
+            // XÁC ĐỊNH CHUYẾN DỰA VÀO ĐANG XEM CHIỀU NÀO
             ChuyenTau chuyenDangXem = dangXemChieuVe ? chuyenVe : chuyenDi;
 
             btn.setBackground(new java.awt.Color(252, 90, 90));
-            bus.themGheDaChon(ghe);
+            themGheDaChon(ghe, chuyenDangXem); // Truyền cả chuyến tàu
             themPanelThongTinVe(ghe, chuyenDangXem);
         }
 
         // ĐỒNG BỘ CHECKBOX
         try {
-            // Tìm panel toa chứa button này
             JPanel toaPanel = (JPanel) btn.getParent().getParent().getParent().getParent();
             syncCheckboxChonTatCa(toaPanel, 
                                  ghe.getKhoangTau().getToaTau(), 
@@ -632,7 +575,12 @@ public class ChonChoNgoi extends javax.swing.JPanel {
     */
     
     private void themPanelThongTinVe(Ghe ghe, ChuyenTau chuyen) {
-        String tieuDe = String.format("Toa %d - Ghế %d",
+        String tenTau = chuyen.getTau().getTenTau(); 
+        String tieuDe = String.format("%s %s → %s - %s - Toa %d - Ghế %d",
+            tenTau.substring(tenTau.lastIndexOf(" ") + 1),
+            chuyen.getTuyenDuong().getGaDi().getTenGa(),
+            chuyen.getTuyenDuong().getGaDen().getTenGa(),
+            FormatUtil.formatDateTime(chuyen.getThoiGianDi()),
             ghe.getKhoangTau().getToaTau().getSoHieuToa(),
             ghe.getSoGhe()
         );
@@ -646,7 +594,7 @@ public class ChonChoNgoi extends javax.swing.JPanel {
         if (isChieuVe) {
             // KIỂM TRA HEADER CHIỀU VỀ
             if (lbl_headerChieuVe.getParent() == null) {
-                pnl_thongTin.add(javax.swing.Box.createVerticalStrut(15));
+                pnl_thongTin.add(javax.swing.Box.createVerticalStrut(8));
                 pnl_thongTin.add(lbl_headerChieuVe);
                 pnl_thongTin.add(javax.swing.Box.createVerticalStrut(10));
             }
@@ -659,7 +607,7 @@ public class ChonChoNgoi extends javax.swing.JPanel {
             // KIỂM TRA HEADER CHIỀU ĐI
             if (lbl_headerChieuDi.getParent() == null) {
                 int insertIndex = getIndexAfterKhachHang();
-                pnl_thongTin.add(javax.swing.Box.createVerticalStrut(15), insertIndex);
+                pnl_thongTin.add(javax.swing.Box.createVerticalStrut(8), insertIndex);
                 pnl_thongTin.add(lbl_headerChieuDi, insertIndex + 1);
                 pnl_thongTin.add(javax.swing.Box.createVerticalStrut(10), insertIndex + 2);
             }
@@ -673,13 +621,6 @@ public class ChonChoNgoi extends javax.swing.JPanel {
         // Refresh UI
         pnl_thongTin.revalidate();
         pnl_thongTin.repaint();
-
-        // Scroll xuống
-        javax.swing.SwingUtilities.invokeLater(() -> {
-            jScrollPane2.getVerticalScrollBar().setValue(
-                jScrollPane2.getVerticalScrollBar().getMaximum()
-            );
-        });
     }
 
     /**
@@ -874,13 +815,13 @@ public class ChonChoNgoi extends javax.swing.JPanel {
             if (isSelected) {
                 if (!bus.isDaChonGhe(ghe)) {
                     btn.setBackground(new java.awt.Color(252, 90, 90));
-                    bus.themGheDaChon(ghe);
+                    themGheDaChon(ghe, chuyen); // Truyền cả chuyến
                     themPanelThongTinVe(ghe, chuyen);
                 }
             } else {
                 if (bus.isDaChonGhe(ghe)) {
                     btn.setBackground(Color.WHITE);
-                    bus.xoaGheDaChon(ghe);
+                    xoaGheDaChon(ghe); // Dùng method mới
                     xoaPanelThongTinVe(ghe);
                 }
             }
@@ -986,9 +927,6 @@ public class ChonChoNgoi extends javax.swing.JPanel {
         filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         jLabel6 = new javax.swing.JLabel();
         txt_cccd = new javax.swing.JTextField();
-        pnl_chieuDi = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jPanel12 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -1156,17 +1094,6 @@ public class ChonChoNgoi extends javax.swing.JPanel {
 
         pnl_thongTin.add(pnl_thongTinKhachHang);
 
-        pnl_chieuDi.setLayout(new java.awt.BorderLayout());
-
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        jLabel1.setText("Chiều đi");
-        pnl_chieuDi.add(jLabel1, java.awt.BorderLayout.PAGE_START);
-
-        jPanel12.setLayout(new javax.swing.BoxLayout(jPanel12, javax.swing.BoxLayout.LINE_AXIS));
-        pnl_chieuDi.add(jPanel12, java.awt.BorderLayout.CENTER);
-
-        pnl_thongTin.add(pnl_chieuDi);
-
         jScrollPane2.setViewportView(pnl_thongTin);
 
         pnl_nhapThongTin.add(jScrollPane2, java.awt.BorderLayout.CENTER);
@@ -1320,7 +1247,6 @@ public class ChonChoNgoi extends javax.swing.JPanel {
     private javax.swing.Box.Filler filler7;
     private javax.swing.Box.Filler filler8;
     private javax.swing.Box.Filler filler9;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
@@ -1330,7 +1256,6 @@ public class ChonChoNgoi extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel11;
-    private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
@@ -1344,7 +1269,6 @@ public class ChonChoNgoi extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JPanel pnl_chieuDi;
     private javax.swing.JPanel pnl_contain;
     private javax.swing.JPanel pnl_nhapThongTin;
     private javax.swing.JPanel pnl_thongTin;

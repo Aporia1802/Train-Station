@@ -238,7 +238,7 @@ public class ChonChuyenTau extends javax.swing.JPanel {
         } else {
             
         // Xử lý cho chuyến về
-        // Nếu click vào panel đang được chọn -> Bỏ chọn
+        // Nếu click vào panel đang được chọn - Bỏ chọn
             if (panelChuyenVeDangChon == selectedPanel) {
                 selectedPanel.setSelected(false);
                 panelChuyenVeDangChon = null;

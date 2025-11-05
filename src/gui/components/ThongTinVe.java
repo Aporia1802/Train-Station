@@ -105,6 +105,7 @@ public class ThongTinVe extends javax.swing.JPanel {
         cbo_loaiVe = new javax.swing.JComboBox<>();
         jPanel4 = new javax.swing.JPanel();
         lbl_giaVe = new javax.swing.JLabel();
+        btn_bin = new javax.swing.JLabel();
 
         setMaximumSize(new java.awt.Dimension(2147483647, 200));
         setLayout(new java.awt.BorderLayout());
@@ -178,7 +179,14 @@ public class ThongTinVe extends javax.swing.JPanel {
         lbl_giaVe.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lbl_giaVe.setForeground(new java.awt.Color(255, 51, 0));
         lbl_giaVe.setText("Giá vé: ");
+        lbl_giaVe.setMaximumSize(new java.awt.Dimension(600, 25));
         jPanel4.add(lbl_giaVe);
+
+        btn_bin.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btn_bin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/trash.png"))); // NOI18N
+        btn_bin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_bin.setMaximumSize(new java.awt.Dimension(40, 50));
+        jPanel4.add(btn_bin);
 
         pnl_thongTinHK.add(jPanel4);
 
@@ -219,6 +227,7 @@ public class ThongTinVe extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel btn_bin;
     private javax.swing.JComboBox<String> cbo_loaiVe;
     private com.toedter.calendar.JDateChooser date_ngaySinhHK;
     private javax.swing.Box.Filler filler1;
