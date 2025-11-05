@@ -99,58 +99,55 @@ public class ThanhToan extends javax.swing.JPanel {
     jPanel13.repaint();
 }
 
-// Helper: Tạo panel thông tin vé
-private JPanel taoThongTinVe(ThongTinVe.ThongTinHanhKhach hk, entity.Ghe ghe, 
-                             entity.ChuyenTau ct, double giaVe, String tag) {
-    JPanel p = new JPanel();
-    p.setBackground(new java.awt.Color(255, 255, 255));
-    p.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-        javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(200, 200, 200)),
-        javax.swing.BorderFactory.createEmptyBorder(15, 20, 15, 20)
-    ));
-    p.setLayout(new javax.swing.BoxLayout(p, javax.swing.BoxLayout.Y_AXIS));
+    // Tạo panel thông tin vé
+    private JPanel taoThongTinVe(ThongTinVe.ThongTinHanhKhach hk, entity.Ghe ghe, 
+                                 entity.ChuyenTau ct, double giaVe, String tag) {
+        JPanel p = new JPanel();
+        p.setBackground(new java.awt.Color(255, 255, 255));
+        p.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+            javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(200, 200, 200)),
+            javax.swing.BorderFactory.createEmptyBorder(15, 20, 15, 20)
+        ));
+        p.setLayout(new javax.swing.BoxLayout(p, javax.swing.BoxLayout.Y_AXIS));
 
-    // Thông tin chi tiết
-    String tenTau = ct.getTau().getTenTau();
-    String tuyen = ct.getTuyenDuong().getGaDi().getTenGa() + " → " + 
-                   ct.getTuyenDuong().getGaDen().getTenGa();
-    String ngay = utils.FormatUtil.formatDateTime(ct.getThoiGianDi());
-    String toa = String.valueOf(ghe.getKhoangTau().getToaTau().getSoHieuToa());
-    String cho = String.valueOf(ghe.getSoGhe());
-    String loaiCho = ghe.getLoaiGhe().getTenLoaiGhe();
+        // Thông tin chi tiết
+        String tenTau = ct.getTau().getTenTau();
+        String tuyen = ct.getTuyenDuong().getGaDi().getTenGa() + " → " + 
+                       ct.getTuyenDuong().getGaDen().getTenGa();
+        String ngay = utils.FormatUtil.formatDateTime(ct.getThoiGianDi());
+        String toa = String.valueOf(ghe.getKhoangTau().getToaTau().getSoHieuToa());
+        String cho = String.valueOf(ghe.getSoGhe());
+        String loaiCho = ghe.getLoaiGhe().getTenLoaiGhe();
 
-    p.add(taoLabel(tag + " Họ tên: " + hk.getHoTen(), 16, true));
-    p.add(taoLabel("Đối tượng: " + hk.getLoaiVe(), 15, false));
-    p.add(taoLabel("Số giấy tờ: " + (hk.getCCCD() == null || hk.getCCCD().isEmpty() 
-                   ? "Trẻ em" : hk.getCCCD()), 15, false));
-    p.add(taoLabel("Hành trình: " + tenTau + " " + tuyen + " " + ngay, 15, true));
-    p.add(taoLabel("Toa " + toa + " - Ghế " + cho + " - " + loaiCho, 15, false));
-    p.add(javax.swing.Box.createVerticalStrut(5));
-    
-    javax.swing.JLabel lblGia = taoLabel("Giá vé: " + utils.FormatUtil.formatCurrency(giaVe), 
-                                         16, true);
-    lblGia.setForeground(new java.awt.Color(255, 51, 0));
-    p.add(lblGia);
+        p.add(taoLabel(tag + " Họ tên: " + hk.getHoTen(), 16, true));
+        p.add(taoLabel("Đối tượng: " + hk.getLoaiVe(), 15, false));
+        p.add(taoLabel("Số giấy tờ: " + (hk.getCCCD() == null || hk.getCCCD().isEmpty() 
+                       ? "Trẻ em" : hk.getCCCD()), 15, false));
+        p.add(taoLabel("Hành trình: " + tenTau + " " + tuyen + " " + ngay, 15, true));
+        p.add(taoLabel("Toa " + toa + " - Ghế " + cho + " - " + loaiCho, 15, false));
+        p.add(javax.swing.Box.createVerticalStrut(5));
 
-    return p;
-}
+        javax.swing.JLabel lblGia = taoLabel("Giá vé: " + utils.FormatUtil.formatCurrency(giaVe), 16, true);
+        lblGia.setForeground(new java.awt.Color(255, 51, 0));
+        p.add(lblGia);
 
-// Helper: Tạo label
-private javax.swing.JLabel taoLabel(String text, int size, boolean bold) {
-    javax.swing.JLabel l = new javax.swing.JLabel(text);
-    l.setFont(new java.awt.Font("Segoe UI", bold ? java.awt.Font.BOLD : java.awt.Font.PLAIN, size));
-    return l;
-}
-
-// Helper: Lấy hệ số loại vé
-private double layHeSoLoaiVe(String loaiVe) {
-    switch(loaiVe) {
-        case "Trẻ em": return 0.5;
-        case "Sinh viên": return 0.8;
-        case "Người cao tuổi": return 0.7;
-        default: return 1.0;
+        return p;
     }
-}
+
+    private javax.swing.JLabel taoLabel(String text, int size, boolean bold) {
+        javax.swing.JLabel l = new javax.swing.JLabel(text);
+        l.setFont(new java.awt.Font("Segoe UI", bold ? java.awt.Font.BOLD : java.awt.Font.PLAIN, size));
+        return l;
+    }
+
+    private double layHeSoLoaiVe(String loaiVe) {
+        switch(loaiVe) {
+            case "Trẻ em": return 0.5;
+            case "Sinh viên": return 0.8;
+            case "Người cao tuổi": return 0.7;
+            default: return 1.0;
+        }
+    }
 
 
 
@@ -347,10 +344,13 @@ private double layHeSoLoaiVe(String loaiVe) {
         jPanel4.add(jPanel6);
         jPanel4.add(filler1);
 
+        jPanel5.setBackground(new java.awt.Color(0, 204, 51));
         jPanel5.setMaximumSize(new java.awt.Dimension(32767, 80));
         jPanel5.setLayout(new java.awt.BorderLayout());
 
+        jLabel2.setBackground(new java.awt.Color(0, 204, 102));
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("3.600.000");
         jPanel5.add(jLabel2, java.awt.BorderLayout.CENTER);
@@ -417,48 +417,48 @@ private double layHeSoLoaiVe(String loaiVe) {
         jPanel17.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
         jPanel17.setLayout(new java.awt.GridLayout(0, 2));
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel5.setText("Họ tên");
         jPanel17.add(jLabel5);
 
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel6.setText("Hồ Công Hoàng");
         jPanel17.add(jLabel6);
 
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel7.setText("Số điện thoại");
         jPanel17.add(jLabel7);
 
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel8.setText("0349573425");
         jPanel17.add(jLabel8);
 
-        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel10.setText("Thành tiền");
         jPanel17.add(jLabel10);
 
-        jLabel13.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel13.setText("3.600.000");
         jPanel17.add(jLabel13);
 
-        jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel12.setText("Khuyến mãi");
         jPanel17.add(jLabel12);
 
-        jLabel15.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabel15.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(51, 255, 51));
         jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel15.setText("0");
         jPanel17.add(jLabel15);
 
-        jLabel14.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel14.setText("VAT");
         jPanel17.add(jLabel14);
 
-        jLabel16.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel16.setText("10%");
         jPanel17.add(jLabel16);

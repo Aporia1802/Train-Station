@@ -7,10 +7,13 @@ package gui.components;
 import dao.LoaiVe_DAO;
 import entity.ChuyenTau;
 import entity.Ghe;
+import gui.custom.RoundedButton;
 import java.awt.Font;
 import java.util.Date;
 import javax.swing.BorderFactory;
 import utils.FormatUtil;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  *
@@ -59,6 +62,55 @@ public class ThongTinVe extends javax.swing.JPanel {
         this.ct = ct;
         dao = new LoaiVe_DAO();
         lbl_giaVe.setText("Giá vé: " + FormatUtil.formatCurrency(ct.getTuyenDuong().tinhGiaVeCoBan() * ghe.getLoaiGhe().getHeSoLoaiGhe()));
+        btn_bin.addMouseListener(new java.awt.event.MouseAdapter() {
+    @Override
+    public void mouseClicked(java.awt.event.MouseEvent evt) {
+        ChonChoNgoi parent = timParentChonChoNgoi(ThongTinVe.this);
+        if (parent == null) return;
+
+        // 1. XÓA GHẾ KHỎI BUS + MAP
+        parent.xoaGheDaChon(ghe);
+
+        // 2. XÓA PANEL THÔNG TIN
+        parent.xoaPanelThongTinVe(ghe);
+
+        // 3. TÌM VÀ CẬP NHẬT NÚT GHẾ TRÊN SƠ ĐỒ
+        JPanel toaPanel = timToaPanelChuaGhe();
+        if (toaPanel != null) {
+            RoundedButton btnGhe = parent.findButtonBySoGhe(toaPanel, ghe.getSoGhe());
+            if (btnGhe != null) {
+                btnGhe.setBackground(Color.WHITE);
+                // Xóa listener cũ
+                for (java.awt.event.ActionListener al : btnGhe.getActionListeners()) {
+                    btnGhe.removeActionListener(al);
+                }
+                // Thêm lại listener chọn ghế
+                btnGhe.addActionListener(e -> parent.handleChonGhe(btnGhe, ghe));
+            }
+
+            // Đồng bộ checkbox
+            try {
+                ChuyenTau chuyen = parent.isGheThuocChuyenVe(ghe) ? parent.chuyenVe : parent.chuyenDi;
+                parent.syncCheckboxChonTatCa(toaPanel, ghe.getKhoangTau().getToaTau(), chuyen);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        // 4. XÓA PANEL NÀY KHỎI GIAO DIỆN
+        Container container = getParent();
+        if (container != null) {
+            container.remove(ThongTinVe.this);
+            int idx = container.getComponentZOrder(ThongTinVe.this);
+            if (idx + 1 < container.getComponentCount() && 
+                container.getComponent(idx + 1) instanceof Box.Filler) {
+                container.remove(idx + 1);
+            }
+            container.revalidate();
+            container.repaint();
+        }
+    }
+});
     }
     
     public Ghe getGhe() {
@@ -77,8 +129,79 @@ public class ThongTinVe extends javax.swing.JPanel {
         info.setNgaySinh(date_ngaySinhHK.getDate());
         info.setLoaiVe((String) cbo_loaiVe.getSelectedItem());
         return info;
-}
+    }
+    
+    private void xoaGheVaPanel() {
+    // 1. XÓA KHỎI BUS
+    ChonChoNgoi parent = timParentChonChoNgoi(this);
+    if (parent != null) {
+        parent.xoaGheDaChon(ghe); // Dùng method có sẵn
+        parent.xoaPanelThongTinVe(ghe);
 
+        // 2. CẬP NHẬT LẠI NÚT GHẾ (tìm và đổi màu về trắng)
+        JPanel toaPanel = timToaPanelChuaGhe();
+        if (toaPanel != null) {
+            RoundedButton btnGhe = parent.findButtonBySoGhe(toaPanel, ghe.getSoGhe());
+            if (btnGhe != null) {
+                btnGhe.setBackground(Color.WHITE);
+                // XÓA listener cũ, thêm lại listener chọn ghế
+                for (java.awt.event.ActionListener al : btnGhe.getActionListeners()) {
+                    btnGhe.removeActionListener(al);
+                }
+                btnGhe.addActionListener(e -> parent.handleChonGhe(btnGhe, ghe));
+            }
+            // Đồng bộ checkbox
+            try {
+                parent.syncCheckboxChonTatCa(toaPanel, ghe.getKhoangTau().getToaTau(),
+                    parent.isGheThuocChuyenVe(ghe) ? parent.chuyenVe : parent.chuyenDi);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    // 3. XÓA PANEL NÀY KHỎI GIAO DIỆN
+    Container container = getParent();
+        if (container != null) {
+            container.remove(this);
+            // Xóa filler nếu có
+            int index = container.getComponentZOrder(this);
+            if (index + 1 < container.getComponentCount() &&
+                container.getComponent(index + 1) instanceof Box.Filler) {
+                container.remove(index + 1);
+            }
+            container.revalidate();
+            container.repaint();
+        }
+    }
+
+    private JPanel timToaPanelChuaGhe() {
+    ChonChoNgoi parent = timParentChonChoNgoi(this);
+    if (parent == null) return null;
+
+    // Duyệt tất cả panel toa trong jPanel8
+    for (Component comp : parent.jPanel8.getComponents()) {
+        if (!(comp instanceof JPanel)) continue;
+        JPanel panel = (JPanel) comp;
+
+        // Tìm nút có text = số ghế
+        RoundedButton btn = parent.findButtonBySoGhe(panel, ghe.getSoGhe());
+        if (btn != null && btn.isEnabled()) {
+            return panel;
+        }
+    }
+    return null;
+}
+    
+    private ChonChoNgoi timParentChonChoNgoi(Component comp) {
+    while (comp != null) {
+        if (comp instanceof ChonChoNgoi) {
+            return (ChonChoNgoi) comp;
+        }
+        comp = comp.getParent();
+    }
+    return null;
+}
 
     /**
      * This method is called from within the constructor to initialize the form.

@@ -103,7 +103,7 @@ public class QuanLyDatVe_BUS {
     }
     
     /**
-     * Kiểm tra ghế đã được chọn trong session hiện tại
+     * Kiểm tra ghế đã được chọn trong phiên hiện tại
      */
     public boolean isDaChonGhe(Ghe ghe) {
         for (Ghe g : dsGheDaChon) {
