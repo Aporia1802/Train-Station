@@ -38,6 +38,7 @@ public class ChonChoNgoi extends javax.swing.JPanel {
     private javax.swing.JLabel lbl_headerChieuDi;
     private javax.swing.JLabel lbl_headerChieuVe;
     private final Map<String, ChuyenTau> gheToChuyenMap = new HashMap<>();
+    private final Map<String, PanelVeData> thongTinDaNhapMap = new HashMap<>();
     private boolean autoUpdateUI = true;
     
     /**
@@ -48,6 +49,36 @@ public class ChonChoNgoi extends javax.swing.JPanel {
         initComponents();
         this.bus = bus;
         initEvent();
+    }
+    
+    /**
+    * Lưu lại thông tin đã nhập trước khi xóa panel
+    */
+   private void luuThongTinDaNhap() {
+       Component[] components = pnl_thongTin.getComponents();
+       for (Component comp : components) {
+           if (comp instanceof ThongTinVe) {
+               ThongTinVe panelThongTin = (ThongTinVe) comp;
+               ThongTinVe.ThongTinHanhKhach thongTin = panelThongTin.getThongTin();
+
+               // Lưu cả tiêu đề hiện tại
+               String tieuDeHienTai = panelThongTin.getTieuDe();
+               String maGhe = thongTin.getMaGhe();
+
+               thongTinDaNhapMap.put(maGhe, new PanelVeData(tieuDeHienTai, thongTin));
+           }
+       }
+   }
+    
+    // Class inner để lưu đầy đủ thông tin
+    private static class PanelVeData {
+        String tieuDe;
+        ThongTinVe.ThongTinHanhKhach thongTin;
+
+        public PanelVeData(String tieuDe, ThongTinVe.ThongTinHanhKhach thongTin) {
+            this.tieuDe = tieuDe;
+            this.thongTin = thongTin;
+        }
     }
 
     // HÀM CẬP NHẬT 1 LẦN
@@ -564,6 +595,7 @@ public class ChonChoNgoi extends javax.swing.JPanel {
     * Gọi sau khi đổi chuyến để hiển thị lại thông tin
     */
    private void khoiPhucThongTinVe() {
+       luuThongTinDaNhap();
        // Xóa tất cả trừ panel khách hàng
        pnl_thongTin.removeAll();
        pnl_thongTin.add(pnl_thongTinKhachHang);
@@ -613,18 +645,34 @@ public class ChonChoNgoi extends javax.swing.JPanel {
     * Thêm panel thông tin vé (dùng khi khôi phục)
     */
    private void themPanelThongTinVeSauKhiKhoiPhuc(Ghe ghe, ChuyenTau chuyen) {
-       String tenTau = chuyen.getTau().getTenTau(); 
-       String tieuDe = String.format("%s %s → %s - %s - Toa %d - Ghế %d",
-           tenTau.substring(tenTau.lastIndexOf(" ") + 1),
-           chuyen.getTuyenDuong().getGaDi().getTenGa(),
-           chuyen.getTuyenDuong().getGaDen().getTenGa(),
-           utils.FormatUtil.formatDateTime(chuyen.getThoiGianDi()),
-           ghe.getKhoangTau().getToaTau().getSoHieuToa(),
-           ghe.getSoGhe()
-       );
+       String tieuDe;
+       String maGhe = ghe.getMaGhe();
+
+       // KIỂM TRA XEM ĐÃ CÓ TIÊU ĐỀ LƯU TRƯỚC ĐÓ CHƯA
+       if (thongTinDaNhapMap.containsKey(maGhe)) {
+           // SỬ DỤNG TIÊU ĐỀ ĐÃ LƯU
+           tieuDe = thongTinDaNhapMap.get(maGhe).tieuDe;
+       } else {
+           // TẠO TIÊU ĐỀ MỚI
+           String tenTau = chuyen.getTau().getTenTau(); 
+           tieuDe = String.format("%s %s → %s - %s - Toa %d - Ghế %d",
+               tenTau.substring(tenTau.lastIndexOf(" ") + 1),
+               chuyen.getTuyenDuong().getGaDi().getTenGa(),
+               chuyen.getTuyenDuong().getGaDen().getTenGa(),
+               utils.FormatUtil.formatDateTime(chuyen.getThoiGianDi()),
+               ghe.getKhoangTau().getToaTau().getSoHieuToa(),
+               ghe.getSoGhe()
+           );
+       }
 
        gui.components.ThongTinVe panelThongTin = new gui.components.ThongTinVe(tieuDe, ghe, chuyen);
        panelThongTin.setName("THONGTIN_" + ghe.getMaGhe());
+
+       // KHÔI PHỤC THÔNG TIN ĐÃ NHẬP (NẾU CÓ)
+       if (thongTinDaNhapMap.containsKey(maGhe)) {
+           ThongTinVe.ThongTinHanhKhach thongTinCu = thongTinDaNhapMap.get(maGhe).thongTin;
+           panelThongTin.setThongTin(thongTinCu);
+       }
 
        pnl_thongTin.add(panelThongTin);
        pnl_thongTin.add(javax.swing.Box.createVerticalStrut(10));
@@ -685,15 +733,25 @@ public class ChonChoNgoi extends javax.swing.JPanel {
     */
     
     private void themPanelThongTinVe(Ghe ghe, ChuyenTau chuyen) {
-        String tenTau = chuyen.getTau().getTenTau(); 
-        String tieuDe = String.format("%s %s → %s - %s - Toa %d - Ghế %d",
-            tenTau.substring(tenTau.lastIndexOf(" ") + 1),
-            chuyen.getTuyenDuong().getGaDi().getTenGa(),
-            chuyen.getTuyenDuong().getGaDen().getTenGa(),
-            FormatUtil.formatDateTime(chuyen.getThoiGianDi()),
-            ghe.getKhoangTau().getToaTau().getSoHieuToa(),
-            ghe.getSoGhe()
-        );
+        String tieuDe;
+        String maGhe = ghe.getMaGhe();
+
+        // KIỂM TRA XEM ĐÃ CÓ TIÊU ĐỀ LƯU TRƯỚC ĐÓ CHƯA
+        if (thongTinDaNhapMap.containsKey(maGhe)) {
+            // SỬ DỤNG TIÊU ĐỀ ĐÃ LƯU
+            tieuDe = thongTinDaNhapMap.get(maGhe).tieuDe;
+        } else {
+            // TẠO TIÊU ĐỀ MỚI
+            String tenTau = chuyen.getTau().getTenTau(); 
+            tieuDe = String.format("%s %s → %s - %s - Toa %d - Ghế %d",
+                tenTau.substring(tenTau.lastIndexOf(" ") + 1),
+                chuyen.getTuyenDuong().getGaDi().getTenGa(),
+                chuyen.getTuyenDuong().getGaDen().getTenGa(),
+                FormatUtil.formatDateTime(chuyen.getThoiGianDi()),
+                ghe.getKhoangTau().getToaTau().getSoHieuToa(),
+                ghe.getSoGhe()
+            );
+        }
 
         ThongTinVe panelThongTin = new ThongTinVe(tieuDe, ghe, chuyen);
         panelThongTin.setName("THONGTIN_" + ghe.getMaGhe());
@@ -778,8 +836,12 @@ public class ChonChoNgoi extends javax.swing.JPanel {
     public void xoaPanelThongTinVe(Ghe ghe) {
         String nameToFind = "THONGTIN_" + ghe.getMaGhe();
         Component[] components = pnl_thongTin.getComponents();
+
         for (int i = 0; i < components.length; i++) {
             if (components[i].getName() != null && components[i].getName().equals(nameToFind)) {
+                // XÓA KHỎI MAP KHI BỎ CHỌN GHẾ
+                thongTinDaNhapMap.remove(ghe.getMaGhe());
+
                 pnl_thongTin.remove(i);
                 if (i < pnl_thongTin.getComponentCount() && 
                     pnl_thongTin.getComponent(i) instanceof javax.swing.Box.Filler) {
@@ -792,7 +854,7 @@ public class ChonChoNgoi extends javax.swing.JPanel {
 
         pnl_thongTin.revalidate();
         pnl_thongTin.repaint();
-        
+
         if (autoUpdateUI) capNhatToanBoGiaoDien();
     }
 

@@ -14,6 +14,7 @@ import javax.swing.BorderFactory;
 import utils.FormatUtil;
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDate;
 
 /**
  *
@@ -23,11 +24,13 @@ public class ThongTinVe extends javax.swing.JPanel {
     private Ghe ghe;
     private ChuyenTau ct;
     private LoaiVe_DAO dao;
+    private String tieuDe;
     /**
      * Creates new form ThongTinVe
      */
     
     public class ThongTinHanhKhach {
+        private String maChuyenTau;
         private String maGhe;
         private String hoTen;
         private String CCCD;
@@ -44,10 +47,13 @@ public class ThongTinVe extends javax.swing.JPanel {
         public String getCCCD() { return CCCD; }
         public Date getNgaySinh() { return ngaySinh; }
         public String getLoaiVe() { return loaiVe; }
+        public void setMaChuyenTau(String maChuyenTau) { this.maChuyenTau = maChuyenTau; }
+        public String getMaChuyenTau() { return maChuyenTau; }
     }
 
     public ThongTinVe(String thongTin, Ghe ghe, ChuyenTau ct) {
         initComponents();
+        this.tieuDe = thongTin;
         pnl_thongTinHK.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createTitledBorder(
                 null,
@@ -113,6 +119,19 @@ public class ThongTinVe extends javax.swing.JPanel {
 });
     }
     
+    public String getTieuDe() {
+    return tieuDe;
+}
+    
+    public void setThongTin(ThongTinHanhKhach thongTin) {
+    if (thongTin == null) return;
+    
+    txt_hoTenHK.setText(thongTin.getHoTen());
+    txt_cccdHK.setText(thongTin.getCCCD());
+    date_ngaySinhHK.setDate(thongTin.getNgaySinh());
+    cbo_loaiVe.setSelectedItem(thongTin.getLoaiVe());
+}
+    
     public Ghe getGhe() {
         return this.ghe;
     }
@@ -122,14 +141,16 @@ public class ThongTinVe extends javax.swing.JPanel {
     }
     
     public ThongTinHanhKhach getThongTin() {
-        ThongTinHanhKhach info = new ThongTinHanhKhach();
-        info.setMaGhe(ghe.getMaGhe());
-        info.setHoTen(txt_hoTenHK.getText());
-        info.setCCCD(txt_cccdHK.getText());
-        info.setNgaySinh(date_ngaySinhHK.getDate());
-        info.setLoaiVe((String) cbo_loaiVe.getSelectedItem());
-        return info;
-    }
+    ThongTinHanhKhach info = new ThongTinHanhKhach();
+    info.setMaGhe(ghe.getMaGhe());
+    info.setHoTen(txt_hoTenHK.getText());
+    info.setCCCD(txt_cccdHK.getText());
+    info.setNgaySinh(date_ngaySinhHK.getDate());
+    info.setLoaiVe((String) cbo_loaiVe.getSelectedItem());
+    info.setMaChuyenTau(ct.getMaChuyenTau());
+    return info;
+}
+
     
     private void xoaGheVaPanel() {
     // 1. XÓA KHỎI BUS

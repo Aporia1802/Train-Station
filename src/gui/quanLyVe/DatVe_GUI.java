@@ -53,7 +53,7 @@ public class DatVe_GUI extends javax.swing.JPanel {
         // Tạo vùng chứa hiệu ứng
         slidePane = new JLayeredPane();
         slidePane.setLayout(null);
-        slidePane.setDoubleBuffered(true); // ✅ giúp vẽ mượt hơn
+        slidePane.setDoubleBuffered(true); 
         add(slidePane, BorderLayout.CENTER);
 
         // Gắn panel đầu tiên
@@ -86,61 +86,48 @@ public class DatVe_GUI extends javax.swing.JPanel {
     private void initNavigation() {
         // Xử lý nút Next ở màn hình chọn chuyến tàu
         chonChuyenTau.next().addActionListener(e -> {
-    if (validateChonChuyenTau()) {
-        try {
-            // KHÔNG XÓA ghế cũ → giữ lại khi quay lại
-            chonChoNgoi.loadDanhSachGhe(
-                chonChuyenTau.getChuyenDiDaChon(), 
-                chonChuyenTau.getChuyenVeDaChon(), 
+            if (validateChonChuyenTau()) {
+                try {
+                    // KHÔNG XÓA ghế cũ → giữ lại khi quay lại
+                    chonChoNgoi.loadDanhSachGhe(
+                        chonChuyenTau.getChuyenDiDaChon(), 
+                        chonChuyenTau.getChuyenVeDaChon(), 
+                        chonChuyenTau.isKhuHoi()
+                    );
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                next();
+            }
+        });
+        
+        chonChoNgoi.next().addActionListener(e -> {
+            // 1. VALIDATE TRƯỚC KHI CHUYỂN
+            if (!chonChoNgoi.validateThongTin()) {
+                return; // Dừng lại nếu validate fail
+            }
+
+            // 2. LẤY THÔNG TIN
+            String hoTen = chonChoNgoi.getHoTenKhachChinh();
+            String sdt = chonChoNgoi.getSoDienThoai();
+            String cccd = chonChoNgoi.getCCCD();
+
+            java.util.ArrayList<ThongTinVe.ThongTinHanhKhach> dsHK = 
+                chonChoNgoi.getDanhSachThongTinHanhKhach();
+
+            // 3. ĐẨY DỮ LIỆU VÀO THANH TOÁN
+            thanhToan.hienThiDuLieu(
+                hoTen, sdt, cccd,
+                dsHK,
+                chonChuyenTau.getChuyenDiDaChon(),
+                chonChuyenTau.getChuyenVeDaChon(),
                 chonChuyenTau.isKhuHoi()
             );
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        next();
-    }
-});
-        chonChoNgoi.next().addActionListener(e -> {
-    // 1. LẤY THÔNG TIN TỪ CHỌN GHẾ
-    String hoTen = chonChoNgoi.getHoTenKhachChinh();
-    String sdt = chonChoNgoi.getSoDienThoai();
-    String cccd = chonChoNgoi.getCCCD();
 
-    if (hoTen.isEmpty() || sdt.isEmpty() || cccd.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Vui lòng nhập thông tin khách hàng chính!");
-        return;
-    }
-
-    java.util.ArrayList<ThongTinVe.ThongTinHanhKhach> dsHK = new java.util.ArrayList<>();
-    for (java.awt.Component c : chonChoNgoi.getPanelThongTin().getComponents()) {
-        if (c instanceof ThongTinVe) {
-            ThongTinVe p = (ThongTinVe) c;
-            ThongTinVe.ThongTinHanhKhach hk = p.getThongTin();
-            if (hk.getHoTen() == null || hk.getHoTen().trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Nhập họ tên cho ghế: " + hk.getMaGhe());
-                return;
-            }
-            dsHK.add(hk);
-        }
-    }
-
-    if (dsHK.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Chưa chọn ghế nào!");
-        return;
-    }
-
-    // 2. ĐẨY DỮ LIỆU VÀO THANH TOÁN
-    thanhToan.hienThiDuLieu(
-        hoTen, sdt, cccd,
-        dsHK,
-        chonChuyenTau.getChuyenDiDaChon(),
-        chonChuyenTau.getChuyenVeDaChon(),
-        chonChuyenTau.isKhuHoi()
-    );
-
-    // 3. CHUYỂN SANG BƯỚC 3
-    next();
-});
+            // 4. CHUYỂN SANG BƯỚC 3
+            next();
+        });
+        
         chonChoNgoi.previous().addActionListener(e -> previous());
         thanhToan.previous().addActionListener(e -> previous());
     }
