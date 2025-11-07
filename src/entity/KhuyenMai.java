@@ -22,7 +22,7 @@ public class KhuyenMai {
     private Boolean trangThai;
     
     public static final String TENKHUYENMAI_EMPTY = "Tên khuyến mãi không được rỗng!";
-    public static final String HESO_INVALID = "Hệ số khuyến mãi phải từ 0.0 đến 1.0!";
+    public static final String HESO_INVALID = "Hệ số khuyến mãi phải từ 0.1 đến 100!";
     public static final String NGAYBATDAU_INVALID = "Ngày bắt đầu phải nhỏ hơn ngày kết thúc!";
     public static final String NGAYKETTHUC_INVALID = "Ngày kết thúc phải lớn hơn ngày bắt đầu!";
     public static final String TONGTIEN_INVALID = "Tổng tiền tối thiểu phải lớn hơn 0!";
