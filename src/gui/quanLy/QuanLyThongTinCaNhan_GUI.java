@@ -10,6 +10,8 @@ import dao.TaiKhoan_DAO;
 import entity.NhanVien;
 import entity.TaiKhoan;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
+import java.time.Period;
 import javax.swing.JOptionPane;
 import main.Application;
 import utils.HashPassword;
@@ -77,28 +79,66 @@ public class QuanLyThongTinCaNhan_GUI extends javax.swing.JPanel {
             String diaChi = txt_diaChi.getText().trim();
             java.util.Date d = date_ngaySinh.getDate();
 
-            if (tenNV.isEmpty() || email.isEmpty() || diaChi.isEmpty() || d == null) {
-                JOptionPane.showMessageDialog(this, "Vui lòng điền đầy đủ thông tin!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            // Kiểm tra bắt buộc
+            if (tenNV.isEmpty()) {
+                JOptionPane.showMessageDialog(this, NhanVien.TENNV_EMPTY, "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+                txt_hoTen.requestFocus();
+                return;
+            }
+            if (email.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Email không được rỗng!", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+                txt_email.requestFocus();
+                return;
+            }
+            if (diaChi.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Địa chỉ không được rỗng!", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+                txt_diaChi.requestFocus();
+                return;
+            }
+            if (d == null) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn ngày sinh!", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
+            // Chuyển ngày
+            LocalDate ngaySinh = new java.sql.Date(d.getTime()).toLocalDate();
+
+            // Kiểm tra tên hợp lệ
+            if (!tenNV.matches("^[\\p{L} ]+$")) {
+                JOptionPane.showMessageDialog(this, NhanVien.TENNV_INVALID, "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+                txt_hoTen.requestFocus();
+                return;
+            }
+
+            // Kiểm tra email hợp lệ
             if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
-                JOptionPane.showMessageDialog(this, "Email không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, NhanVien.EMAIL_INVALID, "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+                txt_email.requestFocus();
                 return;
             }
 
+            // Kiểm tra tuổi >= 18
+            int tuoi = Period.between(ngaySinh, LocalDate.now()).getYears();
+            if (tuoi < 18) {
+                JOptionPane.showMessageDialog(this, NhanVien.NGAYSINH_INVALID, "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Gán dữ liệu vào entity
             nhanVienHienTai.setTenNV(tenNV);
             nhanVienHienTai.setEmail(email);
             nhanVienHienTai.setDiaChi(diaChi);
-            nhanVienHienTai.setNgaySinh(new java.sql.Date(d.getTime()).toLocalDate());
+            nhanVienHienTai.setNgaySinh(ngaySinh);
 
+            // Cập nhật
             if (nvBUS.updateThongTin(nhanVienHienTai)) {
-                JOptionPane.showMessageDialog(this, "Cập nhật thông tin thành công!");
+                JOptionPane.showMessageDialog(this, "Cập nhật thông tin thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(this, "Cập nhật thất bại! Vui lòng kiểm tra lại dữ liệu hoặc kết nối.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Cập nhật thất bại! Vui lòng thử lại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
+
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Lỗi hệ thống: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }
@@ -109,75 +149,95 @@ public class QuanLyThongTinCaNhan_GUI extends javax.swing.JPanel {
             String mkMoi = new String(pwd_matKhauMoi.getPassword()).trim();
             String xacNhan = new String(pwd_xacNhan.getPassword()).trim();
 
-            if (mkHienTai.isEmpty() || mkMoi.isEmpty() || xacNhan.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Vui lòng điền đầy đủ thông tin mật khẩu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            // Kiểm tra rỗng
+            if (mkHienTai.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập mật khẩu hiện tại!", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+                pwd_matKhauHT.requestFocus();
+                return;
+            }
+            if (mkMoi.isEmpty()) {
+                JOptionPane.showMessageDialog(this, TaiKhoan.MATKHAU_EMPTY, "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+                pwd_matKhauMoi.requestFocus();
+                return;
+            }
+            if (xacNhan.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng xác nhận mật khẩu mới!", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+                pwd_xacNhan.requestFocus();
                 return;
             }
 
-            if (tenDangNhap == null) {
-                JOptionPane.showMessageDialog(this, "Tên đăng nhập không hợp lệ. Vui lòng kiểm tra lại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            // Kiểm tra tên đăng nhập
+            if (tenDangNhap == null || tenDangNhap.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Không xác định được tên đăng nhập!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
+            // Lấy tài khoản từ DB
             TaiKhoan_DAO tkDAO = new TaiKhoan_DAO();
             TaiKhoan tk = tkDAO.getOne(tenDangNhap);
-
             if (tk == null) {
-                JOptionPane.showMessageDialog(this, "Không tìm thấy tài khoản với tên đăng nhập: " + tenDangNhap, "Lỗi", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Không tìm thấy tài khoản!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            String hashedPasswordFromDB = tk.getMatKhau();
-
-            boolean isPasswordMatch = false;
+            // So sánh mật khẩu hiện tại
+            boolean isMatch = false;
             try {
-                isPasswordMatch = HashPassword.comparePasswords(mkHienTai, hashedPasswordFromDB);
-                if (!isPasswordMatch) {
-                    isPasswordMatch = mkHienTai.equals(hashedPasswordFromDB);
-                }
-            } catch (NoSuchAlgorithmException e) {
-                JOptionPane.showMessageDialog(this, "Lỗi khi mã hóa mật khẩu: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-                e.printStackTrace();
+                isMatch = HashPassword.comparePasswords(mkHienTai, tk.getMatKhau());
+            } catch (NoSuchAlgorithmException ex) {
+                JOptionPane.showMessageDialog(this, "Lỗi mã hóa mật khẩu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            if (!isPasswordMatch) {
-                JOptionPane.showMessageDialog(this, "Mật khẩu hiện tại không đúng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            if (!isMatch) {
+                JOptionPane.showMessageDialog(this, "Mật khẩu hiện tại không đúng!", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+                pwd_matKhauHT.setText("");
+                pwd_matKhauHT.requestFocus();
                 return;
             }
 
+            // Kiểm tra xác nhận
             if (!mkMoi.equals(xacNhan)) {
-                JOptionPane.showMessageDialog(this, "Xác nhận mật khẩu không khớp!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Xác nhận mật khẩu không khớp!", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+                pwd_xacNhan.setText("");
+                pwd_xacNhan.requestFocus();
                 return;
             }
 
-            if (mkMoi.length() < 8) {
-                JOptionPane.showMessageDialog(this, "Mật khẩu mới phải có ít nhất 8 ký tự!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            // Kiểm tra độ phức tạp mật khẩu mới
+            if (!mkMoi.matches("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).{8,}$")) {
+                JOptionPane.showMessageDialog(this, TaiKhoan.MATKHAU_INVALID, "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+                pwd_matKhauMoi.setText("");
+                pwd_xacNhan.setText("");
+                pwd_matKhauMoi.requestFocus();
                 return;
             }
 
+            // Mã hóa mật khẩu mới
             String hashedMkMoi;
             try {
                 hashedMkMoi = HashPassword.hashPassword(mkMoi);
-            } catch (NoSuchAlgorithmException e) {
-                JOptionPane.showMessageDialog(this, "Lỗi khi mã hóa mật khẩu mới: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-                e.printStackTrace();
+            } catch (NoSuchAlgorithmException ex) {
+                JOptionPane.showMessageDialog(this, "Lỗi mã hóa mật khẩu mới!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
+            // Cập nhật DB
             if (tkBUS.doiMatKhau(tenDangNhap, hashedMkMoi)) {
-                JOptionPane.showMessageDialog(this, "Đổi mật khẩu thành công!");
+                JOptionPane.showMessageDialog(this, "Đổi mật khẩu thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
                 pwd_matKhauHT.setText("");
                 pwd_matKhauMoi.setText("");
                 pwd_xacNhan.setText("");
             } else {
-                JOptionPane.showMessageDialog(this, "Đổi mật khẩu thất bại! Vui lòng thử lại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Đổi mật khẩu thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
+
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Lỗi khi đổi mật khẩu: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Lỗi hệ thống: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
