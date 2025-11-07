@@ -38,7 +38,6 @@ public class ToaTau_DAO implements DAOBase<ToaTau>{
                 // Lấy loaiToa và kiểm tra null
                 String loaiToa = rs.getString("loaiToa");
                 if (loaiToa == null) {
-                    System.err.println("WARNING: loaiToa is NULL for maToaTau: " + toa.getMaToa());
                     loaiToa = "NGOI_MEM"; // Giá trị mặc định
                 }
                 toa.setLoaiToa(loaiToa);
@@ -49,11 +48,6 @@ public class ToaTau_DAO implements DAOBase<ToaTau>{
                 toa.setTau(tau);
                 
                 dsToa.add(toa);
-                
-                // Debug log
-                System.out.println("Loaded ToaTau: " + toa.getMaToa() + 
-                                 ", soHieuToa: " + toa.getSoHieuToa() + 
-                                 ", loaiToa: " + toa.getLoaiToa());
             }
         } catch (SQLException e) {
             System.err.println("Error in getToaTauTheoMaTau: " + e.getMessage());

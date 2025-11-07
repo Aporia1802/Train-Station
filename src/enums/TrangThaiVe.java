@@ -9,8 +9,8 @@ package enums;
  * @author CÔNG HOÀNG
  */
 public enum TrangThaiVe {
-    CHUA_SU_DUNG(1, "Chưa sử dụng"),
-    DA_SU_DUNG(2, "Đã sử dụng"),
+    DA_DAT(1, "Đã đặt"),
+    DA_THANH_TOAN(2, "Đã thanh toán"),
     DA_HUY(3, "Đã hủy");
     
     private final int value;

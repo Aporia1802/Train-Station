@@ -28,30 +28,32 @@ public class HoaDon_DAO implements DAOBase<HoaDon>{
 
     @Override
     public String generateID() {
-         String prefix = "HD";
-    String sql = "SELECT MAX(maHoaDon) FROM HoaDon";
-    String newId = "";
+        String prefix = "HD-";
+        String sql = "SELECT MAX(maHoaDon) FROM HoaDon";
+        String newId = prefix + "00001";
 
-    try {
-        PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
-        ResultSet rs = st.executeQuery();
+        try (PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
+             ResultSet rs = st.executeQuery()) {
 
-        if (rs.next()) {
-            String lastId = rs.getString(1); // VD: HD0005
-            if (lastId != null) {
-                int number = Integer.parseInt(lastId.substring(prefix.length())); // -> 5
-                number++;
-                newId = prefix + String.format("%04d", number); // -> HD0006
-            } else {
-                newId = prefix + "0001";
+            if (rs.next()) {
+                String lastId = rs.getString(1);
+                if (lastId != null && lastId.startsWith(prefix)) {
+                    String numberPart = lastId.substring(prefix.length());
+                    try {
+                        int number = Integer.parseInt(numberPart);
+                        number++;
+                        newId = prefix + String.format("%05d", number);
+                    } catch (NumberFormatException e) {
+                        newId = prefix + "00001";
+                    }
+                }
             }
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
-        newId = prefix + "0001";
-    }
 
-    return newId;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return newId;
     }
 
     @Override

@@ -51,20 +51,6 @@ public class QuanLyTraVe_BUS {
             throw new Exception("Không thể lưu hóa đơn trả!");
         }
 
-//      Cập nhật trạng thái vé
-        if (!veDAO.capNhatTrangThaiVe(hdt.getVe().getMaVe())) {
-            throw new Exception("Không thể cập nhật trạng thái vé!");
-        }
-        
-//      Cập nhật trạng thái ghế
-        if (!gheDAO.capNhatTrangThaiGheTrong(hdt.getVe().getGhe().getMaGhe())) {
-            throw new Exception("Không thể cập nhật trạng thái ghế!");
-        }
-        
-//      Cập nhật lại số lượng ghế đặt và ghế trống
-        if (!chuyenTauDAO.capNhatSoGheKhiHuy(hdt.getVe().getChuyenTau().getMaChuyenTau())) {
-            throw new Exception("Không thể cập nhật số ghế!");
-        }
 
         return true;
     }

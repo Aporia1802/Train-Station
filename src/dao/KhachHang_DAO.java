@@ -86,15 +86,15 @@ public class KhachHang_DAO implements DAOBase<KhachHang> {
     @Override
     public Boolean create(KhachHang object) {
         int n = 0;
-        String sql = "INSERT INTO KhachHang (maKH, tenKH, soDienThoai, cccd) VALUES (?, ?, ?, ?, ?)";
-        
+        String sql = "INSERT INTO KhachHang (maKH, tenKH, soDienThoai, cccd) VALUES (?, ?, ?, ?)";
+
         try {
             PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
             st.setString(1, object.getMaKH());
             st.setString(2, object.getTenKH());
             st.setString(3, object.getSoDienThoai());
             st.setString(4, object.getCccd());
-            
+
             n = st.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

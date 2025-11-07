@@ -67,9 +67,6 @@ public class HanhKhach {
     }
 
     public void setNgaySinh(LocalDate ngaySinh) throws Exception{
-        if(ngaySinh.isAfter(LocalDate.now())) {
-            throw new Exception(NGAYSINH_INVALID);
-        }
         this.ngaySinh = ngaySinh;
     }
 

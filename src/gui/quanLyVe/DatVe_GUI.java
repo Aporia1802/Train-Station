@@ -46,6 +46,10 @@ public class DatVe_GUI extends javax.swing.JPanel {
         chonChuyenTau = new ChonChuyenTau(bus);
         chonChoNgoi = new ChonChoNgoi(bus);
         thanhToan = new ThanhToan(bus);
+        
+        thanhToan.setOnThanhToanThanhCong(() -> {
+            resetToiDau();
+        });
 
         // Tạo mảng panel
         panels = new JPanel[]{chonChuyenTau, chonChoNgoi, thanhToan};
@@ -204,6 +208,50 @@ public class DatVe_GUI extends javax.swing.JPanel {
         current.setBounds(0, 0, slidePane.getWidth(), slidePane.getHeight());
         slidePane.add(current, Integer.valueOf(0));
         slidePane.repaint();
+    }
+    
+    /**
+     * Reset toàn bộ quy trình đặt vé về bước đầu tiên
+     */
+    public void resetToiDau() {
+        // 1. Reset BUS - xóa tất cả ghế đã chọn
+        bus.clearDanhSachGheDaChon();
+        
+        // 2. Reset các panel
+        try {
+            // Reset ChonChuyenTau - tạo mới
+            chonChuyenTau = new ChonChuyenTau(bus);
+            
+            // Reset ChonChoNgoi - tạo mới
+            chonChoNgoi = new ChonChoNgoi(bus);
+            
+            // Reset ThanhToan - tạo mới
+            thanhToan = new ThanhToan(bus);
+            
+            // Cập nhật lại mảng panels
+            panels[0] = chonChuyenTau;
+            panels[1] = chonChoNgoi;
+            panels[2] = thanhToan;
+            
+            // 3. Khởi tạo lại navigation
+            initNavigation();
+            
+            // 4. Quay về màn hình đầu tiên
+            currentIndex = 0;
+            slidePane.removeAll();
+            JPanel first = panels[0];
+            first.setBounds(0, 0, slidePane.getWidth(), slidePane.getHeight());
+            slidePane.add(first, Integer.valueOf(0));
+            slidePane.revalidate();
+            slidePane.repaint();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this,
+                "Có lỗi khi reset form: " + e.getMessage(),
+                "Lỗi",
+                JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     @Override

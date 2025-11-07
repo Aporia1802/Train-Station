@@ -38,7 +38,7 @@ public class LoaiVe_DAO implements DAOBase<LoaiVe>{
         return loaiVe;
     }
     
-        public LoaiVe getLoaiVe(String tenLoai) {
+    public LoaiVe getLoaiVe(String tenLoai) {
         LoaiVe loaiVe = null;
         String sql = "SELECT * FROM LoaiVe WHERE tenLoaiVe = ?";
 

@@ -128,29 +128,34 @@ public class Ve_DAO implements DAOBase<Ve>{
 
     @Override
     public String generateID() {
-        String prefix = "V";
+        String prefix = "VE-";
         String sql = "SELECT MAX(maVe) FROM Ve";
-        String newId = "";
+        String newId = prefix + "00001";
 
-        try {
-            PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
-            ResultSet rs = st.executeQuery();
+        try (PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
+             ResultSet rs = st.executeQuery()) {
 
             if (rs.next()) {
-                String lastId = rs.getString(1); 
-                if (lastId != null) {
-                    int number = Integer.parseInt(lastId.substring(prefix.length()));
-                    number++;
-                    newId = prefix + String.format("%03d", number);
-                } else {
-                    newId = prefix + "001";
+                String lastId = rs.getString(1);
+                if (lastId != null && lastId.startsWith(prefix)) {
+                    String numberPart = lastId.substring(prefix.length());
+                    try {
+                        int number = Integer.parseInt(numberPart);
+                        number++;
+                        newId = prefix + String.format("%05d", number);
+                    } catch (NumberFormatException e) {
+                        newId = prefix + "00001";
+                    }
                 }
             }
-        } catch (NumberFormatException | SQLException e) {
-            newId = prefix + "0001";
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
         return newId;
     }
+
 
     @Override
     public Boolean create(Ve object) {
@@ -176,8 +181,22 @@ public class Ve_DAO implements DAOBase<Ve>{
     }
 
     @Override
-    public Boolean update(String id, Ve newObject) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Boolean update(String id, Ve newVe) {
+        int n = 0;
+        String sql = "UPDATE Ve SET  trangThai = ? WHERE maVe = ?";
+        
+        try {
+            PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
+            
+            st.setInt(1, newVe.getTrangThai().getValue());
+            st.setString(2, id);
+            
+            n = st.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return n > 0;
     }
 
     @Override
@@ -406,32 +425,68 @@ public class Ve_DAO implements DAOBase<Ve>{
      */
     public ArrayList<Ve> getVeTheoMaChuyenTau(String maChuyenTau) throws Exception {
         ArrayList<Ve> dsVe = new ArrayList<>();
-        String sql = "SELECT v.*, g.maGhe, g.soGhe " +
+        String sql = "SELECT v.*, " +
+                     "hk.tenHanhKhach, hk.cccd, hk.ngaySinh, " +
+                     "g.soGhe, g.maLoaiGhe, " +
+                     "lg.tenLoaiGhe, lg.heSoLoaiGhe, " +
+                     "kt.maKhoangTau, kt.soHieuKhoang, " +
+                     "tt.maToaTau, tt.soHieuToa " +
                      "FROM Ve v " +
+                     "INNER JOIN HanhKhach hk ON v.maHanhKhach = hk.maHanhKhach " +
                      "INNER JOIN Ghe g ON v.maGhe = g.maGhe " +
+                     "INNER JOIN LoaiGhe lg ON g.maLoaiGhe = lg.maLoaiGhe " +
+                     "INNER JOIN KhoangTau kt ON g.maKhoangTau = kt.maKhoangTau " +
+                     "INNER JOIN ToaTau tt ON kt.maToaTau = tt.maToaTau " +
                      "WHERE v.maChuyenTau = ?";
         
-        try  {
-            PreparedStatement pstmt = ConnectDB.conn.prepareStatement(sql);
-            pstmt.setString(1, maChuyenTau);
-            ResultSet rs = pstmt.executeQuery();
+        try {
+            PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
+            st.setString(1, maChuyenTau);
+            ResultSet rs = st.executeQuery();
             
             while (rs.next()) {
                 Ve ve = new Ve();
                 ve.setMaVe(rs.getString("maVe"));
-                ve.setTrangThai(TrangThaiVe.fromInt(rs.getInt("trangThai")));
                 ve.setGiaVe(rs.getDouble("giaVe"));
+                ve.setTrangThai(TrangThaiVe.fromInt(rs.getInt("trangThai")));
                 
-                // Tạo đối tượng Ghe
+                // Tạo HanhKhach
+                HanhKhach hk = new HanhKhach();
+                hk.setMaHanhKhach(rs.getString("maHanhKhach"));
+                hk.setTenHanhKhach(rs.getString("tenHanhKhach"));
+                hk.setCccd(rs.getString("cccd"));
+                if (rs.getDate("ngaySinh") != null) {
+                    hk.setNgaySinh(rs.getDate("ngaySinh").toLocalDate());
+                }
+                ve.setHanhKhach(hk);
+                
+                // Tạo Ghe với LoaiGhe
+                LoaiGhe loaiGhe = new LoaiGhe();
+                loaiGhe.setMaLoaiGhe(rs.getString("maLoaiGhe"));
+                loaiGhe.setTenLoaiGhe(rs.getString("tenLoaiGhe"));
+                loaiGhe.setHeSoLoaiGhe(rs.getDouble("heSoLoaiGhe"));
+                
+                ToaTau toaTau = new ToaTau();
+                toaTau.setMaToa(rs.getString("maToaTau"));
+                toaTau.setSoHieuToa(rs.getInt("soHieuToa"));
+                
+                KhoangTau khoangTau = new KhoangTau();
+                khoangTau.setMaKhoangTau(rs.getString("maKhoangTau"));
+                khoangTau.setSoHieuKhoang(rs.getInt("soHieuKhoang"));
+                khoangTau.setToaTau(toaTau);
+                
                 Ghe ghe = new Ghe();
                 ghe.setMaGhe(rs.getString("maGhe"));
                 ghe.setSoGhe(rs.getInt("soGhe"));
+                ghe.setLoaiGhe(loaiGhe);
+                ghe.setKhoangTau(khoangTau);
                 ve.setGhe(ghe);
                 
                 dsVe.add(ve);
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            throw e;
         }
         
         return dsVe;

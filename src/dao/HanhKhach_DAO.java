@@ -132,24 +132,24 @@ public class HanhKhach_DAO {
     
     // Thêm vào HanhKhach_DAO.java
 
-public String generateID() {
-    String newID = "HK001";
-    String sql = "SELECT TOP 1 maHanhKhach FROM HanhKhach ORDER BY maHanhKhach DESC";
-    
-    try {
-        Statement st = ConnectDB.conn.createStatement();
-        ResultSet rs = st.executeQuery(sql);
-        
-        if (rs.next()) {
-            String lastID = rs.getString("maHanhKhach");
-            int num = Integer.parseInt(lastID.substring(2));
-            newID = String.format("HK%03d", num + 1);
+    public String generateID() {
+        String newID = "HK-001";
+        String sql = "SELECT TOP 1 maHanhKhach FROM HanhKhach ORDER BY maHanhKhach DESC";
+
+        try {
+            Statement st = ConnectDB.conn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+
+            if (rs.next()) {
+                String lastID = rs.getString("maHanhKhach");
+                int num = Integer.parseInt(lastID.substring(3));
+                newID = String.format("HK-%03d", num + 1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        e.printStackTrace();
+        return newID;
     }
-    return newID;
-}
 
     public Boolean create(HanhKhach object) {
     int n = 0;
@@ -160,8 +160,12 @@ public String generateID() {
         st.setString(1, object.getMaHanhKhach());
         st.setString(2, object.getTenHanhKhach());
         st.setString(3, object.getCccd());
-        st.setDate(4, java.sql.Date.valueOf(object.getNgaySinh()));
-        
+        if(object.getNgaySinh() == null) {
+            st.setDate(4, null);
+        } else {
+            st.setDate(4, java.sql.Date.valueOf(object.getNgaySinh()));
+        }
+       
         n = st.executeUpdate();
     } catch (Exception e) {
         e.printStackTrace();
