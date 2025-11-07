@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import javax.swing.JOptionPane;
 import main.Application;
 import raven.toast.Notifications;
+import utils.CreateReturnOrder;
 import utils.FormatUtil;
 
 /**
@@ -41,22 +42,45 @@ public class TraVe_GUI extends javax.swing.JPanel {
     }
     
     private void handleTimKiem() {
-        String maVe = txt_timKiem.getText();
-        
-        if(maVe.equals("")) {
+        String maVe = txt_timKiem.getText().trim();
+
+        if(maVe.isEmpty()) {
             Notifications.getInstance().show(Notifications.Type.INFO, "Cần nhập mã vé cần trả!");
             return;
         }
-        
+
         ve = bus.getVeById(maVe);
-        
-        
+
+        // Reset tất cả panel trước khi hiển thị kết quả mới
+        pnl_thongTinVe.setVisible(false);
+        pnl_thongBao.setVisible(false);
+        pnl_chiTietHoanTien.setVisible(false);
+
         if(ve == null) {
             pnl_thongBao.setVisible(true);
             lbl_thongBao.setText("Không tìm thấy vé");
+            lbl_chiTietThongBao.setText("Vui lòng kiểm tra lại mã vé");
             return;
         }
-        
+
+        // Hiển thị thông tin vé
+        hienThiThongTinVe();
+        pnl_thongTinVe.setVisible(true);
+
+        // Kiểm tra điều kiện trả vé
+        if(!kiemTraDieuKienTraVe()) {
+            // Nếu không đủ điều kiện, chỉ hiển thị thông báo
+            pnl_thongBao.setVisible(true);
+            return;
+        }
+
+        // Nếu đủ điều kiện, tạo hóa đơn và hiển thị chi tiết hoàn tiền
+        hdt = createHoaDonTra();
+        hienThiChiTietHoanTien();
+        pnl_chiTietHoanTien.setVisible(true);
+    }
+
+    private void hienThiThongTinVe() {
         lbl_maVe.setText(ve.getMaVe());
         lbl_tau.setText(ve.getChuyenTau().getTau().getMaTau() + " - " + ve.getChuyenTau().getTau().getTenTau());
         lbl_hanhTrinh.setText(ve.getChuyenTau().getTuyenDuong().getGaDi().getTenGa() + " - " + ve.getChuyenTau().getTuyenDuong().getGaDen().getTenGa());
@@ -65,68 +89,69 @@ public class TraVe_GUI extends javax.swing.JPanel {
         lbl_soGhe.setText("Toa " + ve.getGhe().getKhoangTau().getToaTau().getSoHieuToa() + " chỗ " + ve.getGhe().getSoGhe());
         lbl_hoTen.setText(ve.getHanhKhach().getTenHanhKhach());
         lbl_cccd.setText(ve.getHanhKhach().getCccd());
-        
-        pnl_thongTinVe.setVisible(true);
-        
-//      Hiển thị thông báo nêú không đủ điều kiện
-        hienThiThongBao();
-        
-//      Tạo hóa đơn trả và hiển thị chi tiết hoàn tiền nếu đáp ứng được điều kiện
-        hdt = CreateHoaDonTra();
-        hienThiChiTietHoanTien();
     }
-    
-    private void hienThiThongBao() {
+
+    private boolean kiemTraDieuKienTraVe() {
+        // Kiểm tra trạng thái vé đã sử dụng
         if(ve.getTrangThai().compare(2)) {
             lbl_thongBao.setText("Không đủ điều kiện trả vé");
             lbl_chiTietThongBao.setText("Vé đã được sử dụng!");
-            pnl_thongBao.setVisible(true);
-            return;
+            return false;
         }
-        
+
+        // Kiểm tra trạng thái vé đã hủy
         if(ve.getTrangThai().compare(3)) {
             lbl_thongBao.setText("Không đủ điều kiện trả vé");
             lbl_chiTietThongBao.setText("Vé đã bị hủy không thể đổi trả!");
-            pnl_thongBao.setVisible(true);
-            return;
+            return false;
         }
-        
+
+        // Kiểm tra thời gian trước giờ tàu chạy
         LocalDateTime gioTauChay = ve.getChuyenTau().getThoiGianDi();
         LocalDateTime gioHienTai = LocalDateTime.now();
-
-        // Tính khoảng thời gian giữa hai thời điểm
         Duration duration = Duration.between(gioHienTai, gioTauChay);
         long hours = duration.toHours();
 
         if(hours < 4) {
             lbl_thongBao.setText("Không đủ điều kiện trả vé");
             lbl_chiTietThongBao.setText("Vé chỉ có thể trả trước 4 giờ tàu chạy (tàu chạy lúc " + FormatUtil.formatDateTime(gioTauChay) + ")");
-            pnl_thongBao.setVisible(true);
+            return false;
         }
+
+        return true;
     }
-    
-    private HoaDonTra CreateHoaDonTra() {
+
+    private HoaDonTra createHoaDonTra() {
         String maHDT = bus.generateID();
         LocalDateTime ngayTra = LocalDateTime.now();
-        hdt = new HoaDonTra(maHDT, ngayTra, nhanVien, ve);
-        return hdt;
+        return new HoaDonTra(maHDT, ngayTra, nhanVien, ve);
     }
-    
+
     private void hienThiChiTietHoanTien() { 
         lbl_giaVe.setText(FormatUtil.formatCurrency(ve.getGiaVe()));
         lbl_phiHuy.setText(FormatUtil.formatCurrency(hdt.phiHuy()));
         lbl_soTienHoan.setText(FormatUtil.formatCurrency(hdt.getSoTienHoanTra()));
-        
-        pnl_chiTietHoanTien.setVisible(true);
     }
-    
+
     private void handleDongThongBao() {
+        // Reset tất cả panel và input
         pnl_thongTinVe.setVisible(false);
         pnl_thongBao.setVisible(false);
+        pnl_chiTietHoanTien.setVisible(false);
         txt_timKiem.setText("");
+
+        // Reset biến ve và hdt
+        ve = null;
+        hdt = null;
     }
-    
+
     private void handleTraVe() {
+        // Kiểm tra hdt có tồn tại không
+        if(hdt == null) {
+            Notifications.getInstance().show(Notifications.Type.ERROR, "Không có thông tin hóa đơn trả!");
+            return;
+        }
+
         int n = JOptionPane.showConfirmDialog(
             null,
             "Bạn có chắc muốn trả vé không? Vé đã trả sẽ không thể phục hồi",
@@ -134,17 +159,33 @@ public class TraVe_GUI extends javax.swing.JPanel {
             JOptionPane.YES_NO_OPTION,
             JOptionPane.QUESTION_MESSAGE
         );
-        
+
         if(n == JOptionPane.YES_OPTION) {
             try {
                 if(bus.create(hdt)) {
-                    pnl_thongTinVe.setVisible(false);
-                    pnl_chiTietHoanTien.setVisible(false);
-                    txt_timKiem.setText("");
                     Notifications.getInstance().show(Notifications.Type.SUCCESS, "Trả vé thành công!");
+
+                    // Hỏi có muốn in hóa đơn không
+                    int printChoice = JOptionPane.showConfirmDialog(
+                        null,
+                        "Bạn có muốn xuất hóa đơn trả vé PDF không?",
+                        "Xuất hóa đơn",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE
+                    );
+
+                    if(printChoice == JOptionPane.YES_OPTION) {
+                        // Xuất hóa đơn PDF
+                        CreateReturnOrder printer = new CreateReturnOrder(hdt);
+                        printer.xuatHoaDonTra();
+                    }
+
+                    // Reset giao diện
+                    handleDongThongBao();
                 }
             } catch (Exception ex) {
-                Notifications.getInstance().show(Notifications.Type.ERROR, "Không thể thực hiện trả vé!");
+                Notifications.getInstance().show(Notifications.Type.ERROR, "Không thể thực hiện trả vé: " + ex.getMessage());
+                ex.printStackTrace();
             }
         }
     }

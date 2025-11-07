@@ -204,19 +204,29 @@ public class Ve_DAO implements DAOBase<Ve>{
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
-    public Boolean capNhatTrangThaiVe(String maVe) {
-        int n = 0;
-         String sql = "UPDATE Ve SET trangThai = ? WHERE maVe = ?";
-        try {
-            PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
-            st.setInt(1, 3);
-            st.setString(2, maVe);
-            n = st.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e.getMessage());
-        }
-        return n > 0;
-    }
+    /**
+    * Cập nhật trạng thái vé
+    * @param maVe Mã vé
+    * @param trangThai Trạng thái mới (1: Chưa sử dụng, 2: Đã sử dụng, 3: Đã hủy)
+    * @return true nếu thành công
+    */
+   public boolean updateTrangThaiVe(String maVe, int trangThai) {
+       String sql = "UPDATE Ve SET trangThai = ? WHERE maVe = ?";
+
+       try {
+           PreparedStatement ps = ConnectDB.conn.prepareStatement(sql);
+           ps.setInt(1, trangThai);
+           ps.setString(2, maVe);
+
+           int result = ps.executeUpdate();
+           ps.close();
+
+           return result > 0;
+       } catch (Exception e) {
+           e.printStackTrace();
+           return false;
+       }
+   }
     
     public Ve getData(ResultSet rs) throws SQLException, Exception {
         // LOẠI VÉ 
@@ -227,13 +237,22 @@ public class Ve_DAO implements DAOBase<Ve>{
                     rs.getDouble("heSoLoaiVe")
             );
             
+        
+        
             // Hành khách
             HanhKhach hanhKhach = new HanhKhach(
                 rs.getString("maHanhKhach"),
                 rs.getString("tenHanhKhach"),
                 rs.getString("cccdHanhKhach"),
-                rs.getDate("ngaySinhHanhKhach").toLocalDate()  // ← Dùng alias
+                null
             );
+            
+            Date ngaySinh =  rs.getDate("ngaySinhHanhKhach");
+            if(ngaySinh == null) {
+                hanhKhach.setNgaySinh(null);
+            } else {
+                hanhKhach.setNgaySinh(ngaySinh.toLocalDate());
+            }
 
             
             //GHẾ & LOẠI GHẾ
