@@ -38,7 +38,6 @@ public class TraVe_GUI extends javax.swing.JPanel {
         pnl_chiTietHoanTien.setVisible(false);
         pnl_thongBao.setVisible(false);
         pnl_thongTinVe.setVisible(false);
-        txt_timKiem.setText("V001");
     }
     
     private void handleTimKiem() {

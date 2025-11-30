@@ -7,10 +7,19 @@ package gui.components;
 import bus.QuanLyDatVe_BUS;
 import entity.ChuyenTau;
 import entity.Ghe;
+import entity.HoaDonDoi;
+import entity.NhanVien;
+import entity.Ve;
 import java.awt.Component;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import main.Application;
+import raven.toast.Notifications;
+import utils.CreateExchangeOrder;
+import utils.CreateTicket;
 import utils.FormatUtil;
 
 /**
@@ -19,6 +28,9 @@ import utils.FormatUtil;
  */
 public class ThanhToan extends javax.swing.JPanel {
     private final QuanLyDatVe_BUS bus;
+    private final NhanVien nhanVien = Application.nhanVien;
+    
+    // Thông tin chung
     private String hoTenKhach;
     private String sdtKhach;
     private String cccdKhach;
@@ -27,7 +39,13 @@ public class ThanhToan extends javax.swing.JPanel {
     private ChuyenTau chuyenVe;
     private boolean isKhuHoi;
     private double tongTienThanhToan = 0;
-    private Runnable onThanhToanThanhCong; // THÊM CALLBACK
+    
+    // Riêng cho Đổi vé
+    private Ve veCanDoi = null;
+    private static final double PHI_DOI_VE = 20000;
+    
+    // Callback
+    private Runnable onThanhToanThanhCong;
     
     public ThanhToan(QuanLyDatVe_BUS bus) {
         initComponents();
@@ -39,16 +57,34 @@ public class ThanhToan extends javax.swing.JPanel {
     }
     
     /**
+     * Set vé cần đổi (chỉ dùng cho chế độ Đổi vé)
+     */
+    public void setVeCanDoi(Ve veCanDoi) {
+        this.veCanDoi = veCanDoi;
+    }
+    
+    /**
+     * Kiểm tra có phải đang đổi vé không
+     */
+    private boolean isDoiVe() {
+        return veCanDoi != null;
+    }
+    
+    /**
      * Đặt callback khi thanh toán thành công
      */
     public void setOnThanhToanThanhCong(Runnable callback) {
         this.onThanhToanThanhCong = callback;
     }
    
+
+    /**
+     * Hiển thị dữ liệu thanh toán - CẢI TIẾN
+     */
     public void hienThiDuLieu(String hoTen, String sdt, String cccd,
-                          java.util.List<ThongTinVe.ThongTinHanhKhach> dsHK,
-                          ChuyenTau chuyenDi, ChuyenTau chuyenVe, boolean khuHoi) {
-        // LƯU THÔNG TIN
+                      java.util.List<ThongTinVe.ThongTinHanhKhach> dsHK,
+                      ChuyenTau chuyenDi, ChuyenTau chuyenVe, boolean khuHoi) {
+        // Lưu thông tin
         this.hoTenKhach = hoTen;
         this.sdtKhach = sdt;
         this.cccdKhach = cccd;
@@ -57,11 +93,14 @@ public class ThanhToan extends javax.swing.JPanel {
         this.chuyenVe = chuyenVe;
         this.isKhuHoi = khuHoi;
 
+        // Hiển thị thông tin khách
         jLabel6.setText(hoTen);
         jLabel8.setText(sdt);
+
+        // Clear panel vé
         jPanel13.removeAll();
 
-        // PHÂN LOẠI VÉ THEO CHIỀU
+        // Phân loại vé theo chiều
         java.util.ArrayList<ThongTinVe.ThongTinHanhKhach> dsVeDi = new java.util.ArrayList<>();
         java.util.ArrayList<ThongTinVe.ThongTinHanhKhach> dsVeVe = new java.util.ArrayList<>();
 
@@ -69,8 +108,7 @@ public class ThanhToan extends javax.swing.JPanel {
         String maChuyenVe = (chuyenVe != null) ? chuyenVe.getMaChuyenTau() : null;
 
         for (ThongTinVe.ThongTinHanhKhach hk : dsHK) {
-            String maChuyenCuaVe = hk.getMaChuyenTau(); 
-
+            String maChuyenCuaVe = hk.getMaChuyenTau();
             if (maChuyenCuaVe != null) {
                 if (maChuyenCuaVe.equals(maChuyenDi)) {
                     dsVeDi.add(hk);
@@ -80,23 +118,28 @@ public class ThanhToan extends javax.swing.JPanel {
             }
         }
 
-        double tongTien = 0;
+        double tongTienVeMoi = 0;
+        double giaVeCu = 0;
 
-        // HIỂN THỊ CHIỀU ĐI
+        // ========== XỬ LÝ ĐẶC BIỆT CHO ĐỔI VÉ ==========
+        if (isDoiVe()) {
+            // Tính giá vé cũ
+            giaVeCu = tinhGiaVeCu(veCanDoi);
+
+            // Thêm thông tin vé cũ
+            javax.swing.JLabel lblVeCu = taoHeader("Vé cũ");
+            jPanel13.add(lblVeCu);
+            jPanel13.add(javax.swing.Box.createVerticalStrut(10));
+
+            JPanel pnlVeCu = taoThongTinVeCu(veCanDoi, giaVeCu);
+            jPanel13.add(pnlVeCu);
+            jPanel13.add(javax.swing.Box.createVerticalStrut(20));
+        }
+
+        // Hiển thị chiều đi (VÉ MỚI)
         if (!dsVeDi.isEmpty()) {
-            javax.swing.JLabel lblHeaderDi = new javax.swing.JLabel("Chiều đi");
-            lblHeaderDi.setFont(new java.awt.Font("Segoe UI", 1, 16));
-            lblHeaderDi.setForeground(new java.awt.Color(123, 17, 19));
-            lblHeaderDi.setBackground(java.awt.Color.WHITE);
-            lblHeaderDi.setOpaque(true);
-            lblHeaderDi.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-            lblHeaderDi.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-                javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(123, 17, 19)),
-                javax.swing.BorderFactory.createEmptyBorder(10, 0, 10, 15)
-            ));
-            lblHeaderDi.setMaximumSize(new java.awt.Dimension(Integer.MAX_VALUE, 40));
-            lblHeaderDi.setAlignmentX(Component.LEFT_ALIGNMENT);
-
+            String headerText = isDoiVe() ? "Vé mới" : "Chiều đi";
+            javax.swing.JLabel lblHeaderDi = taoHeader(headerText);
             jPanel13.add(lblHeaderDi);
             jPanel13.add(javax.swing.Box.createVerticalStrut(10));
 
@@ -105,7 +148,7 @@ public class ThanhToan extends javax.swing.JPanel {
                 if (ghe == null) continue;
 
                 double giaVe = bus.tinhGiaVe(hk, ghe, chuyenDi);
-                tongTien += giaVe;
+                tongTienVeMoi += giaVe;
 
                 JPanel pnlVe = taoThongTinVe(hk, ghe, chuyenDi, giaVe);
                 jPanel13.add(pnlVe);
@@ -113,23 +156,11 @@ public class ThanhToan extends javax.swing.JPanel {
             }
         }
 
-        // HIỂN THỊ CHIỀU VỀ
+        // Hiển thị chiều về
         if (!dsVeVe.isEmpty() && chuyenVe != null) {
             jPanel13.add(javax.swing.Box.createVerticalStrut(20));
-            
-            javax.swing.JLabel lblHeaderVe = new javax.swing.JLabel("Chiều về");
-            lblHeaderVe.setFont(new java.awt.Font("Segoe UI", 1, 16));
-            lblHeaderVe.setForeground(new java.awt.Color(123, 17, 19));
-            lblHeaderVe.setBackground(java.awt.Color.WHITE);
-            lblHeaderVe.setOpaque(true);
-            lblHeaderVe.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-            lblHeaderVe.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-                javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(123, 17, 19)),
-                javax.swing.BorderFactory.createEmptyBorder(10, 0, 10, 15)
-            ));
-            lblHeaderVe.setMaximumSize(new java.awt.Dimension(Integer.MAX_VALUE, 40));
-            lblHeaderVe.setAlignmentX(Component.LEFT_ALIGNMENT);
 
+            javax.swing.JLabel lblHeaderVe = taoHeader("Chiều về");
             jPanel13.add(lblHeaderVe);
             jPanel13.add(javax.swing.Box.createVerticalStrut(10));
 
@@ -138,7 +169,7 @@ public class ThanhToan extends javax.swing.JPanel {
                 if (ghe == null) continue;
 
                 double giaVe = bus.tinhGiaVe(hk, ghe, chuyenVe);
-                tongTien += giaVe;
+                tongTienVeMoi += giaVe;
 
                 JPanel pnlVe = taoThongTinVe(hk, ghe, chuyenVe, giaVe);
                 jPanel13.add(pnlVe);
@@ -146,15 +177,190 @@ public class ThanhToan extends javax.swing.JPanel {
             }
         }
 
-        // HIỂN THỊ TỔNG TIỀN
-        jLabel13.setText(FormatUtil.formatCurrency(tongTien));
-        tongTienThanhToan = 1.1 * tongTien; // LƯU VÀO BIẾN
+        // ========== TÍNH TỔNG TIỀN ==========
+        double thanhTien = 0;
+
+        if (isDoiVe()) {
+            // Công thức đổi vé: (Vé mới - Vé cũ) + Phí đổi
+            double chenhLech = tongTienVeMoi - giaVeCu;
+
+            // Thêm phí đổi vé
+            JPanel pnlPhiDoi = taoPanelPhiDoi();
+            jPanel13.add(pnlPhiDoi);
+
+            thanhTien = chenhLech + PHI_DOI_VE;
+
+            // Nếu chênh lệch âm (vé mới rẻ hơn), khách chỉ trả phí đổi
+            if (thanhTien < 0) {
+                thanhTien = PHI_DOI_VE;
+            }
+
+            btn_xacNhan.setText("Xác nhận đổi vé");
+        } else {
+            thanhTien = tongTienVeMoi;
+            btn_xacNhan.setText("In hóa đơn và vé");
+        }
+
+        // Hiển thị tổng tiền
+        jLabel13.setText(FormatUtil.formatCurrency(thanhTien));
+        tongTienThanhToan = 1.1 * thanhTien; // +10% VAT
         jLabel2.setText(FormatUtil.formatCurrency(tongTienThanhToan));
-        jLabel9.setText("Tổng tiền: " + FormatUtil.formatCurrency(tongTienThanhToan));
 
-        // TÍNH TIỀN THỐI
-        final double TONG_TIEN = 1.1 * tongTien;
+        // ===== CẬP NHẬT LABEL TỔNG TIỀN =====
+        String labelTongTien = isDoiVe() 
+            ? "Tổng tiền đổi vé: " + FormatUtil.formatCurrency(tongTienThanhToan)
+            : "Tổng tiền: " + FormatUtil.formatCurrency(tongTienThanhToan);
+        jLabel9.setText(labelTongTien);
 
+        // Tính tiền thối
+        setupTienThoi(tongTienThanhToan);
+
+        jPanel13.revalidate();
+        jPanel13.repaint();
+    }
+
+    
+    /**
+     * Tạo header cho nhóm vé
+     */
+    private javax.swing.JLabel taoHeader(String text) {
+        javax.swing.JLabel lbl = new javax.swing.JLabel(text);
+        lbl.setFont(new java.awt.Font("Segoe UI", 1, 16));
+        lbl.setForeground(new java.awt.Color(123, 17, 19));
+        lbl.setBackground(java.awt.Color.WHITE);
+        lbl.setOpaque(true);
+        lbl.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lbl.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+            javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(123, 17, 19)),
+            javax.swing.BorderFactory.createEmptyBorder(10, 0, 10, 15)
+        ));
+        lbl.setMaximumSize(new java.awt.Dimension(Integer.MAX_VALUE, 40));
+        lbl.setAlignmentX(Component.LEFT_ALIGNMENT);
+        return lbl;
+    }
+    
+    /**
+     * Tạo panel hiển thị thông tin vé
+     */
+    private JPanel taoThongTinVe(ThongTinVe.ThongTinHanhKhach hk, Ghe ghe, 
+                             ChuyenTau ct, double giaVe) {
+        JPanel p = new JPanel();
+        p.setBackground(new java.awt.Color(255, 255, 255));
+        p.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+            javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(200, 200, 200)),
+            javax.swing.BorderFactory.createEmptyBorder(12, 15, 12, 15)
+        ));
+        p.setLayout(new javax.swing.BoxLayout(p, javax.swing.BoxLayout.Y_AXIS));
+        p.setMaximumSize(new java.awt.Dimension(Integer.MAX_VALUE, 170));
+
+        // ===== THÊM DÒNG NÀY ĐỂ CĂN TRÁI =====
+        p.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        int soHieuToa = ghe.getKhoangTau().getToaTau().getSoHieuToa();
+        int soGhe = ghe.getSoGhe();
+        String loaiGhe = ghe.getLoaiGhe().getTenLoaiGhe();
+
+        p.add(taoLabel("Họ tên: " + hk.getHoTen(), 15, true));
+        p.add(javax.swing.Box.createVerticalStrut(5));
+        p.add(taoLabel("Đối tượng: " + hk.getLoaiVe(), 15, false));
+        p.add(javax.swing.Box.createVerticalStrut(3));
+
+        String giayCCCD = (hk.getCCCD() == null || hk.getCCCD().isEmpty()) ? "Trẻ em" : hk.getCCCD();
+        p.add(taoLabel("Số giấy tờ: " + giayCCCD, 15, false));
+        p.add(javax.swing.Box.createVerticalStrut(3));
+
+        p.add(taoLabel("Hành trình: " + 
+            ct.getTuyenDuong().getGaDi().getTenGa() + " → " + 
+            ct.getTuyenDuong().getGaDen().getTenGa() + " " + 
+            FormatUtil.formatDateTime(ct.getThoiGianDi()), 15, true));
+        p.add(javax.swing.Box.createVerticalStrut(3));
+
+        p.add(taoLabel("Vị trí: Toa " + soHieuToa + 
+            " - Ghế " + soGhe + " (" + loaiGhe + ")", 15, false));
+        p.add(javax.swing.Box.createVerticalStrut(8));
+
+        javax.swing.JLabel lblGia = taoLabel("Giá vé: " + FormatUtil.formatCurrency(giaVe), 16, true);
+        lblGia.setForeground(new java.awt.Color(255, 51, 0));
+        p.add(lblGia);
+
+        return p;
+    }
+    
+    /**
+     * Tạo panel thông tin vé cũ (cho đổi vé)
+     */
+    private JPanel taoThongTinVeCu(Ve ve, double giaVe) {
+        JPanel p = new JPanel();
+        p.setBackground(new java.awt.Color(254, 226, 226));
+        p.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+            javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(200, 100, 100)),
+            javax.swing.BorderFactory.createEmptyBorder(12, 15, 12, 15)
+        ));
+        p.setLayout(new javax.swing.BoxLayout(p, javax.swing.BoxLayout.Y_AXIS));
+        p.setMaximumSize(new java.awt.Dimension(Integer.MAX_VALUE, 180));
+        p.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        p.add(taoLabel("Mã vé: " + ve.getMaVe(), 15, true));
+        p.add(javax.swing.Box.createVerticalStrut(5));
+        p.add(taoLabel("Hành trình: " + 
+            ve.getChuyenTau().getTuyenDuong().getGaDi().getTenGa() + " → " + 
+            ve.getChuyenTau().getTuyenDuong().getGaDen().getTenGa(), 15, false));
+        p.add(javax.swing.Box.createVerticalStrut(3));
+        p.add(taoLabel("Khởi hành: " + 
+            FormatUtil.formatDateTime(ve.getChuyenTau().getThoiGianDi()), 15, false));
+        p.add(javax.swing.Box.createVerticalStrut(3));
+        p.add(taoLabel("Ghế: Toa " + ve.getGhe().getKhoangTau().getToaTau().getSoHieuToa() + 
+            " - Ghế " + ve.getGhe().getSoGhe(), 15, false));
+        p.add(javax.swing.Box.createVerticalStrut(8));
+
+        // Hiển thị giá vé cũ
+        javax.swing.JLabel lblGia = taoLabel("Giá vé: " + FormatUtil.formatCurrency(giaVe), 16, true);
+        lblGia.setForeground(new java.awt.Color(34, 197, 94)); // Màu xanh
+        p.add(lblGia);
+        p.add(javax.swing.Box.createVerticalStrut(5));
+
+        javax.swing.JLabel lblNote = taoLabel("Vé này sẽ bị hủy sau khi đổi", 14, true);
+        lblNote.setForeground(new java.awt.Color(185, 28, 28));
+        p.add(lblNote);
+
+        return p;
+    }
+
+    /**
+     * Tạo panel hiển thị phí đổi vé
+     */
+    private JPanel taoPanelPhiDoi() {
+        JPanel p = new JPanel();
+        p.setBackground(new java.awt.Color(255, 255, 255));
+        p.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+            javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(200, 200, 200)),
+            javax.swing.BorderFactory.createEmptyBorder(10, 15, 10, 15)
+        ));
+        p.setLayout(new javax.swing.BoxLayout(p, javax.swing.BoxLayout.LINE_AXIS));
+        p.setMaximumSize(new java.awt.Dimension(Integer.MAX_VALUE, 50));
+
+        javax.swing.JLabel lblText = taoLabel("Phí đổi vé:", 15, true);
+        p.add(lblText);
+        p.add(javax.swing.Box.createHorizontalGlue());
+        
+        javax.swing.JLabel lblPhi = taoLabel(FormatUtil.formatCurrency(PHI_DOI_VE), 16, true);
+        lblPhi.setForeground(new java.awt.Color(255, 102, 0));
+        p.add(lblPhi);
+
+        return p;
+    }
+    
+    private javax.swing.JLabel taoLabel(String text, int size, boolean bold) {
+        javax.swing.JLabel l = new javax.swing.JLabel(text);
+        l.setFont(new java.awt.Font("Segoe UI", bold ? java.awt.Font.BOLD : java.awt.Font.PLAIN, size));
+        l.setAlignmentX(java.awt.Component.LEFT_ALIGNMENT);
+        return l;
+    }
+    
+    /**
+     * Setup tính tiền thối tự động
+     */
+    private void setupTienThoi(final double TONG_TIEN) {
         jTextField1.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
             public void insertUpdate(javax.swing.event.DocumentEvent e) { tinhTienThoi(); }
             public void removeUpdate(javax.swing.event.DocumentEvent e) { tinhTienThoi(); }
@@ -171,74 +377,24 @@ public class ThanhToan extends javax.swing.JPanel {
                 }
             }
         });
-
-        jPanel13.revalidate();
-        jPanel13.repaint();
     }
     
-    private javax.swing.JLabel taoLabel(String text, int size, boolean bold) {
-        javax.swing.JLabel l = new javax.swing.JLabel(text);
-        l.setFont(new java.awt.Font("Segoe UI", bold ? java.awt.Font.BOLD : java.awt.Font.PLAIN, size));
-        l.setAlignmentX(java.awt.Component.LEFT_ALIGNMENT);
-        return l;
-    }
-    
-    private JPanel taoThongTinVe(ThongTinVe.ThongTinHanhKhach hk, Ghe ghe, 
-                                 ChuyenTau ct, double giaVe) {
-        JPanel p = new JPanel();
-        p.setBackground(new java.awt.Color(255, 255, 255));
-        p.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-            javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(200, 200, 200)),
-            javax.swing.BorderFactory.createEmptyBorder(12, 15, 12, 15)
-        ));
-        p.setLayout(new javax.swing.BoxLayout(p, javax.swing.BoxLayout.Y_AXIS));
-        p.setMaximumSize(new java.awt.Dimension(Integer.MAX_VALUE, 170));
-
-        int soHieuToa = ghe.getKhoangTau().getToaTau().getSoHieuToa();
-        int soGhe = ghe.getSoGhe();
-        String loaiGhe = ghe.getLoaiGhe().getTenLoaiGhe();
-
-        javax.swing.JLabel lblHoTen = taoLabel("Họ tên: " + hk.getHoTen(), 15, true);
-        javax.swing.JLabel lblDoiTuong = taoLabel("Đối tượng: " + hk.getLoaiVe(), 15, false);
-        
-        String giayCCCD = (hk.getCCCD() == null || hk.getCCCD().isEmpty()) ? "Trẻ em" : hk.getCCCD();
-        javax.swing.JLabel lblGiayTo = taoLabel("Số giấy tờ: " + giayCCCD, 15, false);
-        
-        javax.swing.JLabel lblHanhTrinh = taoLabel("Hành trình: " + 
-            ct.getTuyenDuong().getGaDi().getTenGa() + " → " + 
-            ct.getTuyenDuong().getGaDen().getTenGa() + " " + 
-            FormatUtil.formatDateTime(ct.getThoiGianDi()), 15, true);
-        
-        javax.swing.JLabel lblViTri = taoLabel("Vị trí: Toa " + soHieuToa + 
-            " - Ghế " + soGhe + " (" + loaiGhe + ")", 15, false);
-
-        javax.swing.JLabel lblGia = taoLabel("Giá vé: " + FormatUtil.formatCurrency(giaVe), 16, true);
-        lblGia.setForeground(new java.awt.Color(255, 51, 0));
-
-        p.add(lblHoTen);
-        p.add(javax.swing.Box.createVerticalStrut(5));
-        p.add(lblDoiTuong);
-        p.add(javax.swing.Box.createVerticalStrut(3));
-        p.add(lblGiayTo);
-        p.add(javax.swing.Box.createVerticalStrut(3));
-        p.add(lblHanhTrinh);
-        p.add(javax.swing.Box.createVerticalStrut(3));
-        p.add(lblViTri);
-        p.add(javax.swing.Box.createVerticalStrut(8));
-        p.add(lblGia);
-
-        return p;
-    }
-    
-    // XỬ LÝ THANH TOÁN - CHỈ XỬ LÝ GIAO DIỆN
+    /**
+     * Xử lý thanh toán - Tự động phân biệt Đặt vé / Đổi vé
+     */
     private void xuLyThanhToan() {
         try {
-            // 1. Validate dữ liệu đầu vào
+            // Validate chung
             if (!kiemTraDuLieuHopLe()) {
                 return;
             }
 
-            // 2. Lấy số tiền khách đưa
+            // Nếu là đổi vé, validate riêng
+            if (isDoiVe() && !validateDoiVe()) {
+                return;
+            }
+
+            // Validate tiền khách đưa
             String tienText = jTextField1.getText().replaceAll("[^0-9]", "");
             if (tienText.isEmpty()) {
                 JOptionPane.showMessageDialog(this, 
@@ -249,8 +405,7 @@ public class ThanhToan extends javax.swing.JPanel {
             }
 
             double tienNhan = Double.parseDouble(tienText);
-            
-            // SỬ DỤNG BIẾN ĐÃ LƯU
+
             if (tienNhan < tongTienThanhToan) {
                 JOptionPane.showMessageDialog(this, 
                     "Số tiền nhận không đủ!\nCần: " + FormatUtil.formatCurrency(tongTienThanhToan) +
@@ -260,14 +415,21 @@ public class ThanhToan extends javax.swing.JPanel {
                 return;
             }
 
-            // 3. Xác nhận thanh toán
-            int confirm = JOptionPane.showConfirmDialog(this,
-                "Xác nhận thanh toán:\n" +
-                "Khách hàng: " + hoTenKhach + "\n" +
-                "Tổng tiền: " + FormatUtil.formatCurrency(tongTienThanhToan) + "\n" +
-                "Tiền nhận: " + FormatUtil.formatCurrency(tienNhan) + "\n" +
-                "Tiền thối: " + jTextField2.getText(),
-                "Xác nhận thanh toán",
+            // Xác nhận
+            String message = isDoiVe() 
+                ? "Xác nhận đổi vé:\n" +
+                  "Vé cũ: " + veCanDoi.getMaVe() + " (sẽ bị hủy)\n" +
+                  "Chuyến mới: " + chuyenDi.getMaChuyenTau() + "\n" +
+                  "Phí đổi: " + FormatUtil.formatCurrency(PHI_DOI_VE) + "\n" +
+                  "Tổng tiền: " + FormatUtil.formatCurrency(tongTienThanhToan)
+                : "Xác nhận thanh toán:\n" +
+                  "Khách hàng: " + hoTenKhach + "\n" +
+                  "Tổng tiền: " + FormatUtil.formatCurrency(tongTienThanhToan) + "\n" +
+                  "Tiền nhận: " + FormatUtil.formatCurrency(tienNhan) + "\n" +
+                  "Tiền thối: " + jTextField2.getText();
+
+            int confirm = JOptionPane.showConfirmDialog(this, message,
+                isDoiVe() ? "Xác nhận đổi vé" : "Xác nhận thanh toán",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE);
 
@@ -275,27 +437,27 @@ public class ThanhToan extends javax.swing.JPanel {
                 return;
             }
 
-            // 4. Gọi BUS xử lý thanh toán
-            boolean thanhCong = bus.xuLyThanhToan(
-                hoTenKhach,
-                sdtKhach,
-                cccdKhach,
-                dsHanhKhach,
-                chuyenDi,
-                chuyenVe,
-                isKhuHoi,
-                null // Mã khuyến mãi nếu có
-            );
+            // Xử lý theo loại giao dịch
+            boolean thanhCong;
+            if (isDoiVe()) {
+                thanhCong = xuLyDoiVe();
+            } else {
+                thanhCong = xuLyDatVe();
+            }
 
-            // 5. Xử lý kết quả
+            // Thông báo kết quả
             if (thanhCong) {
-                JOptionPane.showMessageDialog(this,
-                    "Thanh toán thành công!\n" +
-                    "Hóa đơn và vé đã được in.",
-                    "Thành công",
-                    JOptionPane.INFORMATION_MESSAGE);
+                String successMsg = isDoiVe() 
+                    ? "Đổi vé thành công!\nVé cũ đã được hủy.\nVé mới đã được in."
+                    : "Thanh toán thành công!\nHóa đơn và vé đã được in.";
 
-                // Gọi callback nếu có
+                Notifications.getInstance().show(Notifications.Type.SUCCESS, 
+                    successMsg.split("\n")[0]);
+
+                JOptionPane.showMessageDialog(this, successMsg,
+                    "Thành công", JOptionPane.INFORMATION_MESSAGE);
+
+                // Reset
                 if (onThanhToanThanhCong != null) {
                     onThanhToanThanhCong.run();
                 } else {
@@ -316,37 +478,116 @@ public class ThanhToan extends javax.swing.JPanel {
                 JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+    /**
+     * Xử lý đặt vé bình thường
+     */
+    private boolean xuLyDatVe() throws Exception {
+        return bus.xuLyThanhToan(
+            hoTenKhach, sdtKhach, cccdKhach,
+            dsHanhKhach, chuyenDi, chuyenVe,
+            isKhuHoi, null
+        );
+    }
+    
+    /**
+     * Xử lý đổi vé
+     */
+    private boolean xuLyDoiVe() throws Exception {
+        // VALIDATE TRƯỚC KHI XỬ LÝ
+        if (!validateDoiVe()) {
+            return false;
+        }
 
+        // 1. Tạo hóa đơn đổi
+        String maHDD = bus.generateHoaDonDoiID();
+        LocalDateTime ngayDoi = LocalDateTime.now();
+        HoaDonDoi hdd = new HoaDonDoi(maHDD, ngayDoi, nhanVien, veCanDoi);
+
+        // 2. Lưu hóa đơn đổi
+        if (!bus.createHoaDonDoi(hdd)) {
+            throw new Exception("Không thể tạo hóa đơn đổi!");
+        }
+
+        // 3. Hủy vé cũ
+        if (!bus.huyVe(veCanDoi)) {
+            throw new Exception("Không thể hủy vé cũ!");
+        }
+
+        // 4. Tạo vé mới và lấy danh sách vé mới
+        ArrayList<Ve> danhSachVeMoi = bus.xuLyThanhToanVaLayVe(
+            hoTenKhach, sdtKhach, cccdKhach,
+            dsHanhKhach, chuyenDi, null,
+            false, null
+        );
+
+        if (danhSachVeMoi == null || danhSachVeMoi.isEmpty()) {
+            // Rollback: khôi phục vé cũ
+            bus.khoiPhucVe(veCanDoi);
+            throw new Exception("Không thể tạo vé mới!");
+        }
+
+        // DOUBLE CHECK: Đảm bảo chỉ có 1 vé được tạo
+        if (danhSachVeMoi.size() != 1) {
+            // Rollback tất cả
+            for (Ve ve : danhSachVeMoi) {
+                bus.huyVe(ve);
+            }
+            bus.khoiPhucVe(veCanDoi);
+            throw new Exception("Lỗi hệ thống: Tạo nhiều hơn 1 vé khi đổi!");
+        }
+
+        // 5. In hóa đơn đổi và vé
+        int printChoice = JOptionPane.showConfirmDialog(this,
+            "Bạn có muốn xuất hóa đơn đổi vé và vé không?",
+            "Xuất hóa đơn",
+            JOptionPane.YES_NO_OPTION);
+
+        if (printChoice == JOptionPane.YES_OPTION) {
+            try {
+                // In hóa đơn đổi
+                CreateExchangeOrder exchangePrinter = new CreateExchangeOrder(hdd, danhSachVeMoi);
+                exchangePrinter.xuatHoaDonDoi();
+
+                // In vé mới (chỉ 1 vé)
+                CreateTicket ticketPrinter = new CreateTicket();
+                ticketPrinter.taoVe(danhSachVeMoi.get(0));
+
+            } catch (Exception e) {
+                System.err.println("Lỗi khi in: " + e.getMessage());
+                // Không throw exception vì vé đã đổi thành công
+            }
+        }
+
+        return true;
+    }
+    
     private boolean kiemTraDuLieuHopLe() {
         if (hoTenKhach == null || hoTenKhach.trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, 
                 "Thiếu thông tin họ tên khách hàng!",
-                "Thông báo",
-                JOptionPane.WARNING_MESSAGE);
+                "Thông báo", JOptionPane.WARNING_MESSAGE);
             return false;
         }
 
         if (sdtKhach == null || sdtKhach.trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, 
                 "Thiếu thông tin số điện thoại!",
-                "Thông báo",
-                JOptionPane.WARNING_MESSAGE);
+                "Thông báo", JOptionPane.WARNING_MESSAGE);
             return false;
         }
 
         if (dsHanhKhach == null || dsHanhKhach.isEmpty()) {
             JOptionPane.showMessageDialog(this, 
                 "Chưa có thông tin hành khách!",
-                "Thông báo",
-                JOptionPane.WARNING_MESSAGE);
+                "Thông báo", JOptionPane.WARNING_MESSAGE);
             return false;
         }
 
         if (chuyenDi == null) {
             JOptionPane.showMessageDialog(this, 
                 "Chưa chọn chuyến tàu!",
-                "Thông báo",
-                JOptionPane.WARNING_MESSAGE);
+                "Thông báo", JOptionPane.WARNING_MESSAGE);
             return false;
         }
 
@@ -357,20 +598,89 @@ public class ThanhToan extends javax.swing.JPanel {
         jTextField1.setText("");
         jTextField2.setText("0");
         tongTienThanhToan = 0;
+        veCanDoi = null;
 
-        // Clear thông tin hiển thị
         jPanel13.removeAll();
         jPanel13.revalidate();
         jPanel13.repaint();
 
-        // Reset labels
         jLabel6.setText("");
         jLabel8.setText("");
         jLabel13.setText("0");
         jLabel2.setText("0");
         jLabel9.setText("Tổng tiền: 0");
     }
+    
+    /**
+    * Tính giá vé cũ
+    */
+   private double tinhGiaVeCu(Ve ve) {
+       if (ve == null) return 0;
 
+       // Lấy thông tin từ vé cũ
+       Ghe ghe = ve.getGhe();
+       ChuyenTau chuyenTau = ve.getChuyenTau();
+       ThongTinVe ttVe = new ThongTinVe();
+       ThongTinVe.ThongTinHanhKhach hk = ttVe.createThongTinHanhKhach();
+       hk.setHoTen(ve.getHoaDon().getKhachHang().getTenKH());
+       hk.setLoaiVe(ve.getLoaiVe().getTenLoaiVe());
+       hk.setCCCD(ve.getHoaDon().getKhachHang().getCccd());
+       hk.setMaGhe(ghe.getMaGhe());
+       hk.setMaChuyenTau(chuyenTau.getMaChuyenTau());
+
+       return bus.tinhGiaVe(hk, ghe, chuyenTau);
+    }
+   
+    private boolean validateDoiVe() {
+        // Kiểm tra có đang đổi vé không
+        if (!isDoiVe()) {
+            JOptionPane.showMessageDialog(this,
+                "Không có thông tin vé cần đổi!",
+                "Lỗi",
+                JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        // QUAN TRỌNG: Chỉ được đổi 1 vé duy nhất
+        if (dsHanhKhach == null || dsHanhKhach.size() != 1) {
+            JOptionPane.showMessageDialog(this,
+                "Chỉ được đổi 1 vé cho 1 hành khách!\n" +
+                "Vui lòng chọn đúng 1 ghế để đổi.",
+                "Lỗi nghiệp vụ",
+                JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        // Kiểm tra vé cũ còn hợp lệ không
+        if (veCanDoi.getTrangThai().compare(3)) { // Đã hủy
+            JOptionPane.showMessageDialog(this,
+                "Vé đã bị hủy, không thể đổi!",
+                "Lỗi",
+                JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        // Kiểm tra thời gian đổi vé (ví dụ: phải trước giờ khởi hành 24h)
+        LocalDateTime gioKhoiHanh = veCanDoi.getChuyenTau().getThoiGianDi();
+        LocalDateTime gioHienTai = LocalDateTime.now();
+        long hoursUntilDeparture = java.time.Duration.between(gioHienTai, gioKhoiHanh).toHours();
+
+        if (hoursUntilDeparture < 24) {
+            int confirm = JOptionPane.showConfirmDialog(this,
+                "Vé sắp khởi hành (còn " + hoursUntilDeparture + " giờ).\n" +
+                "Đổi vé gần giờ khởi hành có thể bị thu phí cao hơn.\n" +
+                "Bạn có chắc muốn tiếp tục?",
+                "Cảnh báo",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE);
+
+            if (confirm != JOptionPane.YES_OPTION) {
+                return false;
+            }
+        }
+
+        return true;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

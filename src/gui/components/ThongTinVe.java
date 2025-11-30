@@ -7,6 +7,7 @@ package gui.components;
 import dao.LoaiVe_DAO;
 import entity.ChuyenTau;
 import entity.Ghe;
+import entity.Ve;
 import gui.custom.RoundedButton;
 import java.awt.Font;
 import java.util.Date;
@@ -36,7 +37,7 @@ public class ThongTinVe extends javax.swing.JPanel {
         private String CCCD;
         private Date ngaySinh;
         private String loaiVe;
-        public void setMaGhe(String maGhe) { this.maGhe = ghe.getMaGhe(); }
+        public void setMaGhe(String maGhe) { this.maGhe = maGhe; }
         public void setHoTen(String hoTen) { this.hoTen = hoTen; }
         public void setCCCD(String CCCD) { this.CCCD = CCCD; }
         public void setNgaySinh(Date ngaySinh) { this.ngaySinh = ngaySinh; }
@@ -49,6 +50,30 @@ public class ThongTinVe extends javax.swing.JPanel {
         public String getLoaiVe() { return loaiVe; }
         public void setMaChuyenTau(String maChuyenTau) { this.maChuyenTau = maChuyenTau; }
         public String getMaChuyenTau() { return maChuyenTau; }
+    }
+    
+    public ThongTinHanhKhach createThongTinHanhKhach() {
+        return new ThongTinHanhKhach();
+    }
+    
+    public ThongTinHanhKhach createThongTinHanhKhachFromVe(Ve ve, Ghe gheMoi, ChuyenTau chuyenMoi) {
+        ThongTinHanhKhach tt = new ThongTinHanhKhach();
+        tt.setHoTen(ve.getHanhKhach().getTenHanhKhach());
+        tt.setCCCD(ve.getHanhKhach().getCccd());
+        
+        if (ve.getHanhKhach().getNgaySinh() != null) {
+            tt.setNgaySinh(java.sql.Date.valueOf(ve.getHanhKhach().getNgaySinh()));
+        }
+        
+        tt.setLoaiVe(ve.getLoaiVe().getTenLoaiVe());
+        tt.setMaGhe(gheMoi.getMaGhe());
+        tt.setMaChuyenTau(chuyenMoi.getMaChuyenTau());
+        
+        return tt;
+    }
+    
+    public ThongTinVe() {
+        
     }
 
     public ThongTinVe(String thongTin, Ghe ghe, ChuyenTau ct) {

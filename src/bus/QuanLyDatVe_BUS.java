@@ -23,6 +23,7 @@ public class QuanLyDatVe_BUS {
     private final HoaDon_DAO hoaDonDAO = new HoaDon_DAO();
     private final KhachHang_DAO khachHangDAO = new KhachHang_DAO();
     private final HanhKhach_DAO hanhKhachDAO = new HanhKhach_DAO();
+    private final HoaDonDoi_DAO hoaDonDoiDAO = new HoaDonDoi_DAO();
     
     private NhanVien nhanVien = Application.nhanVien;
     private ArrayList<Ghe> dsGheDaChon = new ArrayList<>();
@@ -460,5 +461,169 @@ public class QuanLyDatVe_BUS {
         }
     }
     
+    /**
+     * Lấy vé theo mã - Dùng cho Đổi vé
+     */
+    public Ve getVeById(String maVe) {
+        Ve_DAO veDAO = new Ve_DAO();
+        return veDAO.getOne(maVe);
+    }
+    
+    /**
+     * Tạo mã hóa đơn đổi mới
+     */
+    public String generateHoaDonDoiID() {
+        return hoaDonDoiDAO.generateID();
+    }
+    
+    /**
+     * Tạo hóa đơn đổi
+     */
+    public boolean createHoaDonDoi(HoaDonDoi hdd) {
+        return hoaDonDoiDAO.insert(hdd);
+    }
+    
+    /**
+     * Hủy vé (đổi trạng thái = 3)
+     */
+    public boolean huyVe(Ve ve) {
+        return veDAO.updateTrangThaiVe(ve.getMaVe(), 3);
+    }
+    
+    /**
+     * Khôi phục vé (đổi lại trạng thái = 1) - Dùng khi rollback
+     */
+    public boolean khoiPhucVe(Ve ve) {
+        return veDAO.updateTrangThaiVe(ve.getMaVe(), 1);
+    }
+    
+    /**
+ * Xử lý thanh toán VÀ trả về danh sách vé đã tạo
+ * Dùng cho trường hợp đổi vé (cần lấy danh sách vé để in)
+ */
+public ArrayList<Ve> xuLyThanhToanVaLayVe(String hoTenKhach, String sdtKhach, String cccdKhach,
+                             java.util.List<ThongTinVe.ThongTinHanhKhach> dsHanhKhach,
+                             ChuyenTau chuyenDi, ChuyenTau chuyenVe, boolean isKhuHoi,
+                             String maKhuyenMai) {
+    try {
+        // BƯỚC 1: Validate nghiệp vụ
+        if (!validateThanhToan(dsHanhKhach, chuyenDi, chuyenVe)) {
+            return null;
+        }
+        
+        // BƯỚC 2: Xử lý khách hàng
+        KhachHang khachHang = xuLyKhachHang(hoTenKhach, sdtKhach, cccdKhach);
+        if (khachHang == null) {
+            System.err.println("Không thể tạo/lấy thông tin khách hàng");
+            return null;
+        }
+        
+        // ===== Generate ID đầu tiên một lần duy nhất =====
+        String firstId = veDAO.generateID();
+        String prefix = "VE-";
+        int startNumber = extractNumber(firstId, prefix);
+        
+        // BƯỚC 3: Tạo danh sách vé và tính tổng tiền
+        ArrayList<Ve> dsVe = new ArrayList<>();
+        double tongTienVe = 0.0;
+        int index = 0;
+        
+        for (ThongTinVe.ThongTinHanhKhach hk : dsHanhKhach) {
+            // Tạo hành khách
+            HanhKhach hanhKhach = taoHanhKhach(hk);
+            if (hanhKhach == null) {
+                System.err.println("Không thể tạo hành khách: " + hk.getHoTen());
+                rollbackVe(dsVe);
+                return null;
+            }
+            
+            // Tìm ghế
+            Ghe ghe = getThongTinGhe(hk.getMaGhe());
+            if (ghe == null) {
+                System.err.println("Không tìm thấy ghế: " + hk.getMaGhe());
+                rollbackVe(dsVe);
+                return null;
+            }
+            
+            // Xác định chuyến tàu
+            String maChuyen = hk.getMaChuyenTau();
+            ChuyenTau chuyen = null;
+            
+            if (maChuyen.equals(chuyenDi.getMaChuyenTau())) {
+                chuyen = chuyenDi;
+            } else if (isKhuHoi && chuyenVe != null && maChuyen.equals(chuyenVe.getMaChuyenTau())) {
+                chuyen = chuyenVe;
+            }
+            
+            if (chuyen == null) {
+                System.err.println("Không xác định được chuyến tàu cho vé: " + hk.getMaGhe());
+                rollbackVe(dsVe);
+                return null;
+            }
+            
+            // Tìm loại vé
+            LoaiVe loaiVe = timLoaiVeTheoTen(hk.getLoaiVe());
+            if (loaiVe == null) {
+                System.err.println("Không tìm thấy loại vé: " + hk.getLoaiVe());
+                rollbackVe(dsVe);
+                return null;
+            }
+            
+            // Tính giá vé
+            double giaVe = tinhGiaVe(hk, ghe, chuyen);
+            tongTienVe += giaVe;
+            
+            // Generate mã vé tuần tự
+            String maVe = prefix + String.format("%05d", startNumber + index);
+            index++;
+            
+            // Tạo vé
+            Ve ve = new Ve();
+            ve.setMaVe(maVe);
+            ve.setChuyenTau(chuyen);
+            ve.setHanhKhach(hanhKhach);
+            ve.setGhe(ghe);
+            ve.setTrangThai(TrangThaiVe.DA_DAT);
+            ve.setLoaiVe(loaiVe);
+            ve.setGiaVe(giaVe);
+            
+            dsVe.add(ve);
+        }
+        
+        // BƯỚC 4: Tính tổng tiền (bao gồm VAT và khuyến mãi)
+        double vat = 0.1; // 10%
+        double giamGia = 0.0;
+        double thanhTien = tongTienVe;
+        double tongTien = tongTienVe + (tongTienVe * vat) - giamGia;
+        
+        // BƯỚC 5: Tạo hóa đơn
+        HoaDon hoaDon = taoHoaDon(khachHang, thanhTien, tongTien, vat);
+        if (hoaDon == null) {
+            rollbackVe(dsVe);
+            return null;
+        }
+        
+        // BƯỚC 6: Cập nhật hóa đơn cho vé và lưu vào DB
+        for (Ve ve : dsVe) {
+            ve.setHoaDon(hoaDon);
+            if (!veDAO.create(ve)) {
+                rollbackVe(dsVe);
+                rollbackHoaDon(hoaDon);
+                return null;
+            }
+        }
+        
+        // BƯỚC 7: Clear danh sách ghế đã chọn
+        clearDanhSachGheDaChon();
+        
+        // TRẢ VỀ danh sách vé đã tạo thành công
+        return dsVe;
+        
+    } catch (Exception e) {
+        e.printStackTrace();
+        System.err.println("Lỗi trong quá trình thanh toán: " + e.getMessage());
+        return null;
+    }
+}
     
 }

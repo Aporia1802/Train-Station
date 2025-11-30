@@ -9,6 +9,7 @@ import entity.ChuyenTau;
 import entity.Ghe;
 import entity.KhoangTau;
 import entity.ToaTau;
+import entity.Ve;
 import gui.custom.RoundedButton;
 import java.awt.Color;
 import java.awt.Component;
@@ -49,6 +50,23 @@ public class ChonChoNgoi extends javax.swing.JPanel {
         initComponents();
         this.bus = bus;
         initEvent();
+    }
+    
+    // Thêm biến để lưu thông tin vé cũ (dùng cho đổi vé)
+    private Ve veCanDoi = null;
+
+    /**
+     * Set thông tin vé cần đổi (gọi từ DoiVe_GUI)
+     */
+    public void setVeCanDoi(Ve ve) {
+        this.veCanDoi = ve;
+    }
+
+    /**
+     * Kiểm tra có phải đang đổi vé không
+     */
+    private boolean isDangDoiVe() {
+        return veCanDoi != null;
     }
     
     /**
@@ -207,24 +225,29 @@ public class ChonChoNgoi extends javax.swing.JPanel {
     }
     
     /**
-     * Load và render danh sách ghế
-     */
+    * Load và render danh sách ghế
+    */
     public void loadDanhSachGhe(ChuyenTau chuyenDi, ChuyenTau chuyenVe, boolean isKhuHoi) throws Exception {
         this.chuyenDi = chuyenDi;
         this.chuyenVe = chuyenVe;
         this.isKhuHoi = isKhuHoi;
-        
+
         // Reset trạng thái
         dangXemChieuVe = false;
         btn_chuyenVe.setText("Chọn chuyến về");
         btn_chuyenVe.setVisible(isKhuHoi && chuyenVe != null);
-        
-        // CẬP NHẬT TIÊU ĐỀ 
+
+        // CẬP NHẬT TIÊU ĐỀ
         String tieuDeDi = String.format("Chiều đi: ngày %s từ %s → %s",
             FormatUtil.formatDateTime(chuyenDi.getThoiGianDi()),
             chuyenDi.getTuyenDuong().getGaDi().getTenGa(),
             chuyenDi.getTuyenDuong().getGaDen().getTenGa()
         );
+
+        // ===== THÊM CHÚ THÍCH NẾU LÀ ĐỔI VÉ =====
+        if (isDangDoiVe()) {
+            tieuDeDi += " (Chuyến thay thế)";
+        }
 
         jPanel3.setBorder(javax.swing.BorderFactory.createCompoundBorder(
             javax.swing.BorderFactory.createTitledBorder(null, tieuDeDi,
@@ -236,8 +259,31 @@ public class ChonChoNgoi extends javax.swing.JPanel {
         ));
 
         renderDanhSachToa(chuyenDi);
+
+        // ===== TỰ ĐỘNG PRE-FILL THÔNG TIN NẾU LÀ ĐỔI VÉ =====
+        if (isDangDoiVe()) {
+            preFillThongTinDoiVe();
+        }
     }
     
+    private void preFillThongTinDoiVe() {
+        if (veCanDoi == null) return;
+
+        try {
+            // Thông tin đã được điền ở DoiVe_GUI rồi
+            // Chỉ cần disable để không cho sửa (tùy yêu cầu)
+            // txt_hoTen.setEnabled(false);
+            // txt_sdt.setEnabled(false);
+            // txt_cccd.setEnabled(false);
+
+            // Hoặc để user có thể cập nhật thông tin mới
+            // Không disable
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Render danh sách toa tàu
      */
@@ -703,51 +749,58 @@ public class ChonChoNgoi extends javax.swing.JPanel {
     */
     
     void handleChonGhe(RoundedButton btn, Ghe ghe) {
-        if (bus.isDaChonGhe(ghe)) {
-            // Bỏ chọn
-            btn.setBackground(java.awt.Color.WHITE);
-            xoaGheDaChon(ghe); // Dùng method mới
-            xoaPanelThongTinVe(ghe);
-        } else {
-            // XÁC ĐỊNH CHUYẾN DỰA VÀO ĐANG XEM CHIỀU NÀO
-            ChuyenTau chuyenDangXem = dangXemChieuVe ? chuyenVe : chuyenDi;
-
-            btn.setBackground(new java.awt.Color(252, 90, 90));
-            themGheDaChon(ghe, chuyenDangXem); // Truyền cả chuyến tàu
-            themPanelThongTinVe(ghe, chuyenDangXem);
+    if (bus.isDaChonGhe(ghe)) {
+        // Bỏ chọn
+        btn.setBackground(java.awt.Color.WHITE);
+        xoaGheDaChon(ghe);
+        xoaPanelThongTinVe(ghe);
+    } else {
+        // ===== VALIDATION: CHỈ CHO PHÉP CHỌN 1 GHẾ KHI ĐỔI VÉ =====
+        if (isDangDoiVe() && bus.getSoGheDaChon() >= 1) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Chỉ được chọn 1 ghế!\n" +
+                "Vui lòng bỏ chọn ghế hiện tại trước khi chọn ghế mới.",
+                "Giới hạn đổi vé",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            return; // DỪNG LẠI, không cho chọn thêm
         }
+        
+        // XÁC ĐỊNH CHUYẾN DỰA VÀO ĐANG XEM CHIỀU NÀO
+        ChuyenTau chuyenDangXem = dangXemChieuVe ? chuyenVe : chuyenDi;
 
-        // ĐỒNG BỘ CHECKBOX
-        try {
-            JPanel toaPanel = (JPanel) btn.getParent().getParent().getParent().getParent();
-            syncCheckboxChonTatCa(toaPanel, 
-                                 ghe.getKhoangTau().getToaTau(), 
-                                 dangXemChieuVe ? chuyenVe : chuyenDi);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        btn.setBackground(new java.awt.Color(252, 90, 90));
+        themGheDaChon(ghe, chuyenDangXem);
+        themPanelThongTinVe(ghe, chuyenDangXem);
     }
 
-    /**
-    * Thêm panel thông tin vé vào form
-    */
+    // Đồng bộ checkbox
+    try {
+        JPanel toaPanel = (JPanel) btn.getParent().getParent().getParent().getParent();
+        syncCheckboxChonTatCa(toaPanel, 
+                             ghe.getKhoangTau().getToaTau(), 
+                             dangXemChieuVe ? chuyenVe : chuyenDi);
+    } catch (Exception ex) {
+        ex.printStackTrace();
+    }
+}
+
     
+    /**
+     * Thêm panel thông tin vé vào form - CẢI TIẾN
+     */
     private void themPanelThongTinVe(Ghe ghe, ChuyenTau chuyen) {
         String tieuDe;
         String maGhe = ghe.getMaGhe();
 
-        // KIỂM TRA XEM ĐÃ CÓ TIÊU ĐỀ LƯU TRƯỚC ĐÓ CHƯA
         if (thongTinDaNhapMap.containsKey(maGhe)) {
-            // SỬ DỤNG TIÊU ĐỀ ĐÃ LƯU
             tieuDe = thongTinDaNhapMap.get(maGhe).tieuDe;
         } else {
-            // TẠO TIÊU ĐỀ MỚI
             String tenTau = chuyen.getTau().getTenTau(); 
             tieuDe = String.format("%s %s → %s - %s - Toa %d - Ghế %d",
                 tenTau.substring(tenTau.lastIndexOf(" ") + 1),
                 chuyen.getTuyenDuong().getGaDi().getTenGa(),
                 chuyen.getTuyenDuong().getGaDen().getTenGa(),
-                FormatUtil.formatDateTime(chuyen.getThoiGianDi()),
+                utils.FormatUtil.formatDateTime(chuyen.getThoiGianDi()),
                 ghe.getKhoangTau().getToaTau().getSoHieuToa(),
                 ghe.getSoGhe()
             );
@@ -756,43 +809,72 @@ public class ChonChoNgoi extends javax.swing.JPanel {
         ThongTinVe panelThongTin = new ThongTinVe(tieuDe, ghe, chuyen);
         panelThongTin.setName("THONGTIN_" + ghe.getMaGhe());
 
-        // XÁC ĐỊNH CHÍNH XÁC GHẾ THUỘC CHIỀU NÀO
+        // ===== FIX: PRE-FILL THÔNG TIN NẾU LÀ ĐỔI VÉ =====
+        if (isDangDoiVe() && veCanDoi != null) {
+            try {
+                // CÁCH 1: Sử dụng method createThongTinHanhKhach (NẾU CÓ)
+                ThongTinVe.ThongTinHanhKhach ttCu = 
+                    panelThongTin.createThongTinHanhKhach();
+
+
+
+                // Set thông tin
+                ttCu.setHoTen(veCanDoi.getHanhKhach().getTenHanhKhach());
+                ttCu.setCCCD(veCanDoi.getHanhKhach().getCccd());
+
+                // Xử lý ngày sinh
+                if (veCanDoi.getHanhKhach().getNgaySinh() != null) {
+                    ttCu.setNgaySinh(
+                        java.sql.Date.valueOf(veCanDoi.getHanhKhach().getNgaySinh())
+                    );
+                }
+
+                ttCu.setLoaiVe(veCanDoi.getLoaiVe().getTenLoaiVe());
+                ttCu.setMaGhe(ghe.getMaGhe());
+                ttCu.setMaChuyenTau(chuyen.getMaChuyenTau());
+
+                panelThongTin.setThongTin(ttCu);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.err.println("Không thể pre-fill thông tin từ vé cũ: " + e.getMessage());
+            }
+        } 
+        // KHÔI PHỤC THÔNG TIN ĐÃ NHẬP (NẾU CÓ)
+        else if (thongTinDaNhapMap.containsKey(maGhe)) {
+            ThongTinVe.ThongTinHanhKhach thongTinCu = 
+                thongTinDaNhapMap.get(maGhe).thongTin;
+            panelThongTin.setThongTin(thongTinCu);
+        }
+
+        // Thêm vào UI
         boolean isChieuVe = (chuyen == chuyenVe);
 
         if (isChieuVe) {
-            // KIỂM TRA HEADER CHIỀU VỀ
             if (lbl_headerChieuVe.getParent() == null) {
                 pnl_thongTin.add(javax.swing.Box.createVerticalStrut(8));
                 pnl_thongTin.add(lbl_headerChieuVe);
                 pnl_thongTin.add(javax.swing.Box.createVerticalStrut(10));
             }
-
-            // THÊM VÉ VÀO CUỐI (SAU TẤT CẢ VÉ CHIỀU VỀ KHÁC)
             pnl_thongTin.add(panelThongTin);
             pnl_thongTin.add(javax.swing.Box.createVerticalStrut(10));
-
         } else {
-            // KIỂM TRA HEADER CHIỀU ĐI
             if (lbl_headerChieuDi.getParent() == null) {
                 int insertIndex = getIndexAfterKhachHang();
                 pnl_thongTin.add(javax.swing.Box.createVerticalStrut(8), insertIndex);
                 pnl_thongTin.add(lbl_headerChieuDi, insertIndex + 1);
                 pnl_thongTin.add(javax.swing.Box.createVerticalStrut(10), insertIndex + 2);
             }
-
-            // THÊM VÉ SAU HEADER CHIỀU ĐI (TRƯỚC HEADER CHIỀU VỀ NẾU CÓ)
             int insertPos = timViTriThemVeChieuDi();
             pnl_thongTin.add(panelThongTin, insertPos);
             pnl_thongTin.add(javax.swing.Box.createVerticalStrut(10), insertPos + 1);
         }
 
-        // Refresh UI
         pnl_thongTin.revalidate();
         pnl_thongTin.repaint();
-        
+
         if (autoUpdateUI) capNhatToanBoGiaoDien();
     }
-
     /**
      * Tìm vị trí để thêm vé chiều đi (sau vé chiều đi cuối cùng, trước header chiều về)
      */
@@ -926,19 +1008,25 @@ public class ChonChoNgoi extends javax.swing.JPanel {
      * Setup sự kiện cho checkbox "Chọn tất cả" của từng toa
     */
     private void setupChonTatCaCheckbox(JPanel panelToa, ToaTau toa, ChuyenTau chuyen) {
-        // Tìm checkbox trong panel toa
-        JCheckBox chkChonTatCa = findCheckboxInPanel(panelToa);
+    JCheckBox chkChonTatCa = findCheckboxInPanel(panelToa);
 
-        if (chkChonTatCa != null) {
-            chkChonTatCa.addActionListener(e -> {
-                try {
-                    handleChonTatCaToa(chkChonTatCa.isSelected(), toa, chuyen, panelToa);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            });
+    if (chkChonTatCa != null) {
+        // ===== VÔ HIỆU HÓA KHI ĐỔI VÉ =====
+        if (isDangDoiVe()) {
+            chkChonTatCa.setEnabled(false);
+            chkChonTatCa.setToolTipText("Đổi vé chỉ được chọn 1 ghế");
+            return; // Không thêm action listener
         }
+        
+        chkChonTatCa.addActionListener(e -> {
+            try {
+                handleChonTatCaToa(chkChonTatCa.isSelected(), toa, chuyen, panelToa);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
     }
+}
 
     /**
      * Tìm checkbox trong panel
@@ -1179,6 +1267,22 @@ public class ChonChoNgoi extends javax.swing.JPanel {
     public JButton previous() {
         return btn_previous;
     }
+    
+    public javax.swing.JTextField getTxt_hoTen() {
+        return txt_hoTen;
+    }
+
+    public javax.swing.JTextField getTxt_sdt() {
+        return txt_sdt;
+    }
+
+    public javax.swing.JTextField getTxt_cccd() {
+        return txt_cccd;
+    }
+    
+    public void resetVeCanDoi() {
+        this.veCanDoi = null;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -1367,6 +1471,11 @@ public class ChonChoNgoi extends javax.swing.JPanel {
 
         txt_sdt.setMaximumSize(txt_hoTen.getMaximumSize());
         txt_sdt.setPreferredSize(txt_hoTen.getPreferredSize());
+        txt_sdt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_sdtActionPerformed(evt);
+            }
+        });
         jPanel14.add(txt_sdt);
         jPanel14.add(filler6);
 
@@ -1521,6 +1630,10 @@ public class ChonChoNgoi extends javax.swing.JPanel {
     private void btn_nextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_nextActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btn_nextActionPerformed
+
+    private void txt_sdtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_sdtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_sdtActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

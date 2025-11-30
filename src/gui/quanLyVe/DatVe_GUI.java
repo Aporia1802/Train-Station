@@ -145,6 +145,14 @@ public class DatVe_GUI extends javax.swing.JPanel {
             javax.swing.JOptionPane.WARNING_MESSAGE);
             return false;
         }
+        
+        if (chonChuyenTau.getChuyenVeDaChon() == null && chonChuyenTau.isKhuHoi()) {
+            javax.swing.JOptionPane.showMessageDialog(this, 
+            "Vui lòng chọn chuyến tàu về!",
+            "Thông báo",
+            javax.swing.JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
         return true;
     }
 

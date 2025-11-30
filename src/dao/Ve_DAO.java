@@ -386,10 +386,33 @@ public class Ve_DAO implements DAOBase<Ve>{
         ArrayList<Ve> dsVe = new ArrayList<>();
 
         StringBuilder sql = new StringBuilder("""
-            SELECT * FROM Ve v
-            JOIN HanhKhach hk ON v.maHanhKhach = hk.maHanhKhach
-            JOIN ChuyenTau ct ON v.maChuyenTau = ct.maChuyenTau
-            WHERE 1=1
+            SELECT v.*, " +
+                                "lv.*, " +
+                                "hk.maHanhKhach, hk.tenHanhKhach, hk.cccd AS cccdHanhKhach, hk.ngaySinh AS ngaySinhHanhKhach, " +
+                                "g.*, lg.*, kt.*, tt.*, t.*, ct.*, td.*, " +
+                                "gdi.maGa AS maGaDi, gdi.tenGa AS tenGaDi, gdi.diaChi AS diaChiGaDi, gdi.soDienThoai AS sdtGaDi, " +
+                                "gden.maGa AS maGaDen, gden.tenGa AS tenGaDen, gden.diaChi AS diaChiGaDen, gden.soDienThoai AS sdtGaDen, " +
+                                "hd.*, " +
+                                "nv.maNV, nv.tenNV, nv.gioiTinh AS gioiTinhNV, nv.ngaySinh AS ngaySinhNV, nv.email, nv.soDienThoai AS sdtNV, nv.cccd AS cccdNV, nv.diaChi AS diaChiNV, nv.chucVu, nv.trangThai AS trangThaiNV, " +
+                                "kh.maKH, kh.tenKH, kh.soDienThoai AS sdtKH, kh.cccd AS cccdKH, " +
+                                "km.* " +
+                                "FROM Ve v " +
+                                "JOIN LoaiVe lv ON v.maLoaiVe = lv.maLoaiVe " +
+                                "JOIN HanhKhach hk ON v.maHanhKhach = hk.maHanhKhach " +
+                                "JOIN Ghe g ON v.maGhe = g.maGhe " +
+                                "JOIN LoaiGhe lg ON g.maLoaiGhe = lg.maLoaiGhe " +
+                                "JOIN KhoangTau kt ON g.maKhoangTau = kt.maKhoangTau " +
+                                "JOIN ToaTau tt ON kt.maToaTau = tt.maToaTau " +
+                                "JOIN Tau t ON tt.maTau = t.maTau " +
+                                "JOIN ChuyenTau ct ON v.maChuyenTau = ct.maChuyenTau " +
+                                "JOIN TuyenDuong td ON ct.maTuyenDuong = td.maTuyenDuong " +
+                                "JOIN GaTau gdi ON td.gaDi = gdi.maGa " +
+                                "JOIN GaTau gden ON td.gaDen = gden.maGa " +
+                                "JOIN HoaDon hd ON v.maHoaDon = hd.maHoaDon " +
+                                "JOIN NhanVien nv ON hd.maNhanVien = nv.maNV " +
+                                "JOIN KhachHang kh ON hd.maKhachHang = kh.maKH " +
+                                "LEFT JOIN KhuyenMai km ON hd.maKhuyenMai = km.maKhuyenMai "
+                                "where 1=1";
                         """);
 
         // Xây dựng SQL linh hoạt (chỉ thêm điều kiện khi có dữ liệu)

@@ -1,13 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package gui.quanLyVe;
 
 import bus.QuanLyDatVe_BUS;
+import entity.ChuyenTau;
+import entity.Ve;
 import gui.components.ChonChoNgoi;
 import gui.components.ThanhToan;
-import gui.components.ThongTinVe;
+import gui.components.ChonChuyenTau;
 import gui.components.TimVeDoi;
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -19,134 +17,258 @@ import org.jdesktop.animation.timing.Animator;
 import org.jdesktop.animation.timing.TimingTargetAdapter;
 
 /**
- *
- * @author CÔNG HOÀNG
+ * GUI Quản lý vé thống nhất - Xử lý cả Đặt vé và Đổi vé
+ * Chỉ khác nhau bước 1, các bước sau dùng chung
  */
 public class DoiVe_GUI extends javax.swing.JPanel {
-    private QuanLyDatVe_BUS bus;
-    private JPanel container;
+    private final QuanLyDatVe_BUS bus;
+    
+    // Animation
+    private JLayeredPane slidePane;
     private int currentIndex = 0;
     private JPanel[] panels;
     private Animator animator;
     private boolean forward = true;
     private float fraction = 0f;
-    private JLayeredPane slidePane;
+    private JPanel currentPanel, nextPanel;
 
-    TimVeDoi timVeDoi;
-    ChonChoNgoi chonChoNgoi;
-    ThanhToan thanhToan;
+    // Components
+    private JPanel buoc1Panel; 
+    private ChonChoNgoi chonChoNgoi;
+    private ThanhToan thanhToan;
+    
+    // State
+    private boolean isDoiVe = true; // false = Đặt vé, true = Đổi vé
+    private Ve veCanDoi = null;
 
+    /**
+     * Constructor - mặc định là Đặt vé
+     */
     public DoiVe_GUI() {
+        this(true);
+    }
+    
+    /**
+     * Constructor có tham số
+     * @param isDoiVe true = Đổi vé, false = Đặt vé
+     */
+    public DoiVe_GUI(boolean isDoiVe) {
+        this.isDoiVe = isDoiVe;
         setLayout(new BorderLayout());
         
         bus = new QuanLyDatVe_BUS();
         
-        timVeDoi = new TimVeDoi(bus);
+        // Khởi tạo components dùng chung
         chonChoNgoi = new ChonChoNgoi(bus);
         thanhToan = new ThanhToan(bus);
+        
+        // Khởi tạo bước 1 tùy theo chế độ
+        if (isDoiVe) {
+            buoc1Panel = new TimVeDoi(bus);
+        } else {
+            buoc1Panel = new ChonChuyenTau(bus);
+        }
         
         thanhToan.setOnThanhToanThanhCong(() -> {
             resetToiDau();
         });
 
-        // Tạo mảng panel
-        panels = new JPanel[]{timVeDoi, chonChoNgoi, thanhToan};
-
-        // Tạo vùng chứa hiệu ứng
+        // Setup animation
+        setupAnimation();
+        
+        // Setup navigation
+        initNavigation();
+    }
+    
+    /**
+     * Setup animation slider
+     */
+    private void setupAnimation() {
+        panels = new JPanel[]{buoc1Panel, chonChoNgoi, thanhToan};
+        
         slidePane = new JLayeredPane();
         slidePane.setLayout(null);
-        slidePane.setDoubleBuffered(true); 
+        slidePane.setDoubleBuffered(true);
         add(slidePane, BorderLayout.CENTER);
 
-        // Gắn panel đầu tiên
         JPanel first = panels[0];
         first.setBounds(0, 0, getWidth(), getHeight());
         slidePane.add(first, Integer.valueOf(0));
 
-        // Animator mượt hơn
         animator = new Animator(600);
         animator.setResolution(5);
         animator.setAcceleration(0.2f);
         animator.setDeceleration(0.2f);
         animator.addTarget(new TimingTargetAdapter() {
-        @Override
-        public void timingEvent(float f) {
-            // easing mượt kiểu "ease in-out"
-            fraction = (float) (0.5 - 0.5 * Math.cos(Math.PI * f));
-            updateAnimation();
-        }
+            @Override
+            public void timingEvent(float f) {
+                fraction = (float) (0.5 - 0.5 * Math.cos(Math.PI * f));
+                updateAnimation();
+            }
 
-        @Override
-        public void end() {
-            finishAnimation();
-        }
-    });
-
-    initNavigation();
-}
-
-    private void initNavigation() {
-        // Xử lý nút Next ở màn hình chọn chuyến tàu
-        timVeDoi.next().addActionListener(e -> {
-            if (validateChonChuyenTau()) {
-                try {
-                    // KHÔNG XÓA ghế cũ → giữ lại khi quay lại
-                    chonChoNgoi.loadDanhSachGhe(
-                        timVeDoi.getChuyenDiDaChon(), 
-                        timVeDoi.getChuyenVeDaChon(), 
-                        timVeDoi.isKhuHoi()
-                    );
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-                next();
+            @Override
+            public void end() {
+                finishAnimation();
             }
         });
-        
+    }
+
+
+
+    /**
+     * Khởi tạo navigation cho cả đặt vé và đổi vé
+     */
+    private void initNavigation() {
+        if (isDoiVe) {
+            // LOGIC ĐỔI VÉ
+            TimVeDoi timVeDoi = (TimVeDoi) buoc1Panel;
+
+            timVeDoi.next().addActionListener(e -> {
+                if (validateBuoc1DoiVe(timVeDoi)) {
+                    try {
+                        veCanDoi = timVeDoi.getVeCanDoi();
+
+                        //  Set vé cần đổi vào ChonChoNgoi 
+                        chonChoNgoi.setVeCanDoi(veCanDoi);
+
+                        // Load ghế của chuyến thay thế
+                        chonChoNgoi.loadDanhSachGhe(
+                            timVeDoi.getChuyenDiDaChon(), 
+                            null, 
+                            false
+                        );
+
+                        // Tự động điền thông tin khách hàng từ vé cũ
+                        if (veCanDoi != null && veCanDoi.getHoaDon() != null) {
+                            chonChoNgoi.getTxt_hoTen().setText(
+                                veCanDoi.getHoaDon().getKhachHang().getTenKH()
+                            );
+                            chonChoNgoi.getTxt_sdt().setText(
+                                veCanDoi.getHoaDon().getKhachHang().getSoDienThoai()
+                            );
+                            chonChoNgoi.getTxt_cccd().setText(
+                                veCanDoi.getHoaDon().getKhachHang().getCccd()
+                            );
+                        }
+
+                        next();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(this,
+                            "Có lỗi khi tải thông tin ghế: " + ex.getMessage(),
+                            "Lỗi",
+                            JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            });
+
+        } else {
+            // LOGIC ĐẶT VÉ (giữ nguyên)
+            ChonChuyenTau chonChuyenTau = (ChonChuyenTau) buoc1Panel;
+
+            chonChuyenTau.next().addActionListener(e -> {
+                if (validateBuoc1DatVe(chonChuyenTau)) {
+                    try {
+                        chonChoNgoi.loadDanhSachGhe(
+                            chonChuyenTau.getChuyenDiDaChon(), 
+                            chonChuyenTau.getChuyenVeDaChon(), 
+                            chonChuyenTau.isKhuHoi()
+                        );
+                        next();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(this,
+                            "Có lỗi khi tải thông tin ghế: " + ex.getMessage(),
+                            "Lỗi",
+                            JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            });
+        }
+
+        // BƯỚC 2 -> 3: CHUNG CHO CẢ HAI
         chonChoNgoi.next().addActionListener(e -> {
-            // 1. VALIDATE TRƯỚC KHI CHUYỂN
             if (!chonChoNgoi.validateThongTin()) {
-                return; // Dừng lại nếu validate fail
+                return;
             }
 
-            // 2. LẤY THÔNG TIN
             String hoTen = chonChoNgoi.getHoTenKhachChinh();
             String sdt = chonChoNgoi.getSoDienThoai();
             String cccd = chonChoNgoi.getCCCD();
 
-            java.util.ArrayList<ThongTinVe.ThongTinHanhKhach> dsHK = 
+            java.util.ArrayList<gui.components.ThongTinVe.ThongTinHanhKhach> dsHK = 
                 chonChoNgoi.getDanhSachThongTinHanhKhach();
 
-            // 3. ĐẨY DỮ LIỆU VÀO THANH TOÁN
-            thanhToan.hienThiDuLieu(
-                hoTen, sdt, cccd,
-                dsHK,
-                timVeDoi.getChuyenDiDaChon(),
-                timVeDoi.getChuyenVeDaChon(),
-                timVeDoi.isKhuHoi()
-            );
+            ChuyenTau chuyenDi, chuyenVe;
+            boolean khuHoi;
 
-            // 4. CHUYỂN SANG BƯỚC 3
+            if (isDoiVe) {
+                TimVeDoi timVeDoi = (TimVeDoi) buoc1Panel;
+                chuyenDi = timVeDoi.getChuyenDiDaChon();
+                chuyenVe = null;
+                khuHoi = false;
+            } else {
+                ChonChuyenTau chonChuyenTau = (ChonChuyenTau) buoc1Panel;
+                chuyenDi = chonChuyenTau.getChuyenDiDaChon();
+                chuyenVe = chonChuyenTau.getChuyenVeDaChon();
+                khuHoi = chonChuyenTau.isKhuHoi();
+            }
+            
+            // Nếu là đổi vé, set thêm thông tin vé cũ vào ThanhToan
+            if (isDoiVe) {
+                thanhToan.setVeCanDoi(veCanDoi);
+            }
+            
+            thanhToan.hienThiDuLieu(hoTen, sdt, cccd, dsHK, chuyenDi, chuyenVe, khuHoi);
+
+            
             next();
         });
-        
+
+        // QUAY LẠI: CHUNG CHO CẢ HAI
         chonChoNgoi.previous().addActionListener(e -> previous());
         thanhToan.previous().addActionListener(e -> previous());
     }
     
-    private boolean validateChonChuyenTau() {
-    //  Kiểm tra đã chọn chuyến đi chưa
-        if (timVeDoi.getChuyenDiDaChon() == null) {
-            javax.swing.JOptionPane.showMessageDialog(this, 
-            "Vui lòng chọn chuyến tàu đi!",
-            "Thông báo",
-            javax.swing.JOptionPane.WARNING_MESSAGE);
+    /**
+     * Validate bước 1 - Đặt vé
+     */
+    private boolean validateBuoc1DatVe(ChonChuyenTau chonChuyenTau) {
+        if (chonChuyenTau.getChuyenDiDaChon() == null) {
+            JOptionPane.showMessageDialog(this, 
+                "Vui lòng chọn chuyến tàu đi!",
+                "Thông báo",
+                JOptionPane.WARNING_MESSAGE);
             return false;
         }
         return true;
     }
+    
+    /**
+     * Validate bước 1 - Đổi vé
+     */
+    private boolean validateBuoc1DoiVe(TimVeDoi timVeDoi) {
+        if (timVeDoi.getVeCanDoi() == null) {
+            JOptionPane.showMessageDialog(this, 
+                "Vui lòng tìm và chọn vé cần đổi!",
+                "Thông báo",
+                JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        
+        if (timVeDoi.getChuyenDiDaChon() == null) {
+            JOptionPane.showMessageDialog(this, 
+                "Vui lòng chọn chuyến tàu thay thế!",
+                "Thông báo",
+                JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        
+        return true;
+    }
 
-
+    // ========== ANIMATION METHODS ==========
+    
     private void next() {
         if (!animator.isRunning() && currentIndex < panels.length - 1) {
             forward = true;
@@ -161,8 +283,6 @@ public class DoiVe_GUI extends javax.swing.JPanel {
         }
     }
 
-    private JPanel currentPanel, nextPanel;
-
     private void startAnimation(JPanel current, JPanel next) {
         this.currentPanel = current;
         this.nextPanel = next;
@@ -170,12 +290,10 @@ public class DoiVe_GUI extends javax.swing.JPanel {
         int w = slidePane.getWidth();
         int h = slidePane.getHeight();
         if (w == 0 || h == 0) {
-            // Trì hoãn nếu panel chưa layout xong
             SwingUtilities.invokeLater(() -> startAnimation(current, next));
             return;
         }
 
-        // Cập nhật kích thước panel
         current.setBounds(0, 0, w, h);
         next.setBounds(forward ? w : -w, 0, w, h);
 
@@ -209,32 +327,34 @@ public class DoiVe_GUI extends javax.swing.JPanel {
     }
     
     /**
-     * Reset toàn bộ quy trình đặt vé về bước đầu tiên
+     * Reset về bước đầu
      */
     public void resetToiDau() {
-        // 1. Reset BUS - xóa tất cả ghế đã chọn
         bus.clearDanhSachGheDaChon();
-        
-        // 2. Reset các panel
+        veCanDoi = null;
+
         try {
-            // Reset ChonChuyenTau - tạo mới
-            timVeDoi = new TimVeDoi(bus);
-            
-            // Reset ChonChoNgoi - tạo mới
+            // Tạo lại components
             chonChoNgoi = new ChonChoNgoi(bus);
-            
-            // Reset ThanhToan - tạo mới
             thanhToan = new ThanhToan(bus);
-            
-            // Cập nhật lại mảng panels
-            panels[0] = timVeDoi;
+
+            if (isDoiVe) {
+                buoc1Panel = new TimVeDoi(bus);
+            } else {
+                buoc1Panel = new ChonChuyenTau(bus);
+            }
+
+            // ===== QUAN TRỌNG: Reset vé cần đổi trong ChonChoNgoi =====
+            chonChoNgoi.resetVeCanDoi();
+
+            thanhToan.setOnThanhToanThanhCong(() -> resetToiDau());
+
+            panels[0] = buoc1Panel;
             panels[1] = chonChoNgoi;
             panels[2] = thanhToan;
-            
-            // 3. Khởi tạo lại navigation
+
             initNavigation();
-            
-            // 4. Quay về màn hình đầu tiên
+
             currentIndex = 0;
             slidePane.removeAll();
             JPanel first = panels[0];
@@ -242,7 +362,7 @@ public class DoiVe_GUI extends javax.swing.JPanel {
             slidePane.add(first, Integer.valueOf(0));
             slidePane.revalidate();
             slidePane.repaint();
-            
+
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this,
@@ -255,34 +375,9 @@ public class DoiVe_GUI extends javax.swing.JPanel {
     @Override
     public void doLayout() {
         super.doLayout();
-        // Cập nhật kích thước panel khi resize
-        if (slidePane.getComponentCount() > 0) {
+        if (slidePane != null && slidePane.getComponentCount() > 0) {
             Component c = slidePane.getComponent(0);
             c.setBounds(0, 0, getWidth(), getHeight());
         }
     }
-
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
-    private void initComponents() {
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
-    }// </editor-fold>                        
-
-    // Variables declaration - do not modify                     
-    // End of variables declaration                   
 }

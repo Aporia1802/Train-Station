@@ -372,6 +372,9 @@
                                   <Connection component="txt_hoTen" name="getPreferredSize" type="method"/>
                                 </Property>
                               </Properties>
+                              <Events>
+                                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txt_sdtActionPerformed"/>
+                              </Events>
                             </Component>
                             <Component class="javax.swing.Box$Filler" name="filler6">
                               <Properties>
