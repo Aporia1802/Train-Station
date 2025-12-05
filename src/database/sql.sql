@@ -204,6 +204,17 @@ CREATE TABLE HoaDonTra (
     CONSTRAINT FK_HDT_NhanVien FOREIGN KEY (maNV) REFERENCES NhanVien(maNV)
 );
 
+CREATE TABLE HoaDonDoi (
+    maHoaDonDoi VARCHAR(20) PRIMARY KEY,
+    ngayDoi DATETIME NOT NULL,
+    maNhanVien VARCHAR(20) NOT NULL,
+    maVe VARCHAR(20) NOT NULL,
+    phiDoi DECIMAL(18,2) DEFAULT 20000,
+    FOREIGN KEY (maNhanVien) REFERENCES NhanVien(maNV),
+    FOREIGN KEY (maVe) REFERENCES Ve(maVe)
+);
+
+
 -- THÊM DỮ LIỆU MẪU
 
 -- 1. NHÂN VIÊN
@@ -2659,16 +2670,17 @@ DELETE FROM ChuyenTau WHERE maTuyenDuong IN ('TD-GA-127-GA-053', 'TD-GA-053-GA-1
 
 -- Chuyến Sài Gòn -> Hà Nội (3 chuyến)
 INSERT INTO ChuyenTau (maChuyenTau, thoiGianDi, thoiGianDen, soGheDaDat, soGheConTrong, maTau, maTuyenDuong) VALUES
-('CT-00102', '2025-11-03 06:00:00', '2025-11-04 12:00:00', 3, 335, 'TAU-001', 'TD-GA-127-GA-053'),
-('CT-00103', '2025-11-03 19:00:00', '2025-11-04 01:00:00', 4, 376, 'TAU-002', 'TD-GA-127-GA-053'),
-('CT-00104', '2025-11-04 06:00:00', '2025-11-05 12:00:00', 3, 335, 'TAU-003', 'TD-GA-127-GA-053');
+('CT-00110', '2025-12-09 06:00:00', '2025-12-10 12:00:00', 3, 335, 'TAU-001', 'TD-GA-127-GA-053'),
+('CT-00102', '2025-12-10 06:00:00', '2025-12-11 12:00:00', 3, 335, 'TAU-001', 'TD-GA-127-GA-053'),
+('CT-00103', '2025-12-10 19:00:00', '2025-12-11 01:00:00', 4, 376, 'TAU-002', 'TD-GA-127-GA-053'),
+('CT-00104', '2025-12-10 06:00:00', '2025-12-11 12:00:00', 3, 335, 'TAU-003', 'TD-GA-127-GA-053');
 
 
 -- Chuyến Hà Nội -> Sài Gòn (3 chuyến)
 INSERT INTO ChuyenTau (maChuyenTau, thoiGianDi, thoiGianDen, soGheDaDat, soGheConTrong, maTau, maTuyenDuong) VALUES
-('CT-00105', '2025-11-06 06:00:00', '2025-11-06 12:00:00', 3, 377, 'TAU-011', 'TD-GA-053-GA-127'),
-('CT-00106', '2025-11-06 19:00:00', '2025-11-07 01:00:00', 4, 376, 'TAU-012', 'TD-GA-053-GA-127'),
-('CT-00107', '2025-11-07 06:00:00', '2025-11-08 12:00:00', 3, 377, 'TAU-013', 'TD-GA-053-GA-127');
+('CT-00105', '2025-12-13 06:00:00', '2025-12-14 12:00:00', 3, 377, 'TAU-011', 'TD-GA-053-GA-127'),
+('CT-00106', '2025-12-13 19:00:00', '2025-12-14 01:00:00', 4, 376, 'TAU-012', 'TD-GA-053-GA-127'),
+('CT-00107', '2025-12-13 06:00:00', '2025-12-14 12:00:00', 3, 377, 'TAU-013', 'TD-GA-053-GA-127');
 
 
 -- 3. HÀNH KHÁCH
@@ -2924,5 +2936,4 @@ BEGIN
 END
 
 CLOSE chuyen_cursor;
-DEALLOCATE chuyen_cursor;
-
+DEALLOCATE chuyen_cursor;	
