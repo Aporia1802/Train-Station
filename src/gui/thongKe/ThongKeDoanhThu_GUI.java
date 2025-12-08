@@ -62,7 +62,7 @@ public class ThongKeDoanhThu_GUI extends javax.swing.JPanel {
         pnl_north.setBackground(new java.awt.Color(255, 255, 255));
         pnl_north.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Lọc", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
         pnl_north.setPreferredSize(new java.awt.Dimension(1366, 50));
-        pnl_north.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 30, 0));
+        pnl_north.setLayout(new javax.swing.BoxLayout(pnl_north, javax.swing.BoxLayout.LINE_AXIS));
 
         cbo_thang.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tháng" }));
         pnl_north.add(cbo_thang);
@@ -155,19 +155,9 @@ public class ThongKeDoanhThu_GUI extends javax.swing.JPanel {
 
         pnl_bieuDoTron.setBackground(new java.awt.Color(255, 255, 255));
         pnl_bieuDoTron.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Tỉ lệ vé hủy với vé đã hoàn thành ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
+        pnl_bieuDoTron.setMinimumSize(new java.awt.Dimension(366, 23));
         pnl_bieuDoTron.setPreferredSize(new java.awt.Dimension(366, 227));
-
-        javax.swing.GroupLayout pnl_bieuDoTronLayout = new javax.swing.GroupLayout(pnl_bieuDoTron);
-        pnl_bieuDoTron.setLayout(pnl_bieuDoTronLayout);
-        pnl_bieuDoTronLayout.setHorizontalGroup(
-            pnl_bieuDoTronLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        pnl_bieuDoTronLayout.setVerticalGroup(
-            pnl_bieuDoTronLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
+        pnl_bieuDoTron.setLayout(new java.awt.BorderLayout());
         pnl_center.add(pnl_bieuDoTron, java.awt.BorderLayout.CENTER);
 
         add(pnl_center, java.awt.BorderLayout.CENTER);
@@ -201,18 +191,7 @@ public class ThongKeDoanhThu_GUI extends javax.swing.JPanel {
         pnl_bieuDoCot.setBackground(new java.awt.Color(255, 255, 255));
         pnl_bieuDoCot.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Thống kê doanh thu", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
         pnl_bieuDoCot.setPreferredSize(new java.awt.Dimension(1000, 468));
-
-        javax.swing.GroupLayout pnl_bieuDoCotLayout = new javax.swing.GroupLayout(pnl_bieuDoCot);
-        pnl_bieuDoCot.setLayout(pnl_bieuDoCotLayout);
-        pnl_bieuDoCotLayout.setHorizontalGroup(
-            pnl_bieuDoCotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 990, Short.MAX_VALUE)
-        );
-        pnl_bieuDoCotLayout.setVerticalGroup(
-            pnl_bieuDoCotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 445, Short.MAX_VALUE)
-        );
-
+        pnl_bieuDoCot.setLayout(new java.awt.BorderLayout());
         pnl_south.add(pnl_bieuDoCot, java.awt.BorderLayout.CENTER);
 
         add(pnl_south, java.awt.BorderLayout.PAGE_END);
