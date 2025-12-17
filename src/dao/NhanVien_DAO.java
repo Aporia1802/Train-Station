@@ -16,7 +16,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.sql.SQLException;
 
-
 /**
  *
  * @author CÔNG HOÀNG
@@ -43,6 +42,11 @@ public class NhanVien_DAO implements DAOBase<NhanVien> {
                 String diaChi = rs.getString("diaChi");
 
                 nhanVien = new NhanVien(id, tenNV, gioiTinh, ngaySinh, email, soDienThoai, cccd, diaChi, chucVu, trangThai);
+                try {
+                    String anh = rs.getString("anh");
+                    nhanVien.setAnh(anh);
+                } catch (Exception ex) {
+                }
             }
 
         } catch (Exception e) {
@@ -50,8 +54,6 @@ public class NhanVien_DAO implements DAOBase<NhanVien> {
         }
         return nhanVien;
     }
-    
-    
 
     @Override
     public ArrayList<NhanVien> getAll() {
@@ -68,9 +70,9 @@ public class NhanVien_DAO implements DAOBase<NhanVien> {
         }
         return dsNV;
     }
-    
+
     public NhanVien getData(ResultSet rs) throws SQLException, Exception {
-    // Lấy dữ liệu từng cột trong ResultSet
+        // Lấy dữ liệu từng cột trong ResultSet
         String maNV = rs.getString("maNV");
         String tenNV = rs.getString("tenNV");
         boolean gioiTinh = rs.getBoolean("gioiTinh");
@@ -82,49 +84,68 @@ public class NhanVien_DAO implements DAOBase<NhanVien> {
         String chucVu = rs.getString("chucVu");
         boolean trangThai = rs.getBoolean("trangThai");
 
-    // Trả về đối tượng NhanVien
-        return new NhanVien(maNV, tenNV, gioiTinh, ngaySinh, email, soDienThoai, cccd, diaChi, chucVu, trangThai);
+        // Trả về đối tượng NhanVien
+        NhanVien nv = new NhanVien(maNV, tenNV, gioiTinh, ngaySinh, email, soDienThoai, cccd, diaChi, chucVu, trangThai);
+        try {
+            String anh = rs.getString("anh");
+            nv.setAnh(anh);
+        } catch (Exception ex) {
+            // nếu cột 'anh' không tồn tại thì bỏ qua
+        }
+        return nv;
 }
-    
+
+    public Boolean updateAnh(String id, String link) {
+        int n = 0;
+        try {
+            PreparedStatement st = ConnectDB.conn.prepareStatement("UPDATE NhanVien SET anh = ? WHERE maNV = ?");
+            st.setString(1, link);
+            st.setString(2, id);
+            n = st.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return n > 0;
+    }
+
     public ArrayList<NhanVien> filterByComboBox(String chucVu, String trangThai) {
-       ArrayList<NhanVien> dsNV = new ArrayList<>();
-       StringBuilder sql = new StringBuilder("SELECT * FROM NhanVien WHERE 1=1");
+        ArrayList<NhanVien> dsNV = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("SELECT * FROM NhanVien WHERE 1=1");
 
-       // Nếu chọn chức vụ thực sự
-       if (chucVu != null && !chucVu.equals("Chức vụ")) {
-          sql.append(" AND LTRIM(RTRIM(chucVu)) LIKE ?");
+        // Nếu chọn chức vụ thực sự
+        if (chucVu != null && !chucVu.equals("Chức vụ")) {
+            sql.append(" AND LTRIM(RTRIM(chucVu)) LIKE ?");
 
-       }
+        }
 
-       // Nếu chọn trạng thái thực sự
-       if (trangThai != null && !trangThai.equals("Trạng thái")) {
-           sql.append(" AND trangThai = ?");
-       }
+        // Nếu chọn trạng thái thực sự
+        if (trangThai != null && !trangThai.equals("Trạng thái")) {
+            sql.append(" AND trangThai = ?");
+        }
 
-       try (PreparedStatement ps = conn.prepareStatement(sql.toString())) {
-           int index = 1;
+        try (PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+            int index = 1;
 
-           if (chucVu != null && !chucVu.equals("Chức vụ")) {
-               ps.setString(index++, "%" + chucVu.trim() + "%");
-           }
+            if (chucVu != null && !chucVu.equals("Chức vụ")) {
+                ps.setString(index++, "%" + chucVu.trim() + "%");
+            }
 
-           if (trangThai != null && !trangThai.equals("Trạng thái")) {
-               // Chuyển "Đang làm" -> true, "Đã nghỉ" -> false
-               ps.setBoolean(index++, trangThai.equals("Đang làm"));
-           }
+            if (trangThai != null && !trangThai.equals("Trạng thái")) {
+                // Chuyển "Đang làm" -> true, "Đã nghỉ" -> false
+                ps.setBoolean(index++, trangThai.equals("Đang làm"));
+            }
 
-           ResultSet rs = ps.executeQuery();
-           while (rs.next()) {
-               dsNV.add(getData(rs));
-           }
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                dsNV.add(getData(rs));
+            }
 
-       } catch (Exception e) {
-           throw new RuntimeException(e.getMessage());
-       }
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
 
-       return dsNV;
-   }
-
+        return dsNV;
+    }
 
     public ArrayList<NhanVien> getNhanVienBySoDienThoai(String soDienThoai) {
         ArrayList<NhanVien> dsNhanVien = new ArrayList<>();
@@ -141,66 +162,65 @@ public class NhanVien_DAO implements DAOBase<NhanVien> {
             throw new RuntimeException(e.getMessage());
         }
         return dsNhanVien;
-}
-   public ArrayList<NhanVien> timKiemNhanVien(String maNV, String tenNV, String cccd, String sdt, String gioiTinh, String trangThai) {
-    ArrayList<NhanVien> dsNhanVien = new ArrayList<>();
-    StringBuilder sql = new StringBuilder("SELECT * FROM NhanVien WHERE 1=1");
-
-    // Chỉ thêm điều kiện khi người dùng có nhập dữ liệu
-    if (maNV != null && !maNV.trim().isEmpty()) {
-        sql.append(" AND maNV LIKE ?");
-    }
-    if (tenNV != null && !tenNV.trim().isEmpty()) {
-        sql.append(" AND tenNV LIKE ?");
-    }
-    if (cccd != null && !cccd.trim().isEmpty()) {
-        sql.append(" AND cccd LIKE ?");
-    }
-    if (sdt != null && !sdt.trim().isEmpty()) {
-        sql.append(" AND soDienThoai LIKE ?");
-    }
-    if (gioiTinh != null && !gioiTinh.equals("Tất cả")) {
-        sql.append(" AND gioiTinh = ?");
-    }
-    if (trangThai != null && !trangThai.equals("Tất cả")) {
-        sql.append(" AND trangThai = ?");
     }
 
-    try (PreparedStatement ps = conn.prepareStatement(sql.toString())) {
-        int index = 1;
+    public ArrayList<NhanVien> timKiemNhanVien(String maNV, String tenNV, String cccd, String sdt, String gioiTinh, String trangThai) {
+        ArrayList<NhanVien> dsNhanVien = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("SELECT * FROM NhanVien WHERE 1=1");
 
+        // Chỉ thêm điều kiện khi người dùng có nhập dữ liệu
         if (maNV != null && !maNV.trim().isEmpty()) {
-            ps.setString(index++, "%" + maNV.trim() + "%");
+            sql.append(" AND maNV LIKE ?");
         }
         if (tenNV != null && !tenNV.trim().isEmpty()) {
-            ps.setString(index++, "%" + tenNV.trim() + "%");
+            sql.append(" AND tenNV LIKE ?");
         }
         if (cccd != null && !cccd.trim().isEmpty()) {
-            ps.setString(index++, "%" + cccd.trim() + "%");
+            sql.append(" AND cccd LIKE ?");
         }
         if (sdt != null && !sdt.trim().isEmpty()) {
-            ps.setString(index++, "%" + sdt.trim() + "%");
+            sql.append(" AND soDienThoai LIKE ?");
         }
         if (gioiTinh != null && !gioiTinh.equals("Tất cả")) {
-            ps.setBoolean(index++, gioiTinh.equalsIgnoreCase("Nam"));
+            sql.append(" AND gioiTinh = ?");
         }
         if (trangThai != null && !trangThai.equals("Tất cả")) {
-            ps.setBoolean(index++, trangThai.equals("Đang làm"));
+            sql.append(" AND trangThai = ?");
         }
 
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            dsNhanVien.add(getData(rs));
+        try (PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+            int index = 1;
+
+            if (maNV != null && !maNV.trim().isEmpty()) {
+                ps.setString(index++, "%" + maNV.trim() + "%");
+            }
+            if (tenNV != null && !tenNV.trim().isEmpty()) {
+                ps.setString(index++, "%" + tenNV.trim() + "%");
+            }
+            if (cccd != null && !cccd.trim().isEmpty()) {
+                ps.setString(index++, "%" + cccd.trim() + "%");
+            }
+            if (sdt != null && !sdt.trim().isEmpty()) {
+                ps.setString(index++, "%" + sdt.trim() + "%");
+            }
+            if (gioiTinh != null && !gioiTinh.equals("Tất cả")) {
+                ps.setBoolean(index++, gioiTinh.equalsIgnoreCase("Nam"));
+            }
+            if (trangThai != null && !trangThai.equals("Tất cả")) {
+                ps.setBoolean(index++, trangThai.equals("Đang làm"));
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                dsNhanVien.add(getData(rs));
+            }
+            rs.close();
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
         }
-        rs.close();
-    } catch (Exception e) {
-        throw new RuntimeException(e.getMessage());
+
+        return dsNhanVien;
     }
-
-    return dsNhanVien;
-}
-
-
 
     @Override
     public String generateID() {
@@ -211,8 +231,8 @@ public class NhanVien_DAO implements DAOBase<NhanVien> {
     public Boolean create(NhanVien object) {
         int n = 0;
         String sql = "INSERT INTO NhanVien (maNV, tenNV, gioiTinh, ngaySinh, email, soDienThoai, cccd, diaChi, chucVu, trangThai) "
-               + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
         try {
             PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
             st.setString(1, object.getMaNV());
@@ -225,7 +245,7 @@ public class NhanVien_DAO implements DAOBase<NhanVien> {
             st.setString(8, object.getDiaChi());
             st.setString(9, object.getChucVu());
             st.setBoolean(10, object.isTrangThai());
-        
+
             n = st.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage());
@@ -250,11 +270,11 @@ public class NhanVien_DAO implements DAOBase<NhanVien> {
         }
         return n > 0;
     }
-    
+
     public String getMaxID() {
         String maxID = ""; // giá trị mặc định nếu bảng rỗng
-    
-        try{
+
+        try {
             String sql = "SELECT TOP 1 * FROM NhanVien ORDER BY MaNV DESC";
             PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
             ResultSet rs = st.executeQuery();

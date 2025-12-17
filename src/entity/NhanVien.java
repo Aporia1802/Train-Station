@@ -23,6 +23,7 @@ public class NhanVien {
     private String diaChi;
     private String chucVu;
     private boolean trangThai;
+    private String anh;
     
 //  Thông báo lỗi
     public static final String TENNV_EMPTY = "Họ tên không được rỗng!";
@@ -143,6 +144,14 @@ public class NhanVien {
 
     public void setDiaChi(String diaChi) {
         this.diaChi = diaChi;
+    }
+    
+    public String getAnh() {
+        return anh;
+    }
+
+    public void setAnh(String anh) {
+        this.anh = anh;
     }
 
     public String getChucVu() {

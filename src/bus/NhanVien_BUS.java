@@ -22,5 +22,9 @@ public class NhanVien_BUS {
     public boolean updateThongTin(NhanVien nv) {
         return dao.update(nv.getMaNV(), nv);
     }
+    
+    public boolean updateAnh(String maNV, String link) {
+        return dao.updateAnh(maNV, link);
+    }
 
 }

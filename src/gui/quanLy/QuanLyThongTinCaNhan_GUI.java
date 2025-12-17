@@ -9,10 +9,15 @@ import bus.TaiKhoan_BUS;
 import dao.TaiKhoan_DAO;
 import entity.NhanVien;
 import entity.TaiKhoan;
+import java.awt.Image;
+import java.io.File;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.Period;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import main.Application;
 import utils.HashPassword;
 
@@ -55,6 +60,25 @@ public class QuanLyThongTinCaNhan_GUI extends javax.swing.JPanel {
             txt_diaChi.setText(nhanVienHienTai.getDiaChi() != null ? nhanVienHienTai.getDiaChi() : "");
             if (nhanVienHienTai.getNgaySinh() != null) {
                 date_ngaySinh.setDate(java.sql.Date.valueOf(nhanVienHienTai.getNgaySinh()));
+            }
+            try {
+                String anhPath = nhanVienHienTai.getAnh();
+                if (anhPath != null && !anhPath.trim().isEmpty()) {
+                    File f = new File(anhPath);
+                    if (f.exists()) {
+                        ImageIcon icon = new ImageIcon(anhPath);
+                        int w = lbl_taiAnh.getWidth() > 0 ? lbl_taiAnh.getWidth() : lbl_taiAnh.getPreferredSize().width;
+                        int h = lbl_taiAnh.getHeight() > 0 ? lbl_taiAnh.getHeight() : lbl_taiAnh.getPreferredSize().height;
+                        Image img = icon.getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH);
+                        lbl_taiAnh.setIcon(new ImageIcon(img));
+                    } else {
+                        lbl_taiAnh.setIcon(null);
+                    }
+                } else {
+                    lbl_taiAnh.setIcon(null);
+                }
+            } catch (Exception ex) {
+                lbl_taiAnh.setIcon(null);
             }
         } else {
             JOptionPane.showMessageDialog(this, "Không tìm thấy thông tin nhân viên với mã: " + maNV, "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -456,6 +480,42 @@ public class QuanLyThongTinCaNhan_GUI extends javax.swing.JPanel {
 
     private void btn_taiAnhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_taiAnhActionPerformed
         // TODO add your handling code here:
+        if (nhanVienHienTai == null) {
+            JOptionPane.showMessageDialog(this, "Không có thông tin nhân viên để cập nhật ảnh!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        JFileChooser chooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Image files", "jpg", "jpeg", "png", "gif");
+        chooser.setFileFilter(filter);
+        int ret = chooser.showOpenDialog(this);
+        if (ret == JFileChooser.APPROVE_OPTION) {
+            File file = chooser.getSelectedFile();
+            String path = file.getAbsolutePath();
+
+            // Load and scale image to label
+            try {
+                ImageIcon icon = new ImageIcon(path);
+                Image img = icon.getImage().getScaledInstance(lbl_taiAnh.getWidth(), lbl_taiAnh.getHeight(), Image.SCALE_SMOOTH);
+                lbl_taiAnh.setIcon(new ImageIcon(img));
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Không thể tải ảnh: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+
+            // Save path to DB
+            try {
+                boolean ok = nvBUS.updateAnh(nhanVienHienTai.getMaNV(), path);
+                if (ok) {
+                    nhanVienHienTai.setAnh(path);
+                    JOptionPane.showMessageDialog(this, "Cập nhật ảnh thành công!");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Cập nhật ảnh thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật ảnh: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+            }
+        }
     }//GEN-LAST:event_btn_taiAnhActionPerformed
 
     private void txt_diaChiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_diaChiActionPerformed

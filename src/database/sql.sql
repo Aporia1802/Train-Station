@@ -15,6 +15,7 @@ CREATE TABLE NhanVien (
     cccd VARCHAR(12) NOT NULL,
     diaChi NVARCHAR(50) NOT NULL,
     chucVu NVARCHAR(20) NOT NULL,
+    anh NVARCHAR(255) NULL,
     trangThai BIT NOT NULL
 );
 
