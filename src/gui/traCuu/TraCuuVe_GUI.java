@@ -31,6 +31,8 @@ public class TraCuuVe_GUI extends javax.swing.JPanel {
     private void init() {
         bus = new TraCuuVe_BUS();
         
+        date_ngayDi.setDate(null);
+        
         String[] columns = {"Mã vé", "Tàu", "Tuyến", "Thời gian đi", "Thời gian đến", 
                            "Hành khách", "CCCD", "Số ghế", "Giá vé"};
         tblModel = new DefaultTableModel(columns, 0) {
@@ -94,7 +96,7 @@ public class TraCuuVe_GUI extends javax.swing.JPanel {
         txt_maVe.setText("");
         txt_hoTen.setText("");
         txt_cccd.setText("");
-        date_ngayDi.setDate(new Date());
+        date_ngayDi.setDate(null);
         loadDataToTable(bus.getAllVe());
         txt_maVe.requestFocus();
     }

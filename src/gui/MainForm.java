@@ -21,12 +21,10 @@ import gui.traCuu.TraCuuTau_GUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.util.UIScale;
-import gui.components.ChonChuyenTau;
 import gui.menu.Menu;
 import gui.menu.MenuAction;
 import gui.quanLyVe.DatVe_GUI;
 import gui.thongKe.ThongKeDoanhThu_GUI;
-import gui.thongKe.ThongKeHanhKhach_GUI;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
@@ -141,14 +139,7 @@ public class MainForm extends JLayeredPane{
                     }
                     break; 
                 case 3: 
-                    switch (subIndex) {
-                        case 1: 
-                            Application.showForm(new ThongKeDoanhThu_GUI());
-                            break;
-                        case 2: 
-                            Application.showForm(new ThongKeHanhKhach_GUI());
-                            break;
-                    }
+                    Application.showForm(new ThongKeDoanhThu_GUI());
                     break;
                 case 4:
                     Application.showForm(new QuanLyTau_GUI());

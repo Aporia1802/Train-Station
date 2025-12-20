@@ -199,7 +199,7 @@ public class TraVe_GUI extends javax.swing.JPanel {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        pnl_quyDinh = new gui.custom.PanelShadow();
+        pnl_quyDinh = new gui.customPanel.PanelShadow();
         jLabel1 = new javax.swing.JLabel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
         jLabel2 = new javax.swing.JLabel();
@@ -218,7 +218,7 @@ public class TraVe_GUI extends javax.swing.JPanel {
         pnl_thongTinVe = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
-        pnl = new gui.custom.PanelShadow();
+        pnl = new gui.customPanel.PanelShadow();
         jLabel18 = new javax.swing.JLabel();
         lbl_maVe = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
@@ -242,7 +242,7 @@ public class TraVe_GUI extends javax.swing.JPanel {
         jPanel5 = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
         jLabel28 = new javax.swing.JLabel();
-        panelShadow1 = new gui.custom.PanelShadow();
+        panelShadow1 = new gui.customPanel.PanelShadow();
         jLabel32 = new javax.swing.JLabel();
         lbl_giaVe = new javax.swing.JLabel();
         jLabel30 = new javax.swing.JLabel();
@@ -254,7 +254,7 @@ public class TraVe_GUI extends javax.swing.JPanel {
         jPanel16 = new javax.swing.JPanel();
         btn_dong = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
-        panelShadow2 = new gui.custom.PanelShadow();
+        panelShadow2 = new gui.customPanel.PanelShadow();
         lbl_thongBao = new javax.swing.JLabel();
         filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
         lbl_chiTietThongBao = new javax.swing.JLabel();
@@ -639,11 +639,11 @@ public class TraVe_GUI extends javax.swing.JPanel {
     private javax.swing.JLabel lbl_soTienHoan;
     private javax.swing.JLabel lbl_tau;
     private javax.swing.JLabel lbl_thongBao;
-    private gui.custom.PanelShadow panelShadow1;
-    private gui.custom.PanelShadow panelShadow2;
-    private gui.custom.PanelShadow pnl;
+    private gui.customPanel.PanelShadow panelShadow1;
+    private gui.customPanel.PanelShadow panelShadow2;
+    private gui.customPanel.PanelShadow pnl;
     private javax.swing.JPanel pnl_chiTietHoanTien;
-    private gui.custom.PanelShadow pnl_quyDinh;
+    private gui.customPanel.PanelShadow pnl_quyDinh;
     private javax.swing.JPanel pnl_thongBao;
     private javax.swing.JPanel pnl_thongTinVe;
     private javax.swing.JPanel pnl_timKiem;

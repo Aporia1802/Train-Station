@@ -58,15 +58,15 @@ public class ChonChuyenTau extends javax.swing.JPanel {
         cbo_gaDen.setSelectedItem("Hà Nội");
         pnl_chieuDi.setVisible(false);
         pnl_chieuVe.setVisible(false);
-//        Calendar cal = Calendar.getInstance();
-//        date_ngayDi.getJCalendar().setMinSelectableDate(cal.getTime());
-//        date_ngayVe.getJCalendar().setMinSelectableDate(cal.getTime());
-//        date_ngayDi.addPropertyChangeListener("date", evt -> {
-//            if (date_ngayDi.getDate() != null) {
-//                date_ngayVe.setDate(date_ngayDi.getDate());
-//                date_ngayVe.getJCalendar().setMinSelectableDate(date_ngayDi.getDate());
-//            }
-//        });
+        Calendar cal = Calendar.getInstance();
+        date_ngayDi.getJCalendar().setMinSelectableDate(cal.getTime());
+        date_ngayVe.getJCalendar().setMinSelectableDate(cal.getTime());
+        date_ngayDi.addPropertyChangeListener("date", evt -> {
+            if (date_ngayDi.getDate() != null) {
+                date_ngayVe.setDate(date_ngayDi.getDate());
+                date_ngayVe.getJCalendar().setMinSelectableDate(date_ngayDi.getDate());
+            }
+        });
     }
     
 //  Load danh sách ga tàu
@@ -305,13 +305,13 @@ public class ChonChuyenTau extends javax.swing.JPanel {
         jPanel11 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         rSMaterialButtonCircle1 = new rojerusan.RSMaterialButtonCircle();
-        roundedButton1 = new gui.custom.RoundedButton();
+        roundedButton1 = new gui.customPanel.RoundedButton();
         jPanel2 = new javax.swing.JPanel();
         rSMaterialButtonCircle2 = new rojerusan.RSMaterialButtonCircle();
-        roundedButton2 = new gui.custom.RoundedButton();
+        roundedButton2 = new gui.customPanel.RoundedButton();
         jPanel9 = new javax.swing.JPanel();
         rSMaterialButtonCircle4 = new rojerusan.RSMaterialButtonCircle();
-        roundedButton3 = new gui.custom.RoundedButton();
+        roundedButton3 = new gui.customPanel.RoundedButton();
         jPanel10 = new javax.swing.JPanel();
         pnl_chonChuyenTau = new javax.swing.JPanel();
         pnl_chieuDi = new javax.swing.JPanel();
@@ -742,8 +742,8 @@ public class ChonChuyenTau extends javax.swing.JPanel {
     private rojerusan.RSMaterialButtonCircle rSMaterialButtonCircle4;
     private javax.swing.JRadioButton rad_khuHoi;
     private javax.swing.JRadioButton rad_motChieu;
-    private gui.custom.RoundedButton roundedButton1;
-    private gui.custom.RoundedButton roundedButton2;
-    private gui.custom.RoundedButton roundedButton3;
+    private gui.customPanel.RoundedButton roundedButton1;
+    private gui.customPanel.RoundedButton roundedButton2;
+    private gui.customPanel.RoundedButton roundedButton3;
     // End of variables declaration//GEN-END:variables
 }

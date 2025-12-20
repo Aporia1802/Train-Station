@@ -22,7 +22,7 @@ public class Login_BUS {
     private final TaiKhoan_DAO taiKhoanDAO = new TaiKhoan_DAO();
     private final NhanVien_DAO nhanVienDAO = new NhanVien_DAO();
     
-//  Chức năng đăng nhập
+    //  Chức năng đăng nhập
     public NhanVien login(String tenDangNhap, String matKhau) throws Exception {
         TaiKhoan taiKhoan = taiKhoanDAO.getOne(tenDangNhap);
         
@@ -58,22 +58,22 @@ public class Login_BUS {
             throw new Exception("Tài khoản hoặc email không chính xác!");
         }
         
-//      Sinh mật khẩu mới
+        //  Sinh mật khẩu mới
         String matKhauMoi = RandomPassword();
         String matKhauHash = hashPassword(matKhauMoi);
 
-//      Lưu mật khẩu cũ để rollback khi cần
+        //  Lưu mật khẩu cũ để rollback khi cần
         String matKhauCu = taiKhoan.getMatKhau();
         
         boolean updated = taiKhoanDAO.updatePassword(tenDangNhap, matKhauHash);
         
-//      Cập nhật DB
+        //  Cập nhật DB
         if (!updated) {
            throw new Exception("Không thể cập nhật mật khẩu trong cơ sở dữ liệu!");
         }
 
         try {
-//      Gửi email
+        //  Gửi email
         sendEmail(email, "Reset mật khẩu",
                 "Mật khẩu mới của bạn là: " + matKhauMoi + 
                 ". Vui lòng đổi mật khẩu ngay sau khi đăng nhập.");

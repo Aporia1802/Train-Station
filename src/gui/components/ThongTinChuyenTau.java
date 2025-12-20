@@ -134,7 +134,7 @@ public class ThongTinChuyenTau extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        pnl_contain = new gui.custom.PanelShadow();
+        pnl_contain = new gui.customPanel.PanelShadow();
         pnl_header = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -150,7 +150,7 @@ public class ThongTinChuyenTau extends javax.swing.JPanel {
         lbl_ngayDi = new javax.swing.JLabel();
         pnl_thoiGianDiChuyen = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
-        lbl_thoiGianDiChuyen = new gui.custom.RoundedTextField();
+        lbl_thoiGianDiChuyen = new gui.customPanel.RoundedTextField();
         pnl_thongTinDen = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         lbl_thoiGianDen = new javax.swing.JLabel();
@@ -282,9 +282,9 @@ public class ThongTinChuyenTau extends javax.swing.JPanel {
     private javax.swing.JLabel lbl_soHieuTau;
     private javax.swing.JLabel lbl_thoiGianDen;
     private javax.swing.JLabel lbl_thoiGianDi;
-    private gui.custom.RoundedTextField lbl_thoiGianDiChuyen;
+    private gui.customPanel.RoundedTextField lbl_thoiGianDiChuyen;
     private javax.swing.JPanel pnl_center;
-    private gui.custom.PanelShadow pnl_contain;
+    private gui.customPanel.PanelShadow pnl_contain;
     private javax.swing.JPanel pnl_header;
     private javax.swing.JPanel pnl_thoiGianDiChuyen;
     private javax.swing.JPanel pnl_thongTin;

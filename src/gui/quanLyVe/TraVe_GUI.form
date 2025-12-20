@@ -40,7 +40,7 @@
         <Property name="axis" type="int" value="1"/>
       </Layout>
       <SubComponents>
-        <Container class="gui.custom.PanelShadow" name="pnl_quyDinh">
+        <Container class="gui.customPanel.PanelShadow" name="pnl_quyDinh">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="f7" green="ed" red="d9" type="rgb"/>
@@ -295,7 +295,7 @@
                     </Component>
                   </SubComponents>
                 </Container>
-                <Container class="gui.custom.PanelShadow" name="pnl">
+                <Container class="gui.customPanel.PanelShadow" name="pnl">
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="ff" green="ff" red="ff" type="rgb"/>
@@ -568,7 +568,7 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Container class="gui.custom.PanelShadow" name="panelShadow1">
+                    <Container class="gui.customPanel.PanelShadow" name="panelShadow1">
                       <Properties>
                         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="ff" green="ff" red="ff" type="rgb"/>
@@ -735,7 +735,7 @@
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
                   <SubComponents>
-                    <Container class="gui.custom.PanelShadow" name="panelShadow2">
+                    <Container class="gui.customPanel.PanelShadow" name="panelShadow2">
                       <Properties>
                         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="e2" green="e2" red="fe" type="rgb"/>

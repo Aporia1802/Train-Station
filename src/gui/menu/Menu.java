@@ -32,7 +32,7 @@ public class Menu extends JPanel{
         {"Trang chủ"},
         {"Vé", "Đặt vé", "Đổi vé", "Trả vé"},
         {"Tra cứu", "Vé", "Nhân viên", "Ga tàu", "Tàu", "Hành khách", "Chuyến tàu"},
-        {"Thống kê", "Thống kê doanh thu", "Thống kê hành khách"},
+        {"Thống kê", "Thống kê doanh thu"},
         {"Quản lý tàu"},
         {"Quản lý địa điểm ga"},
         {"Quản lý nhân viên"},

@@ -1,4 +1,4 @@
-package gui.custom;
+package gui.customPanel;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;

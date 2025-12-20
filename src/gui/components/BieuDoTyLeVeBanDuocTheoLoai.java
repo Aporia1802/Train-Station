@@ -2,18 +2,18 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package gui.thongKe;
+package gui.components;
 
 /**
  *
- * @author CÔNG HOÀNG
+ * @author Administrator
  */
-public class ThongKeHanhKhach_GUI extends javax.swing.JPanel {
+public class BieuDoTyLeVeBanDuocTheoLoai extends javax.swing.JPanel {
 
     /**
-     * Creates new form ThongKeHanhKhach_GUI
+     * Creates new form huhuhuhuhu
      */
-    public ThongKeHanhKhach_GUI() {
+    public BieuDoTyLeVeBanDuocTheoLoai() {
         initComponents();
     }
 
@@ -26,19 +26,32 @@ public class ThongKeHanhKhach_GUI extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        panelShadow1 = new raven2.panel.PanelShadow();
+        tyLeVeBanDuocTheoLoai1 = new gui.components.TyLeVeBanDuocTheoLoai();
+
+        panelShadow1.setRadius(30);
+        panelShadow1.setShadowColor(new java.awt.Color(102, 204, 255));
+        panelShadow1.setShadowOpacity(0.4F);
+        panelShadow1.setShadowSize(4);
+        panelShadow1.setShadowType(raven2.panel.PanelShadow.ShadowType.BOT);
+        panelShadow1.setLayout(new java.awt.BorderLayout());
+        panelShadow1.add(tyLeVeBanDuocTheoLoai1, java.awt.BorderLayout.CENTER);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1366, Short.MAX_VALUE)
+            .addComponent(panelShadow1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 768, Short.MAX_VALUE)
+            .addComponent(panelShadow1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private raven2.panel.PanelShadow panelShadow1;
+    private gui.components.TyLeVeBanDuocTheoLoai tyLeVeBanDuocTheoLoai1;
     // End of variables declaration//GEN-END:variables
 }

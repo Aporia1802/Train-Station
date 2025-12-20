@@ -73,7 +73,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rSMaterialButtonCircle1ActionPerformed"/>
               </Events>
             </Component>
-            <Component class="gui.custom.RoundedButton" name="roundedButton1">
+            <Component class="gui.customPanel.RoundedButton" name="roundedButton1">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="d4" green="d4" red="d4" type="rgb"/>
@@ -123,7 +123,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rSMaterialButtonCircle2ActionPerformed"/>
               </Events>
             </Component>
-            <Component class="gui.custom.RoundedButton" name="roundedButton2">
+            <Component class="gui.customPanel.RoundedButton" name="roundedButton2">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="13" green="11" red="7b" type="rgb"/>
@@ -176,7 +176,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rSMaterialButtonCircle4ActionPerformed"/>
               </Events>
             </Component>
-            <Component class="gui.custom.RoundedButton" name="roundedButton3">
+            <Component class="gui.customPanel.RoundedButton" name="roundedButton3">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="d4" green="d4" red="d4" type="rgb"/>
@@ -497,7 +497,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
               <SubComponents>
-                <Component class="gui.custom.RoundedButton" name="roundedButton4">
+                <Component class="gui.customPanel.RoundedButton" name="roundedButton4">
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="5a" green="5a" red="fc" type="rgb"/>
@@ -561,7 +561,7 @@
                     <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalStrut"/>
                   </AuxValues>
                 </Component>
-                <Component class="gui.custom.RoundedButton" name="roundedButton5">
+                <Component class="gui.customPanel.RoundedButton" name="roundedButton5">
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="92" green="92" red="92" type="rgb"/>
@@ -619,7 +619,7 @@
                     <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalStrut"/>
                   </AuxValues>
                 </Component>
-                <Component class="gui.custom.RoundedButton" name="roundedButton6">
+                <Component class="gui.customPanel.RoundedButton" name="roundedButton6">
                   <Properties>
                     <Property name="toolTipText" type="java.lang.String" value=""/>
                     <Property name="enabled" type="boolean" value="false"/>

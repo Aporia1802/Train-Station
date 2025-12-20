@@ -318,16 +318,16 @@ public class TimVeDoi extends javax.swing.JPanel {
         jPanel11 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         rSMaterialButtonCircle1 = new rojerusan.RSMaterialButtonCircle();
-        roundedButton1 = new gui.custom.RoundedButton();
+        roundedButton1 = new gui.customPanel.RoundedButton();
         jPanel2 = new javax.swing.JPanel();
         rSMaterialButtonCircle2 = new rojerusan.RSMaterialButtonCircle();
-        roundedButton2 = new gui.custom.RoundedButton();
+        roundedButton2 = new gui.customPanel.RoundedButton();
         jPanel9 = new javax.swing.JPanel();
         rSMaterialButtonCircle4 = new rojerusan.RSMaterialButtonCircle();
-        roundedButton3 = new gui.custom.RoundedButton();
+        roundedButton3 = new gui.customPanel.RoundedButton();
         pnl_chonChuyenTau = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
-        pnl_quyDinh = new gui.custom.PanelShadow();
+        pnl_quyDinh = new gui.customPanel.PanelShadow();
         jLabel1 = new javax.swing.JLabel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
         jLabel2 = new javax.swing.JLabel();
@@ -342,7 +342,7 @@ public class TimVeDoi extends javax.swing.JPanel {
         pnl_thongTinVe = new javax.swing.JPanel();
         jPanel10 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
-        pnl = new gui.custom.PanelShadow();
+        pnl = new gui.customPanel.PanelShadow();
         jLabel20 = new javax.swing.JLabel();
         lbl_hoTen = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
@@ -747,22 +747,22 @@ public class TimVeDoi extends javax.swing.JPanel {
     private javax.swing.JLabel lbl_tau;
     private javax.swing.JLabel lbl_tieuDeChuyenDi;
     private javax.swing.JLabel lbl_tieuDeChuyenVe;
-    private gui.custom.PanelShadow pnl;
+    private gui.customPanel.PanelShadow pnl;
     private javax.swing.JPanel pnl_chieuDi;
     private javax.swing.JPanel pnl_chieuVe;
     private javax.swing.JPanel pnl_chonChuyenTau;
     private javax.swing.JPanel pnl_chonChuyenTau1;
     private javax.swing.JPanel pnl_dsChuyenDi;
     private javax.swing.JPanel pnl_dsChuyenVe;
-    private gui.custom.PanelShadow pnl_quyDinh;
+    private gui.customPanel.PanelShadow pnl_quyDinh;
     private javax.swing.JPanel pnl_thongTinVe;
     private javax.swing.JPanel pnl_timKiem;
     private rojerusan.RSMaterialButtonCircle rSMaterialButtonCircle1;
     private rojerusan.RSMaterialButtonCircle rSMaterialButtonCircle2;
     private rojerusan.RSMaterialButtonCircle rSMaterialButtonCircle4;
-    private gui.custom.RoundedButton roundedButton1;
-    private gui.custom.RoundedButton roundedButton2;
-    private gui.custom.RoundedButton roundedButton3;
+    private gui.customPanel.RoundedButton roundedButton1;
+    private gui.customPanel.RoundedButton roundedButton2;
+    private gui.customPanel.RoundedButton roundedButton3;
     private javax.swing.JTextField txt_maVe;
     // End of variables declaration//GEN-END:variables
 }

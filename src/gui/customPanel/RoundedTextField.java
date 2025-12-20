@@ -2,11 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package gui.custom;
+package gui.customPanel;
 
 /**
  *
- * @author CÔNG HOÀNG
+ * @author PHAMGIAKHANH
  */
 import java.awt.Color;
 import java.awt.Graphics;
@@ -16,12 +16,11 @@ import java.awt.RenderingHints;
 import java.awt.geom.Area;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
-import javax.swing.JButton;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
-import gui.custom.ShadowRenderer;
-import gui.custom.RippleEffect;
+import javax.swing.plaf.basic.BasicTextFieldUI;
 
-public class RoundedButton extends JButton {
+public class RoundedTextField extends JTextField {
 
     public int getRound() {
         return round;
@@ -43,26 +42,19 @@ public class RoundedButton extends JButton {
         repaint();
     }
 
-    public void setRippleColor(Color color) {
-        rippleEffect.setRippleColor(color);
-    }
-
-    public Color getRippleColor() {
-        return rippleEffect.getRippleColor();
-    }
-
     private int round = 10;
     private Color shadowColor = new Color(170, 170, 170);
     private BufferedImage imageShadow;
     private final Insets shadowSize = new Insets(2, 5, 8, 5);
-    private final RippleEffect rippleEffect = new RippleEffect(this);
 
-    public RoundedButton() {
-        setBorder(new EmptyBorder(10, 12, 15, 12));
-        setContentAreaFilled(false);
-        setBackground(new Color(255, 255, 255));
+    public RoundedTextField() {
+        setUI(new TextUI());
+        setOpaque(false);
         setForeground(new Color(80, 80, 80));
-        rippleEffect.setRippleColor(new Color(220, 220, 220));
+        setSelectedTextColor(new Color(255, 255, 255));
+        setSelectionColor(new Color(133, 209, 255));
+        setBorder(new EmptyBorder(10, 12, 15, 12));
+        setBackground(new Color(255, 255, 255));
     }
 
     @Override
@@ -79,7 +71,6 @@ public class RoundedButton extends JButton {
         g2.setColor(getBackground());
         Area area = new Area(new RoundRectangle2D.Double(x, y, width, height, round, round));
         g2.fill(area);
-        rippleEffect.reder(grphcs, area);
         g2.dispose();
         super.paintComponent(grphcs);
     }
@@ -116,6 +107,15 @@ public class RoundedButton extends JButton {
             return new ShadowRenderer(5, 0.3f, shadowColor).createShadow(img);
         } else {
             return null;
+        }
+    }
+
+    private class TextUI extends BasicTextFieldUI {
+
+        //  Override this method to remove background or not paint background
+        @Override
+        protected void paintBackground(Graphics grphcs) {
+
         }
     }
 }

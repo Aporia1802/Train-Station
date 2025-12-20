@@ -693,13 +693,13 @@ public class ThanhToan extends javax.swing.JPanel {
         jPanel11 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         rSMaterialButtonCircle1 = new rojerusan.RSMaterialButtonCircle();
-        roundedButton1 = new gui.custom.RoundedButton();
+        roundedButton1 = new gui.customPanel.RoundedButton();
         jPanel2 = new javax.swing.JPanel();
         rSMaterialButtonCircle2 = new rojerusan.RSMaterialButtonCircle();
-        roundedButton2 = new gui.custom.RoundedButton();
+        roundedButton2 = new gui.customPanel.RoundedButton();
         jPanel9 = new javax.swing.JPanel();
         rSMaterialButtonCircle4 = new rojerusan.RSMaterialButtonCircle();
-        roundedButton3 = new gui.custom.RoundedButton();
+        roundedButton3 = new gui.customPanel.RoundedButton();
         jPanel15 = new javax.swing.JPanel();
         btn_previous = new javax.swing.JButton();
         btn_xacNhan = new javax.swing.JButton();
@@ -1078,8 +1078,8 @@ public class ThanhToan extends javax.swing.JPanel {
     private rojerusan.RSMaterialButtonCircle rSMaterialButtonCircle1;
     private rojerusan.RSMaterialButtonCircle rSMaterialButtonCircle2;
     private rojerusan.RSMaterialButtonCircle rSMaterialButtonCircle4;
-    private gui.custom.RoundedButton roundedButton1;
-    private gui.custom.RoundedButton roundedButton2;
-    private gui.custom.RoundedButton roundedButton3;
+    private gui.customPanel.RoundedButton roundedButton1;
+    private gui.customPanel.RoundedButton roundedButton2;
+    private gui.customPanel.RoundedButton roundedButton3;
     // End of variables declaration//GEN-END:variables
 }

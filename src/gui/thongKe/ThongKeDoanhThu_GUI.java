@@ -26,19 +26,53 @@ public class ThongKeDoanhThu_GUI extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1366, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 768, Short.MAX_VALUE)
-        );
+        jPanel1 = new javax.swing.JPanel();
+        bieuDoSoVeBanDuoc1 = new gui.components.BieuDoSoVeBanDuoc();
+        bieuDoSoVeDaHoanThanh1 = new gui.components.BieuDoSoVeDaHoanThanh();
+        bieuDoSoVeBiHuy1 = new gui.components.BieuDoSoVeBiHuy();
+        bieuDoTyLeTangTruongDoanhThu2 = new gui.components.BieuDoTyLeTangTruongDoanhThu();
+        jPanel3 = new javax.swing.JPanel();
+        topChuyenDi1 = new gui.components.TopChuyenDi();
+        bieuDoTyLeVeBanDuocTheoLoai2 = new gui.components.BieuDoTyLeVeBanDuocTheoLoai();
+        bieuDoSoLuongHanhKhach1 = new gui.components.BieuDoSoLuongHanhKhach();
+        thongKeDoanhThu2 = new gui.components.ThongKeDoanhThu();
+
+        setLayout(new java.awt.BorderLayout());
+
+        jPanel1.setPreferredSize(new java.awt.Dimension(100, 220));
+        jPanel1.setLayout(new java.awt.GridLayout(1, 0));
+        jPanel1.add(bieuDoSoVeBanDuoc1);
+        jPanel1.add(bieuDoSoVeDaHoanThanh1);
+        jPanel1.add(bieuDoSoVeBiHuy1);
+        jPanel1.add(bieuDoTyLeTangTruongDoanhThu2);
+
+        add(jPanel1, java.awt.BorderLayout.PAGE_START);
+
+        jPanel3.setPreferredSize(new java.awt.Dimension(10, 280));
+        jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.LINE_AXIS));
+
+        topChuyenDi1.setMaximumSize(new java.awt.Dimension(320, 2147483647));
+        topChuyenDi1.setMinimumSize(new java.awt.Dimension(320, 0));
+        topChuyenDi1.setPreferredSize(new java.awt.Dimension(320, 0));
+        jPanel3.add(topChuyenDi1);
+        jPanel3.add(bieuDoTyLeVeBanDuocTheoLoai2);
+        jPanel3.add(bieuDoSoLuongHanhKhach1);
+
+        add(jPanel3, java.awt.BorderLayout.PAGE_END);
+        add(thongKeDoanhThu2, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private gui.components.BieuDoSoLuongHanhKhach bieuDoSoLuongHanhKhach1;
+    private gui.components.BieuDoSoVeBanDuoc bieuDoSoVeBanDuoc1;
+    private gui.components.BieuDoSoVeBiHuy bieuDoSoVeBiHuy1;
+    private gui.components.BieuDoSoVeDaHoanThanh bieuDoSoVeDaHoanThanh1;
+    private gui.components.BieuDoTyLeTangTruongDoanhThu bieuDoTyLeTangTruongDoanhThu2;
+    private gui.components.BieuDoTyLeVeBanDuocTheoLoai bieuDoTyLeVeBanDuocTheoLoai2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel3;
+    private gui.components.ThongKeDoanhThu thongKeDoanhThu2;
+    private gui.components.TopChuyenDi topChuyenDi1;
     // End of variables declaration//GEN-END:variables
 }

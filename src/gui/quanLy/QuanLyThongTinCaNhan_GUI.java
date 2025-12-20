@@ -189,9 +189,6 @@ public class QuanLyThongTinCaNhan_GUI extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        pnlWest = new javax.swing.JPanel();
-        lbl_taiAnh = new javax.swing.JLabel();
-        btn_taiAnh = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -233,27 +230,7 @@ public class QuanLyThongTinCaNhan_GUI extends javax.swing.JPanel {
 
         jPanel2.setLayout(new java.awt.BorderLayout());
 
-        pnlWest.setBorder(javax.swing.BorderFactory.createEmptyBorder(60, 10, 0, 10));
-        pnlWest.setPreferredSize(new java.awt.Dimension(450, 380));
-
-        lbl_taiAnh.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbl_taiAnh.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        lbl_taiAnh.setPreferredSize(new java.awt.Dimension(300, 300));
-        pnlWest.add(lbl_taiAnh);
-
-        btn_taiAnh.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        btn_taiAnh.setText("Tải ảnh lên");
-        btn_taiAnh.setPreferredSize(new java.awt.Dimension(200, 50));
-        btn_taiAnh.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_taiAnhActionPerformed(evt);
-            }
-        });
-        pnlWest.add(btn_taiAnh);
-
-        jPanel2.add(pnlWest, java.awt.BorderLayout.LINE_START);
-
-        jPanel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(40, 10, 10, 65));
+        jPanel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(40, 100, 10, 100));
         jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.Y_AXIS));
 
         jPanel4.setMaximumSize(new java.awt.Dimension(32767, 120));
@@ -394,10 +371,6 @@ public class QuanLyThongTinCaNhan_GUI extends javax.swing.JPanel {
         add(jPanel1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btn_taiAnhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_taiAnhActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btn_taiAnhActionPerformed
-
     private void txt_diaChiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_diaChiActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_diaChiActionPerformed
@@ -420,7 +393,6 @@ public class QuanLyThongTinCaNhan_GUI extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_doiMK;
     private javax.swing.JButton btn_luuThongTin;
-    private javax.swing.JButton btn_taiAnh;
     private com.toedter.calendar.JDateChooser date_ngaySinh;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
@@ -445,8 +417,6 @@ public class QuanLyThongTinCaNhan_GUI extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
-    private javax.swing.JLabel lbl_taiAnh;
-    private javax.swing.JPanel pnlWest;
     private javax.swing.JPasswordField pwd_matKhauHT;
     private javax.swing.JPasswordField pwd_matKhauMoi;
     private javax.swing.JPasswordField pwd_xacNhan;

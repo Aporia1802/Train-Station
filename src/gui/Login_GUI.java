@@ -341,6 +341,7 @@ public class Login_GUI extends javax.swing.JPanel {
                     "Mật khẩu đã được cập nhật. Vui lòng đăng nhập lại!");
                 } catch (InterruptedException | ExecutionException ex) {
                     Notifications.getInstance().show(Notifications.Type.ERROR, ex.getMessage());
+                    
                 }
             }
     };
@@ -373,6 +374,7 @@ public class Login_GUI extends javax.swing.JPanel {
                 Application.login(nhanVien);
             }
         } catch (Exception ex) {
+            ex.printStackTrace();
             Notifications.getInstance().show(Notifications.Type.ERROR, ex.getMessage());
         }
     }//GEN-LAST:event_btn_dangNhapActionPerformed

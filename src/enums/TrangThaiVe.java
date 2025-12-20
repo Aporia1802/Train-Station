@@ -10,7 +10,7 @@ package enums;
  */
 public enum TrangThaiVe {
     DA_DAT(1, "Đã đặt"),
-    DA_THANH_TOAN(2, "Đã thanh toán"),
+    DA_HOAN_THANH(2, "Đã hoàn thành"),
     DA_HUY(3, "Đã hủy");
     
     private final int value;
