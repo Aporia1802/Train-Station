@@ -1,4 +1,4 @@
-package gui.quanLyVe;
+package gui.ticket;
 
 import bus.QuanLyDatVe_BUS;
 import entity.ChuyenTau;

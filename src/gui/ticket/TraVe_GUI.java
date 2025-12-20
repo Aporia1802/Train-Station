@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package gui.quanLyVe;
+package gui.ticket;
 
 import bus.QuanLyTraVe_BUS;
 import entity.HoaDonTra;
