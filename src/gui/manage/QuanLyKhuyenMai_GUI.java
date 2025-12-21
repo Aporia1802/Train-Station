@@ -119,12 +119,176 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
         String trangThai = cbo_trangThaiKM.getSelectedItem().toString().trim();
         getTableData(bus.filterByTrangThai(trangThai));
     }
+    
+    private boolean validateInput() {
+        // 1. Kiểm tra tên khuyến mãi
+        String tenKM = txt_tenKhuyenMai.getText().trim();
+        if (tenKM.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Tên khuyến mãi không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            txt_tenKhuyenMai.requestFocus();
+            return false;
+        }
+
+        // 2. Kiểm tra mức giảm
+        String mucGiamStr = txt_mucGiam.getText().trim().replace("%", "");
+        double mucGiam;
+        try {
+            mucGiam = Double.parseDouble(mucGiamStr);
+            if (mucGiam <= 0 || mucGiam > 100) {
+                JOptionPane.showMessageDialog(this, "Mức giảm phải từ 0% đến 100%!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                txt_mucGiam.requestFocus();
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Mức giảm không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            txt_mucGiam.requestFocus();
+            return false;
+        }
+
+        // 3. Kiểm tra ngày
+        if (txt_ngayBatDau.getDate() == null) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn ngày bắt đầu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (txt_ngayKetThuc.getDate() == null) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn ngày kết thúc!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        LocalDate ngayBatDau = txt_ngayBatDau.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate ngayKetThuc = txt_ngayKetThuc.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        // Kiểm tra ngày bắt đầu <= ngày kết thúc
+        if (ngayBatDau.isAfter(ngayKetThuc)) {
+            JOptionPane.showMessageDialog(this, "Ngày bắt đầu phải trước hoặc bằng ngày kết thúc!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        // 4. Kiểm tra tổng tiền tối thiểu
+        String tongTienStr = txt_tongTienToiThieu.getText().trim();
+        double tongTien;
+        try {
+            tongTien = Double.parseDouble(tongTienStr);
+            if (tongTien <= 0) {
+                JOptionPane.showMessageDialog(this, "Tổng tiền tối thiểu phải lớn hơn 0!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                txt_tongTienToiThieu.requestFocus();
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Tổng tiền tối thiểu không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            txt_tongTienToiThieu.requestFocus();
+            return false;
+        }
+
+        // 5. Kiểm tra tiền khuyến mãi tối đa
+        String tienKMStr = txt_tienKhuyenMaiToiDa.getText().trim();
+        double tienKM;
+        try {
+            tienKM = Double.parseDouble(tienKMStr);
+            if (tienKM <= 0) {
+                JOptionPane.showMessageDialog(this, "Tiền khuyến mãi tối đa phải lớn hơn 0!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                txt_tienKhuyenMaiToiDa.requestFocus();
+                return false;
+            }
+
+            // Kiểm tra logic: tiền KM tối đa không nên vượt quá tổng tiền * mức giảm
+            double tienKMToiDaLyThuyet = tongTien * (mucGiam / 100);
+            if (tienKM > tienKMToiDaLyThuyet * 2) { // Cho phép linh hoạt gấp đôi
+                int choice = JOptionPane.showConfirmDialog(this, 
+                    "Tiền khuyến mãi tối đa (" + tienKM + ") có vẻ không hợp lý so với mức giảm " + mucGiam + "% và tổng tiền tối thiểu " + tongTien + ".\nBạn có chắc muốn tiếp tục?",
+                    "Cảnh báo", 
+                    JOptionPane.YES_NO_OPTION, 
+                    JOptionPane.WARNING_MESSAGE);
+                if (choice == JOptionPane.NO_OPTION) {
+                    txt_tienKhuyenMaiToiDa.requestFocus();
+                    return false;
+                }
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Tiền khuyến mãi tối đa không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            txt_tienKhuyenMaiToiDa.requestFocus();
+            return false;
+        }
+
+        return true;
+    }
+    
+    // Validation riêng cho thêm mới
+    private boolean validateForCreate() {
+        if (!validateInput()) {
+            return false;
+        }
+
+        // Kiểm tra ngày bắt đầu không được là quá khứ
+        LocalDate ngayBatDau = txt_ngayBatDau.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate today = LocalDate.now();
+
+        if (ngayBatDau.isBefore(today)) {
+            int choice = JOptionPane.showConfirmDialog(this, 
+                "Ngày bắt đầu đã là quá khứ. Khuyến mãi này sẽ không có hiệu lực.\nBạn có chắc muốn tiếp tục?",
+                "Cảnh báo", 
+                JOptionPane.YES_NO_OPTION, 
+                JOptionPane.WARNING_MESSAGE);
+            if (choice == JOptionPane.NO_OPTION) {
+                return false;
+            }
+        }
+
+        // Kiểm tra trùng tên (nên thêm vào BUS)
+        String tenKM = txt_tenKhuyenMai.getText().trim();
+        ArrayList<KhuyenMai> allKM = bus.getAllKhuyenMai();
+        for (KhuyenMai km : allKM) {
+            if (km.getTenKhuyenMai().equalsIgnoreCase(tenKM)) {
+                JOptionPane.showMessageDialog(this, "Tên khuyến mãi đã tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                txt_tenKhuyenMai.requestFocus();
+                return false;
+            }
+        }
+
+        return true;
+    }
+    
+    // Validation riêng cho cập nhật
+    private boolean validateForUpdate() {
+        if (!validateInput()) {
+            return false;
+        }
+
+        // Kiểm tra đã chọn khuyến mãi chưa
+        if (txt_maKhuyenMai.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn khuyến mãi cần cập nhật từ bảng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        // Kiểm tra trùng tên (trừ chính nó)
+        String maKM = txt_maKhuyenMai.getText().trim();
+        String tenKM = txt_tenKhuyenMai.getText().trim();
+        ArrayList<KhuyenMai> allKM = bus.getAllKhuyenMai();
+        for (KhuyenMai km : allKM) {
+            if (!km.getMaKhuyenMai().equals(maKM) && km.getTenKhuyenMai().equalsIgnoreCase(tenKM)) {
+                JOptionPane.showMessageDialog(this, "Tên khuyến mãi đã tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                txt_tenKhuyenMai.requestFocus();
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     private void handleActionThem() {
+        if (!validateForCreate()) {
+            return;
+        }
+
         try {
             String maKM = bus.generateID();
             String tenKM = txt_tenKhuyenMai.getText().trim();
-            double heSo = Double.parseDouble(txt_mucGiam.getText().trim());
+
+            // Xử lý mức giảm - loại bỏ ký tự %
+            String mucGiamStr = txt_mucGiam.getText().trim().replace("%", "");
+            double heSo = Double.parseDouble(mucGiamStr) / 100; // Chuyển về dạng 0.1 thay vì 10
+
             LocalDate ngayBatDau = txt_ngayBatDau.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             LocalDate ngayKetThuc = txt_ngayKetThuc.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             double tongTienTT = Double.parseDouble(txt_tongTienToiThieu.getText().trim());
@@ -134,23 +298,32 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
             KhuyenMai km = new KhuyenMai(maKM, tenKM, heSo, ngayBatDau, ngayKetThuc, tongTienTT, tienKMToiDa, trangThai);
 
             if (bus.themKhuyenMai(km)) {
-                JOptionPane.showMessageDialog(this, "Thêm khuyến mãi thành công!");
+                JOptionPane.showMessageDialog(this, "Thêm khuyến mãi thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
                 getTableData(bus.getAllKhuyenMai());
+                handleActionXoaTrang();
             } else {
-                JOptionPane.showMessageDialog(this, "Không thể thêm khuyến mãi!");
+                JOptionPane.showMessageDialog(this, "Không thể thêm khuyến mãi!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Dữ liệu nhập không hợp lệ!");
+            JOptionPane.showMessageDialog(this, "Có lỗi xảy ra: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void handleActionCapNhat() {
+        if (!validateForUpdate()) {
+            return;
+        }
+
         try {
             String maKM = txt_maKhuyenMai.getText().trim();
             String tenKM = txt_tenKhuyenMai.getText().trim();
-            double heSo = Double.parseDouble(txt_mucGiam.getText().trim());
-            LocalDate ngayBatDau =txt_ngayBatDau.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+            // Xử lý mức giảm - loại bỏ ký tự %
+            String mucGiamStr = txt_mucGiam.getText().trim().replace("%", "");
+            double heSo = Double.parseDouble(mucGiamStr) / 100; // Chuyển về dạng 0.1 thay vì 10
+
+            LocalDate ngayBatDau = txt_ngayBatDau.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             LocalDate ngayKetThuc = txt_ngayKetThuc.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             double tongTienTT = Double.parseDouble(txt_tongTienToiThieu.getText().trim());
             double tienKMToiDa = Double.parseDouble(txt_tienKhuyenMaiToiDa.getText().trim());
@@ -159,14 +332,15 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
             KhuyenMai km = new KhuyenMai(maKM, tenKM, heSo, ngayBatDau, ngayKetThuc, tongTienTT, tienKMToiDa, trangThai);
 
             if (bus.capNhatKhuyenMai(km)) {
-                JOptionPane.showMessageDialog(this, "Cập nhật khuyến mãi thành công!");
+                JOptionPane.showMessageDialog(this, "Cập nhật khuyến mãi thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
                 getTableData(bus.getAllKhuyenMai());
+                handleActionXoaTrang();
             } else {
-                JOptionPane.showMessageDialog(this, "Không thể cập nhật khuyến mãi!");
+                JOptionPane.showMessageDialog(this, "Không thể cập nhật khuyến mãi!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Dữ liệu nhập không hợp lệ!");
+            JOptionPane.showMessageDialog(this, "Có lỗi xảy ra: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -280,7 +454,7 @@ public class QuanLyKhuyenMai_GUI extends javax.swing.JPanel {
         pnl_cta.add(btn_Loc);
 
         btn_Reset.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btn_Reset.setText("Reset");
+        btn_Reset.setText("Làm mới");
         btn_Reset.setMaximumSize(new java.awt.Dimension(100, 50));
         btn_Reset.setPreferredSize(new java.awt.Dimension(100, 50));
         btn_Reset.addMouseListener(new java.awt.event.MouseAdapter() {

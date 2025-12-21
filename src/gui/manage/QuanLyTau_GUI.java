@@ -135,69 +135,127 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
         cbo_trangThai.setSelectedIndex(0);
         txt_timKiem.setText("Nhập mã tàu cần tìm...");
     }
+    
+    private Boolean validateData(boolean isUpdate) {
+        String currentMaTau = txt_maTau.getText().trim();
+
+        // 1. Kiểm tra tên tàu không rỗng
+        if(txt_tenTau.getText().trim().isEmpty()) {
+            Notifications.getInstance().show(Notifications.Type.WARNING, "Tên tàu không được để trống!");
+            txt_tenTau.requestFocus();
+            return false;
+        }
+
+        // 2. Kiểm tra tên tàu có ký tự hợp lệ (chỉ chữ, số, khoảng trắng)
+        if(!txt_tenTau.getText().trim().matches("^[\\p{L}0-9\\s]{2,50}$")) {
+            Notifications.getInstance().show(Notifications.Type.WARNING, "Tên tàu không hợp lệ (2-50 ký tự, chỉ chữ và số)!");
+            txt_tenTau.requestFocus();
+            return false;
+        }
+
+        // 3. Kiểm tra trùng tên tàu
+        for(Tau tau : bus.getAllTau()) {
+            // Nếu đang cập nhật, bỏ qua bản ghi hiện tại
+            if(isUpdate && tau.getMaTau().equals(currentMaTau)) {
+                continue;
+            }
+
+            if(tau.getTenTau().equalsIgnoreCase(txt_tenTau.getText().trim())) {
+                Notifications.getInstance().show(Notifications.Type.WARNING, "Tên tàu đã tồn tại!");
+                txt_tenTau.requestFocus();
+                return false;
+            }
+        }
+
+        // 4. Kiểm tra số lượng toa
+        if(txt_soLuongToa.getText().trim().isEmpty()) {
+            Notifications.getInstance().show(Notifications.Type.WARNING, "Số lượng toa không được để trống!");
+            txt_soLuongToa.requestFocus();
+            return false;
+        }
+
+        try {
+            int soToa = Integer.parseInt(txt_soLuongToa.getText().trim());
+            if(soToa <= 0 || soToa > 20) {
+                Notifications.getInstance().show(Notifications.Type.WARNING, "Số lượng toa phải từ 1 đến 20!");
+                txt_soLuongToa.requestFocus();
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            Notifications.getInstance().show(Notifications.Type.WARNING, "Số lượng toa phải là số nguyên dương!");
+            txt_soLuongToa.requestFocus();
+            return false;
+        }
+
+        // 5. Kiểm tra ngày hoạt động
+        if(txt_ngayHD.getDate() == null) {
+            Notifications.getInstance().show(Notifications.Type.WARNING, "Vui lòng chọn ngày hoạt động!");
+            txt_ngayHD.requestFocus();
+            return false;
+        }
+
+        LocalDate ngayHoatDong = txt_ngayHD.getDate()
+                .toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+
+        // Kiểm tra ngày hoạt động không vượt quá ngày hiện tại
+        if(ngayHoatDong.isAfter(LocalDate.now())) {
+            Notifications.getInstance().show(Notifications.Type.WARNING, "Ngày hoạt động không được lớn hơn ngày hiện tại!");
+            txt_ngayHD.requestFocus();
+            return false;
+        }
+
+        // Kiểm tra ngày hoạt động không quá xa trong quá khứ (ví dụ: 50 năm)
+        if(ngayHoatDong.isBefore(LocalDate.now().minusYears(50))) {
+            Notifications.getInstance().show(Notifications.Type.WARNING, "Ngày hoạt động không hợp lệ!");
+            txt_ngayHD.requestFocus();
+            return false;
+        }
+
+        // 6. Kiểm tra trạng thái đã được chọn
+        if(cbo_tt.getSelectedIndex() == -1) {
+            Notifications.getInstance().show(Notifications.Type.WARNING, "Vui lòng chọn trạng thái!");
+            cbo_tt.requestFocus();
+            return false;
+        }
+
+        return true;
+    }
      
     public Tau getFormData() {
-       // Lấy giá trị từ các ô nhập liệu
-       String maTau = txt_maTau.getText().trim();
-       String tenTau = txt_tenTau.getText().trim();
+        // Lấy giá trị từ các ô nhập liệu
+        String maTau = txt_maTau.getText().trim();
+        String tenTau = txt_tenTau.getText().trim();
 
-       // Kiểm tra dữ liệu rỗng
-       if (tenTau.isEmpty()) {
-           Notifications.getInstance().show(Notifications.Type.WARNING, "Tên tàu không được để trống!");
-           txt_tenTau.requestFocus();
-           return null;
-       }
+        // Số toa tàu
+        int soToaTau = Integer.parseInt(txt_soLuongToa.getText().trim());
 
-       // Số toa tàu
-       int soToaTau = 0;
-       try {
-           soToaTau = Integer.parseInt(txt_soLuongToa.getText().trim());
-           if (soToaTau <= 0) throw new NumberFormatException();
-       } catch (NumberFormatException e) {
-           Notifications.getInstance().show(Notifications.Type.WARNING, "Số toa tàu phải là số nguyên dương!");
-           txt_soLuongToa.requestFocus();
-           return null;
-       }
+        // Ngày hoạt động
+        LocalDate ngayHoatDong = txt_ngayHD.getDate()
+                .toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
 
-       // Ngày hoạt động
-       if (txt_ngayHD.getDate() == null) {
-           Notifications.getInstance().show(Notifications.Type.WARNING, "Vui lòng chọn ngày hoạt động!");
-           return null;
-       }
+        // Trạng thái tàu (lấy từ ComboBox)
+        String trangThaiStr = cbo_tt.getSelectedItem().toString();
+        TrangThaiTau trangThai = TrangThaiTau.fromDisplay(trangThaiStr);
 
-       LocalDate ngayHoatDong = txt_ngayHD.getDate()
-               .toInstant()
-               .atZone(ZoneId.systemDefault())
-               .toLocalDate();
+        // Tạo đối tượng Tau
+        Tau tau = new Tau();
+        try {
+            tau.setMaTau(maTau);
+            tau.setTenTau(tenTau);
+            tau.setSoToaTau(soToaTau);
+            tau.setNgayHoatDong(ngayHoatDong);
+            tau.setTrangThai(trangThai);
+        } catch (Exception e) {
+            Notifications.getInstance().show(Notifications.Type.WARNING, e.getMessage());
+            return null;
+        }
 
-       // Kiểm tra ngày hoạt động không vượt quá ngày hiện tại
-       if (ngayHoatDong.isAfter(LocalDate.now())) {
-           Notifications.getInstance().show(Notifications.Type.WARNING, "Ngày hoạt động không được lớn hơn ngày hiện tại!");
-           txt_ngayHD.requestFocus();
-           return null;
-       }
-
-       // Trạng thái tàu (lấy từ ComboBox)
-       String trangThaiStr = cbo_tt.getSelectedItem().toString();
-       TrangThaiTau trangThai = TrangThaiTau.fromDisplay(trangThaiStr);
-
-
-       // Tạo đối tượng Tau
-       Tau tau = new Tau();
-       try {
-           
-           tau.setMaTau(maTau);
-           tau.setTenTau(tenTau);
-           tau.setSoToaTau(soToaTau);
-           tau.setNgayHoatDong(ngayHoatDong);
-           tau.setTrangThai(trangThai);
-       } catch (Exception e) {
-           Notifications.getInstance().show(Notifications.Type.WARNING, e.getMessage());
-           return null;
-       }
-
-       return tau;
-   }
+        return tau;
+    }
 
     private void handleCapNhat() {
         try {
@@ -205,39 +263,57 @@ public class QuanLyTau_GUI extends javax.swing.JPanel {
                 Notifications.getInstance().show(Notifications.Type.ERROR, "Chưa chọn tàu cần thay đổi thông tin!");
                 return;
             }
-            
+
+            // Validate dữ liệu (true = đang update)
+            if(!validateData(true)) {
+                return;
+            }
+
             Tau tau = getFormData();
-            
+
             if(tau == null) {
                 return;
             }
-            
+
             if(bus.capNhatTau(tau)) {
                 Notifications.getInstance().show(Notifications.Type.SUCCESS, "Cập nhật thành công!");
                 getTableData(bus.getAllTau());
                 handleXoaTrang();
-            } 
+            } else {
+                Notifications.getInstance().show(Notifications.Type.ERROR, "Cập nhật thất bại!");
+            }
         } catch (Exception e) {
-            Notifications.getInstance().show(Notifications.Type.ERROR, "Cập nhật thất bại!");
+            Notifications.getInstance().show(Notifications.Type.ERROR, "Cập nhật thất bại: " + e.getMessage());
+            e.printStackTrace();
         }
     }
    
     private void handleThemTau() {
         try {
-            String maTau  = bus.generateID();
-            
+            // Validate dữ liệu (false = đang thêm mới)
+            if(!validateData(false)) {
+                return;
+            }
+
+            String maTau = bus.generateID();
+
             Tau tau = getFormData();
             if(tau == null) {
                 return;
             }
+
             tau.setMaTau(maTau);
+
             if(bus.themTau(tau)) {
                 Notifications.getInstance().show(Notifications.Type.SUCCESS, "Thêm mới thành công!");
                 getTableData(bus.getAllTau());
                 handleXoaTrang();
-            } 
+            } else {
+                Notifications.getInstance().show(Notifications.Type.ERROR, "Thêm thất bại!");
+            }
         } catch (Exception e) {
-            Notifications.getInstance().show(Notifications.Type.ERROR, "Thêm thất bại!");
+            Notifications.getInstance().show(Notifications.Type.ERROR, "Thêm thất bại: " + e.getMessage());
+            e.printStackTrace();
         }
     }
      

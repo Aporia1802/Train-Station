@@ -7,6 +7,7 @@ package gui.menu;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.UIScale;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -28,16 +29,18 @@ import main.Application;
 public class Menu extends JPanel{
     public static final int STORE_EMPLOYEE = 0;
     
+    public static JLabel lbl_currentEmployee;
     private static final String menuItems[][] = {
-        {"Trang chủ"},
+        {"Dashboard"},
         {"Vé", "Đặt vé", "Đổi vé", "Trả vé"},
         {"Tra cứu", "Vé", "Nhân viên", "Ga tàu", "Tàu", "Hành khách", "Chuyến tàu"},
-        {"Thống kê", "Thống kê doanh thu"},
+        {"Thống kê", "Thống kê doanh thu", "Thống kê hành khách"},
         {"Quản lý tàu"},
         {"Quản lý địa điểm ga"},
         {"Quản lý nhân viên"},
         {"Quản lý khuyến mãi"},
         {"Quản lý chuyến tàu"},
+        {"Trợ giúp"},
         {"Tài khoản"},
         {"Đăng xuất"}
     };
@@ -71,21 +74,20 @@ public class Menu extends JPanel{
                 menuItem.setFull(menuFull);
             }
         }
-        lightDarkMode.setMenuFull(menuFull);
         toolBarAccentColor.setMenuFull(menuFull);
     }
     
         public static boolean isBan(String menuItemName) {
-//        Nếu nhân viên rỗng thì cấm tất cả
+        //  Nếu nhân viên rỗng thì cấm tất cả
         if (Application.nhanVien == null) {
             return true;
         }
 
-//        Xác định xem tài khoản thuộc loại nào để ban
+        //  Xác định xem tài khoản thuộc loại nào để ban
         int roleIndex = Menu.STORE_EMPLOYEE;
         String roleName = Application.nhanVien.getChucVu();
 
-//        Nếu cửa hàng trưởng thì cho phép tất cả
+        //  Nếu cửa hàng trưởng thì cho phép tất cả
         if (roleName.equalsIgnoreCase("Nhân viên quản lý")) {
             return false;
         }
@@ -120,7 +122,7 @@ public class Menu extends JPanel{
 
     private final List<MenuEvent> events = new ArrayList<>();
     private boolean menuFull = true;
-    private final String headerName = "Platform 9 3/4";
+    private final String headerName = "<html>Nhà ga 9&nbsp;<sup>3</sup>&frasl;<sub>4</sub></html>";
 
     protected final boolean hideMenuTitleOnMinimum = true;
     protected final int menuTitleLeftInset = 5;
@@ -145,7 +147,7 @@ public class Menu extends JPanel{
                 + "background:$Menu.background;"
                 + "arc:10");
         header = new JLabel(headerName);
-        header.setIcon(new ImageIcon(getClass().getResource("/imgs/logo.png")));
+        header.setIcon(new ImageIcon(getClass().getResource("/imgs/SmallLogo.png")));
         header.setIconTextGap(20);
         header.putClientProperty(FlatClientProperties.STYLE, ""
                 + "border: 5,5,5,5;"
@@ -171,16 +173,20 @@ public class Menu extends JPanel{
                 + "background:$Menu.ScrollBar.background;"
                 + "thumb:$Menu.ScrollBar.thumb");
         createMenu();
-        lightDarkMode = new LightDarkMode();
         toolBarAccentColor = new ToolBarAccentColor(this);
         toolBarAccentColor.setVisible(FlatUIUtils.getUIBoolean("AccentControl.show", false));
         add(header);
         add(scroll);
-        add(lightDarkMode);
         add(toolBarAccentColor);
     }
 
     private void createMenu() {
+        String title = Application.nhanVien == null ? " Chủ tịch Cảnh " : String.format(" %s: %s ", Application.nhanVien.getChucVu(), Application.nhanVien.getTenNV());
+        lbl_currentEmployee = createTitle(title);
+        lbl_currentEmployee.setForeground(Color.WHITE);
+        lbl_currentEmployee.setFont(lbl_currentEmployee.getFont().deriveFont(14f));
+        panelMenu.add(lbl_currentEmployee);
+        
         int index = 0;
         for (int i = 0; i < menuItems.length; i++) {
             String menuName = menuItems[i][0];
@@ -266,7 +272,6 @@ public class Menu extends JPanel{
     private JLabel header;
     private JScrollPane scroll;
     private JPanel panelMenu;
-    private LightDarkMode lightDarkMode;
     private ToolBarAccentColor toolBarAccentColor;
 
     private class MenuLayout implements LayoutManager {
@@ -314,17 +319,14 @@ public class Menu extends JPanel{
                 header.setBounds(x + hgap, y, iconWidth - (hgap * 2), iconHeight);
                 int ldgap = UIScale.scale(10);
                 int ldWidth = width - ldgap * 2;
-                int ldHeight = lightDarkMode.getPreferredSize().height;
                 int ldx = x + ldgap;
-                int ldy = y + height - ldHeight - ldgap - accentColorHeight;
+                int ldy = y + height - ldgap - accentColorHeight;
 
                 int menux = x;
                 int menuy = y + iconHeight + gap;
                 int menuWidth = width;
-                int menuHeight = height - (iconHeight + gap) - (ldHeight + ldgap * 2) - (accentColorHeight);
+                int menuHeight = height - (iconHeight + gap) - (ldgap * 2) - (accentColorHeight);
                 scroll.setBounds(menux, menuy, menuWidth, menuHeight);
-
-                lightDarkMode.setBounds(ldx, ldy, ldWidth, ldHeight);
 
                 if (toolBarAccentColor.isVisible()) {
                     int tbheight = toolBarAccentColor.getPreferredSize().height;

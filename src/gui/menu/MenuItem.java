@@ -94,13 +94,13 @@ public class MenuItem extends JPanel{
                 + "foreground:$Menu.lineColor");
         for (int i = 0; i < menus.length; i++) {
             JButton menuItem = createButtonItem(menus[i]);
-//            Nếu không có quyền sử dụng sẽ disable
+            //  Nếu không có quyền sử dụng sẽ disable
             boolean isBan = Menu.isBan(menus[i]);
 
             menuItem.setHorizontalAlignment(menuItem.getComponentOrientation().isLeftToRight() ? JButton.LEADING : JButton.TRAILING);
 
             if (i == 0) {
-//                Chuyển thành icon bị khóa nếu tài khoản không có quyền
+                //  Chuyển thành icon bị khóa nếu tài khoản không có quyền
                 if (isBan) {
                     menuItem.setIcon(new FlatSVGIcon("imgs/menu/lock.svg"));
                 } else {

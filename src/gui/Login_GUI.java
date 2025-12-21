@@ -24,8 +24,8 @@ public class Login_GUI extends javax.swing.JPanel {
     public Login_GUI() {
         initComponents();
         System.out.println(getClass().getResource("/icons/eye.png"));
-        txt_taiKhoan.setText("0912345678");
-        txt_matKhau.setText("6uZXqeMV");
+        txt_taiKhoan.setText("0349573425");
+        txt_matKhau.setText("Mk12345@");
         
     }
 
@@ -85,7 +85,7 @@ public class Login_GUI extends javax.swing.JPanel {
         pnl_logo.setLayout(new java.awt.BorderLayout());
 
         lbl_logo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbl_logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/Large_logo.png"))); // NOI18N
+        lbl_logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/LargeLogo.png"))); // NOI18N
         lbl_logo.setMaximumSize(new java.awt.Dimension(630, 650));
         lbl_logo.setMinimumSize(new java.awt.Dimension(630, 650));
         lbl_logo.setPreferredSize(new java.awt.Dimension(630, 650));
@@ -374,7 +374,6 @@ public class Login_GUI extends javax.swing.JPanel {
                 Application.login(nhanVien);
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
             Notifications.getInstance().show(Notifications.Type.ERROR, ex.getMessage());
         }
     }//GEN-LAST:event_btn_dangNhapActionPerformed

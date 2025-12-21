@@ -52,13 +52,6 @@ private String maKH;
     }
     
     public void setTenKH(String tenKH) throws Exception {
-        tenKH = tenKH.trim();
-        if (tenKH.isEmpty()) {
-            throw new Exception(TENKH_EMPTY);
-        }
-        if (!tenKH.matches("^[\\p{L} ]+$")) {
-            throw new Exception(TENKH_INVALID);
-        }
         this.tenKH = tenKH;
     }
     

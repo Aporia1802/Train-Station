@@ -8,7 +8,10 @@ import dao.NhanVien_DAO;
 import dao.TaiKhoan_DAO;
 import entity.NhanVien;
 import entity.TaiKhoan;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import static utils.HashPassword.hashPassword;
 
 /**
  *
@@ -30,8 +33,8 @@ public class QuanLyNhanVien_BUS {
         
     }
     
-    public ArrayList<NhanVien> getNhanVienbySDT(String sdt){
-        ArrayList<NhanVien> nhanVien = nhanVienDao.getNhanVienBySoDienThoai(sdt);
+    public ArrayList<NhanVien> getNhanVienbySDT(String maNV){
+        ArrayList<NhanVien> nhanVien = nhanVienDao.getNhanVienByMaNV(maNV);
         return nhanVien;
     }
     
@@ -40,29 +43,30 @@ public class QuanLyNhanVien_BUS {
         return nhanVien;
     }
     
-    public String generateID() {
-//      Lấy mã lớn nhất
-        String maxID = nhanVienDao.getMaxID();
-        
-        if(maxID.equals("")) {
-            return "NV001";
-        }
-        
-//      Tách phần số
-        int num = Integer.parseInt(maxID.substring(2));
-        
-//      Tăng lên một đơn vị
-        num++;
-        
-//      Tạo mã mới 
-        String newID = String.format("NV%03d", num);
-        
+    public String generateID(boolean gioiTinh, LocalDate ngaySinh) {
+        // Lấy số thứ tự lớn nhất từ 3 ký tự cuối của tất cả mã nhân viên
+        int maxSTT = nhanVienDao.getMaxSTT(); // Trả về số thứ tự lớn nhất
+
+        // Tăng lên một đơn vị
+        int stt = maxSTT + 1;
+
+        // Xác định X (1 = Nam, 0 = Nữ)
+        String x = gioiTinh ? "1" : "0";
+
+        // Format ngày sinh thành DDMMYYYY
+        // KHÔNG DÙNG SimpleDateFormat với LocalDate
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy");
+        String ngaySinhStr = ngaySinh.format(formatter);
+
+        // Tạo mã mới theo format NVXDDMMYYYYOOO
+        String newID = String.format("NV%s%s%03d", x, ngaySinhStr, stt);
+
         return newID;
     }
 
     public Boolean themNhanVien(NhanVien nhanVien) throws Exception {
         nhanVienDao.create(nhanVien);
-        TaiKhoan taiKhoan = new TaiKhoan(nhanVien.getSoDienThoai(), "123456", nhanVien);
+        TaiKhoan taiKhoan = new TaiKhoan(nhanVien.getSoDienThoai(), hashPassword("Mk12345@"), nhanVien);
         return taiKhoanDao.create(taiKhoan);
     }
     
@@ -70,5 +74,28 @@ public class QuanLyNhanVien_BUS {
         return nhanVienDao.update(nhanVien.getMaNV(), nhanVien);
     }
     
+    public boolean checkEmailExists(String email) {
+        return nhanVienDao.checkEmailExists(email);
+    }
+
+    public boolean checkSDTExists(String sdt) {
+        return nhanVienDao.checkSDTExists(sdt);
+    }
+
+    public boolean checkCCCDExists(String cccd) {
+        return nhanVienDao.checkCCCDExists(cccd);
+    }
+
+    public boolean checkEmailExistsExceptThis(String email, String maNV) {
+        return nhanVienDao.checkEmailExistsExceptThis(email, maNV);
+    }
+
+    public boolean checkSDTExistsExceptThis(String sdt, String maNV) {
+        return nhanVienDao.checkSDTExistsExceptThis(sdt, maNV);
+    }
+
+    public boolean checkCCCDExistsExceptThis(String cccd, String maNV) {
+        return nhanVienDao.checkCCCDExistsExceptThis(cccd, maNV);
+    }
 }
 

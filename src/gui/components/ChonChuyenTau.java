@@ -54,19 +54,17 @@ public class ChonChuyenTau extends javax.swing.JPanel {
         date_ngayVe.setEnabled(false);
         date_ngayDi.setDate(new Date());
         date_ngayVe.setDate(new Date());
-        cbo_gaDi.setSelectedItem("Sài Gòn");
-        cbo_gaDen.setSelectedItem("Hà Nội");
         pnl_chieuDi.setVisible(false);
         pnl_chieuVe.setVisible(false);
-//        Calendar cal = Calendar.getInstance();
-//        date_ngayDi.getJCalendar().setMinSelectableDate(cal.getTime());
-//        date_ngayVe.getJCalendar().setMinSelectableDate(cal.getTime());
-//        date_ngayDi.addPropertyChangeListener("date", evt -> {
-//            if (date_ngayDi.getDate() != null) {
-//                date_ngayVe.setDate(date_ngayDi.getDate());
-//                date_ngayVe.getJCalendar().setMinSelectableDate(date_ngayDi.getDate());
-//            }
-//        });
+        Calendar cal = Calendar.getInstance();
+        date_ngayDi.getJCalendar().setMinSelectableDate(cal.getTime());
+        date_ngayVe.getJCalendar().setMinSelectableDate(cal.getTime());
+        date_ngayDi.addPropertyChangeListener("date", evt -> {
+            if (date_ngayDi.getDate() != null) {
+                date_ngayVe.setDate(date_ngayDi.getDate());
+                date_ngayVe.getJCalendar().setMinSelectableDate(date_ngayDi.getDate());
+            }
+        });
     }
     
 //  Load danh sách ga tàu
@@ -100,7 +98,7 @@ public class ChonChuyenTau extends javax.swing.JPanel {
     }
 
     
-//  Hàm loại bỏ dấu tiếng Việt (để so khớp không phân biệt dấu)
+    //  Hàm loại bỏ dấu tiếng Việt (để so khớp không phân biệt dấu)
     private static String removeVietnameseAccents(String text) {
         if (text == null) return "";
         String temp = Normalizer.normalize(text, Normalizer.Form.NFD);
@@ -147,19 +145,19 @@ public class ChonChuyenTau extends javax.swing.JPanel {
         }
     }
 
-/**
- * Chuyển đổi Date sang LocalDate
- */
+    /**
+     * Chuyển đổi Date sang LocalDate
+     */
     private LocalDate convertDateToLocalDate(Date date) {
         return date.toInstant()
                .atZone(ZoneId.systemDefault())
                .toLocalDate();
     }
 
-/**
- * Hiển thị danh sách chuyến tàu lên giao diện
- * @return true nếu có chuyến tàu, false nếu không tìm thấy
- */
+    /**
+     * Hiển thị danh sách chuyến tàu lên giao diện
+     * @return true nếu có chuyến tàu, false nếu không tìm thấy
+     */
     private boolean hienThiDanhSachChuyen(ArrayList<ChuyenTau> dsChuyen, 
                                        JPanel pnlChuyen, 
                                        JPanel pnlDsChuyen,

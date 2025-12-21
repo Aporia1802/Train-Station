@@ -59,13 +59,11 @@ public class DatVe_GUI extends javax.swing.JPanel {
         slidePane.setLayout(null);
         slidePane.setDoubleBuffered(true); 
         add(slidePane, BorderLayout.CENTER);
-
-        // Gắn panel đầu tiên
+        
         JPanel first = panels[0];
         first.setBounds(0, 0, getWidth(), getHeight());
         slidePane.add(first, Integer.valueOf(0));
 
-        // Animator mượt hơn
         animator = new Animator(600);
         animator.setResolution(5);
         animator.setAcceleration(0.2f);

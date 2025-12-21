@@ -38,14 +38,13 @@ public class Application extends javax.swing.JFrame {
     /**
      * Creates new form Application
      */
+    
     public Application() {
         initComponents();
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
         setSize(new Dimension(1366, 768));
         setLocationRelativeTo(null);
-        setTitle("Platform 9 3/4");
-//        setIconImage(new FlatSVGIcon("imgs/icon.svg").getImage());
         mainForm = new MainForm();
         loginForm = new Login_GUI();
         setContentPane(loginForm);
@@ -57,7 +56,7 @@ public class Application extends javax.swing.JFrame {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
                 if (JOptionPane.showConfirmDialog(null,
-                        "Bạn có thật sự muốn tắt Platform 9 3/4?", "Đóng ứng dụng?",
+                        "Bạn có thật sự muốn tắt ứng dụng?", "Đóng ứng dụng?",
                         JOptionPane.YES_NO_OPTION,
                         JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                     ConnectDB.disconnect();
@@ -93,7 +92,7 @@ public class Application extends javax.swing.JFrame {
         app.loginForm.applyComponentOrientation(app.getComponentOrientation());
         SwingUtilities.updateComponentTreeUI(app.loginForm);
         FlatAnimatedLafChange.hideSnapshotWithAnimation();
-//      update state
+        //  update state
         Application.nhanVien = null;
         Notifications.getInstance().show(Notifications.Type.INFO, "Đăng xuất khỏi hệ thống thành công");
     }
@@ -140,10 +139,10 @@ public class Application extends javax.swing.JFrame {
         
         app = new Application();
 
-//      Fake loading
+        //  Fake loading
         new Loading_GUI().setVisible(true);
         
-//      Connect db
+        // Connect db
         try {
             ConnectDB.connect();
         } catch (SQLException e) {
@@ -151,7 +150,7 @@ public class Application extends javax.swing.JFrame {
             System.exit(0);
         }
      
-//        Delay render
+        // Delay render
         Timer timer = new Timer(2500, (ActionEvent evt) -> {
             java.awt.EventQueue.invokeLater(() -> {
                 app.setVisible(true);

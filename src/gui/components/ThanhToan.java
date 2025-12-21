@@ -121,7 +121,7 @@ public class ThanhToan extends javax.swing.JPanel {
         double tongTienVeMoi = 0;
         double giaVeCu = 0;
 
-        // ========== XỬ LÝ ĐẶC BIỆT CHO ĐỔI VÉ ==========
+        // XỬ LÝ ĐẶC BIỆT CHO ĐỔI VÉ 
         if (isDoiVe()) {
             // Tính giá vé cũ
             giaVeCu = tinhGiaVeCu(veCanDoi);
@@ -177,7 +177,7 @@ public class ThanhToan extends javax.swing.JPanel {
             }
         }
 
-        // ========== TÍNH TỔNG TIỀN ==========
+        // TÍNH TỔNG TIỀN 
         double thanhTien = 0;
 
         if (isDoiVe()) {
@@ -206,7 +206,7 @@ public class ThanhToan extends javax.swing.JPanel {
         tongTienThanhToan = 1.1 * thanhTien; // +10% VAT
         jLabel2.setText(FormatUtil.formatCurrency(tongTienThanhToan));
 
-        // ===== CẬP NHẬT LABEL TỔNG TIỀN =====
+        // CẬP NHẬT LABEL TỔNG TIỀN 
         String labelTongTien = isDoiVe() 
             ? "Tổng tiền đổi vé: " + FormatUtil.formatCurrency(tongTienThanhToan)
             : "Tổng tiền: " + FormatUtil.formatCurrency(tongTienThanhToan);
@@ -223,6 +223,7 @@ public class ThanhToan extends javax.swing.JPanel {
     /**
      * Tạo header cho nhóm vé
      */
+    
     private javax.swing.JLabel taoHeader(String text) {
         javax.swing.JLabel lbl = new javax.swing.JLabel(text);
         lbl.setFont(new java.awt.Font("Segoe UI", 1, 16));
@@ -242,6 +243,7 @@ public class ThanhToan extends javax.swing.JPanel {
     /**
      * Tạo panel hiển thị thông tin vé
      */
+    
     private JPanel taoThongTinVe(ThongTinVe.ThongTinHanhKhach hk, Ghe ghe, 
                              ChuyenTau ct, double giaVe) {
         JPanel p = new JPanel();
@@ -289,6 +291,7 @@ public class ThanhToan extends javax.swing.JPanel {
     /**
      * Tạo panel thông tin vé cũ (cho đổi vé)
      */
+    
     private JPanel taoThongTinVeCu(Ve ve, double giaVe) {
         JPanel p = new JPanel();
         p.setBackground(new java.awt.Color(254, 226, 226));
@@ -329,6 +332,7 @@ public class ThanhToan extends javax.swing.JPanel {
     /**
      * Tạo panel hiển thị phí đổi vé
      */
+    
     private JPanel taoPanelPhiDoi() {
         JPanel p = new JPanel();
         p.setBackground(new java.awt.Color(255, 255, 255));
@@ -360,6 +364,7 @@ public class ThanhToan extends javax.swing.JPanel {
     /**
      * Setup tính tiền thối tự động
      */
+    
     private void setupTienThoi(final double TONG_TIEN) {
         jTextField1.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
             public void insertUpdate(javax.swing.event.DocumentEvent e) { tinhTienThoi(); }
@@ -382,6 +387,7 @@ public class ThanhToan extends javax.swing.JPanel {
     /**
      * Xử lý thanh toán - Tự động phân biệt Đặt vé / Đổi vé
      */
+    
     private void xuLyThanhToan() {
         try {
             // Validate chung
@@ -482,6 +488,7 @@ public class ThanhToan extends javax.swing.JPanel {
     /**
      * Xử lý đặt vé bình thường
      */
+    
     private boolean xuLyDatVe() throws Exception {
         return bus.xuLyThanhToan(
             hoTenKhach, sdtKhach, cccdKhach,
@@ -493,6 +500,7 @@ public class ThanhToan extends javax.swing.JPanel {
     /**
      * Xử lý đổi vé
      */
+    
     private boolean xuLyDoiVe() throws Exception {
         // VALIDATE TRƯỚC KHI XỬ LÝ
         if (!validateDoiVe()) {

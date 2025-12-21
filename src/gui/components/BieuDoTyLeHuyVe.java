@@ -6,15 +6,22 @@ package gui.components;
 
 /**
  *
- * @author Administrator
+ * @author Công Hoàng
  */
 public class BieuDoTyLeHuyVe extends javax.swing.JPanel {
-
-    /**
-     * Creates new form huhuhuhuhu
-     */
+    
     public BieuDoTyLeHuyVe() {
         initComponents();
+        
+    }
+    
+     /**
+     * Refresh dữ liệu biểu đồ
+     */
+    public void refresh() {
+        if (tyLeHuyVe2 != null) {
+            tyLeHuyVe2.refresh();
+        }
     }
 
     /**

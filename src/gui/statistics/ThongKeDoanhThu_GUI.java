@@ -30,11 +30,7 @@ public class ThongKeDoanhThu_GUI extends javax.swing.JPanel {
         bieuDoSoVeBanDuoc1 = new gui.components.BieuDoSoVeBanDuoc();
         bieuDoSoVeDaHoanThanh1 = new gui.components.BieuDoSoVeDaHoanThanh();
         bieuDoSoVeBiHuy1 = new gui.components.BieuDoSoVeBiHuy();
-        bieuDoTyLeTangTruongDoanhThu2 = new gui.components.BieuDoTyLeTangTruongDoanhThu();
-        jPanel3 = new javax.swing.JPanel();
-        topChuyenDi1 = new gui.components.TopChuyenDi();
-        bieuDoTyLeVeBanDuocTheoLoai2 = new gui.components.BieuDoTyLeVeBanDuocTheoLoai();
-        bieuDoSoLuongHanhKhach1 = new gui.components.BieuDoSoLuongHanhKhach();
+        bieuDoTyLeTangTruongDoanhThu2 = new gui.components.BieuDoTongDoanhThu();
         thongKeDoanhThu2 = new gui.components.ThongKeDoanhThu();
 
         setLayout(new java.awt.BorderLayout());
@@ -47,32 +43,16 @@ public class ThongKeDoanhThu_GUI extends javax.swing.JPanel {
         jPanel1.add(bieuDoTyLeTangTruongDoanhThu2);
 
         add(jPanel1, java.awt.BorderLayout.PAGE_START);
-
-        jPanel3.setPreferredSize(new java.awt.Dimension(10, 280));
-        jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.LINE_AXIS));
-
-        topChuyenDi1.setMaximumSize(new java.awt.Dimension(320, 2147483647));
-        topChuyenDi1.setMinimumSize(new java.awt.Dimension(320, 0));
-        topChuyenDi1.setPreferredSize(new java.awt.Dimension(320, 0));
-        jPanel3.add(topChuyenDi1);
-        jPanel3.add(bieuDoTyLeVeBanDuocTheoLoai2);
-        jPanel3.add(bieuDoSoLuongHanhKhach1);
-
-        add(jPanel3, java.awt.BorderLayout.PAGE_END);
         add(thongKeDoanhThu2, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private gui.components.BieuDoSoLuongHanhKhach bieuDoSoLuongHanhKhach1;
     private gui.components.BieuDoSoVeBanDuoc bieuDoSoVeBanDuoc1;
     private gui.components.BieuDoSoVeBiHuy bieuDoSoVeBiHuy1;
     private gui.components.BieuDoSoVeDaHoanThanh bieuDoSoVeDaHoanThanh1;
-    private gui.components.BieuDoTyLeTangTruongDoanhThu bieuDoTyLeTangTruongDoanhThu2;
-    private gui.components.BieuDoTyLeVeBanDuocTheoLoai bieuDoTyLeVeBanDuocTheoLoai2;
+    private gui.components.BieuDoTongDoanhThu bieuDoTyLeTangTruongDoanhThu2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel3;
     private gui.components.ThongKeDoanhThu thongKeDoanhThu2;
-    private gui.components.TopChuyenDi topChuyenDi1;
     // End of variables declaration//GEN-END:variables
 }

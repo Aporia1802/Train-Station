@@ -693,4 +693,304 @@ public class ThongKe_DAO {
 
         return ketQua;
     }
+    
+    /**
+    * Lấy doanh thu hôm nay và hôm qua để so sánh
+    * @return Map với key là "homNay" và "homQua", value là doanh thu
+    */
+   public Map<String, Double> getDoanhThuHomNayVaHomQua() {
+       Map<String, Double> ketQua = new LinkedHashMap<>();
+
+       try {
+           // Lấy doanh thu hôm nay và hôm qua
+           String sql = "SELECT " +
+                       "CONVERT(VARCHAR(10), ngayLapHoaDon, 23) AS ngay, " +
+                       "SUM(tongTien) AS doanhThu " +
+                       "FROM HoaDon " +
+                       "WHERE ngayLapHoaDon >= DATEADD(DAY, -1, CAST(GETDATE() AS DATE)) " +
+                       "AND ngayLapHoaDon < DATEADD(DAY, 1, CAST(GETDATE() AS DATE)) " +
+                       "GROUP BY CONVERT(VARCHAR(10), ngayLapHoaDon, 23) " +
+                       "ORDER BY ngay ASC";
+
+           Statement st = ConnectDB.conn.createStatement();
+           ResultSet rs = st.executeQuery(sql);
+
+           SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+           Calendar cal = Calendar.getInstance();
+
+           // Ngày hôm qua
+           cal.setTime(new java.util.Date());
+           cal.add(Calendar.DAY_OF_MONTH, -1);
+           String ngayHomQua = sdf.format(cal.getTime());
+
+           // Ngày hôm nay
+           cal.setTime(new java.util.Date());
+           String ngayHomNay = sdf.format(cal.getTime());
+
+           // Khởi tạo giá trị mặc định
+           ketQua.put("homQua", 0.0);
+           ketQua.put("homNay", 0.0);
+
+           while (rs.next()) {
+               String ngay = rs.getString("ngay");
+               double doanhThu = rs.getDouble("doanhThu");
+
+               if (ngay.equals(ngayHomQua)) {
+                   ketQua.put("homQua", doanhThu);
+               } else if (ngay.equals(ngayHomNay)) {
+                   ketQua.put("homNay", doanhThu);
+               }
+           }
+
+           rs.close();
+           st.close();
+
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
+
+       return ketQua;
+   }
+
+    /**
+     * Tính tỷ lệ thay đổi doanh thu hôm nay so với hôm qua
+     * @return Tỷ lệ phần trăm (dương = tăng, âm = giảm)
+     */
+    public double getTyLeThayDoiDoanhThuHomNay() {
+        try {
+            Map<String, Double> duLieu = getDoanhThuHomNayVaHomQua();
+            double doanhThuHomQua = duLieu.getOrDefault("homQua", 0.0);
+            double doanhThuHomNay = duLieu.getOrDefault("homNay", 0.0);
+
+            if (doanhThuHomQua > 0) {
+                return ((doanhThuHomNay - doanhThuHomQua) / doanhThuHomQua) * 100;
+            } else if (doanhThuHomNay > 0) {
+                return 100.0; // Tăng 100% nếu hôm qua = 0
+            }
+            return 0.0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0.0;
+        }
+    }
+    
+    /**
+ * Lấy số lượng hành khách theo tháng trong năm hiện tại
+ * @return Map với key là tháng (01-12), value là số lượng hành khách
+ */
+public Map<String, Integer> getSoLuongHanhKhachTheoThang() {
+    Map<String, Integer> ketQua = new LinkedHashMap<>();
+    
+    try {
+        String sql = "SELECT FORMAT(hd.ngayLapHoaDon, 'MM') AS thang, " +
+                    "COUNT(DISTINCT v.maHanhKhach) AS soLuongHanhKhach " +
+                    "FROM HoaDon hd " +
+                    "JOIN Ve v ON hd.maHoaDon = v.maHoaDon " +
+                    "WHERE YEAR(hd.ngayLapHoaDon) = YEAR(GETDATE()) " +
+                    "AND v.trangThai != 3 " +
+                    "GROUP BY FORMAT(hd.ngayLapHoaDon, 'MM') " +
+                    "ORDER BY thang ASC";
+        
+        Statement st = ConnectDB.conn.createStatement();
+        ResultSet rs = st.executeQuery(sql);
+        
+        while (rs.next()) {
+            String thang = rs.getString("thang");
+            int soLuong = rs.getInt("soLuongHanhKhach");
+            ketQua.put(thang, soLuong);
+        }
+        
+        rs.close();
+        st.close();
+        
+        // Đảm bảo có đủ 12 tháng
+        Map<String, Integer> ketQuaDayDu = new LinkedHashMap<>();
+        for (int i = 1; i <= 12; i++) {
+            String thang = String.format("%02d", i);
+            ketQuaDayDu.put(thang, ketQua.getOrDefault(thang, 0));
+        }
+        
+        return ketQuaDayDu;
+        
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    
+    return ketQua;
+}
+
+    /**
+     * Lấy số lượng hành khách theo năm trong 5 năm gần nhất
+     * @return Map với key là năm, value là số lượng hành khách
+     */
+    public Map<String, Integer> getSoLuongHanhKhachTheoNam() {
+        Map<String, Integer> ketQua = new LinkedHashMap<>();
+
+        try {
+            String sql = "SELECT YEAR(hd.ngayLapHoaDon) AS nam, " +
+                        "COUNT(DISTINCT v.maHanhKhach) AS soLuongHanhKhach " +
+                        "FROM HoaDon hd " +
+                        "JOIN Ve v ON hd.maHoaDon = v.maHoaDon " +
+                        "WHERE YEAR(hd.ngayLapHoaDon) >= YEAR(GETDATE()) - 4 " +
+                        "AND v.trangThai != 3 " +
+                        "GROUP BY YEAR(hd.ngayLapHoaDon) " +
+                        "ORDER BY nam ASC";
+
+            Statement st = ConnectDB.conn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+
+            while (rs.next()) {
+                String nam = String.valueOf(rs.getInt("nam"));
+                int soLuong = rs.getInt("soLuongHanhKhach");
+                ketQua.put(nam, soLuong);
+            }
+
+            rs.close();
+            st.close();
+
+            // Đảm bảo có đủ 5 năm
+            Calendar cal = Calendar.getInstance();
+            int namHienTai = cal.get(Calendar.YEAR);
+
+            Map<String, Integer> ketQuaDayDu = new LinkedHashMap<>();
+            for (int i = 4; i >= 0; i--) {
+                String nam = String.valueOf(namHienTai - i);
+                ketQuaDayDu.put(nam, ketQua.getOrDefault(nam, 0));
+            }
+
+            return ketQuaDayDu;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return ketQua;
+    }
+    
+    /**
+ * Lấy tỷ lệ hủy vé theo ngày trong 7 ngày gần nhất
+ * @return Map với key là ngày (yyyy-MM-dd), value là tỷ lệ % hủy vé
+ */
+public Map<String, Double> getTyLeHuyVe7NgayGanNhat() {
+    Map<String, Double> ketQua = new LinkedHashMap<>();
+    
+    try {
+        // Lấy tổng số vé và số vé bị hủy theo ngày
+        String sql = "SELECT " +
+                    "CONVERT(VARCHAR(10), hd.ngayLapHoaDon, 23) AS ngay, " +
+                    "COUNT(v.maVe) AS tongVe, " +
+                    "SUM(CASE WHEN v.trangThai = 3 THEN 1 ELSE 0 END) AS veHuy " +
+                    "FROM HoaDon hd " +
+                    "JOIN Ve v ON hd.maHoaDon = v.maHoaDon " +
+                    "WHERE hd.ngayLapHoaDon >= DATEADD(DAY, -6, CAST(GETDATE() AS DATE)) " +
+                    "AND hd.ngayLapHoaDon < DATEADD(DAY, 1, CAST(GETDATE() AS DATE)) " +
+                    "GROUP BY CONVERT(VARCHAR(10), hd.ngayLapHoaDon, 23) " +
+                    "ORDER BY ngay ASC";
+        
+        Statement st = ConnectDB.conn.createStatement();
+        ResultSet rs = st.executeQuery(sql);
+        
+        while (rs.next()) {
+            String ngay = rs.getString("ngay");
+            int tongVe = rs.getInt("tongVe");
+            int veHuy = rs.getInt("veHuy");
+            
+            // Tính tỷ lệ %
+            double tyLe = tongVe > 0 ? (veHuy * 100.0 / tongVe) : 0.0;
+            ketQua.put(ngay, tyLe);
+        }
+        
+        rs.close();
+        st.close();
+        
+        // Đảm bảo có đủ 7 ngày (bổ sung các ngày thiếu với giá trị 0)
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        
+        Map<String, Double> ketQuaDayDu = new LinkedHashMap<>();
+        for (int i = 6; i >= 0; i--) {
+            cal.setTime(new java.util.Date());
+            cal.add(Calendar.DAY_OF_MONTH, -i);
+            String ngay = sdf.format(cal.getTime());
+            
+            ketQuaDayDu.put(ngay, ketQua.getOrDefault(ngay, 0.0));
+        }
+        
+        return ketQuaDayDu;
+        
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    
+    return ketQua;
+}
+
+/**
+ * Lấy tỷ lệ hủy vé hôm nay
+ * @return Tỷ lệ % hủy vé hôm nay
+ */
+public double getTyLeHuyVeHomNay() {
+    try {
+        String sql = "SELECT " +
+                    "COUNT(v.maVe) AS tongVe, " +
+                    "SUM(CASE WHEN v.trangThai = 3 THEN 1 ELSE 0 END) AS veHuy " +
+                    "FROM HoaDon hd " +
+                    "JOIN Ve v ON hd.maHoaDon = v.maHoaDon " +
+                    "WHERE CAST(hd.ngayLapHoaDon AS DATE) = CAST(GETDATE() AS DATE)";
+        
+        Statement st = ConnectDB.conn.createStatement();
+        ResultSet rs = st.executeQuery(sql);
+        
+        if (rs.next()) {
+            int tongVe = rs.getInt("tongVe");
+            int veHuy = rs.getInt("veHuy");
+            
+            rs.close();
+            st.close();
+            
+            return tongVe > 0 ? (veHuy * 100.0 / tongVe) : 0.0;
+        }
+        
+        rs.close();
+        st.close();
+        
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    
+    return 0.0;
+}
+
+    /**
+     * Lấy tổng số vé bị hủy trong 7 ngày gần nhất
+     * @return Tổng số vé bị hủy
+     */
+    public int getTongSoVeHuy7NgayGanNhat() {
+        int tongSoVeHuy = 0;
+
+        try {
+            String sql = "SELECT COUNT(v.maVe) AS tongVeHuy " +
+                        "FROM HoaDon hd " +
+                        "JOIN Ve v ON hd.maHoaDon = v.maHoaDon " +
+                        "WHERE v.trangThai = 3 " +
+                        "AND hd.ngayLapHoaDon >= DATEADD(DAY, -6, CAST(GETDATE() AS DATE)) " +
+                        "AND hd.ngayLapHoaDon < DATEADD(DAY, 1, CAST(GETDATE() AS DATE))";
+
+            Statement st = ConnectDB.conn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+
+            if (rs.next()) {
+                tongSoVeHuy = rs.getInt("tongVeHuy");
+            }
+
+            rs.close();
+            st.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return tongSoVeHuy;
+    }
 }

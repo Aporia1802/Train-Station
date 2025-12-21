@@ -30,7 +30,7 @@ public class Dashboard_GUI extends javax.swing.JPanel {
         bieuDoSoVeBanDuoc1 = new gui.components.BieuDoSoVeBanDuoc();
         bieuDoSoVeDaHoanThanh1 = new gui.components.BieuDoSoVeDaHoanThanh();
         bieuDoSoVeBiHuy1 = new gui.components.BieuDoSoVeBiHuy();
-        bieuDoTyLeTangTruongDoanhThu2 = new gui.components.BieuDoTyLeTangTruongDoanhThu();
+        bieuDoTyLeTangTruongDoanhThu2 = new gui.components.BieuDoTongDoanhThu();
         jPanel2 = new javax.swing.JPanel();
         bieuDoDoanhThuTheoNgay1 = new gui.components.BieuDoDoanhThuTheoNgay();
         jPanel3 = new javax.swing.JPanel();
@@ -78,7 +78,7 @@ public class Dashboard_GUI extends javax.swing.JPanel {
     private gui.components.BieuDoSoVeBanDuoc bieuDoSoVeBanDuoc1;
     private gui.components.BieuDoSoVeBiHuy bieuDoSoVeBiHuy1;
     private gui.components.BieuDoSoVeDaHoanThanh bieuDoSoVeDaHoanThanh1;
-    private gui.components.BieuDoTyLeTangTruongDoanhThu bieuDoTyLeTangTruongDoanhThu2;
+    private gui.components.BieuDoTongDoanhThu bieuDoTyLeTangTruongDoanhThu2;
     private gui.components.BieuDoTyLeVeBanDuocTheoLoai bieuDoTyLeVeBanDuocTheoLoai2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

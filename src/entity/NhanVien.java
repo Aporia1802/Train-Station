@@ -33,6 +33,7 @@ public class NhanVien {
     public static final String SDT_INVALID = "Số điện thoại không hợp lệ!";
     public static final String CCCD_EMPTY = "Số cccd không được rỗng!";
     public static final String CCCD_INVALID = "Số cccd không hợp lệ!";
+    public static final String DIACHI_EMPTY = "Địa chỉ không được để trống";
     
     public NhanVien() {
     }
@@ -100,10 +101,10 @@ public class NhanVien {
     }
 
     public void setEmail(String email) throws Exception{
-//        email = email.trim();
-//        if(!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
-//            throw new Exception(EMAIL_INVALID);
-//        }
+        email = email.trim();
+        if(!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
+            throw new Exception(EMAIL_INVALID);
+        }
         this.email = email;
     }
 
@@ -141,7 +142,11 @@ public class NhanVien {
         return diaChi;
     }
 
-    public void setDiaChi(String diaChi) {
+    public void setDiaChi(String diaChi)throws Exception {
+        soDienThoai = soDienThoai.trim();
+        if(soDienThoai == null || soDienThoai.isEmpty()) {
+            throw new Exception(DIACHI_EMPTY);
+        }
         this.diaChi = diaChi;
     }
 

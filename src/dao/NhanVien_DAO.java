@@ -69,23 +69,6 @@ public class NhanVien_DAO implements DAOBase<NhanVien> {
         return dsNV;
     }
     
-    public NhanVien getData(ResultSet rs) throws SQLException, Exception {
-    // Lấy dữ liệu từng cột trong ResultSet
-        String maNV = rs.getString("maNV");
-        String tenNV = rs.getString("tenNV");
-        boolean gioiTinh = rs.getBoolean("gioiTinh");
-        LocalDate ngaySinh = rs.getDate("ngaySinh").toLocalDate();
-        String email = rs.getString("email");
-        String soDienThoai = rs.getString("soDienThoai");
-        String cccd = rs.getString("cccd");
-        String diaChi = rs.getString("diaChi");
-        String chucVu = rs.getString("chucVu");
-        boolean trangThai = rs.getBoolean("trangThai");
-
-    // Trả về đối tượng NhanVien
-        return new NhanVien(maNV, tenNV, gioiTinh, ngaySinh, email, soDienThoai, cccd, diaChi, chucVu, trangThai);
-}
-    
     public ArrayList<NhanVien> filterByComboBox(String chucVu, String trangThai) {
        ArrayList<NhanVien> dsNV = new ArrayList<>();
        StringBuilder sql = new StringBuilder("SELECT * FROM NhanVien WHERE 1=1");
@@ -125,23 +108,23 @@ public class NhanVien_DAO implements DAOBase<NhanVien> {
        return dsNV;
    }
 
-
-    public ArrayList<NhanVien> getNhanVienBySoDienThoai(String soDienThoai) {
+    public ArrayList<NhanVien> getNhanVienByMaNV(String maNV) {
         ArrayList<NhanVien> dsNhanVien = new ArrayList<>();
-        String sql = "SELECT * FROM NhanVien WHERE soDienThoai LIKE ?";
+        String sql = "SELECT * FROM NhanVien WHERE maNV = ?";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, "%" + soDienThoai + "%"); // tìm gần đúng (có thể nằm giữa)
+            ps.setString(1, maNV); 
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                dsNhanVien.add(getData(rs)); // getData là hàm chuyển ResultSet → đối tượng NhanVien
+                dsNhanVien.add(getData(rs));
             }
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
         return dsNhanVien;
-}
+    }
+    
     public ArrayList<NhanVien> timKiemNhanVien(String maNV, String tenNV, String cccd, String sdt, String gioiTinh, String trangThai) {
         ArrayList<NhanVien> dsNhanVien = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT * FROM NhanVien WHERE 1=1");
@@ -200,8 +183,6 @@ public class NhanVien_DAO implements DAOBase<NhanVien> {
         return dsNhanVien;
     }
 
-
-
     @Override
     public String generateID() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
@@ -238,12 +219,18 @@ public class NhanVien_DAO implements DAOBase<NhanVien> {
         int n = 0;
         try {
             PreparedStatement st = ConnectDB.conn.prepareStatement(
-                    "UPDATE NhanVien SET tenNV=?, ngaySinh=?, email=?, diaChi=? WHERE maNV=?");
+                    "UPDATE NhanVien SET tenNV=?, ngaySinh=?, email=?, diaChi=?, gioiTinh=?, soDienThoai=?, cccd=?, chucVu=?, trangThai=? WHERE maNV=?");
             st.setString(1, newObject.getTenNV());
             st.setDate(2, Date.valueOf(newObject.getNgaySinh()));
             st.setString(3, newObject.getEmail());
             st.setString(4, newObject.getDiaChi());
-            st.setString(5, id);
+            st.setBoolean(5, newObject.isGioiTinh());
+            st.setString(6, newObject.getSoDienThoai());
+            st.setString(7, newObject.getCccd());
+            st.setString(8, newObject.getChucVu());
+            st.setBoolean(9, newObject.isTrangThai());
+            st.setString(10, id);
+            
             n = st.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage());
@@ -251,25 +238,139 @@ public class NhanVien_DAO implements DAOBase<NhanVien> {
         return n > 0;
     }
     
-    public String getMaxID() {
-        String maxID = ""; // giá trị mặc định nếu bảng rỗng
-    
-        try{
-            String sql = "SELECT TOP 1 * FROM NhanVien ORDER BY MaNV DESC";
-            PreparedStatement st = ConnectDB.conn.prepareStatement(sql);
-            ResultSet rs = st.executeQuery();
+    public int getMaxSTT() {
+        int maxSTT = 0;
+        String sql = "SELECT MAX(CAST(RIGHT(maNV, 3) AS INT)) AS maxSTT FROM NhanVien";
+
+        try {
+            Statement st = ConnectDB.conn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
 
             if (rs.next()) {
-                maxID = rs.getString("maNV");
+                maxSTT = rs.getInt("maxSTT");
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e.getMessage());
+            e.printStackTrace();
         }
-        return maxID;
+
+        return maxSTT;
+    }
+    
+    public boolean checkEmailExists(String email) {
+        String sql = "SELECT COUNT(*) FROM NhanVien WHERE email = ?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, email);
+            
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean checkSDTExists(String sdt) {
+        String sql = "SELECT COUNT(*) FROM NhanVien WHERE soDienThoai = ?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, sdt);
+            
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean checkCCCDExists(String cccd) {
+        String sql = "SELECT COUNT(*) FROM NhanVien WHERE cccd = ?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, cccd);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean checkEmailExistsExceptThis(String email, String maNV) {
+        String sql = "SELECT COUNT(*) FROM NhanVien WHERE email = ? AND maNV != ?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, email);
+            ps.setString(2, maNV);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean checkSDTExistsExceptThis(String sdt, String maNV) {
+        String sql = "SELECT COUNT(*) FROM NhanVien WHERE soDienThoai = ? AND maNV != ?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, sdt);
+            ps.setString(2, maNV);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean checkCCCDExistsExceptThis(String cccd, String maNV) {
+        String sql = "SELECT COUNT(*) FROM NhanVien WHERE cccd = ? AND maNV != ?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, cccd);
+            ps.setString(2, maNV);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @Override
     public Boolean delete(String id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    public NhanVien getData(ResultSet rs) throws SQLException, Exception {
+        // Lấy dữ liệu từng cột trong ResultSet
+        String maNV = rs.getString("maNV");
+        String tenNV = rs.getString("tenNV");
+        boolean gioiTinh = rs.getBoolean("gioiTinh");
+        LocalDate ngaySinh = rs.getDate("ngaySinh").toLocalDate();
+        String email = rs.getString("email");
+        String soDienThoai = rs.getString("soDienThoai");
+        String cccd = rs.getString("cccd");
+        String diaChi = rs.getString("diaChi");
+        String chucVu = rs.getString("chucVu");
+        boolean trangThai = rs.getBoolean("trangThai");
+
+        // Trả về đối tượng NhanVien
+        return new NhanVien(maNV, tenNV, gioiTinh, ngaySinh, email, soDienThoai, cccd, diaChi, chucVu, trangThai);
     }
 }

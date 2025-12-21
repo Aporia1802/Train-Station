@@ -85,7 +85,7 @@ public class Loading_GUI extends javax.swing.JFrame {
         pnl_container.setMinimumSize(new java.awt.Dimension(400, 255));
         pnl_container.setLayout(null);
 
-        lbl_logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/Logo_1.png"))); // NOI18N
+        lbl_logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/MediumLogo.png"))); // NOI18N
         lbl_logo.setMaximumSize(new java.awt.Dimension(180, 180));
         lbl_logo.setMinimumSize(new java.awt.Dimension(180, 180));
         lbl_logo.setPreferredSize(new java.awt.Dimension(180, 180));
@@ -96,7 +96,7 @@ public class Loading_GUI extends javax.swing.JFrame {
         lbl_loading.setForeground(new java.awt.Color(255, 255, 255));
         lbl_loading.setText("Đang kết nối...");
         pnl_container.add(lbl_loading);
-        lbl_loading.setBounds(150, 180, 101, 21);
+        lbl_loading.setBounds(150, 180, 104, 21);
 
         progressbar_status.setForeground(new java.awt.Color(240, 104, 107));
         progressbar_status.setValue(60);

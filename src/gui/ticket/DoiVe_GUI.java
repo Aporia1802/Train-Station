@@ -344,7 +344,7 @@ public class DoiVe_GUI extends javax.swing.JPanel {
                 buoc1Panel = new ChonChuyenTau(bus);
             }
 
-            // ===== QUAN TRỌNG: Reset vé cần đổi trong ChonChoNgoi =====
+            // Reset vé cần đổi trong ChonChoNgoi
             chonChoNgoi.resetVeCanDoi();
 
             thanhToan.setOnThanhToanThanhCong(() -> resetToiDau());

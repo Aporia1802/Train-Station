@@ -21,10 +21,9 @@ public class QuanLyTau_BUS {
         return dsTau;
     }
     
-public ArrayList<Tau> filter(String trangThai){
+    public ArrayList<Tau> filter(String trangThai){
         ArrayList<Tau> dsTau = tauDao.filterByTrangThai(trangThai);
         return dsTau;
-        
     }
     
     public ArrayList<Tau> getTauTheoMa(String maTau) throws Exception{
@@ -38,22 +37,23 @@ public ArrayList<Tau> filter(String trangThai){
     }
     
     public String generateID() {
-//      Lấy mã lớn nhất
+        // Lấy mã lớn nhất
         String maxID = tauDao.getMaxID();
-        
-        if(maxID.equals("")) {
-            return "SE1";
+
+        if(maxID == null || maxID.equals("")) {
+            return "TAU-001";
         }
-        
-//      Tách phần số
-        int num = Integer.parseInt(maxID.substring(2));
-        
-//      Tăng lên một đơn vị
+
+        // Tách phần số - xử lý cả trường hợp có dấu "-"
+        String numPart = maxID.replaceAll("[^0-9]", ""); // Chỉ lấy số
+        int num = Integer.parseInt(numPart);
+
+        // Tăng lên một đơn vị
         num++;
-        
-//      Tạo mã mới 
-        String newID = String.format("SE%01d", num);
-        
+
+        // Tạo mã mới với format TAU-XXX
+        String newID = String.format("TAU-%03d", num);
+
         return newID;
     }
     

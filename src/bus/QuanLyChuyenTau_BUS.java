@@ -54,29 +54,29 @@ public class QuanLyChuyenTau_BUS {
         try {
             ArrayList<ChuyenTau> all = getAllChuyenTau();
             ArrayList<ChuyenTau> result = new ArrayList<>();
-            
+
             for (ChuyenTau ct : all) {
                 if (ct.getTuyenDuong() == null) continue;
-                
+
                 boolean matchGaDi = maGaDi == null || 
                                    maGaDi.isEmpty() || 
-                                   maGaDi.equals("Tất cả") ||
+                                   maGaDi.equals("Tất cả") ||  // FIX: Text đúng
                                    (ct.getTuyenDuong().getGaDi() != null && 
                                     ct.getTuyenDuong().getGaDi().getMaGa().equals(maGaDi));
-                
+
                 boolean matchGaDen = maGaDen == null || 
                                     maGaDen.isEmpty() || 
-                                    maGaDen.equals("Tất cả") ||
+                                    maGaDen.equals("Tất cả") ||  // FIX: Text đúng
                                     (ct.getTuyenDuong().getGaDen() != null && 
                                      ct.getTuyenDuong().getGaDen().getMaGa().equals(maGaDen));
-                
+
                 if (matchGaDi && matchGaDen) {
                     result.add(ct);
                 }
             }
-            
+
             return result;
-            
+
         } catch (Exception e) {
             e.printStackTrace();
             return new ArrayList<>();
@@ -91,14 +91,12 @@ public class QuanLyChuyenTau_BUS {
             
             String error = validateChuyenTau(chuyenTau);
             if (error != null) {
-                System.err.println("❌ " + error);
                 return false;
             }
             
             return dao.create(chuyenTau);
             
         } catch (Exception e) {
-            e.printStackTrace();
             return false;
         }
     }
@@ -112,14 +110,12 @@ public class QuanLyChuyenTau_BUS {
             
             String error = validateChuyenTau(chuyenTauMoi);
             if (error != null) {
-                System.err.println("❌ " + error);
                 return false;
             }
             
             return dao.update(maChuyenTau, chuyenTauMoi);
             
         } catch (Exception e) {
-            e.printStackTrace();
             return false;
         }
     }

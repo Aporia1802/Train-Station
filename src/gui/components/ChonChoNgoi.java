@@ -714,7 +714,7 @@ public class ChonChoNgoi extends javax.swing.JPanel {
        gui.components.ThongTinVe panelThongTin = new gui.components.ThongTinVe(tieuDe, ghe, chuyen);
        panelThongTin.setName("THONGTIN_" + ghe.getMaGhe());
 
-       // KHÔI PHỤC THÔNG TIN ĐÃ NHẬP (NẾU CÓ)
+       // KHÔI PHỤC THÔNG TIN ĐÃ NHẬP
        if (thongTinDaNhapMap.containsKey(maGhe)) {
            ThongTinVe.ThongTinHanhKhach thongTinCu = thongTinDaNhapMap.get(maGhe).thongTin;
            panelThongTin.setThongTin(thongTinCu);
@@ -749,44 +749,44 @@ public class ChonChoNgoi extends javax.swing.JPanel {
     */
     
     void handleChonGhe(RoundedButton btn, Ghe ghe) {
-    if (bus.isDaChonGhe(ghe)) {
-        // Bỏ chọn
-        btn.setBackground(java.awt.Color.WHITE);
-        xoaGheDaChon(ghe);
-        xoaPanelThongTinVe(ghe);
-    } else {
-        // ===== VALIDATION: CHỈ CHO PHÉP CHỌN 1 GHẾ KHI ĐỔI VÉ =====
-        if (isDangDoiVe() && bus.getSoGheDaChon() >= 1) {
-            javax.swing.JOptionPane.showMessageDialog(this,
-                "Chỉ được chọn 1 ghế!\n" +
-                "Vui lòng bỏ chọn ghế hiện tại trước khi chọn ghế mới.",
-                "Giới hạn đổi vé",
-                javax.swing.JOptionPane.WARNING_MESSAGE);
-            return; // DỪNG LẠI, không cho chọn thêm
+        if (bus.isDaChonGhe(ghe)) {
+            // Bỏ chọn
+            btn.setBackground(java.awt.Color.WHITE);
+            xoaGheDaChon(ghe);
+            xoaPanelThongTinVe(ghe);
+        } else {
+            // ===== VALIDATION: CHỈ CHO PHÉP CHỌN 1 GHẾ KHI ĐỔI VÉ =====
+            if (isDangDoiVe() && bus.getSoGheDaChon() >= 1) {
+                javax.swing.JOptionPane.showMessageDialog(this,
+                    "Chỉ được chọn 1 ghế!\n" +
+                    "Vui lòng bỏ chọn ghế hiện tại trước khi chọn ghế mới.",
+                    "Giới hạn đổi vé",
+                    javax.swing.JOptionPane.WARNING_MESSAGE);
+                return; // DỪNG LẠI, không cho chọn thêm
+            }
+
+            // XÁC ĐỊNH CHUYẾN DỰA VÀO ĐANG XEM CHIỀU NÀO
+            ChuyenTau chuyenDangXem = dangXemChieuVe ? chuyenVe : chuyenDi;
+
+            btn.setBackground(new java.awt.Color(252, 90, 90));
+            themGheDaChon(ghe, chuyenDangXem);
+            themPanelThongTinVe(ghe, chuyenDangXem);
         }
-        
-        // XÁC ĐỊNH CHUYẾN DỰA VÀO ĐANG XEM CHIỀU NÀO
-        ChuyenTau chuyenDangXem = dangXemChieuVe ? chuyenVe : chuyenDi;
 
-        btn.setBackground(new java.awt.Color(252, 90, 90));
-        themGheDaChon(ghe, chuyenDangXem);
-        themPanelThongTinVe(ghe, chuyenDangXem);
+        // Đồng bộ checkbox
+        try {
+            JPanel toaPanel = (JPanel) btn.getParent().getParent().getParent().getParent();
+            syncCheckboxChonTatCa(toaPanel, 
+                                 ghe.getKhoangTau().getToaTau(), 
+                                 dangXemChieuVe ? chuyenVe : chuyenDi);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
-
-    // Đồng bộ checkbox
-    try {
-        JPanel toaPanel = (JPanel) btn.getParent().getParent().getParent().getParent();
-        syncCheckboxChonTatCa(toaPanel, 
-                             ghe.getKhoangTau().getToaTau(), 
-                             dangXemChieuVe ? chuyenVe : chuyenDi);
-    } catch (Exception ex) {
-        ex.printStackTrace();
-    }
-}
 
     
     /**
-     * Thêm panel thông tin vé vào form - CẢI TIẾN
+     * Thêm panel thông tin vé vào form
      */
     private void themPanelThongTinVe(Ghe ghe, ChuyenTau chuyen) {
         String tieuDe;

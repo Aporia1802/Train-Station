@@ -53,22 +53,22 @@ public class QuanLyGaTau_BUS {
     }
     
     public String generateID() {
-//      Lấy mã lớn nhất
+        // Lấy mã lớn nhất
         String maxID = gaTauDAO.getMaxID();
-        
-        if(maxID.equals("")) {
+
+        if(maxID == null || maxID.equals("")) {
             return "GA001";
         }
-        
-//      Tách phần số
-        int num = Integer.parseInt(maxID.substring(2));
-        
-//      Tăng lên một đơn vị
+
+        String numPart = maxID.replace("GA", "").replace("-", "").trim();
+        int num = Integer.parseInt(numPart);
+
+        // Tăng lên một đơn vị
         num++;
-        
-//      Tạo mã mới 
-        String newID = String.format("GA%03d", num);
-        
+
+        // Tạo mã mới (format giống DB hiện tại)
+        String newID = String.format("GA-%03d", num);
+
         return newID;
     }
     

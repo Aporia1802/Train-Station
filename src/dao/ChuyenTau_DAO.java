@@ -66,10 +66,15 @@ public class ChuyenTau_DAO implements DAOBase {
 
     public ArrayList<ChuyenTau> getChuyenTauByKeyword(String keyword) {
         ArrayList<ChuyenTau> dsChuyenTau = new ArrayList<>();
-        
-        String sql = "SELECT * FROM ChuyenTau ct "
+
+        // FIX: Thêm đầy đủ JOIN với GaTau để có thể gọi getData()
+        String sql = "SELECT *, gdi.maGa AS maGaDi, gdi.tenGa AS tenGaDi, " 
+                   + "gden.maGa AS maGaDen, gden.tenGa AS tenGaDen "
+                   + "FROM ChuyenTau ct "
                    + "JOIN Tau t ON t.maTau = ct.maTau "
                    + "JOIN TuyenDuong td ON td.maTuyenDuong = ct.maTuyenDuong "
+                   + "JOIN GaTau gdi ON gdi.maGa = td.gaDi "
+                   + "JOIN GaTau gden ON gden.maGa = td.gaDen "
                    + "WHERE ct.maChuyenTau LIKE ? OR t.maTau LIKE ? OR td.maTuyenDuong LIKE ?";
 
         try {
@@ -78,16 +83,16 @@ public class ChuyenTau_DAO implements DAOBase {
             ps.setString(1, searchPattern);
             ps.setString(2, searchPattern);
             ps.setString(3, searchPattern);
-            
+
             ResultSet rs = ps.executeQuery();
-            
+
             while (rs.next()) {
                 ChuyenTau ct = getData(rs);
                 if (ct != null) {
                     dsChuyenTau.add(ct);
                 }
             }
-            
+
             rs.close();
             ps.close();
 

@@ -15,9 +15,9 @@ public class TaiKhoan {
     private String matKhau;
     private NhanVien nhanVien;
     
-    public static final String MATKHAU_INVALID="Mật khẩu phải ít nhất 8 kí tự (Bao gồm chữ hoa, chữ thường và số)!";
     public static final String MATKHAU_EMPTY="Mật khẩu không được rỗng!";
-
+    public static final String MATKHAU_INVALID="Mật khẩu phải ít nhất 8 kí tự (Bao gồm chữ hoa, chữ thường và số)!";
+    
 //  Khi tạo mới tài khoản
     public TaiKhoan(String tenDangNhap, String matKhau, NhanVien nhanVien) throws Exception {
         this.tenDangNhap = tenDangNhap;
@@ -51,10 +51,6 @@ public class TaiKhoan {
         matKhau = matKhau.trim();
         if (matKhau == null || matKhau.trim().isEmpty()) {
             throw new Exception("Mật khẩu không được rỗng!");
-        }
-
-        if(!matKhau.matches("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).{8,}$")) {
-            throw new Exception(MATKHAU_INVALID);
         }
         this.matKhau = matKhau;
     }

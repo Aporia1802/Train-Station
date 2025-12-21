@@ -53,7 +53,7 @@
         </Component>
         <Component class="gui.components.BieuDoSoVeBiHuy" name="bieuDoSoVeBiHuy1">
         </Component>
-        <Component class="gui.components.BieuDoTyLeTangTruongDoanhThu" name="bieuDoTyLeTangTruongDoanhThu2">
+        <Component class="gui.components.BieuDoTongDoanhThu" name="bieuDoTyLeTangTruongDoanhThu2">
         </Component>
       </SubComponents>
     </Container>

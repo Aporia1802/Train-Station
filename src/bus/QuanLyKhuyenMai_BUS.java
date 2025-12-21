@@ -49,22 +49,6 @@ public class QuanLyKhuyenMai_BUS {
     }
 
     public String generateID() {
-        String maxID = khuyenMaiDAO.getMaxID();
-        
-        if(maxID.equals("")) {
-            return "KM001";
-        }
-        
-//      Tách phần số
-        int num = Integer.parseInt(maxID.substring(2));
-        
-//      Tăng lên một đơn vị
-        num++;
-        
-//      Tạo mã mới 
-        String newID = String.format("KM%03d", num);
-        
-        return newID;
+        return khuyenMaiDAO.generateID();
     }
-
 }

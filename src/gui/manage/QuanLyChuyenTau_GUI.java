@@ -39,22 +39,22 @@ public class QuanLyChuyenTau_GUI extends javax.swing.JPanel {
         initComponents();
         init();
     }
-  private void init() {
-    bus = new QuanLyChuyenTau_BUS();
-    dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
- 
-    tblModel_thongTinChuyenTau = new DefaultTableModel(
-        new String[] {"Mã chuyến tàu", "Tuyến đường", "Thời gian đi", "Thời gian đến", "Tàu", "Ghế đã đặt", "Ghế còn trống"}, 0) {
-        @Override
-        public boolean isCellEditable(int row, int column) { return false; }
-    };
-    tbl_thongTinCT.setModel(tblModel_thongTinChuyenTau);
-    getTableData(bus.getAllChuyenTau());
-    loadComboBoxData();
-      loadComboBoxTuyenDuong();  
-        loadComboBoxTau(); 
-    setupPlaceholder();
-}
+    private void init() {
+        bus = new QuanLyChuyenTau_BUS();
+        dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+        tblModel_thongTinChuyenTau = new DefaultTableModel(
+            new String[] {"Mã chuyến tàu", "Tuyến đường", "Thời gian đi", "Thời gian đến", "Tàu", "Ghế đã đặt", "Ghế còn trống"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) { return false; }
+        };
+        tbl_thongTinCT.setModel(tblModel_thongTinChuyenTau);
+        getTableData(bus.getAllChuyenTau());
+        loadComboBoxData();
+          loadComboBoxTuyenDuong();  
+            loadComboBoxTau(); 
+        setupPlaceholder();
+    }
     private void loadComboBoxGaDiDen() {
         ArrayList<ChuyenTau> dsChuyenTau = bus.getAllChuyenTau();
         ArrayList<String> dsGaDi = new ArrayList<>();
@@ -80,36 +80,36 @@ public class QuanLyChuyenTau_GUI extends javax.swing.JPanel {
         cb_GaDi.setModel(new DefaultComboBoxModel<>(dsGaDi.toArray(new String[0])));
         cb_GaDen.setModel(new DefaultComboBoxModel<>(dsGaDen.toArray(new String[0])));
     }
-  private void loadComboBoxTuyenDuong() {
-    try {
-        TuyenDuong_DAO tuyenDuongDAO = new TuyenDuong_DAO();
-        ArrayList<TuyenDuong> dsTuyenDuong = tuyenDuongDAO.getAll();
+    private void loadComboBoxTuyenDuong() {
+        try {
+            TuyenDuong_DAO tuyenDuongDAO = new TuyenDuong_DAO();
+            ArrayList<TuyenDuong> dsTuyenDuong = tuyenDuongDAO.getAll();
 
-        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
-        model.addElement("-- Chọn tuyến đường --");
+            DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+            model.addElement("-- Chọn tuyến đường --");
 
-        for (TuyenDuong td : dsTuyenDuong) {
-            if (td != null) {
-        
-                String tenGaDi = (td.getGaDi() != null && td.getGaDi().getTenGa() != null) 
-                               ? td.getGaDi().getTenGa() 
-                               : td.getGaDi() != null ? td.getGaDi().getMaGa() : "N/A";
-                
-                String tenGaDen = (td.getGaDen() != null && td.getGaDen().getTenGa() != null) 
-                                ? td.getGaDen().getTenGa() 
-                                : td.getGaDen() != null ? td.getGaDen().getMaGa() : "N/A";
-         
-                String display = td.getMaTuyenDuong() + " - " + tenGaDi + " → " + tenGaDen;
-                model.addElement(display);
+            for (TuyenDuong td : dsTuyenDuong) {
+                if (td != null) {
+
+                    String tenGaDi = (td.getGaDi() != null && td.getGaDi().getTenGa() != null) 
+                                   ? td.getGaDi().getTenGa() 
+                                   : td.getGaDi() != null ? td.getGaDi().getMaGa() : "N/A";
+
+                    String tenGaDen = (td.getGaDen() != null && td.getGaDen().getTenGa() != null) 
+                                    ? td.getGaDen().getTenGa() 
+                                    : td.getGaDen() != null ? td.getGaDen().getMaGa() : "N/A";
+
+                    String display = td.getMaTuyenDuong() + " - " + tenGaDi + " → " + tenGaDen;
+                    model.addElement(display);
+                }
             }
+
+            cb_TuyenDuong.setModel(model);
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        cb_TuyenDuong.setModel(model);
-
-    } catch (Exception e) {
-        e.printStackTrace();
     }
-}
     private void loadComboBoxTau() {
         try {
             Tau_DAO tauDAO = new Tau_DAO();
@@ -148,51 +148,54 @@ public class QuanLyChuyenTau_GUI extends javax.swing.JPanel {
         comboBox.setSelectedIndex(0);
     }
          
-private void loadComboBoxData() {
-    ArrayList<ChuyenTau> dsChuyenTau = bus.getAllChuyenTau();
-    ArrayList<String> dsGaDi = new ArrayList<>();
-    ArrayList<String> dsGaDen = new ArrayList<>();
-    
-    dsGaDi.add("Tất cả");
-    dsGaDen.add("Tất cả");
-    for (ChuyenTau ct : dsChuyenTau) {
-        if (ct.getTuyenDuong() != null) {
-            GaTau gaDi = ct.getTuyenDuong().getGaDi();
-            GaTau gaDen = ct.getTuyenDuong().getGaDen();    
-            if (gaDi != null && gaDi.getMaGa() != null && !dsGaDi.contains(gaDi.getMaGa())) {
-                dsGaDi.add(gaDi.getMaGa());
-            }
-            
-            if (gaDen != null && gaDen.getMaGa() != null && !dsGaDen.contains(gaDen.getMaGa())) {
-                dsGaDen.add(gaDen.getMaGa());
+    private void loadComboBoxData() {
+        ArrayList<ChuyenTau> dsChuyenTau = bus.getAllChuyenTau();
+        ArrayList<String> dsGaDi = new ArrayList<>();
+        ArrayList<String> dsGaDen = new ArrayList<>();
+
+        dsGaDi.add("Tất cả");
+        dsGaDen.add("Tất cả");
+
+        for (ChuyenTau ct : dsChuyenTau) {
+            if (ct.getTuyenDuong() != null) {
+                GaTau gaDi = ct.getTuyenDuong().getGaDi();
+                GaTau gaDen = ct.getTuyenDuong().getGaDen();
+
+                if (gaDi != null && gaDi.getMaGa() != null && !dsGaDi.contains(gaDi.getMaGa())) {
+                    dsGaDi.add(gaDi.getMaGa());
+                }
+
+                if (gaDen != null && gaDen.getMaGa() != null && !dsGaDen.contains(gaDen.getMaGa())) {
+                    dsGaDen.add(gaDen.getMaGa());
+                }
             }
         }
+
+        cb_GaDi.setModel(new DefaultComboBoxModel<>(dsGaDi.toArray(new String[0])));
+        cb_GaDen.setModel(new DefaultComboBoxModel<>(dsGaDen.toArray(new String[0])));
     }
-    
-    cb_GaDi.setModel(new DefaultComboBoxModel<>(dsGaDi.toArray(new String[0])));
-    cb_GaDen.setModel(new DefaultComboBoxModel<>(dsGaDen.toArray(new String[0])));
-}
-  private void setupPlaceholder() {
-    txt_timKiem.setText("Nhập mã chuyến tàu cần tìm...");
-    txt_timKiem.setForeground(Color.GRAY);
-    
-    txt_timKiem.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusGained(java.awt.event.FocusEvent evt) {
-            if (txt_timKiem.getText().equals("Nhập mã chuyến tàu cần tìm...")) {
-                txt_timKiem.setText("");
-                txt_timKiem.setForeground(Color.BLACK);
-            }
-        }
-        public void focusLost(java.awt.event.FocusEvent evt) {
-            if (txt_timKiem.getText().isEmpty()) {
-                txt_timKiem.setText("Nhập mã chuyến tàu cần tìm...");
-                txt_timKiem.setForeground(Color.GRAY);
-            }
-        }
-    });
-}
   
-  private void getTableData(ArrayList<ChuyenTau> dsChuyenTau) {
+    private void setupPlaceholder() {
+        txt_timKiem.setText("Nhập mã chuyến tàu cần tìm...");
+        txt_timKiem.setForeground(Color.GRAY);
+
+        txt_timKiem.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                if (txt_timKiem.getText().equals("Nhập mã chuyến tàu cần tìm...")) {
+                    txt_timKiem.setText("");
+                    txt_timKiem.setForeground(Color.BLACK);
+                }
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                if (txt_timKiem.getText().isEmpty()) {
+                    txt_timKiem.setText("Nhập mã chuyến tàu cần tìm...");
+                    txt_timKiem.setForeground(Color.GRAY);
+                }
+            }
+        });
+    }
+  
+    private void getTableData(ArrayList<ChuyenTau> dsChuyenTau) {
         tblModel_thongTinChuyenTau.setRowCount(0);
         
         for (ChuyenTau ct : dsChuyenTau) {
@@ -207,7 +210,7 @@ private void loadComboBoxData() {
             };
             tblModel_thongTinChuyenTau.addRow(row);
         }
-}
+    }
      private void getThongTinChuyenTau() {
         int row = tbl_thongTinCT.getSelectedRow();
         if (row == -1) return;
@@ -231,7 +234,7 @@ private void loadComboBoxData() {
             JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage());
         }
     }
- private void handleActionXoaTrang() {
+    private void handleActionXoaTrang() {
         tbl_thongTinCT.clearSelection();
         txt_maCT.setText("");
         cb_TuyenDuong.setSelectedIndex(0);  
@@ -241,7 +244,7 @@ private void loadComboBoxData() {
         date_thoiGianDi.setDate(new Date());
         date_thoiGianDen.setDate(new Date());
     }
-         private void handleActionLamMoi() {
+    private void handleActionLamMoi() {
         handleActionXoaTrang();
         getTableData(bus.getAllChuyenTau());
         txt_timKiem.setText("Nhập mã chuyến tàu cần tìm...");
@@ -249,26 +252,27 @@ private void loadComboBoxData() {
         cb_GaDi.setSelectedIndex(0);
         cb_GaDen.setSelectedIndex(0);
     }
-      private void handleActionTimKiem() {
+    private void handleActionTimKiem() {
         String keyword = txt_timKiem.getText().trim();
-        
+
         if (keyword.equals("Nhập mã chuyến tàu cần tìm...") || keyword.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập từ khóa tìm kiếm!");
             return;
         }
-        
+
         ArrayList<ChuyenTau> ketQua = bus.getChuyenTauByKeyword(keyword);
-        
+
         if (ketQua.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Không tìm thấy chuyến tàu nào!");
             handleActionLamMoi();
         } else {
             getTableData(ketQua);
+            JOptionPane.showMessageDialog(this, "Tìm thấy " + ketQua.size() + " chuyến tàu!");
         }
     }
-  private void handleActionThem() {
-        String maChuyenTau = bus.generateMaChuyenTau();
 
+    private void handleActionThem() {
+        String maChuyenTau = bus.generateMaChuyenTau();
         String maTuyenDuong = getMaFromComboBox(cb_TuyenDuong);
         String maTau = getMaFromComboBox(cb_Tau);
 
@@ -280,9 +284,12 @@ private void loadComboBoxData() {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn thời gian đi và đến!");
             return;
         }
+
         try {
-            LocalDateTime thoiGianDi = date_thoiGianDi.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-            LocalDateTime thoiGianDen = date_thoiGianDen.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+            LocalDateTime thoiGianDi = date_thoiGianDi.getDate().toInstant()
+                .atZone(ZoneId.systemDefault()).toLocalDateTime();
+            LocalDateTime thoiGianDen = date_thoiGianDen.getDate().toInstant()
+                .atZone(ZoneId.systemDefault()).toLocalDateTime();
 
             if (thoiGianDi.isBefore(LocalDateTime.now())) {
                 JOptionPane.showMessageDialog(this, "Thời gian đi phải sau thời gian hiện tại!");
@@ -293,7 +300,8 @@ private void loadComboBoxData() {
                 return;
             }
 
-            ChuyenTau chuyenTau = new ChuyenTau(maChuyenTau, new TuyenDuong(maTuyenDuong), thoiGianDi, thoiGianDen, new Tau(maTau));
+            ChuyenTau chuyenTau = new ChuyenTau(maChuyenTau, 
+                new TuyenDuong(maTuyenDuong), thoiGianDi, thoiGianDen, new Tau(maTau));
             chuyenTau.setSoGheDaDat(0);
 
             int confirm = JOptionPane.showConfirmDialog(this,
@@ -319,71 +327,78 @@ private void loadComboBoxData() {
             JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage());
             e.printStackTrace();
         }
-}
-      private void handleActionCapNhat() {
-    int row = tbl_thongTinCT.getSelectedRow();
-    if (row == -1) {
-        JOptionPane.showMessageDialog(this, "Vui lòng chọn chuyến tàu cần cập nhật!");
-        return;
     }
-    String maChuyenTau = txt_maCT.getText().trim();
-    String maTuyenDuong = getMaFromComboBox(cb_TuyenDuong);
-    String maTau = getMaFromComboBox(cb_Tau);
-    
-    if (maChuyenTau.isEmpty() || maTuyenDuong.isEmpty() || maTau.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Vui lòng điền đầy đủ thông tin!");
-        return;
-    }
-    if (date_thoiGianDi.getDate() == null || date_thoiGianDen.getDate() == null) {
-        JOptionPane.showMessageDialog(this, "Vui lòng chọn thời gian đi và đến!");
-        return;
-    }
-    try {
-        LocalDateTime thoiGianDi = date_thoiGianDi.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-        LocalDateTime thoiGianDen = date_thoiGianDen.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();      
-        if (thoiGianDen.isBefore(thoiGianDi) || thoiGianDen.isEqual(thoiGianDi)) {
-            JOptionPane.showMessageDialog(this, "Thời gian đến phải sau thời gian đi!");
+    private void handleActionCapNhat() {
+        int row = tbl_thongTinCT.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn chuyến tàu cần cập nhật!");
             return;
         }
-        ChuyenTau chuyenTauCu = bus.getChuyenTauByMa(maChuyenTau);
-        
-        if (chuyenTauCu == null) {
-            JOptionPane.showMessageDialog(this, "Không tìm thấy chuyến tàu!");
+
+        String maChuyenTau = txt_maCT.getText().trim();
+        String maTuyenDuong = getMaFromComboBox(cb_TuyenDuong);
+        String maTau = getMaFromComboBox(cb_Tau);
+
+        if (maChuyenTau.isEmpty() || maTuyenDuong == null || maTau == null) {
+            JOptionPane.showMessageDialog(this, "Vui lòng điền đầy đủ thông tin!");
             return;
         }
-        ChuyenTau chuyenTau = new ChuyenTau(maChuyenTau, new TuyenDuong(maTuyenDuong), thoiGianDi, thoiGianDen, new Tau(maTau));
-        chuyenTau.setSoGheDaDat(chuyenTauCu.getSoGheDaDat());
-        chuyenTau.setSoGheConTrong(chuyenTauCu.getSoGheConTrong());
-        
-        int confirm = JOptionPane.showConfirmDialog(this, 
-            "Xác nhận cập nhật chuyến tàu " + maChuyenTau + "?", 
-            "Xác nhận", 
-            JOptionPane.YES_NO_OPTION);
-        
-        if (confirm == JOptionPane.YES_OPTION) {
-            if (bus.updateChuyenTau(maChuyenTau, chuyenTau)) {
-                JOptionPane.showMessageDialog(this, "Cập nhật thành công!");
-                handleActionLamMoi();
-            } else {
-                JOptionPane.showMessageDialog(this, "Cập nhật thất bại!");
+        if (date_thoiGianDi.getDate() == null || date_thoiGianDen.getDate() == null) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn thời gian đi và đến!");
+            return;
+        }
+
+        try {
+            LocalDateTime thoiGianDi = date_thoiGianDi.getDate().toInstant()
+                .atZone(ZoneId.systemDefault()).toLocalDateTime();
+            LocalDateTime thoiGianDen = date_thoiGianDen.getDate().toInstant()
+                .atZone(ZoneId.systemDefault()).toLocalDateTime();
+
+            if (thoiGianDen.isBefore(thoiGianDi) || thoiGianDen.isEqual(thoiGianDi)) {
+                JOptionPane.showMessageDialog(this, "Thời gian đến phải sau thời gian đi!");
+                return;
             }
+
+            ChuyenTau chuyenTauCu = bus.getChuyenTauByMa(maChuyenTau);
+            if (chuyenTauCu == null) {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy chuyến tàu!");
+                return;
+            }
+
+            ChuyenTau chuyenTau = new ChuyenTau(maChuyenTau, 
+                new TuyenDuong(maTuyenDuong), thoiGianDi, thoiGianDen, new Tau(maTau));
+            chuyenTau.setSoGheDaDat(chuyenTauCu.getSoGheDaDat());
+            chuyenTau.setSoGheConTrong(chuyenTauCu.getSoGheConTrong());
+
+            int confirm = JOptionPane.showConfirmDialog(this, 
+                "Xác nhận cập nhật chuyến tàu " + maChuyenTau + "?", 
+                "Xác nhận", 
+                JOptionPane.YES_NO_OPTION);
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                if (bus.updateChuyenTau(maChuyenTau, chuyenTau)) {
+                    JOptionPane.showMessageDialog(this, "Cập nhật thành công!");
+                    handleActionLamMoi();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Cập nhật thất bại!");
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage());
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage());
-        e.printStackTrace();
     }
-}
     private void handleActionLoc() {
         String maGaDi = cb_GaDi.getSelectedItem().toString();
         String maGaDen = cb_GaDen.getSelectedItem().toString();
-        
+
         if (maGaDi.equals("Tất cả") && maGaDen.equals("Tất cả")) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn ít nhất một ga để lọc!");
             return;
         }
-        
+
         ArrayList<ChuyenTau> ketQua = bus.locTheoGaDiGaDen(maGaDi, maGaDen);
-        
+
         if (ketQua.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Không tìm thấy chuyến tàu phù hợp!");
             handleActionLamMoi();
@@ -555,7 +570,6 @@ private void loadComboBoxData() {
         lbl_chucVu.setPreferredSize(new java.awt.Dimension(100, 16));
         pnl_chucVu.add(lbl_chucVu);
 
-        date_thoiGianDi.setEnabled(false);
         date_thoiGianDi.setMaximumSize(txt_maCT.getMaximumSize());
         date_thoiGianDi.setMinimumSize(new java.awt.Dimension(141, 0));
         pnl_chucVu.add(date_thoiGianDi);

@@ -21,10 +21,12 @@ import gui.search.TraCuuTau_GUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.util.UIScale;
+import gui.help.TroGiup_GUI;
 import gui.menu.Menu;
 import gui.menu.MenuAction;
 import gui.ticket.DatVe_GUI;
 import gui.statistics.ThongKeDoanhThu_GUI;
+import gui.statistics.ThongKeHanhKhach_GUI;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
@@ -92,7 +94,6 @@ public class MainForm extends JLayeredPane{
 
     private void initMenuEvent() {
         menu.addMenuEvent((int index, int subIndex, MenuAction action) -> {
-            // Application.mainForm.showForm(new DefaultForm("Form : " + index + " " + subIndex));
             switch (index) {
                 case 0:
                     Application.showForm(new Dashboard_GUI());
@@ -139,7 +140,17 @@ public class MainForm extends JLayeredPane{
                     }
                     break; 
                 case 3: 
-                    Application.showForm(new ThongKeDoanhThu_GUI());
+                    switch (subIndex) {
+                        case 1: 
+                            Application.showForm(new ThongKeDoanhThu_GUI());
+                            break;
+                        case 2: 
+                            Application.showForm(new ThongKeHanhKhach_GUI());
+                            break;
+                        default:
+                            action.cancel();
+                            break;
+                    }
                     break;
                 case 4:
                     Application.showForm(new QuanLyTau_GUI());
@@ -157,9 +168,12 @@ public class MainForm extends JLayeredPane{
                     Application.showForm(new QuanLyChuyenTau_GUI());
                     break;
                 case 9:
-                    Application.showForm(new QuanLyThongTinCaNhan_GUI());
+                    Application.showForm(new TroGiup_GUI());
                     break;
                 case 10:
+                    Application.showForm(new QuanLyThongTinCaNhan_GUI());
+                    break;
+                case 11:
                     if (JOptionPane.showConfirmDialog(this, "Bạn có thật sự muốn đăng xuất", "Xác nhận hành động", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                         try {
                             Application.logout();

@@ -87,41 +87,56 @@ public class QuanLyGaTau_GUI extends javax.swing.JPanel {
         loadDataToTable(bus.getGaTauByKeyword(keyword));
     }
     
-    private Boolean validateData() {
-        if(txt_tenGa.getText().equals("")) {
+    // THÊM CÁI NÀY
+    private Boolean validateData(boolean isUpdate) {
+        String currentMaGa = txt_maGa.getText().trim();
+
+        if(txt_tenGa.getText().trim().isEmpty()) {
             Notifications.getInstance().show(Notifications.Type.INFO, "Tên ga không được rỗng!");
             txt_tenGa.requestFocus();
             return false;
         }
-        
+
+        // Kiểm tra trùng tên ga
         for(GaTau gaTau : bus.getAllGaTau()) {
-            if(gaTau.getTenGa().equalsIgnoreCase(txt_tenGa.getText())) {
+            // Nếu đang cập nhật, bỏ qua bản ghi hiện tại
+            if(isUpdate && gaTau.getMaGa().equals(currentMaGa)) {
+                continue;
+            }
+
+            if(gaTau.getTenGa().equalsIgnoreCase(txt_tenGa.getText().trim())) {
                 Notifications.getInstance().show(Notifications.Type.INFO, "Tên ga đã tồn tại!");
                 txt_tenGa.requestFocus();
                 return false;
             }
         }
-        
+
         if(!txt_diaChi.getText().matches("^[\\p{L}0-9\\s,\\.\\-/]{5,100}$")) {
             Notifications.getInstance().show(Notifications.Type.INFO, "Địa chỉ không hợp lệ!");
             txt_diaChi.requestFocus();
             return false;
         }
-        
+
         if(!txt_soDienThoai.getText().matches("^0[3|5|7|8|9][0-9]{8}$")) {
             Notifications.getInstance().show(Notifications.Type.INFO, "Số điện thoại không hợp lệ!");
             txt_soDienThoai.requestFocus();
             return false;
         }
-        
+
+        // Kiểm tra trùng số điện thoại
         for(GaTau gaTau : bus.getAllGaTau()) {
-            if(gaTau.getSoDienThoai().equalsIgnoreCase(txt_soDienThoai.getText())) {
+            // Nếu đang cập nhật, bỏ qua bản ghi hiện tại
+            if(isUpdate && gaTau.getMaGa().equals(currentMaGa)) {
+                continue;
+            }
+
+            if(gaTau.getSoDienThoai().equalsIgnoreCase(txt_soDienThoai.getText().trim())) {
                 Notifications.getInstance().show(Notifications.Type.INFO, "Số điện thoại đã tồn tại!");
                 txt_soDienThoai.requestFocus();
                 return false;
             }
         }
-        
+
         return true;
     }
     
@@ -151,11 +166,12 @@ public class QuanLyGaTau_GUI extends javax.swing.JPanel {
                 Notifications.getInstance().show(Notifications.Type.ERROR, "Chưa chọn ga cần thay đổi thông tin!");
                 return;
             }
-            
-            if(!validateData()) {
+
+          
+            if(!validateData(true)) { 
                 return;
             }
-            
+
             GaTau gaTau = getCurrentValue();
             if(bus.updateThongTinGa(gaTau)) {
                 Notifications.getInstance().show(Notifications.Type.SUCCESS, "Cập nhật thành công!");
@@ -164,15 +180,17 @@ public class QuanLyGaTau_GUI extends javax.swing.JPanel {
             } 
         } catch (Exception e) {
             Notifications.getInstance().show(Notifications.Type.ERROR, "Cập nhật thất bại!");
+            e.printStackTrace();
         }
     }
     
     private void handleThemMoi() {
         try {
-            if(!validateData()) {
+            
+            if(!validateData(false)) { 
                 return;
             }
-            
+
             GaTau gaTau = getNewValue();
             if(bus.themGaTau(gaTau)) {
                 Notifications.getInstance().show(Notifications.Type.SUCCESS, "Thêm mới thành công!");
@@ -181,6 +199,7 @@ public class QuanLyGaTau_GUI extends javax.swing.JPanel {
             } 
         } catch (Exception e) {
             Notifications.getInstance().show(Notifications.Type.ERROR, "Thêm thất bại!");
+            e.printStackTrace();
         }
     }
     

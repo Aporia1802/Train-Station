@@ -14,6 +14,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -144,20 +146,6 @@ public class KhuyenMai_DAO implements DAOBase<KhuyenMai> {
         return list;
     }
 
-    public KhuyenMai getData(ResultSet rs) throws SQLException, Exception {
-        String maKM = rs.getString("MaKhuyenMai");
-        String tenKM = rs.getString("TenKhuyenMai");
-        double heSo = rs.getDouble("HeSoKhuyenMai");
-        LocalDate ngayBatDau = rs.getDate("NgayBatDau").toLocalDate();
-        LocalDate ngayKetThuc = rs.getDate("NgayKetThuc").toLocalDate();
-        double tongTienToiThieu = rs.getDouble("TongTienToiThieu");
-        double tienKMToiDa = rs.getDouble("TienKhuyenMaiToiDa");
-        boolean trangThai = rs.getBoolean("TrangThai");
-
-        return new KhuyenMai(maKM, tenKM, heSo, ngayBatDau, ngayKetThuc, tongTienToiThieu, tienKMToiDa, trangThai);
-
-    }
-
     public ArrayList<KhuyenMai> filterByTrangThai(String trangThai) {
         ArrayList<KhuyenMai> dsKM = new ArrayList<>();
         String sql = "SELECT * FROM KhuyenMai WHERE TrangThai = ?";
@@ -180,23 +168,18 @@ public class KhuyenMai_DAO implements DAOBase<KhuyenMai> {
         return dsKM;
     }
 
-    public String getMaxID() {
-        String sql = "SELECT TOP 1 MaKhuyenMai FROM KhuyenMai ORDER BY MaKhuyenMai DESC";
-        try {
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getString("MaKhuyenMai");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     @Override
     public String generateID() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String sql = "SELECT dbo.fn_GenerateKhuyenMaiID() AS NewID";
+        try (PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getString("NewID");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(KhuyenMai_DAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     @Override
@@ -254,5 +237,18 @@ public class KhuyenMai_DAO implements DAOBase<KhuyenMai> {
     @Override
     public Boolean delete(String id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    public KhuyenMai getData(ResultSet rs) throws SQLException, Exception {
+        String maKM = rs.getString("MaKhuyenMai");
+        String tenKM = rs.getString("TenKhuyenMai");
+        double heSo = rs.getDouble("HeSoKhuyenMai");
+        LocalDate ngayBatDau = rs.getDate("NgayBatDau").toLocalDate();
+        LocalDate ngayKetThuc = rs.getDate("NgayKetThuc").toLocalDate();
+        double tongTienToiThieu = rs.getDouble("TongTienToiThieu");
+        double tienKMToiDa = rs.getDouble("TienKhuyenMaiToiDa");
+        boolean trangThai = rs.getBoolean("TrangThai");
+
+        return new KhuyenMai(maKM, tenKM, heSo, ngayBatDau, ngayKetThuc, tongTienToiThieu, tienKMToiDa, trangThai);
     }
 }

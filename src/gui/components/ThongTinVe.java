@@ -381,9 +381,9 @@ public class ThongTinVe extends javax.swing.JPanel {
     double giam = 0;
 
     switch (loaiVe) {
-        case "Trẻ em" -> giam = 0.5;        // 50%
-        case "Sinh viên" -> giam = 0.2;     // 20%
-        case "Người cao tuổi" -> giam = 0.3; // 30%
+        case "Trẻ em" -> giam = 0.75;        // 50%
+        case "Sinh viên" -> giam = 0.9;     // 20%
+        case "Người cao tuổi" -> giam = 0.85; // 30%
         default -> giam = 0;                // Người lớn
     }
 

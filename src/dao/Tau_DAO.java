@@ -72,7 +72,7 @@ public class Tau_DAO implements DAOBase<Tau>{
             throw new RuntimeException(e.getMessage());
         }
         return dsTau;
-}
+    }
      
     public ArrayList<Tau> filterByTrangThai(String trangThaiStr) {
         ArrayList<Tau> dsTau = new ArrayList<>();
@@ -99,28 +99,9 @@ public class Tau_DAO implements DAOBase<Tau>{
                 dsTau.add(getData(rs));
             }
         } catch (Exception e) {
-        throw new RuntimeException(e.getMessage());
-    }
-    return dsTau;
-}
-
-
-
-
-    public Tau getData(ResultSet rs) throws SQLException, Exception {
-        String maTau = rs.getString("maTau");
-        String tenTau = rs.getString("tenTau");
-        int soToaTau = rs.getInt("soToaTau");
-        java.sql.Date ngayHoatDongSQL = rs.getDate("ngayHoatDong");
-        LocalDate ngayHoatDong = ngayHoatDongSQL != null ? 
-        ngayHoatDongSQL.toLocalDate() : null;   
-        Tau tau = new Tau(maTau);
-        tau.setTenTau(tenTau);
-        tau.setSoToaTau(soToaTau);
-        tau.setNgayHoatDong(ngayHoatDong);
-        TrangThaiTau trangThai = TrangThaiTau.fromInt(rs.getInt("trangThai"));
-        tau.setTrangThai(trangThai);
-        return tau;
+            throw new RuntimeException(e.getMessage());
+        }
+        return dsTau;
     }
     
     public ArrayList<Tau> search(String maTau, String tenTau, int trangThai) {
@@ -255,5 +236,21 @@ public class Tau_DAO implements DAOBase<Tau>{
             throw new RuntimeException(e.getMessage());
         }
         return newID;
+    }
+    
+    public Tau getData(ResultSet rs) throws SQLException, Exception {
+        String maTau = rs.getString("maTau");
+        String tenTau = rs.getString("tenTau");
+        int soToaTau = rs.getInt("soToaTau");
+        java.sql.Date ngayHoatDongSQL = rs.getDate("ngayHoatDong");
+        LocalDate ngayHoatDong = ngayHoatDongSQL != null ? 
+        ngayHoatDongSQL.toLocalDate() : null;   
+        Tau tau = new Tau(maTau);
+        tau.setTenTau(tenTau);
+        tau.setSoToaTau(soToaTau);
+        tau.setNgayHoatDong(ngayHoatDong);
+        TrangThaiTau trangThai = TrangThaiTau.fromInt(rs.getInt("trangThai"));
+        tau.setTrangThai(trangThai);
+        return tau;
     }
 }

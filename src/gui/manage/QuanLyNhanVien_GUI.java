@@ -53,51 +53,52 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
    }
    
   
-   private void getTableData(ArrayList<NhanVien> dsNV){
-       tblModel_thongtinNhanVien.setRowCount(0);
-       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-       for(NhanVien nv : dsNV){
-           String gioiTinhstr = nv.isGioiTinh() ? "Nam":"Nữ";
-           String trangThaistr = nv.isTrangThai()?"Đang làm":"Đã nghỉ";
-           String ngaySinhstr = "";
-           if(nv.getNgaySinh() != null){
-               ngaySinhstr = nv.getNgaySinh().format(formatter);
-           }
-           String[] newRow = {nv.getMaNV(),nv.getTenNV(),gioiTinhstr,ngaySinhstr,nv.getEmail(),nv.getSoDienThoai(),nv.getCccd(),nv.getDiaChi(),nv.getChucVu(),trangThaistr};
-           tblModel_thongtinNhanVien.addRow(newRow);
-       }
-   }
+    private void getTableData(ArrayList<NhanVien> dsNV){
+        tblModel_thongtinNhanVien.setRowCount(0);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        for(NhanVien nv : dsNV){
+            String gioiTinhstr = nv.isGioiTinh() ? "Nam":"Nữ";
+            String trangThaistr = nv.isTrangThai()?"Đang làm":"Đã nghỉ";
+            String ngaySinhstr = "";
+            if(nv.getNgaySinh() != null){
+                ngaySinhstr = nv.getNgaySinh().format(formatter);
+            }
+            String[] newRow = {nv.getMaNV(),nv.getTenNV(),gioiTinhstr,ngaySinhstr,nv.getEmail(),nv.getSoDienThoai(),nv.getCccd(),nv.getDiaChi(),nv.getChucVu(),trangThaistr};
+            tblModel_thongtinNhanVien.addRow(newRow);
+        }
+    }
+    
     private void getThongTinNhanVien() {
-    int row = tbl_nhanVien.getSelectedRow(); // lấy dòng được chọn
-    if (row != -1) {
-        // Lấy dữ liệu từ từng cột
-        String maNV = tbl_nhanVien.getValueAt(row, 0).toString();
-        String hoTen = tbl_nhanVien.getValueAt(row, 1).toString();
-        String gioiTinh = tbl_nhanVien.getValueAt(row, 2).toString();
-        String ngaySinhStr = tbl_nhanVien.getValueAt(row, 3).toString();
-        String email = tbl_nhanVien.getValueAt(row, 4).toString();
-        String sdt = tbl_nhanVien.getValueAt(row, 5).toString();
-        String cccd = tbl_nhanVien.getValueAt(row, 6).toString();
-        String diaChi = tbl_nhanVien.getValueAt(row, 7).toString();
-        String chucVu = tbl_nhanVien.getValueAt(row, 8).toString().trim();
-        String trangThai = tbl_nhanVien.getValueAt(row, 9).toString();
-      
+        int row = tbl_nhanVien.getSelectedRow(); // lấy dòng được chọn
+        if (row != -1) {
+            // Lấy dữ liệu từ từng cột
+            String maNV = tbl_nhanVien.getValueAt(row, 0).toString();
+            String hoTen = tbl_nhanVien.getValueAt(row, 1).toString();
+            String gioiTinh = tbl_nhanVien.getValueAt(row, 2).toString();
+            String ngaySinhStr = tbl_nhanVien.getValueAt(row, 3).toString();
+            String email = tbl_nhanVien.getValueAt(row, 4).toString();
+            String sdt = tbl_nhanVien.getValueAt(row, 5).toString();
+            String cccd = tbl_nhanVien.getValueAt(row, 6).toString();
+            String diaChi = tbl_nhanVien.getValueAt(row, 7).toString();
+            String chucVu = tbl_nhanVien.getValueAt(row, 8).toString().trim();
+            String trangThai = tbl_nhanVien.getValueAt(row, 9).toString();
 
-        // Gán dữ liệu lên các ô nhập liệu
-        txt_maNV.setText(maNV);
-        txt_hoTen.setText(hoTen);
-        txt_email.setText(email);
-        txt_sdt.setText(sdt);
-        txt_cccd.setText(cccd);
-        txt_diaChi.setText(diaChi);
+
+            // Gán dữ liệu lên các ô nhập liệu
+            txt_maNV.setText(maNV);
+            txt_hoTen.setText(hoTen);
+            txt_email.setText(email);
+            txt_sdt.setText(sdt);
+            txt_cccd.setText(cccd);
+            txt_diaChi.setText(diaChi);
         
-        for (int i = 0; i < cbo_cv.getItemCount(); i++) {
-             String item = cbo_cv.getItemAt(i).toString().trim();
-             if (item.equalsIgnoreCase(chucVu)) {
-                 cbo_cv.setSelectedIndex(i);
-                 break;
-             }
-         }
+            for (int i = 0; i < cbo_cv.getItemCount(); i++) {
+                String item = cbo_cv.getItemAt(i).toString().trim();
+                if (item.equalsIgnoreCase(chucVu)) {
+                    cbo_cv.setSelectedIndex(i);
+                    break;
+                }
+            }
         // Giới tính
         if (gioiTinh.equalsIgnoreCase("Nam")) {
             rad_Nam.setSelected(true);
@@ -122,7 +123,7 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
             txt_ngaySinh.setDate(null); // Nếu trống thì xóa giá trị
         }
             }
-        }
+    }
     
     public NhanVien getFormData() throws Exception {
         String maNV = txt_maNV.getText().trim();
@@ -160,8 +161,6 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
 
         return nv;
     } 
-
-
 
     private void handleActionXoaTrang() {
         tbl_nhanVien.clearSelection();
@@ -210,17 +209,175 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
     private void handleActionLamMoi() {
         tbl_nhanVien.clearSelection();
         getTableData(bus.getAllNhanVien());
-        txt_timKiem.setText("Nhập sdt or cccd cần tìm...");
+        cbo_chucVu.setSelectedIndex(0);
+        cbo_trangThai.setSelectedIndex(0);
         txt_timKiem.setForeground(Color.GRAY);
     }
     
+    private boolean validateForm() {
+        String hoTen = txt_hoTen.getText().trim();
+        String email = txt_email.getText().trim();
+        String sdt = txt_sdt.getText().trim();
+        String cccd = txt_cccd.getText().trim();
+        String diaChi = txt_diaChi.getText().trim();
+
+        // Validate họ tên
+        if (hoTen.isEmpty()) {
+            Notifications.getInstance().show(Notifications.Type.WARNING, "Vui lòng nhập họ tên!");
+            txt_hoTen.requestFocus();
+            return false;
+        }
+
+        // Họ tên phải từ 2 từ trở lên và chỉ chứa chữ cái và khoảng trắng
+        if (!hoTen.matches("^[a-zA-ZÀ-ỹ\\s]{2,}$")) {
+            Notifications.getInstance().show(Notifications.Type.WARNING, "Họ tên không hợp lệ! Chỉ chứa chữ cái và khoảng trắng.");
+            txt_hoTen.requestFocus();
+            return false;
+        }
+
+        // Validate ngày sinh
+        if (txt_ngaySinh.getDate() == null) {
+            Notifications.getInstance().show(Notifications.Type.WARNING, "Vui lòng chọn ngày sinh!");
+            txt_ngaySinh.requestFocus();
+            return false;
+        }
+
+        // Kiểm tra tuổi (phải từ 18 tuổi trở lên)
+        LocalDate ngaySinh = txt_ngaySinh.getDate().toInstant()
+                                 .atZone(ZoneId.systemDefault())
+                                 .toLocalDate();
+        LocalDate now = LocalDate.now();
+        int tuoi = now.getYear() - ngaySinh.getYear();
+
+        if (ngaySinh.isAfter(now)) {
+            Notifications.getInstance().show(Notifications.Type.WARNING, "Ngày sinh không được lớn hơn ngày hiện tại!");
+            txt_ngaySinh.requestFocus();
+            return false;
+        }
+
+        if (tuoi < 18) {
+            Notifications.getInstance().show(Notifications.Type.WARNING, "Nhân viên phải từ 18 tuổi trở lên!");
+            txt_ngaySinh.requestFocus();
+            return false;
+        }
+
+        if (tuoi > 65) {
+            Notifications.getInstance().show(Notifications.Type.WARNING, "Tuổi nhân viên không được quá 65!");
+            txt_ngaySinh.requestFocus();
+            return false;
+        }
+
+        // Validate email
+        if (email.isEmpty()) {
+            Notifications.getInstance().show(Notifications.Type.WARNING, "Vui lòng nhập email!");
+            txt_email.requestFocus();
+            return false;
+        }
+
+        // Kiểm tra định dạng email
+        String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+        if (!email.matches(emailRegex)) {
+            Notifications.getInstance().show(Notifications.Type.WARNING, "Email không đúng định dạng!");
+            txt_email.requestFocus();
+            return false;
+        }
+
+        // Validate số điện thoại
+        if (sdt.isEmpty()) {
+            Notifications.getInstance().show(Notifications.Type.WARNING, "Vui lòng nhập số điện thoại!");
+            txt_sdt.requestFocus();
+            return false;
+        }
+
+        // Số điện thoại Việt Nam: 10 số, bắt đầu bằng 0
+        if (!sdt.matches("^0\\d{9}$")) {
+            Notifications.getInstance().show(Notifications.Type.WARNING, "Số điện thoại không hợp lệ! Phải có 10 số và bắt đầu bằng 0.");
+            txt_sdt.requestFocus();
+            return false;
+        }
+
+        // Validate CCCD
+        if (cccd.isEmpty()) {
+            Notifications.getInstance().show(Notifications.Type.WARNING, "Vui lòng nhập CCCD!");
+            txt_cccd.requestFocus();
+            return false;
+        }
+
+        // CCCD phải có 12 số
+        if (!cccd.matches("^\\d{12}$")) {
+            Notifications.getInstance().show(Notifications.Type.WARNING, "CCCD phải có 12 chữ số!");
+            txt_cccd.requestFocus();
+            return false;
+        }
+
+        // Validate địa chỉ
+        if (diaChi.isEmpty()) {
+            Notifications.getInstance().show(Notifications.Type.WARNING, "Vui lòng nhập địa chỉ!");
+            txt_diaChi.requestFocus();
+            return false;
+        }
+
+        if (diaChi.length() < 10) {
+            Notifications.getInstance().show(Notifications.Type.WARNING, "Địa chỉ quá ngắn! Vui lòng nhập đầy đủ địa chỉ.");
+            txt_diaChi.requestFocus();
+            return false;
+        }
+        
+        // Kiểm tra trùng email (nếu đang thêm mới hoặc email thay đổi)
+        String maNV = txt_maNV.getText().trim();
+        if (maNV.isEmpty()) { // Đang thêm mới
+            if (bus.checkEmailExists(email)) {
+                Notifications.getInstance().show(Notifications.Type.WARNING, "Email đã tồn tại trong hệ thống!");
+                txt_email.requestFocus();
+                return false;
+            }
+
+            if (bus.checkSDTExists(sdt)) {
+                Notifications.getInstance().show(Notifications.Type.WARNING, "Số điện thoại đã tồn tại trong hệ thống!");
+                txt_sdt.requestFocus();
+                return false;
+            }
+
+            if (bus.checkCCCDExists(cccd)) {
+                Notifications.getInstance().show(Notifications.Type.WARNING, "CCCD đã tồn tại trong hệ thống!");
+                txt_cccd.requestFocus();
+                return false;
+            }
+        } else { // Đang cập nhật
+            if (bus.checkEmailExistsExceptThis(email, maNV)) {
+                Notifications.getInstance().show(Notifications.Type.WARNING, "Email đã được nhân viên khác sử dụng!");
+                txt_email.requestFocus();
+                return false;
+            }
+
+            if (bus.checkSDTExistsExceptThis(sdt, maNV)) {
+                Notifications.getInstance().show(Notifications.Type.WARNING, "Số điện thoại đã được nhân viên khác sử dụng!");
+                txt_sdt.requestFocus();
+                return false;
+            }
+
+            if (bus.checkCCCDExistsExceptThis(cccd, maNV)) {
+                Notifications.getInstance().show(Notifications.Type.WARNING, "CCCD đã được nhân viên khác sử dụng!");
+                txt_cccd.requestFocus();
+                return false;
+            }
+        }
+
+        return true;
+    }
+    
+    
     private void handleCapNhat() {
         try {
+            
             if(tbl_nhanVien.getSelectedRow() == -1) {
                 Notifications.getInstance().show(Notifications.Type.ERROR, "Chưa chọn nhân viên cần thay đổi thông tin!");
                 return;
             }
             
+            if (!validateForm()) {
+                return;
+            }
             NhanVien nv = getFormData();
             if(bus.capNhatNhanVien(nv)) {
                 Notifications.getInstance().show(Notifications.Type.SUCCESS, "Cập nhật thành công!");
@@ -234,17 +391,48 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
     
     private void handleThemNV() {
         try {
-           String maNV  = bus.generateID();
-            
+            // Validate form trước
+            if (!validateForm()) {
+                return;
+            }
+
+            // Kiểm tra ngày sinh không null
+            if (txt_ngaySinh.getDate() == null) {
+                Notifications.getInstance().show(Notifications.Type.WARNING, "Vui lòng chọn ngày sinh!");
+                txt_ngaySinh.requestFocus();
+                return;
+            }
+
+            // Giới tính
+            boolean gioiTinh = rad_Nam.isSelected();
+
+            // Ngày sinh - Lưu vào biến để tránh gọi getDate() nhiều lần
+            Date ngaySinhDate = txt_ngaySinh.getDate();
+            LocalDate ngaySinh = ngaySinhDate.toInstant()
+                                     .atZone(ZoneId.systemDefault())
+                                     .toLocalDate();
+
+            // Sinh mã nhân viên
+            String maNV = bus.generateID(gioiTinh, ngaySinh);
+           
+            // Lấy thông tin từ form
             NhanVien nv = getFormData();
             nv.setMaNV(maNV);
+
+            // Thêm vào database
             if(bus.themNhanVien(nv)) {
                 Notifications.getInstance().show(Notifications.Type.SUCCESS, "Thêm mới thành công!");
                 getTableData(bus.getAllNhanVien());
                 handleActionXoaTrang();
-            } 
+            } else {
+                Notifications.getInstance().show(Notifications.Type.ERROR, "Thêm thất bại!");
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            Notifications.getInstance().show(Notifications.Type.ERROR, "Lỗi: Vui lòng kiểm tra lại thông tin nhập!");
         } catch (Exception e) {
-            Notifications.getInstance().show(Notifications.Type.ERROR, "Thêm thất bại!");
+            e.printStackTrace();
+            Notifications.getInstance().show(Notifications.Type.ERROR, "Thêm thất bại: " + e.getMessage());
         }
     }
     
@@ -468,7 +656,18 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
         pnl_timKiem.setPreferredSize(new java.awt.Dimension(579, 30));
         pnl_timKiem.setLayout(new javax.swing.BoxLayout(pnl_timKiem, javax.swing.BoxLayout.LINE_AXIS));
 
+        txt_timKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txt_timKiem.setForeground(new java.awt.Color(204, 204, 204));
+        txt_timKiem.setText("Nhập mã nhân viên cần tìm...");
         txt_timKiem.setPreferredSize(new java.awt.Dimension(500, 30));
+        txt_timKiem.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txt_timKiemFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txt_timKiemFocusLost(evt);
+            }
+        });
         pnl_timKiem.add(txt_timKiem);
 
         pnl_btnTimKiem.setPreferredSize(new java.awt.Dimension(79, 23));
@@ -489,7 +688,7 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
         pnl_cta.setPreferredSize(new java.awt.Dimension(500, 50));
         pnl_cta.setLayout(new java.awt.GridLayout(1, 0));
 
-        cbo_chucVu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Chức vụ", "Nhân viên quản lý", "Nhân viên bán vé" }));
+        cbo_chucVu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Chức vụ", "Quản lý", "Bán vé" }));
         cbo_chucVu.setToolTipText("");
         pnl_cta.add(cbo_chucVu);
 
@@ -506,7 +705,7 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
         });
         pnl_cta.add(btn_Loc);
 
-        btn_Reset.setText("Reset");
+        btn_Reset.setText("Làm mới");
         btn_Reset.setMaximumSize(new java.awt.Dimension(100, 50));
         btn_Reset.setPreferredSize(new java.awt.Dimension(100, 50));
         btn_Reset.addActionListener(new java.awt.event.ActionListener() {
@@ -620,6 +819,7 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
         pnl_radGroup.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 4));
 
         buttonGroup1.add(rad_Nam);
+        rad_Nam.setSelected(true);
         rad_Nam.setText("Nam");
         pnl_radGroup.add(rad_Nam);
 
@@ -722,9 +922,14 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
         lbl_chucVu.setPreferredSize(new java.awt.Dimension(100, 16));
         pnl_chucVu.add(lbl_chucVu);
 
-        cbo_cv.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả", "Nhân viên quản lý", "Nhân viên bán vé" }));
+        cbo_cv.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nhân viên bán vé", "Nhân viên quản lý" }));
         cbo_cv.setMaximumSize(new java.awt.Dimension(32767, 40));
         cbo_cv.setPreferredSize(new java.awt.Dimension(230, 40));
+        cbo_cv.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbo_cvActionPerformed(evt);
+            }
+        });
         pnl_chucVu.add(cbo_cv);
 
         pnl_thongTinNhanVien.add(pnl_chucVu);
@@ -742,6 +947,7 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
         pnl_radGroup2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 9));
 
         buttonGroup2.add(rad_tt1);
+        rad_tt1.setSelected(true);
         rad_tt1.setText("Đang làm");
         pnl_radGroup2.add(rad_tt1);
 
@@ -864,6 +1070,26 @@ public class QuanLyNhanVien_GUI extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_btn_xuatExcelActionPerformed
+
+    private void cbo_cvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbo_cvActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbo_cvActionPerformed
+
+    private void txt_timKiemFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_timKiemFocusGained
+        // TODO add your handling code here:
+        if (txt_timKiem.getText().equals("Nhập mã nhân viên cần tìm...")) {
+            txt_timKiem.setText("");
+            txt_timKiem.setForeground(Color.BLACK);
+        }
+    }//GEN-LAST:event_txt_timKiemFocusGained
+
+    private void txt_timKiemFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_timKiemFocusLost
+        // TODO add your handling code here:
+        if (txt_timKiem.getText().equals("")) {
+            txt_timKiem.setText("Nhập mã nhân viên cần tìm...");
+            txt_timKiem.setForeground(Color.GRAY);
+        }
+    }//GEN-LAST:event_txt_timKiemFocusLost
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

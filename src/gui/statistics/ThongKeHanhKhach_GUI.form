@@ -19,7 +19,7 @@
     <Container class="javax.swing.JPanel" name="jPanel1">
       <Properties>
         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[100, 220]"/>
+          <Dimension value="[100, 280]"/>
         </Property>
       </Properties>
       <Constraints>
@@ -33,17 +33,15 @@
         <Property name="rows" type="int" value="1"/>
       </Layout>
       <SubComponents>
-        <Component class="gui.components.BieuDoSoVeBanDuoc" name="bieuDoSoVeBanDuoc1">
+        <Component class="gui.components.BieuDoTyLeHuyVe" name="bieuDoTyLeHuyVe1">
         </Component>
-        <Component class="gui.components.BieuDoSoVeDaHoanThanh" name="bieuDoSoVeDaHoanThanh1">
+        <Component class="gui.components.BieuDoTyLeVeBanDuocTheoLoai" name="bieuDoTyLeVeBanDuocTheoLoai1">
         </Component>
-        <Component class="gui.components.BieuDoSoVeBiHuy" name="bieuDoSoVeBiHuy1">
-        </Component>
-        <Component class="gui.components.BieuDoTongDoanhThu" name="bieuDoTyLeTangTruongDoanhThu2">
+        <Component class="gui.components.TopChuyenDi" name="topChuyenDi1">
         </Component>
       </SubComponents>
     </Container>
-    <Component class="gui.components.ThongKeDoanhThu" name="thongKeDoanhThu2">
+    <Component class="gui.components.BieuDoSoLuongKhachTheoNam" name="bieuDoSoLuongKhachTheoNam1">
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
           <BorderConstraints direction="Center"/>
